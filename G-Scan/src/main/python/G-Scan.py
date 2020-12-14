@@ -35,8 +35,7 @@ class Application(Frame):
         self.grid()
         self.grid_rowconfigure(0, weight = 1)
         self.grid_columnconfigure(0, weight = 1)
-        self.user_settings_file = self.open_shelf()
-        self.current_user = self.open_user_settings(self.user_settings_file)
+        self.current_user = self.open_user_settings()
         # linux temp directory
         # self.temp_directory = "/home/ryanm/Desktop/GrayScan/Temp"
         # windows temp directory
@@ -47,36 +46,33 @@ class Application(Frame):
         self.validate_directories_check()
         self.write_log("Awaiting input")
         
-    def open_shelf(self):
-        """Opens the user settings shelf file and writes it to
-        a list."""
-
-        user_settings_path = (
-            filesystem.get_data_directory() + "user_settings")
-
-        user_settings_file = shelve.open(user_settings_path)
-        
-        return user_settings_file
-
-    def open_user_settings(self, user_settings_file):
-        # get the current user login name
+    def open_user_settings(self):
+        """Opens the user settings file for the user's directory and
+        workspace settings."""
 
         current_username = os.getlogin()
 
-        # if the user does not exist, create the user as a user object and add to the list, passes back the user object.
-        if current_username not in user_settings_file:
+        # If the user already exists in the user settings data file,
+        # load the user up as the current user and pass it back as a
+        # user object.
+
+        user_settings_data = shelve.open(
+            filesystem.get_user_settings_data_path())
+        
+        if current_username in user_settings_data:
+            current_user = user_settings_data[current_username]
+
+        # If the user does not exist, creates a new user and adds it to
+        # the user settings data file, passing back the user object.
+        else:
             current_user = User(current_username)
             user_settings_file[current_username] = current_user
-            user_settings_file.sync()
-            return current_user
-    
-        # if the user already exists, load the motherfucker up as the current user, passes back the user object.
-        elif current_username in user_settings_file:
-            current_user = user_settings_file[current_username]        
-            return current_user
+            user_settings_data.sync()
+        
+        user_settings_data.close()
 
-    def close_shelf(self, user_settings_file):
-        user_settings_file.close()
+        return current_user
+    
 
     def create_widgets(self, name, ext, job_ref, current_user):
         """ Create all them motherfucking widgets"""

@@ -78,6 +78,12 @@ def get_data_directory():
 
     return get_directory_path() + "data\\"
 
+def get_user_settings_data_path():
+    """Returns the user settings .dat file containing all the
+    user settings regarding directories and workspace defaults."""
+
+    return get_data_directory() + "user_settings"
+
 def get_resources_directory():
     """Returns the path of the resources folder that resides in
     the src\main directory of the program directory."""
