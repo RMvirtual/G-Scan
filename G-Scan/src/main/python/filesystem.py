@@ -30,7 +30,7 @@ def get_directory_items(path):
     """Returns a list of folders and files in a directory."""
     return os.listdir(path)
 
-def get_directory_path():
+def get_root_directory_path():
     """Gets the directory path of the G-Scan folder that all the files
     and subfolders reside in."""
 
@@ -76,7 +76,7 @@ def get_data_directory():
     main directory of the program. Contains things such as the
     user's settings etc."""
 
-    return get_directory_path() + "data\\"
+    return get_root_directory_path() + "data\\"
 
 def get_user_settings_data_path():
     """Returns the user settings .dat file containing all the
@@ -88,7 +88,14 @@ def get_resources_directory():
     """Returns the path of the resources folder that resides in
     the src\main directory of the program directory."""
 
-    return get_directory_path() + "src\\main\\resources\\"
+    return get_root_directory_path() + "src\\main\\resources\\"
+
+def get_temp_directory():
+    """Returns the path of the temp directory that resides in the
+    main directory. Used for file manipulation (pdf appending and
+    copied etc)."""
+
+    return get_root_directory_path() + "temp\\"
 
 def check_path_is_directory(path):
     """Returns a boolean value describing whether the path provided

@@ -39,7 +39,7 @@ class Application(Frame):
         # linux temp directory
         # self.temp_directory = "/home/ryanm/Desktop/GrayScan/Temp"
         # windows temp directory
-        self.temp_dir = "C:/G-Scan/Temp"
+        self.temp_dir = filesystem.get_temp_directory()
         self.create_widgets(name = "", ext = "", job_ref = "", current_user = self.current_user)
         self.quick_mode_hint_message()
         self.activity_log_row_count = 1
@@ -55,7 +55,6 @@ class Application(Frame):
         # If the user already exists in the user settings data file,
         # load the user up as the current user and pass it back as a
         # user object.
-
         user_settings_data = shelve.open(
             filesystem.get_user_settings_data_path())
         
@@ -72,7 +71,6 @@ class Application(Frame):
         user_settings_data.close()
 
         return current_user
-    
 
     def create_widgets(self, name, ext, job_ref, current_user):
         """ Create all them motherfucking widgets"""
