@@ -1,4 +1,5 @@
 import os
+import filesystem
 import shelve
 import shutil
 import re
@@ -29,7 +30,7 @@ class Application(Frame):
     """ GUI Box for inputting a GR Number when viewing a page of paperwork"""
 
     def __init__(self, master):
-        """ Initialise the frame, whatever that means. """
+        """ Initialise the frame, whatever that means."""
         super(Application, self).__init__(master)
         self.grid()
         self.grid_rowconfigure(0, weight = 1)
