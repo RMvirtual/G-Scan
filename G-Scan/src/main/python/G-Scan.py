@@ -1432,8 +1432,8 @@ customer_pwork_flags_suffix = "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork"
 loading_list_flags_suffix = "++xShxPaxIsVs0++OPSLDLST++Loading_List"
 POD_flags_suffix = "++xShxPaIsVs2++KPIPOD++Scanned_POD"
 
-x_axis = str(GetSystemMetrics(0) - 870)
-y_axis = str(GetSystemMetrics(1) - 580)
+x_axis = str(int(GetSystemMetrics(0) / 4))
+y_axis = str(int(GetSystemMetrics(1) / 4))
 
 root = Tk()
 root.title("GrayScan")

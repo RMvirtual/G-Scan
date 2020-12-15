@@ -16,8 +16,8 @@ class Settings_Window(Frame):
         self.create_widgets(
             main_application, current_user, user_settings_data)
 
-        x_axis = str(GetSystemMetrics(0) - 850)
-        y_axis = str(GetSystemMetrics(1) - 550)
+        x_axis = str(int(GetSystemMetrics(0) / 4))
+        y_axis = str(int(GetSystemMetrics(1) / 4))
 
         self.root.geometry("820x220+" + x_axis + "+" + y_axis)
         self.root.title("User Settings: " + current_user.name)
