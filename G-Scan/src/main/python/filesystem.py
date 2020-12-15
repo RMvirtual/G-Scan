@@ -96,7 +96,7 @@ def get_resources_directory():
     """Returns the path of the resources folder that resides in
     the src\main directory of the program directory."""
 
-    return get_root_directory_path() + "main\\src\\resources\\"
+    return get_root_directory_path() + "src\\main\\resources\\"
 
 def get_temp_directory():
     """Returns the path of the temp directory that resides in the
