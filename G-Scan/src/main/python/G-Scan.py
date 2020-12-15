@@ -30,7 +30,7 @@ pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
 class Application(Frame):
-    """ GUI Box for inputting a GR Number when viewing a page of paperwork"""
+    """GUI Box for inputting a GR Number when viewing a page of paperwork"""
 
     def __init__(self, master):
         """ Initialise the frame, whatever that means."""
@@ -147,37 +147,57 @@ class Application(Frame):
         """Creates the widgets for the left master frame."""
 
         # Logo frame inside the left master frame.
-        logo_frame = Frame(
+        self.logo_frame = Frame(
             left_master_frame,
             bg = "white", width = 390, height = 122,
             bd = 0, borderwidth = 0, highlightthickness=0)
 
-        logo_frame.grid(row = 0, column = 0, sticky = N)
-        logo_frame.grid_rowconfigure(0, weight = 1)
-        logo_frame.grid_columnconfigure(0, weight = 1)
+        self.logo_frame.grid(row = 0, column = 0, sticky = N)
+        self.logo_frame.grid_rowconfigure(0, weight = 1)
+        self.logo_frame.grid_columnconfigure(0, weight = 1)
 
         # Create the the G-Scan logo image.
         gscan_logo_image_path = (
             filesystem.get_resources_directory() + "images\\g-scan_logo.png")
 
         logo = PIL.ImageTk.PhotoImage(pil_image.open(gscan_logo_image_path))
-        logo_lbl = Label(logo_frame, image = logo)
+        logo_lbl = Label(self.logo_frame, image = logo)
         logo_lbl.image = logo
         logo_lbl.config(bg = "white")
         logo_lbl.grid()
 
         # Frame for the file processing panel inside the
         # left master frame.
-        file_frame = Frame(
+        self.file_frame = Frame(
             left_master_frame,
             bg = "white", highlightthickness=0,
             width = 375, height = 350, bd = 0)
-        
+
+        self.create_file_frame_widgets(self.file_frame, name, ext, job_ref)        
+
+    def create_right_master_frame_widgets(self, right_master_frame,
+            current_user):
+        """Creates the right master frame's widgets."""
+
+        # Frame for the settings panel inside the right master frame.
+        settings_frame = Frame(
+            right_master_frame, 
+            bg = "white", highlightthickness=0, bd = 0)
+
+        settings_frame.grid(row = 0, column = 0, sticky = S)
+        settings_frame.grid_rowconfigure(0, weight = 1)
+        settings_frame.grid_columnconfigure(0, weight = 1)
+
+        self.create_settings_frame_widgets(settings_frame, current_user)
+
+    def create_file_frame_widgets(self, file_frame, name, ext, job_ref):
+        """Creates widgets required for the file frame."""
+
         file_frame.grid(row = 1, column = 0, sticky = S)
         file_frame.grid_rowconfigure(0, weight = 1)
         file_frame.grid_columnconfigure(0, weight = 1)
 
-                # File name label.
+        # File name label.
         self.file_name_lbl = Label(file_frame, text = "Filename:\t")
         self.file_name_lbl.grid(row = 0, column = 0, sticky = W, padx = 5)
         self.file_name_lbl.config(font=("Calibri", 11), bg = "white")
@@ -287,21 +307,10 @@ class Application(Frame):
             highlightthickness = 0, borderwidth = 0,
             state = DISABLED)
 
-    def create_right_master_frame_widgets(self, right_master_frame,
-            current_user):
-        """Creates the right master frame's widgets."""
-
-        # Frame for the settings panel inside the right master frame.
-        settings_frame = Frame(
-            right_master_frame, 
-            bg = "white", highlightthickness=0, bd = 0)
-
-        settings_frame.grid(row = 0, column = 0, sticky = S)
-        settings_frame.grid_rowconfigure(0, weight = 1)
-        settings_frame.grid_columnconfigure(0, weight = 1)
-
+    def create_settings_frame_widgets(self, settings_frame, current_user):
         # Paperwork type heading for the radio dial to determine
         # the type of paperwork being processed.
+
         self.pw_type_lbl = Label(settings_frame, text = "Paperwork Type")
         self.pw_type_lbl.config(font=("Calibri", 13), bg = "white")
         self.pw_type_lbl.grid(row = 0, column = 0, padx = 10, sticky = W)
