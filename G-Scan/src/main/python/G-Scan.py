@@ -40,7 +40,8 @@ class Application(Frame):
         # self.temp_directory = "/home/ryanm/Desktop/GrayScan/Temp"
         # windows temp directory
         self.temp_dir = filesystem.get_temp_directory()
-        self.create_widgets(name = "", ext = "", job_ref = "", current_user = self.current_user)
+        self.create_widgets(
+            name = "", ext = "", job_ref = "", current_user = self.current_user)
         self.quick_mode_hint_message()
         self.activity_log_row_count = 1
         self.validate_directories_check()
@@ -73,294 +74,441 @@ class Application(Frame):
         return current_user
 
     def create_widgets(self, name, ext, job_ref, current_user):
-        """ Create all them motherfucking widgets"""
+        """Creates all the widgets required for the main GUI window."""
 
-        # left frame for Logo frame and the file processing frame
-        left_frame = Frame(self, width = 390, height = 255, borderwidth = 0, highlightthickness = 0, bg = "white")
-        left_frame.grid(row = 1, column = 0)
-        left_frame.grid_rowconfigure(0, weight = 1)
-        left_frame.grid_columnconfigure(0, weight = 1)
+        # Left master frame to contain the logo frame and the
+        # file processing frame.
+        left_master_frame = Frame(
+            self, width = 390, height = 255,
+            borderwidth = 0, highlightthickness = 0, bg = "white")
 
-        right_frame = Frame(self, width = 390, height = 255, borderwidth = 0, highlightthickness = 0, bg = "white")
-        right_frame.grid(row = 1, column = 1, sticky = "nsew")
-        right_frame.grid_rowconfigure(0, weight = 1)
-        right_frame.grid_columnconfigure(0, weight = 1)
+        left_master_frame.grid(row = 1, column = 0)
+        left_master_frame.grid_rowconfigure(0, weight = 1)
+        left_master_frame.grid_columnconfigure(0, weight = 1)
 
-        # frame for the settings on the right
-        settings_frame = Frame(right_frame, bg = "white", highlightthickness=0,
-                            bd = 0)
+        # Right master frame.
+        right_master_frame = Frame(
+            self, width = 390, height = 255,
+            borderwidth = 0, highlightthickness = 0, bg = "white")
+        
+        right_master_frame.grid(row = 1, column = 1, sticky = "nsew")
+        right_master_frame.grid_rowconfigure(0, weight = 1)
+        right_master_frame.grid_columnconfigure(0, weight = 1)
+
+        # Frame for the settings panel inside the right master frame.
+        settings_frame = Frame(
+            right_master_frame, 
+            bg = "white", highlightthickness=0, bd = 0)
+
         settings_frame.grid(row = 0, column = 0, sticky = S)
         settings_frame.grid_rowconfigure(0, weight = 1)
         settings_frame.grid_columnconfigure(0, weight = 1)
         
-        # Logo Frame
-        logo_frame = Frame(left_frame, bg = "white",
-                           width = 390, height = 122, bd = 0, borderwidth = 0, highlightthickness=0)
+        # Logo frame inside the left master frame.
+        logo_frame = Frame(
+            left_master_frame,
+            bg = "white", width = 390, height = 122,
+            bd = 0, borderwidth = 0, highlightthickness=0)
+
         logo_frame.grid(row = 0, column = 0, sticky = N)
         logo_frame.grid_rowconfigure(0, weight = 1)
         logo_frame.grid_columnconfigure(0, weight = 1)
 
-        # frame for the file processing side on the left
-        file_frame = Frame(left_frame, bg = "white", highlightthickness=0,
-                           width = 375, height = 350, bd = 0)
+        # Frame for the file processing panel inside the
+        # left master frame.
+        file_frame = Frame(
+            left_master_frame,
+            bg = "white", highlightthickness=0,
+            width = 375, height = 350, bd = 0)
+        
         file_frame.grid(row = 1, column = 0, sticky = S)
         file_frame.grid_rowconfigure(0, weight = 1)
         file_frame.grid_columnconfigure(0, weight = 1)
 
-        # activity log frame along the bottom
-        activity_log_frame = Frame(self, width = 500, height = 250, borderwidth = 0, highlightthickness = 0, bg = "white")
-        activity_log_frame.grid(row = 2, column = 0, columnspan = 2, sticky = N + W)
+        # Activity log frame along the bottom.
+        activity_log_frame = Frame(
+            self, width = 500, height = 250,
+            borderwidth = 0, highlightthickness = 0, bg = "white")
+        
+        activity_log_frame.grid(
+            row = 2, column = 0, columnspan = 2, sticky = N + W)
+        
         activity_log_frame.grid_rowconfigure(0, weight = 1)
         activity_log_frame.grid_columnconfigure(0, weight = 1)
 
-        # Open Image and assign to logo label in Logo Frame
-        img = pil_image.open("C:/G-Scan/data/g-scan_logo.png")
-        logo = PIL.ImageTk.PhotoImage(img)
+        # Create the the G-Scan logo image.
+        gscan_logo_image_path = (
+            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
+
+        logo = PIL.ImageTk.PhotoImage(pil_image.open(gscan_logo_image_path))
         logo_lbl = Label(logo_frame, image = logo)
         logo_lbl.image = logo
         logo_lbl.config(bg = "white")
         logo_lbl.grid()
         
-        # text box for all the log to write into
-        self.log_box = Text(activity_log_frame, width = 120, height = 11, wrap = WORD)
-        self.log_box.grid(row = 0, column = 0, sticky = W, padx = 7, pady = 5)
+        # Text box for activity log to write into.
+        self.activity_log_textbox = Text(
+            activity_log_frame,
+            width = 120, height = 11, wrap = WORD)
+        
+        self.activity_log_textbox.grid(
+            row = 0, column = 0, sticky = W, padx = 7, pady = 5)
 
-        # scroll bar for a laugh
-        self.scroll_bar = Scrollbar(activity_log_frame, orient="vertical", command=self.log_box.yview)
+        # Scroll bar for the activity log.
+        self.scroll_bar = Scrollbar(
+            activity_log_frame,
+            orient="vertical",
+            command=self.activity_log_textbox.yview)
+        
         self.scroll_bar.grid(row=0, column = 1, sticky = N + S + W)
 
-        # have to do the config of the textbox here or the system has a bitch fit
-        self.log_box.config(font = ("Calibri", 11), bg = "light grey", state = DISABLED, yscrollcommand=self.scroll_bar.set)
+        # Have to do config the activity log textbox here or the system
+        # won't recognise the custom scroll bar being assigned to it.
+        self.activity_log_textbox.config(
+            font = ("Calibri", 11),
+            bg = "light grey",
+            state = DISABLED,
+            yscrollcommand=self.scroll_bar.set)
 
+        # File name label.
+        self.file_name_lbl = Label(file_frame, text = "Filename:\t")
+        self.file_name_lbl.grid(row = 0, column = 0, sticky = W, padx = 5)
+        self.file_name_lbl.config(font=("Calibri", 11), bg = "white")
 
-        # file name label
-        self.name_lbl = Label(file_frame, text = "Filename:\t")
-        self.name_lbl.grid(row = 0, column = 0, sticky = W, padx = 5)
-        self.name_lbl.config(font=("Calibri", 11), bg = "white")
+        # File name text field to display the name of the file.
+        self.file_name_txt = Text(
+            file_frame, width = 42, height = 1, wrap = WORD)
+        
+        self.file_name_txt.grid(
+            row = 0, column = 1, columnspan = 4, sticky = W)
+        
+        self.file_name_txt.insert(0.0, name)
+        self.file_name_txt.config(
+            font = ("Calibri", 11), bg = "light grey", state = DISABLED)
 
-        # file name field
-        self.name_txt = Text(file_frame, width = 42, height = 1, wrap = WORD)
-        self.name_txt.grid(row = 0, column = 1, columnspan = 4, sticky = W)
-        self.name_txt.insert(0.0, name)
-        self.name_txt.config(font = ("Calibri", 11), bg = "light grey", state = DISABLED)
+        # File extension label.
+        self.file_ext_lbl = Label(file_frame, text = "File Type:\t")
+        self.file_ext_lbl.grid(row = 1, column = 0, sticky = W, padx = 5)
+        self.file_ext_lbl.config(font=("Calibri", 11), bg = "white")
 
-        # file extension label
-        self.ext_lbl = Label(file_frame, text = "File Type:\t")
-        self.ext_lbl.grid(row = 1, column = 0, sticky = W, padx = 5)
-        self.ext_lbl.config(font=("Calibri", 11), bg = "white")
+        # File extension text field to display the file extension.
+        self.file_ext_txt = Text(
+            file_frame, width = 42, height = 1, wrap = WORD)
+        
+        self.file_ext_txt.grid(
+            row = 1, column = 1, columnspan = 4, sticky = W)
+        
+        self.file_ext_txt.insert(0.0, ext)
+        self.file_ext_txt.config(
+            font = ("Calibri", 11), bg = "light grey", state = DISABLED)
 
-        # file extension field
-        self.ext_txt = Text(file_frame, width = 42, height = 1, wrap = WORD)
-        self.ext_txt.grid(row = 1, column = 1, columnspan = 4, sticky = W)
-        self.ext_txt.insert(0.0, ext)
-        self.ext_txt.config(font = ("Calibri", 11), bg = "light grey", state = DISABLED)
-
-        # job ref input instruction
-        self.input_instruction_lbl = Label(file_frame, text = "Please enter the Job Reference (excluding \"GR\")")
-        self.input_instruction_lbl.grid(row = 2, column = 0, columnspan = 5, sticky = W, padx = 5)
+        # Input instruction label that provides text to aid the user
+        # in discerning their next action.
+        self.input_instruction_lbl = Label(
+            file_frame,
+            text = "Please enter the Job Reference (excluding \"GR\")")
+        
+        self.input_instruction_lbl.grid(
+            row = 2, column = 0, columnspan = 5, sticky = W, padx = 5)
         self.input_instruction_lbl.config(font=("Calibri", 11), bg = "white")
 
-        # job ref input box
-        self.job_ref_ent = Entry(file_frame)
-        self.job_ref_ent.grid(row = 3, column = 0, columnspan = 2, sticky = W, padx = 5)
-        self.job_ref_ent.config(font=("Calibri", 11), bg = "light grey")
-        self.job_ref_ent.bind("<Return>", self.submit_enter_key)
-        self.job_ref_ent.bind("<KP_Enter>", self.submit_enter_key)
+        # User input entry box.
+        self.user_input_entry_box = Entry(file_frame)
+        self.user_input_entry_box.grid(
+            row = 3, column = 0, columnspan = 2, sticky = W, padx = 5)
 
-        # job ref submission button
-        self.submit_bttn = Button(file_frame, text = "Submit",command = self.submit)
+        self.user_input_entry_box.config(
+            font=("Calibri", 11), bg = "light grey")
+        
+        self.user_input_entry_box.bind("<Return>", self.submit_enter_key)
+        self.user_input_entry_box.bind("<KP_Enter>", self.submit_enter_key)
+
+        # User input submission button.
+        self.submit_bttn = Button(
+            file_frame, text = "Submit",command = self.submit)
+        
         self.submit_bttn.grid(row = 3, column = 1, sticky = E, ipadx = 28)
         self.submit_bttn.config(font=("Calibri", 11))
         self.submit_bttn.bind("<Return>", self.submit_enter_key)
         self.submit_bttn.bind("<KP_Enter>", self.submit_enter_key)
 
-        # skip file button
-        self.skip_bttn = Button(file_frame, text = "Skip", command = lambda: self.skip())
+        # Skip file button.
+        self.skip_bttn = Button(
+            file_frame, text = "Skip", command = lambda: self.skip())
+        
         self.skip_bttn.grid(row = 3, column = 3, sticky = E, padx = 5)
         self.skip_bttn.config(font=("Calibri", 11))
         self.skip_bttn.bind("<Return>", self.skip_enter_key)
         self.skip_bttn.bind("<KP_Enter>", self.skip_enter_key)
 
-        # document splitter button
-        self.split_multi_page_bttn = Button(file_frame, text = "Split Document", command = self.manual_document_splitter)
-        self.split_multi_page_bttn.grid(row = 3, column = 4, columnspan = 2, sticky = E)
+        # Document splitter button.
+        self.split_multi_page_bttn = Button(
+            file_frame,
+            text = "Split Document",
+            command = self.manual_document_splitter)
+        
+        self.split_multi_page_bttn.grid(
+            row = 3, column = 4, columnspan = 2, sticky = E)
+        
         self.split_multi_page_bttn.config(font=("Calibri", 11))
         self.split_multi_page_bttn.bind("<Return>", self.split_pdf_enter_key)
-        self.split_multi_page_bttn.bind("<KP_Enter>", self.split_pdf_enter_key)
+        
+        self.split_multi_page_bttn.bind(
+            "<KP_Enter>", self.split_pdf_enter_key)
 
-        # start button
-        self.start_bttn = Button(file_frame, text = "Start", command = self.start)
-        self.start_bttn.grid(row = 4, column = 0, sticky = W, padx = 5, pady = 3)
+        # Start button.
+        self.start_bttn = Button(
+            file_frame, text = "Start", command = self.start)
+        
+        self.start_bttn.grid(
+            row = 4, column = 0, sticky = W, padx = 5, pady = 3)
+        
         self.start_bttn.config(font=("Calibri", 11))
         self.start_bttn.bind("<Return>", self.start_enter_key)
         self.start_bttn.bind("<KP_Enter>", self.start_enter_key)
 
-        # GR quick mode clarification
-        self.quick_mode_notice_txt = Text(file_frame, width = 30, height = 1, wrap = WORD)
-        self.quick_mode_notice_txt.grid(row = 4, column = 1, columnspan = 4, sticky = SE)
-        self.quick_mode_notice_txt.config(font = ("Calibri", 11), bg = "White", highlightthickness = 0, borderwidth = 0, state = DISABLED)
+        # GR Quick Mode setting text display notice informing the user
+        # whether quick mode is switched on or not.
+        self.quick_mode_notice_txt = Text(
+            file_frame, width = 30, height = 1, wrap = WORD)
+        
+        self.quick_mode_notice_txt.grid(
+            row = 4, column = 1, columnspan = 4, sticky = SE)
+        
+        self.quick_mode_notice_txt.config(
+            font = ("Calibri", 11), bg = "White",
+            highlightthickness = 0, borderwidth = 0,
+            state = DISABLED)
 
-        # paperwork type heading for the radio dial
+        # Paperwork type heading for the radio dial to determine
+        # the type of paperwork being processed.
         self.pw_type_lbl = Label(settings_frame, text = "Paperwork Type")
         self.pw_type_lbl.config(font=("Calibri", 13), bg = "white")
         self.pw_type_lbl.grid(row = 0, column = 0, padx = 10, sticky = W)
 
-        # paperwork type radio buttons
-        # set the paperwork type variable group for the buttons to feed from
+        # Paperwork type radio buttons.
+        # Initialise the paperwork type variable for the radio button options.
         self.pw_setting = StringVar()
         self.pw_setting.set(current_user.pw_type)
         
-        # cust pw button
-        Radiobutton(settings_frame,
-                    text = "Customer PW",
-                    variable = self.pw_setting,
-                    value = "Cust PW",
-                    bg = "white",
-                    font = ("Calibri", 11),
-                    highlightthickness = 0
-                    ).grid(row = 1, column = 0, sticky = W, padx = 10, pady = 3)
+        # Customer Paperwork paperwork type radio button.
+        self.cust_pw_radio_bttn = Radiobutton(
+            settings_frame,
+            text = "Customer PW",
+            variable = self.pw_setting,
+            value = "Cust PW",
+            bg = "white",
+            font = ("Calibri", 11),
+            highlightthickness = 0)
+        
+        self.cust_pw_radio_bttn.grid(
+            row = 1, column = 0,
+            sticky = W, padx = 10, pady = 3)
 
-        # loading list button
-        Radiobutton(settings_frame,
-                    text = "Loading List",
-                    variable = self.pw_setting,
-                    value = "Loading List",
-                    bg = "White",
-                    font = ("Calibri", 11),
-                    highlightthickness = 0
-                    ).grid(row = 1, column = 1, sticky = W, pady = 3)
+        # Loading list paperwork type radio button.
+        self.loading_list_radio_bttn = Radiobutton(
+            settings_frame,
+            text = "Loading List",
+            variable = self.pw_setting,
+            value = "Loading List",
+            bg = "White",
+            font = ("Calibri", 11),
+            highlightthickness = 0
+            )
+        
+        self.loading_list_radio_bttn.grid(
+            row = 1, column = 1, sticky = W, pady = 3)
 
-        # POD button
-        Radiobutton(settings_frame,
-                    text = "POD",
-                    variable = self.pw_setting,
-                    value = "POD",
-                    bg = "White",
-                    font = ("Calibri", 11),
-                    highlightthickness = 0
-                    ).grid(row = 1, column = 2, sticky = W, padx = 10, pady = 3)
+        # POD paperwork type radio button.
+        self.pod_radio_bttn = Radiobutton(
+            settings_frame,
+            text = "POD",
+            variable = self.pw_setting,
+            value = "POD",
+            bg = "White",
+            font = ("Calibri", 11),
+            highlightthickness = 0)
+        
+        self.pod_radio_bttn.grid(
+            row = 1, column = 2,
+            sticky = W, padx = 10, pady = 3)
 
-        # POD autoprocessing mode checkbox
+        # POD autoprocessing mode checkbox to allow the user to
+        # toggle this mode on and off.
         self.autoprocessing_mode = StringVar()
         self.autoprocessing_mode.set(current_user.autoprocessing)
 
-        Checkbutton(settings_frame,
-                    text = "Autoprocess",
-                    variable = self.autoprocessing_mode,
-                    onvalue = "on",
-                    offvalue = "off",
-                    bg = "White",
-                    font = ("Calibri", 8),
-                    highlightthickness = 0
-                    ).grid(row = 1, column = 3, sticky = W, pady = 3)
+        self.autoprocessing_checkbox = Checkbutton(
+            settings_frame,
+            text = "Autoprocess",
+            variable = self.autoprocessing_mode,
+            onvalue = "on",
+            offvalue = "off",
+            bg = "White",
+            font = ("Calibri", 8),
+            highlightthickness = 0)
         
+        self.autoprocessing_checkbox.grid(
+            row = 1, column = 3, sticky = W, pady = 3)
 
-        # Input mode heading
+        # Input mode heading.
         self.input_mode_lbl = Label(settings_frame, text = "Input Mode")
-        self.input_mode_lbl.grid(row = 2, column = 0, sticky = S + W, padx = 10, pady = 8)
+        
+        self.input_mode_lbl.grid(
+            row = 2, column = 0, sticky = S + W, padx = 10, pady = 8)
+        
         self.input_mode_lbl.config(font=("Calibri", 13), bg = "White")
 
-        # input mode radio buttons
-        # set the input variable group for the buttons to feed from
+        # Input mode radio buttons.
+        # Initialise the input mode variable for input mode options.
         self.current_input_mode = StringVar()
         self.current_input_mode.set(current_user.input_mode)
         
-        # Normal mode
-        Radiobutton(settings_frame,
-                    text = "Normal Mode",
-                    variable = self.current_input_mode,
-                    value = "Normal",
-                    bg = "White",
-                    font = ("Calibri", 11),
-                    highlightthickness = 0,
-                    command = self.quick_mode_hint_message
-                    ).grid(row = 3, column = 0, rowspan = 2, padx = 10, pady = 5, sticky = NW)
+        # Normal input mode radio button.
+        self.normal_mode_radio_bttn = Radiobutton(
+            settings_frame,
+            text = "Normal Mode",
+            variable = self.current_input_mode,
+            value = "Normal",
+            bg = "White",
+            font = ("Calibri", 11),
+            highlightthickness = 0,
+            command = self.quick_mode_hint_message)
+            
+        self.normal_mode_radio_bttn.grid(
+            row = 3, column = 0,
+            rowspan = 2, padx = 10, pady = 5, sticky = NW)
 
-        # Quick Mode
-        Radiobutton(settings_frame,
-                    text = "Quick Mode",
-                    variable = self.current_input_mode,
-                    value = "Quick",
-                    bg = "White",
-                    font = ("Calibri", 11),
-                    highlightthickness = 0,
-                    command = self.quick_mode_hint_message
-                    ).grid(row = 3, column = 1, rowspan = 2, pady = 5, sticky = NW)
+        # Quick input mode radio button.
+        self.quick_mode_radio_bttn = Radiobutton(
+            settings_frame,
+            text = "Quick Mode",
+            variable = self.current_input_mode,
+            value = "Quick",
+            bg = "White",
+            font = ("Calibri", 11),
+            highlightthickness = 0,
+            command = self.quick_mode_hint_message
+            )
+        
+        self.quick_mode_radio_bttn.grid(
+            row = 3, column = 1, rowspan = 2, pady = 5, sticky = NW)
 
-        # Dropdown box for month
+        # Dropdown box for selecting the month that quick mode uses.
         self.month_choice = StringVar(settings_frame)
         self.month_choice.set(CURRENT_MONTH)
         
-        month_menu = OptionMenu(settings_frame,
-                                self.month_choice,
-                                *MONTHS,
-                                command = self.quick_mode_hint_message
-                                )
-        month_menu.grid(row = 3, column = 2, columnspan = 2, padx = 10, sticky = NW)
-        month_menu.config(font =("Calibri", 11), highlightthickness= 0, width = 13)
+        self.month_dropdown_box = OptionMenu(
+            settings_frame,
+            self.month_choice,
+            *MONTHS,
+            command = self.quick_mode_hint_message)
+
+        self.month_dropdown_box.grid(
+            row = 3, column = 2, columnspan = 2, padx = 10, sticky = NW)
         
-        # Dropdown box for year
+        self.month_dropdown_box.config(
+            font =("Calibri", 11), highlightthickness= 0, width = 13)
+        
+        # Dropdown box for selecting the year that quick mode uses.
         self.year_choice = StringVar(settings_frame)
         self.year_choice.set(CURRENT_YEAR)
 
-        year_menu = OptionMenu(settings_frame,
-                               self.year_choice,
-                               LAST_YEAR,
-                               CURRENT_YEAR,
-                               command = self.quick_mode_hint_message
-                               )
-        year_menu.grid(row = 4, column = 2, columnspan = 2, padx = 10, sticky = NW)
-        year_menu.config(font =("Calibri", 11), highlightthickness= 0, width = 13)
+        self.year_dropdown_box = OptionMenu(
+            settings_frame,
+            self.year_choice,
+            LAST_YEAR,
+            CURRENT_YEAR,
+            command = self.quick_mode_hint_message)
+        
+        self.year_dropdown_box.grid(
+            row = 4, column = 2, columnspan = 2, padx = 10, sticky = NW)
+        
+        self.year_dropdown_box.config(
+            font =("Calibri", 11), highlightthickness= 0, width = 13)
 
-        # multi-page handling section
-        # multi-page handling label
-        self.multi_page_lbl = Label(settings_frame, text = "Multi-Page Handling")
-        self.multi_page_lbl.grid(row = 5, column = 0, padx = 10, sticky = S + W)
+        ### Multi-Page Handling Section ###
+        # Multi-page handling label.
+        self.multi_page_lbl = Label(
+            settings_frame, text = "Multi-Page Handling")
+        
+        self.multi_page_lbl.grid(
+            row = 5, column = 0, padx = 10, sticky = S + W)
+        
         self.multi_page_lbl.config(font=("Calibri", 13), bg = "white")
 
-        # multi-page handling radio buttons
-        # set the multi-page handling variable for whether to split multi-page pdfs or not
+        # Multi-page handling radio buttons.
+        # Initialise the multi-page handling variable on whether to
+        # split multi-page pdfs or not.
         self.multi_page_mode = StringVar()
         self.multi_page_mode.set(current_user.multi_page_handling)
 
-        # split mode
-        Radiobutton(settings_frame,
-                    text = "Split Multi-Page\nDocuments",
-                    variable = self.multi_page_mode,
-                    value = "Split",
-                    bg = "White",
-                    font = ("Calibri", 11),
-                    highlightthickness = 0
-                    ).grid(row = 6, column = 0, sticky = W, padx = 10, pady = 3)
+        # Split mode radio button to set multi-page handling to split
+        # documents.
+        self.split_mode_radio_bttn = Radiobutton(
+            settings_frame,
+            text = "Split Multi-Page\nDocuments",
+            variable = self.multi_page_mode,
+            value = "Split",
+            bg = "White",
+            font = ("Calibri", 11),
+            highlightthickness = 0
+            )
+        
+        self.split_mode_radio_bttn.grid(
+            row = 6, column = 0, sticky = W, padx = 10, pady = 3)
 
-        # do not split mode
-        Radiobutton(settings_frame,
-                    text = "Do Not Split",
-                    variable = self.multi_page_mode,
-                    value = "Do Not Split",
-                    bg = "White",
-                    font = ("Calibri", 11),
-                    highlightthickness = 0
-                    ).grid(row = 6, column = 1, sticky = W, pady = 3)
+        # Do not split mode radio button to set multi-page handling
+        # not to split documents.
+        self.do_not_split_mode_radio_bttn = Radiobutton(
+            settings_frame,
+            text = "Do Not Split",
+            variable = self.multi_page_mode,
+            value = "Do Not Split",
+            bg = "White",
+            font = ("Calibri", 11),
+            highlightthickness = 0)
+        
+        self.do_not_split_mode_radio_bttn.grid(
+            row = 6, column = 1, sticky = W, pady = 3)
 
-        # michelin button
+        # Michelin button for performing the special michelin function
+        # wherein paperwork processing is done based on using the
+        # file name as a job reference without requiring user input
+        # or document scanning.
         size = 25, 25
-        self.michelin_img = pil_image.open("C:/G-Scan/data/michelin_logo.jpg")
+
+        self.michelin_img = pil_image.open(
+            filesystem.get_resources_directory()
+            + "images\\michelin_logo.jpg")
+        
         self.michelin_img.thumbnail(size, pil_image.ANTIALIAS)
         self.michelin_logo = PIL.ImageTk.PhotoImage(self.michelin_img)
         
-        self.michelin_bttn = Button(settings_frame, image = self.michelin_logo, command = self.michelin_man)
+        self.michelin_bttn = Button(
+            settings_frame,
+            image = self.michelin_logo,
+            command = self.michelin_man)
+        
         self.michelin_bttn.grid(row = 7, column = 1, sticky = E)
 
-        # settings button
-        self.settings_bttn = Button(settings_frame, text = "Settings",command = lambda: self.settings(current_user))
+        # Settings button.
+        self.settings_bttn = Button(
+            settings_frame,
+            text = "Settings",
+            command = lambda: self.settings(current_user))
+
         self.settings_bttn.grid(row = 7, column = 2, sticky = E, padx = 3)
         self.settings_bttn.bind("<Return>", self.settings_enter_key)
         self.settings_bttn.bind("<KP_Enter>", self.settings_enter_key)
         self.settings_bttn.config(font=("Calibri", 11))
 
-        # exit button
-        self.exit_bttn = Button(settings_frame, text = "Exit", command = self.kill_program)
+        # Exit button.
+        self.exit_bttn = Button(
+            settings_frame,
+            text = "Exit",
+            command = self.kill_program)
+        
         self.exit_bttn.grid(row = 7, column = 3, columnspan = 2, sticky = W)
         self.exit_bttn.config(font=("Calibri", 11))
         self.exit_bttn.bind("<Return>", self.exit_enter_key)
@@ -368,6 +516,7 @@ class Application(Frame):
 
         for i in range(1,10):
             self.columnconfigure(i, weight = 1)
+
         for i in range(1,10):
             self.rowconfigure(1, weight = 1)
             
@@ -470,7 +619,7 @@ class Application(Frame):
             file_name, file_ext = os.path.splitext(self.file)
 
             self.insert_file_attributes(file_name, file_ext)
-            self.job_ref_ent.focus_set()
+            self.user_input_entry_box.focus_set()
 
             # Customer Paperwork/Loading List/Manual POD Processing Mode
             if pw_type == "Cust PW" or pw_type == "Loading List" or pw_type == "POD" and autoprocessing == "off":
@@ -631,13 +780,13 @@ class Application(Frame):
         self.show_image(self.file)
         
         self.insert_file_attributes(file_name, file_ext)
-        self.job_ref_ent.focus_set()
+        self.user_input_entry_box.focus_set()
 
     def submit(self, barcode = None, manual_submission = True):
         # user input variables
         input_mode = self.current_input_mode.get()
         pw_type = self.pw_setting.get()
-        user_input = self.job_ref_ent.get()
+        user_input = self.user_input_entry_box.get()
         auto_processing = self.autoprocessing_mode.get()
 
         # directory variables
@@ -656,7 +805,7 @@ class Application(Frame):
 
             # if the check passes, start the renaming/move file method and get the next one
             if check == True:
-                self.job_ref_ent.delete(0, END)
+                self.user_input_entry_box.delete(0, END)
                 
                 full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = self.rename_file(user_input, input_mode, file_extension)
 
@@ -676,7 +825,7 @@ class Application(Frame):
 
         # POD autoprocessing mode
         elif pw_type == "POD" and auto_processing == "on" and manual_submission == False:
-                self.job_ref_ent.delete(0, END)
+                self.user_input_entry_box.delete(0, END)
                 
                 full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = self.rename_file(barcode, input_mode, file_extension)
 
@@ -1017,7 +1166,7 @@ class Application(Frame):
                         self.upload_doc(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
                         self.write_log("Uploaded " + file + " as " + dest_file_name)
                         file_count += 1
-                        self.job_ref_ent.delete(0, END)
+                        self.user_input_entry_box.delete(0, END)
                         
                     else:
                         self.write_log("Ignoring" + file)
@@ -1030,7 +1179,7 @@ class Application(Frame):
         file_list = self.file_list
         file = file_list[file_index]
         
-        self.job_ref_ent.delete(0, END)
+        self.user_input_entry_box.delete(0, END)
 
         self.file_list.remove(self.file)
         self.write_log("Skipping " + self.file)
@@ -1161,18 +1310,18 @@ class Application(Frame):
 
     def insert_file_attributes(self, file_name, file_ext):
         # make the name & ext text boxes writable
-        self.name_txt.config(state = NORMAL)
-        self.ext_txt.config(state = NORMAL)        
+        self.file_name_txt.config(state = NORMAL)
+        self.file_ext_txt.config(state = NORMAL)        
 
         # clear the current text and insert the file name and extension
-        self.name_txt.delete(0.0, END)
-        self.ext_txt.delete(0.0, END)
-        self.name_txt.insert(0.0, file_name)
-        self.ext_txt.insert(0.0, file_ext)
+        self.file_name_txt.delete(0.0, END)
+        self.file_ext_txt.delete(0.0, END)
+        self.file_name_txt.insert(0.0, file_name)
+        self.file_ext_txt.insert(0.0, file_ext)
 
         # make the name and ext text boxes read only again
-        self.name_txt.config(state = DISABLED)
-        self.ext_txt.config(state = DISABLED)
+        self.file_name_txt.config(state = DISABLED)
+        self.file_ext_txt.config(state = DISABLED)
 
     def quick_mode_hint_message(self, event = None):
         """ Check the current input mode setting, and if switched on, provide a handy hint for what the template GR ref looks like """
@@ -1245,9 +1394,9 @@ class Application(Frame):
     def write_log(self, text):
         """ Inserts text into the box and removes an extra line if getting too full. """
         row = str(self.activity_log_row_count) + ".0"
-        self.log_box.config(state = NORMAL)
-        self.log_box.insert(row, text + "\n")
-        self.log_box.see("end")
+        self.activity_log_textbox.config(state = NORMAL)
+        self.activity_log_textbox.insert(row, text + "\n")
+        self.activity_log_textbox.see("end")
         self.activity_log_row_count += 1
 
 class Settings_Window(Frame):
