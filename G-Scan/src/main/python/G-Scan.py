@@ -86,6 +86,9 @@ class Application(Frame):
         left_master_frame.grid_rowconfigure(0, weight = 1)
         left_master_frame.grid_columnconfigure(0, weight = 1)
 
+        self.create_left_master_frame_widgets(
+            left_master_frame, name, ext, job_ref)
+
         # Right master frame.
         right_master_frame = Frame(
             self, width = 390, height = 255,
@@ -94,36 +97,9 @@ class Application(Frame):
         right_master_frame.grid(row = 1, column = 1, sticky = "nsew")
         right_master_frame.grid_rowconfigure(0, weight = 1)
         right_master_frame.grid_columnconfigure(0, weight = 1)
-
-        # Frame for the settings panel inside the right master frame.
-        settings_frame = Frame(
-            right_master_frame, 
-            bg = "white", highlightthickness=0, bd = 0)
-
-        settings_frame.grid(row = 0, column = 0, sticky = S)
-        settings_frame.grid_rowconfigure(0, weight = 1)
-        settings_frame.grid_columnconfigure(0, weight = 1)
         
-        # Logo frame inside the left master frame.
-        logo_frame = Frame(
-            left_master_frame,
-            bg = "white", width = 390, height = 122,
-            bd = 0, borderwidth = 0, highlightthickness=0)
-
-        logo_frame.grid(row = 0, column = 0, sticky = N)
-        logo_frame.grid_rowconfigure(0, weight = 1)
-        logo_frame.grid_columnconfigure(0, weight = 1)
-
-        # Frame for the file processing panel inside the
-        # left master frame.
-        file_frame = Frame(
-            left_master_frame,
-            bg = "white", highlightthickness=0,
-            width = 375, height = 350, bd = 0)
-        
-        file_frame.grid(row = 1, column = 0, sticky = S)
-        file_frame.grid_rowconfigure(0, weight = 1)
-        file_frame.grid_columnconfigure(0, weight = 1)
+        self.create_right_master_frame_widgets(
+            right_master_frame, current_user)
 
         # Activity log frame along the bottom.
         activity_log_frame = Frame(
@@ -135,16 +111,6 @@ class Application(Frame):
         
         activity_log_frame.grid_rowconfigure(0, weight = 1)
         activity_log_frame.grid_columnconfigure(0, weight = 1)
-
-        # Create the the G-Scan logo image.
-        gscan_logo_image_path = (
-            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
-
-        logo = PIL.ImageTk.PhotoImage(pil_image.open(gscan_logo_image_path))
-        logo_lbl = Label(logo_frame, image = logo)
-        logo_lbl.image = logo
-        logo_lbl.config(bg = "white")
-        logo_lbl.grid()
         
         # Text box for activity log to write into.
         self.activity_log_textbox = Text(
@@ -170,7 +136,48 @@ class Application(Frame):
             state = DISABLED,
             yscrollcommand=self.scroll_bar.set)
 
-        # File name label.
+        for i in range(1,10):
+            self.columnconfigure(i, weight = 1)
+
+        for i in range(1,10):
+            self.rowconfigure(1, weight = 1)
+
+    def create_left_master_frame_widgets(self, left_master_frame, name, ext,
+            job_ref):
+        """Creates the widgets for the left master frame."""
+
+        # Logo frame inside the left master frame.
+        logo_frame = Frame(
+            left_master_frame,
+            bg = "white", width = 390, height = 122,
+            bd = 0, borderwidth = 0, highlightthickness=0)
+
+        logo_frame.grid(row = 0, column = 0, sticky = N)
+        logo_frame.grid_rowconfigure(0, weight = 1)
+        logo_frame.grid_columnconfigure(0, weight = 1)
+
+        # Create the the G-Scan logo image.
+        gscan_logo_image_path = (
+            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
+
+        logo = PIL.ImageTk.PhotoImage(pil_image.open(gscan_logo_image_path))
+        logo_lbl = Label(logo_frame, image = logo)
+        logo_lbl.image = logo
+        logo_lbl.config(bg = "white")
+        logo_lbl.grid()
+
+        # Frame for the file processing panel inside the
+        # left master frame.
+        file_frame = Frame(
+            left_master_frame,
+            bg = "white", highlightthickness=0,
+            width = 375, height = 350, bd = 0)
+        
+        file_frame.grid(row = 1, column = 0, sticky = S)
+        file_frame.grid_rowconfigure(0, weight = 1)
+        file_frame.grid_columnconfigure(0, weight = 1)
+
+                # File name label.
         self.file_name_lbl = Label(file_frame, text = "Filename:\t")
         self.file_name_lbl.grid(row = 0, column = 0, sticky = W, padx = 5)
         self.file_name_lbl.config(font=("Calibri", 11), bg = "white")
@@ -279,6 +286,19 @@ class Application(Frame):
             font = ("Calibri", 11), bg = "White",
             highlightthickness = 0, borderwidth = 0,
             state = DISABLED)
+
+    def create_right_master_frame_widgets(self, right_master_frame,
+            current_user):
+        """Creates the right master frame's widgets."""
+
+        # Frame for the settings panel inside the right master frame.
+        settings_frame = Frame(
+            right_master_frame, 
+            bg = "white", highlightthickness=0, bd = 0)
+
+        settings_frame.grid(row = 0, column = 0, sticky = S)
+        settings_frame.grid_rowconfigure(0, weight = 1)
+        settings_frame.grid_columnconfigure(0, weight = 1)
 
         # Paperwork type heading for the radio dial to determine
         # the type of paperwork being processed.
@@ -512,12 +532,6 @@ class Application(Frame):
         self.exit_bttn.bind("<Return>", self.exit_enter_key)
         self.exit_bttn.bind("<KP_Enter>", self.exit_enter_key)
 
-        for i in range(1,10):
-            self.columnconfigure(i, weight = 1)
-
-        for i in range(1,10):
-            self.rowconfigure(1, weight = 1)
-            
     def submit_enter_key(self, ref):
         self.submit()
 
@@ -1349,7 +1363,10 @@ class Application(Frame):
             self.quick_mode_notice_txt.config(font = ("Calibri", 11), bg = "White", highlightthickness = 0, borderwidth = 0, state = DISABLED)
             
     def settings(self, current_user):
-        
+        """Opens a settings window to act as a user interface for
+        amending the user settings data file to change default
+        directories and user options."""
+
         set_win = Settings_Window(
             self, current_user, filesystem.get_user_settings_data())
 
