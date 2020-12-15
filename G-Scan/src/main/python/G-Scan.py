@@ -1,6 +1,7 @@
 import os
 import filesystem
 from settingswindow import Settings_Window
+from user import User
 import shelve
 import shutil
 import re
@@ -1396,26 +1397,6 @@ class Application(Frame):
         self.activity_log_textbox.insert(row, text + "\n")
         self.activity_log_textbox.see("end")
         self.activity_log_row_count += 1
-
-
-class User(object):
-    """ A user with a couple of values to store """
-    def __init__(self, name):
-        self.name = name
-        self.backup_directory = ""
-        self.scan_directory = ""
-        self.dest_directory = ""
-        self.pw_type = "Cust PW"
-        self.multi_page_handling = "Split"
-        self.input_mode = "Normal"
-        self.autoprocessing = "on"
-
-    def __str__(self):
-        return self.name
-
-    def save_user_settings(self, current_user, user_settings_file):
-        user_settings_file[current_user.name] = current_user
-        user_settings_file.sync()
 
 class Date(object):
     """ A year or month with short and full displays"""
