@@ -476,14 +476,12 @@ class Application(Frame):
         # wherein paperwork processing is done based on using the
         # file name as a job reference without requiring user input
         # or document scanning.
-        size = 25, 25
-
-        self.michelin_img = pil_image.open(
-            filesystem.get_resources_directory()
+        michelin_image_path = (filesystem.get_resources_directory()
             + "images\\michelin_logo.jpg")
         
-        self.michelin_img.thumbnail(size, pil_image.ANTIALIAS)
-        self.michelin_logo = PIL.ImageTk.PhotoImage(self.michelin_img)
+        rendered_michelin_image = pil_image.open(michelin_image_path)
+        rendered_michelin_image.thumbnail((25, 25), pil_image.ANTIALIAS)
+        self.michelin_logo = PIL.ImageTk.PhotoImage(rendered_michelin_image)
         
         self.michelin_bttn = Button(
             settings_frame,
