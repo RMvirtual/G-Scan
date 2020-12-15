@@ -3,6 +3,7 @@ import filesystem
 from settingswindow import Settings_Window
 from user import User
 from date import Date
+from popupbox import Popup_Box
 import shelve
 import shutil
 import re
@@ -541,7 +542,7 @@ class Application(Frame):
         self.exit_bttn.bind("<Return>", self.exit_enter_key)
         self.exit_bttn.bind("<KP_Enter>", self.exit_enter_key)
 
-    def submit_enter_key(self, ref):
+    def submit_enter_key(self, event = None):
         self.submit()
 
     def skip_enter_key(self, event = None):
@@ -578,7 +579,8 @@ class Application(Frame):
                     self.write_log("Adding " + file + " to list")
 
             if not self.file_list:
-                self.popup_box("Failure", "No files found.", "200", "50")
+                popup_box = Popup_Box(
+                    self, "Failure", "No files found.", "200", "50")
 
             else:
                 self.start_browser()
@@ -1344,6 +1346,15 @@ class Application(Frame):
         self.file_name_txt.config(state = DISABLED)
         self.file_ext_txt.config(state = DISABLED)
 
+    def write_log(self, text):
+        """Inserts text into the box and removes an extra line if
+        it is too full."""
+        row = str(self.activity_log_row_count) + ".0"
+        self.activity_log_textbox.config(state = NORMAL)
+        self.activity_log_textbox.insert(row, text + "\n")
+        self.activity_log_textbox.see("end")
+        self.activity_log_row_count += 1
+
     def quick_mode_hint_message(self, event = None):
         """ Check the current input mode setting, and if switched on, provide a handy hint for what the template GR ref looks like """
         input_mode = self.current_input_mode.get()
@@ -1392,38 +1403,6 @@ class Application(Frame):
             exit()
         except:
             exit()
-
-    def popup_box(self, title, popup_text, length, height):
-        self.win = Toplevel()
-        self.win.wm_title(title)
-
-        x_axis = str(GetSystemMetrics(0) - 800)
-        y_axis = str(GetSystemMetrics(1) - 500)
-
-        print(x_axis)
-        print(y_axis)
-
-        self.win.geometry(length + "x" + height + "+" + x_axis + "+" + y_axis)
-
-        label = Label(self.win, text = popup_text)
-        label.grid(row=0, column=0)
-
-        button = Button(self.win, text="Okay", command=self.win.destroy)
-        button.grid(row=1, column=0)
-        button.focus_set()
-        button.bind("<Return>", self.popup_close)
-        button.bind("<KP_Enter>", self.popup_close)
-
-    def popup_close(self, event = None):
-        self.win.destroy()
-
-    def write_log(self, text):
-        """ Inserts text into the box and removes an extra line if getting too full. """
-        row = str(self.activity_log_row_count) + ".0"
-        self.activity_log_textbox.config(state = NORMAL)
-        self.activity_log_textbox.insert(row, text + "\n")
-        self.activity_log_textbox.see("end")
-        self.activity_log_row_count += 1
 
 CURRENT_YEAR = Date(datetime.now().strftime('%Y'),
                     datetime.now().strftime('%y'))
