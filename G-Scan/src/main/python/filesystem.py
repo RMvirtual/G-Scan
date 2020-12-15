@@ -1,4 +1,5 @@
 import os
+import shelve
 
 # A static module for performing file system functions such as
 # retrieving commonly used directories etc.
@@ -83,6 +84,13 @@ def get_user_settings_data_path():
     user settings regarding directories and workspace defaults."""
 
     return get_data_directory() + "user_settings"
+
+def get_user_settings_data():
+    """Returns an open shelf file of the user settings .data file
+    containing all the user settings regarding directories and
+    workspace defaults."""
+
+    return shelve.open(get_user_settings_data_path())
 
 def get_resources_directory():
     """Returns the path of the resources folder that resides in
