@@ -1,5 +1,6 @@
 import os
 import filesystem
+import backup
 from settingswindow import Settings_Window
 from user import User
 from date import Date
@@ -579,8 +580,7 @@ class Application(Frame):
                     self.write_log("Adding " + file + " to list")
 
             if not self.file_list:
-                popup_box = Popup_Box(
-                    self, "Failure", "No files found.", "200", "50")
+                Popup_Box(self, "Failure", "No files found.", "200", "50")
 
             else:
                 self.start_browser()
@@ -1298,38 +1298,6 @@ class Application(Frame):
                 return True
             else:
                 return False
-
-    def backup_file(self, file_name, backup_file_name, scan_dir, backup_dir):
-        """ Creates a backup copy of a file into a specified backup directory """
-        if os.path.isdir(backup_dir):
-            shutil.copyfile(scan_dir + "/" + file_name, backup_dir + "/" + backup_file_name)
-            self.write_log("Backed up " + file_name)
-
-        else:
-            self.write_log("Backup directory not found. Please check your settings.")
-
-    def backup_housekeeping(self, backup_dir):
-        """ Checks the backup directory for any files over 30 days old and deletes them.
-            I have removed this from being used in the code as it scared me what
-            would happen if a user pointed it to the wrong folder, deleting
-            potentially important files on a server directory."""
-        if os.path.isdir(backup_dir):
-            backup_folder = os.listdir(backup_dir)
-            for file in backup_folder:
-                if file.lower().endswith(".pdf") or file.lower().endswith(".tif") or file.lower().endswith(".tiff") or file.lower().endswith(".jpeg")or file.lower().endswith(".jpg") or file.lower().endswith(".png"):
-                    # get last modified timestamp from file 
-                    file_timestamp = os.path.getmtime(backup_dir + "/" + file)
-                    # turn it from gobbledy gook into a useable format
-                    modified_time = datetime.fromtimestamp(file_timestamp)
-                    # get the current time
-                    now = datetime.now()
-                    # work out the difference between the current time and the modified date
-                    difference = now - modified_time
-                    # if the difference is over 30 days old, delete the file
-                    if difference.days > 30:
-                        os.remove(backup_dir + "/" + file)
-        else:
-            self.write_log("Backup directory not found. Please check your settings.")
 
     def insert_file_attributes(self, file_name, file_ext):
         # make the name & ext text boxes writable
