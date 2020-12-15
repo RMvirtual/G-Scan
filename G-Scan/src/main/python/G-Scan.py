@@ -2,6 +2,7 @@ import os
 import filesystem
 from settingswindow import Settings_Window
 from user import User
+from date import Date
 import shelve
 import shutil
 import re
@@ -1398,15 +1399,6 @@ class Application(Frame):
         self.activity_log_textbox.see("end")
         self.activity_log_row_count += 1
 
-class Date(object):
-    """ A year or month with short and full displays"""
-    def __init__(self, full, short):
-        self.full = full
-        self.short = short
-
-    def __str__(self):
-        return str(self.full)
-
 CURRENT_YEAR = Date(datetime.now().strftime('%Y'),
                     datetime.now().strftime('%y'))
 
@@ -1439,7 +1431,6 @@ DEFAULT_MULTI_PAGE_OPTIONS = ("Split", "Do Not Split")
 customer_pwork_flags_suffix = "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork"
 loading_list_flags_suffix = "++xShxPaxIsVs0++OPSLDLST++Loading_List"
 POD_flags_suffix = "++xShxPaIsVs2++KPIPOD++Scanned_POD"
-
 
 x_axis = str(GetSystemMetrics(0) - 870)
 y_axis = str(GetSystemMetrics(1) - 580)
