@@ -1,7 +1,9 @@
 import os
 import filesystem
 import backup
+import userinputvalidation
 from settingswindow import Settings_Window
+from pdfviewer import PDFViewer
 from user import User
 from date import Date
 from popupbox import Popup_Box
@@ -562,8 +564,7 @@ class Application(Frame):
         self.kill_program()
 
     def start_browser(self):
-        self.pdf_window = webdriver.Chrome()
-        self.pdf_window.get("https://www.google.com")
+        self.pdf_viewer = PDFViewer()
 
     def start(self):
         """ initialise looking for paperwork """
@@ -625,7 +626,7 @@ class Application(Frame):
         if not self.file_list:
             if self.file_index == 0:
                 self.popup_box("Guess What", "No more files remaining.", "230", "75")
-                self.pdf_window.quit()
+                self.pdf_viewer.close()
                 
         else:
             self.file = self.file_list[self.file_index]
@@ -646,7 +647,7 @@ class Application(Frame):
 
             # Customer Paperwork/Loading List/Manual POD Processing Mode
             if pw_type == "Cust PW" or pw_type == "Loading List" or pw_type == "POD" and autoprocessing == "off":
-                self.show_image(self.file)
+                self.show_image(self, self.file, self.current_user.scan_directory)
 
             # POD Automatic Processing Mode
             elif pw_type == "POD" and autoprocessing == "on":
@@ -781,11 +782,6 @@ class Application(Frame):
 
         return pdf_file
 
-    def show_image(self, file):
-        """Loads image in Google Chrome"""
-        self.write_log("Displaying " + file)
-        self.pdf_window.get("file:" + self.current_user.scan_directory + "/" + file)
-
     def manual_document_splitter(self):
         file = self.file
         scan_dir = self.current_user.scan_directory
@@ -800,7 +796,7 @@ class Application(Frame):
         self.file = self.file_list[self.file_index]
         file_name, file_ext = os.path.splitext(self.file)
 
-        self.show_image(self.file)
+        self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
         
         self.insert_file_attributes(file_name, file_ext)
         self.user_input_entry_box.focus_set()
@@ -824,15 +820,17 @@ class Application(Frame):
         if pw_type == "Cust PW" or pw_type == "Loading List" or pw_type == "POD" and auto_processing == "off" or auto_processing == "on" and manual_submission == True:
             # check user has inputted correct amount of digits
             check = None
-            check = self.user_input_check(user_input, input_mode)
+            check = userinputvalidation.check_user_input_length(
+                self, user_input, input_mode)
 
             # if the check passes, start the renaming/move file method and get the next one
             if check == True:
                 self.user_input_entry_box.delete(0, END)
                 
-                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = self.rename_file(user_input, input_mode, file_extension)
+                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(
+                    user_input, input_mode, file_extension)
 
-                self.backup_file(file, backup_file_name, scan_dir, backup_dir)
+                backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
                 
                 if pw_type == "Cust PW":
                     self.create_cust_pw(file, scan_dir, dest_dir, full_job_ref, dest_file_name, dest_duplicate_check)
@@ -850,7 +848,7 @@ class Application(Frame):
         elif pw_type == "POD" and auto_processing == "on" and manual_submission == False:
                 self.user_input_entry_box.delete(0, END)
                 
-                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = self.rename_file(barcode, input_mode, file_extension)
+                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(barcode, input_mode, file_extension)
 
                 self.backup_file(file, backup_file_name, scan_dir, backup_dir)
 
@@ -870,7 +868,7 @@ class Application(Frame):
         if not self.file_list:
             if self.file_index == 0:
                 self.popup_box("Guess What", "No more files remaining.", "230", "75")
-                self.pdf_window.quit()
+                self.pdf_viewer.close()
         else:
             file = self.file_list[self.file_index]
 
@@ -887,7 +885,7 @@ class Application(Frame):
             # if no GR reference obtained, display the image for user to manually type in the reference
             if not barcode_ref_list:
                 self.write_log("No barcode found")
-                self.show_image(self.file)
+                self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
 
             # if more than 1 GR reference obtained, split it apart and show the image
             elif len(barcode_ref_list) > 1:
@@ -901,7 +899,7 @@ class Application(Frame):
 
                 file = self.file_list[self.file_index]
                 
-                self.show_image(self.file)
+                self.show_image(self, self.file, self.current_user.scan_directory)
 
             # if 1 GR reference obtained, use this as the user input
             elif len(barcode_ref_list) == 1:
@@ -1176,7 +1174,7 @@ class Application(Frame):
                     self.write_log("\nJob reference is " + job_ref)
                     
                     if len(job_ref) == 9:
-                        full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = self.rename_file(job_ref, "Normal", file_extension)
+                        full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(job_ref, "Normal", file_extension)
 
                         self.backup_file(file, backup_file_name, scan_dir, backup_dir)
                         
@@ -1208,97 +1206,7 @@ class Application(Frame):
         self.write_log("Skipping " + self.file)
         
         self.get_file(file_index, file_list)
-
-    def user_input_check(self, user_input, input_mode):
-        # remove any alphabet characters in case Ops get carried away putting GR in front
-        user_input = re.sub("[^0-9]", "", user_input)
         
-        if input_mode == "Normal":
-            if len(user_input) != 9:
-                self.popup_box("Numpty", "Too many/few digits for a GR number.", "215", "60")
-                return False
-            else:
-                return True
-
-        elif input_mode == "Quick": 
-            if len(user_input) > 9:
-                self.popup_box("Numpty", "Too many digits for a GR number.", "215", "60")
-                return False
-
-            elif len(user_input) < 4:
-                self.popup_box("Numpty", "Not enough digits for a GR number.", "215", "60")
-                return False
-
-            else:
-                return True
-        
-    def rename_file(self, user_input, input_mode, file_ext):
-        job_ref = re.sub("[^0-9]", "", user_input)
-
-        # if user input mode is set to Quick, will restructure the job ref to fill in the missing digits from the user input.
-        if input_mode == "Quick":
-            working_year = self.year_choice.get()
-            year_prefix = re.sub("[^0-9]", "", str([year.short for year in YEARS if year.full == working_year]))
-
-            working_month = self.month_choice.get()
-            month_prefix = re.sub("[^0-9]", "", str([month.short for month in MONTHS if month.full == working_month]))
-
-            # create the year + month job reference digits prefix, add 5 zeroes to the template ref that will be culled from the string later
-            job_ref_prefix = year_prefix + month_prefix
-            sacrificial_digits = str("00000")
-            template_ref = job_ref_prefix + sacrificial_digits
-
-            # get the length of the job ref from the user input so we know how many digits to knock off the template job reference
-            job_ref_length = len(job_ref)
-            job_ref = template_ref[:-job_ref_length] + job_ref
-
-        pwork_type = self.pw_setting.get()
-        
-        if pwork_type == "Cust PW":
-            dest_flags_suffix = customer_pwork_flags_suffix
-        elif pwork_type == "Loading List":
-            dest_flags_suffix = loading_list_flags_suffix
-        elif pwork_type == "POD":
-            dest_flags_suffix = POD_flags_suffix
-
-        backup_suffix = pwork_type
-        backup_file_name = "GR" + job_ref + "_" + backup_suffix + file_ext
-
-        backup_duplicate_check = self.duplicate_check(backup_file_name, "Backup")
-
-        if backup_duplicate_check == True:
-            # if there is a duplicate named file in the backup directory, append a paperwork counter to the backup filename, and loop till
-            # there is no longer a duplicate file name
-            pw_counter = 0
-            while path.exists(self.current_user.backup_directory + "/" +  backup_file_name):
-                if pw_counter == 0:
-                    pw_counter += 1
-                    backup_file_name = "GR" + job_ref + "_" + backup_suffix + "_" + str(pw_counter).zfill(3) + file_ext
-                else:
-                    pw_counter += 1
-                    backup_file_name = "GR" + job_ref + "_" + backup_suffix + "_" + str(pw_counter).zfill(3) + file_ext
-        
-
-        dest_file_name = "++GR" + job_ref + dest_flags_suffix + ".pdf"
-        full_job_ref = "GR" + job_ref
-        
-        # use the duplicate check method to append the correct page number and not overwrite it in error
-        dest_duplicate_check = self.duplicate_check(dest_file_name, "Destination")
-
-        return full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check
-
-    def duplicate_check(self, file_name, mode):
-        if mode == "Destination":
-            if path.exists(self.current_user.dest_directory + "/" + file_name):
-                return True
-            else:
-                return False
-        elif mode == "Backup":
-            if path.exists(self.current_user.backup_directory + "/" + file_name):
-                return True
-            else:
-                return False
-
     def insert_file_attributes(self, file_name, file_ext):
         # make the name & ext text boxes writable
         self.file_name_txt.config(state = NORMAL)
@@ -1355,7 +1263,7 @@ class Application(Frame):
         amending the user settings data file to change default
         directories and user options."""
 
-        set_win = Settings_Window(
+        Settings_Window(
             self, current_user, filesystem.get_user_settings_data())
 
     def refresh_settings(self, current_user):
@@ -1367,7 +1275,7 @@ class Application(Frame):
 
     def kill_program(self):
         try:
-            self.pdf_window.quit()
+            self.pdf_viewer.close()
             exit()
         except:
             exit()
