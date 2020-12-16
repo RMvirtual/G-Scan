@@ -36,12 +36,13 @@ from win32api import GetSystemMetrics
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
-class Application(Frame):
+class GUI(Frame):
     """GUI Box for inputting a GR Number when viewing a page of paperwork"""
 
     def __init__(self, master):
         """ Initialise the frame, whatever that means."""
-        super(Application, self).__init__(master)
+
+        super(GUI, self).__init__(master)
         self.grid()
         self.grid_rowconfigure(0, weight = 1)
         self.grid_columnconfigure(0, weight = 1)
