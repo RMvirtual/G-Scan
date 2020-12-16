@@ -663,7 +663,17 @@ class Application(Frame):
                     self, user_input, input_mode, file_extension,
                     self.current_user)
 
-                backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
+                backup_success = backup.backup_file(
+                    file, backup_file_name, scan_dir, backup_dir)
+
+                if (backup_success):
+                    self.write_log("Backed up " + file_name)
+                
+                else:
+                    self.write_log(
+                        "Backup directory not found. " +
+                        "Please check your settings.")
+
                 
                 if pw_type == "Cust PW":
                     pdfwriter.create_cust_pw(
@@ -705,7 +715,8 @@ class Application(Frame):
                 self.get_file(self.file_index, self.file_list)
 
     def michelin_man(self):
-        """Autoprocesses all the files in the scan directory that are named as a GR number based on the paperwork type setting"""
+        """Autoprocesses all the files in the scan directory that are
+        named as a GR number based on the paperwork type setting."""
         if self.current_user.validate_directories_check(self) == True:
             # user input variables
             pw_type = self.pw_setting.get()
