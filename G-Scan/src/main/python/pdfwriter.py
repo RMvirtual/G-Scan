@@ -221,3 +221,92 @@ def split_pdf_document(master_application, file, scan_dir):
             os.remove(scan_dir + "/" + file)
     
     return split_file_list
+
+def image_converter(master_application, file, scan_dir, multi_page_handling):
+    """Converts image files into PDF format and returns the
+    PDF file."""
+    file_name, file_extension = os.path.splitext(file)
+    pdf_file = file
+    
+    if file_extension.lower() == ".tif" or file_extension.lower() == ".tiff":
+        master_application.write_log("Converting " + file)
+        
+        with pil_image.open(scan_dir + "/" + file) as img:
+            img_page_amount = img.n_frames
+
+            output = PyPDF2.PdfFileWriter()
+
+            page_counter = 0
+
+            for page_number in range(img_page_amount):
+                img.seek(page_number)
+                temporary_png = master_application.temp_dir + "/" + file_name + ".png"
+                img.save(temporary_png)
+
+                final_image = master_application.temp_dir + "/" + "temp_image.png"
+                
+                # ensures page is nearest thing possible to portrait orientation
+                with wand_image(filename = temporary_png, resolution = 300) as img_simulator:
+                    if img_simulator.width > img_simulator.height:
+                        img_simulator.rotate(270)
+                        img_simulator.save(filename = final_image)
+                    else:
+                        img_simulator.save(filename = final_image)
+
+                packet = io.BytesIO()
+                slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
+                slab.setFillColorRGB(0,0,0)
+                slab.drawImage(final_image, -110, 20, width = 815, height = 815, mask = None, preserveAspectRatio = True)
+                slab.save()
+
+                packet.seek(0)
+                new_pdf = PyPDF2.PdfFileReader(packet)
+
+                output.addPage(new_pdf.getPage(0))
+
+            pdf_file = file_name + ".pdf"
+
+            with open(scan_dir + "/" + pdf_file, "wb") as output_stream:
+                output.write(output_stream)
+            output_stream.close()
+            master_application.write_log("Created " + pdf_file)
+            img.close()
+            os.remove(scan_dir + "/" + file)
+
+    if file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
+        master_application.write_log("Converting " + file)
+        
+        with pil_image.open(scan_dir + "/" + file) as img:
+            output = PyPDF2.PdfFileWriter()
+            temporary_image = master_application.temp_dir + "/" + file_name + ".png"
+            img.save(temporary_image)
+
+        final_image = master_application.temp_dir + "/" + "temp_image.png"
+        # arrange page into portrait orientation
+        with wand_image(filename = temporary_image, resolution = 300) as img_simulator:
+            if img_simulator.width > img_simulator.height:
+                img_simulator.rotate(270)
+                img_simulator.save(filename = final_image)
+            else:
+                img_simulator.save(filename = final_image)
+
+        packet = io.BytesIO()
+        slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
+        slab.setFillColorRGB(0,0,0)
+        slab.drawImage(final_image, -110, 20, width = 815, height = 815, mask = None, preserveAspectRatio = True)
+        slab.save()
+
+        packet.seek(0)
+        new_pdf = PyPDF2.PdfFileReader(packet)
+
+        output.addPage(new_pdf.getPage(0))
+
+        pdf_file = file_name + ".pdf"
+
+        with open(scan_dir + "/" + pdf_file, "wb") as output_stream:
+            output.write(output_stream)
+        output_stream.close()
+        master_application.write_log("Created " + pdf_file)
+        os.remove(scan_dir + "/" + file)
+
+    return pdf_file

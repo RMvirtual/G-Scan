@@ -607,7 +607,8 @@ class Application(Frame):
         else:
             self.file = self.file_list[self.file_index]
 
-            pdf_file = self.image_converter(self.file, scan_dir, multi_page_handling)
+            pdf_file = pdfwriter.image_converter(
+                self, self.file, scan_dir, multi_page_handling)
             
             split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, multi_page_handling)
 
@@ -629,125 +630,6 @@ class Application(Frame):
             elif pw_type == "POD" and autoprocessing == "on":
                 pdfreader.barcode_scanner(
                     self, self.file_index, self.file_list)
-
-    def split_pdf_document(self, file, scan_dir):
-        split_file_list = [file]
-        file_name, file_extension = os.path.splitext(file)
-        
-        with open(scan_dir + "/" + file, "rb") as current_file_pdf:
-            current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
-            
-            current_file_page_amount = current_file_pdf_reader.getNumPages()
-
-            if current_file_page_amount > 1:
-                self.write_log("Splitting apart " + file)
-                split_file_list.remove(file)
-                page_counter = 0
-                
-                for page_number in range(current_file_page_amount):
-                    page_counter += 1
-                    split_pdf_holder = PyPDF2.PdfFileWriter()
-                    split_pdf_holder.addPage(current_file_pdf_reader.getPage(page_number))
-
-                    split_pdf_file_name = file_name + "_" + str(page_counter) + file_extension
-                    with open(scan_dir + "/" + split_pdf_file_name, "wb") as split_pdf_file:
-                        split_pdf_holder.write(split_pdf_file)
-                    split_pdf_file.close()
-                    self.write_log("Created " + split_pdf_file_name)
-
-                    split_file_list.append(split_pdf_file_name)
-                                        
-                current_file_pdf.close()
-                os.remove(scan_dir + "/" + file)
-        return split_file_list
-
-    def image_converter(self, file, scan_dir, multi_page_handling):
-        """ Converts image files into PDF format and returns the PDF file. """
-        file_name, file_extension = os.path.splitext(file)
-        pdf_file = file
-        
-        if file_extension.lower() == ".tif" or file_extension.lower() == ".tiff":
-            self.write_log("Converting " + file)
-            
-            with pil_image.open(scan_dir + "/" + file) as img:
-                img_page_amount = img.n_frames
-
-                output = PyPDF2.PdfFileWriter()
-
-                page_counter = 0
-
-                for page_number in range(img_page_amount):
-                    img.seek(page_number)
-                    temporary_png = self.temp_dir + "/" + file_name + ".png"
-                    img.save(temporary_png)
-
-                    final_image = self.temp_dir + "/" + "temp_image.png"
-                    
-                    # ensures page is nearest thing possible to portrait orientation
-                    with wand_image(filename = temporary_png, resolution = 300) as img_simulator:
-                        if img_simulator.width > img_simulator.height:
-                            img_simulator.rotate(270)
-                            img_simulator.save(filename = final_image)
-                        else:
-                            img_simulator.save(filename = final_image)
-
-                    packet = io.BytesIO()
-                    slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-                    slab.setFillColorRGB(0,0,0)
-                    slab.drawImage(final_image, -110, 20, width = 815, height = 815, mask = None, preserveAspectRatio = True)
-                    slab.save()
-
-                    packet.seek(0)
-                    new_pdf = PyPDF2.PdfFileReader(packet)
-
-                    output.addPage(new_pdf.getPage(0))
-
-                pdf_file = file_name + ".pdf"
-
-                with open(scan_dir + "/" + pdf_file, "wb") as output_stream:
-                    output.write(output_stream)
-                output_stream.close()
-                self.write_log("Created " + pdf_file)
-                img.close()
-                os.remove(scan_dir + "/" + file)
-
-        if file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-            self.write_log("Converting " + file)
-            
-            with pil_image.open(scan_dir + "/" + file) as img:
-                output = PyPDF2.PdfFileWriter()
-                temporary_image = self.temp_dir + "/" + file_name + ".png"
-                img.save(temporary_image)
-
-            final_image = self.temp_dir + "/" + "temp_image.png"
-            # arrange page into portrait orientation
-            with wand_image(filename = temporary_image, resolution = 300) as img_simulator:
-                if img_simulator.width > img_simulator.height:
-                    img_simulator.rotate(270)
-                    img_simulator.save(filename = final_image)
-                else:
-                    img_simulator.save(filename = final_image)
-
-            packet = io.BytesIO()
-            slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-            slab.setFillColorRGB(0,0,0)
-            slab.drawImage(final_image, -110, 20, width = 815, height = 815, mask = None, preserveAspectRatio = True)
-            slab.save()
-
-            packet.seek(0)
-            new_pdf = PyPDF2.PdfFileReader(packet)
-
-            output.addPage(new_pdf.getPage(0))
-
-            pdf_file = file_name + ".pdf"
-
-            with open(scan_dir + "/" + pdf_file, "wb") as output_stream:
-                output.write(output_stream)
-            output_stream.close()
-            self.write_log("Created " + pdf_file)
-            os.remove(scan_dir + "/" + file)
-
-        return pdf_file
 
     def submit(self, barcode = None, manual_submission = True):
         # user input variables
@@ -808,7 +690,9 @@ class Application(Frame):
 
                 backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
 
-                self.create_loading_list_pod(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
+                pdfwriter.create_loading_list_pod(
+                    self, file, scan_dir, dest_dir,
+                    dest_file_name, dest_duplicate_check)
                     
                 del self.file_list[self.file_index]
 
@@ -876,11 +760,13 @@ class Application(Frame):
                     self.file_list.append(file)
                     self.write_log("Adding " + file + ".")
 
-            # Converts all image files in the list into PDFs and rebuilds a new list for later use
+            # Converts all image files in the list into PDFs and
+            # rebuilds a new list for later use.
             for file in self.file_list:
                 self.file_index = self.file_list.index(file)
                 
-                pdf_file = self.image_converter(file, scan_dir, multi_page_handling)
+                pdf_file = pdfwriter.image_converter(
+                    self, file, scan_dir, multi_page_handling)
                 
                 split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, "Do Not Split")
 
@@ -908,7 +794,9 @@ class Application(Frame):
                                 full_job_ref, dest_file_name, dest_duplicate_check)
                             
                         elif pw_type == "Loading List" or pw_type == "POD":
-                            self.create_loading_list_pod(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
+                            pdfwriter.create_loading_list_pod(
+                                self, file, scan_dir, dest_dir,
+                                dest_file_name, dest_duplicate_check)
 
                         self.upload_doc(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
                         self.write_log("Uploaded " + file + " as " + dest_file_name)
