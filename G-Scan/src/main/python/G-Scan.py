@@ -3,6 +3,7 @@ import filesystem
 import backup
 import userinputvalidation
 import pdfreader
+import pdfwriter
 from settingswindow import SettingsWindow
 from pdfviewer import PDFViewer
 from user import User
@@ -803,13 +804,17 @@ class Application(Frame):
             if check == True:
                 self.user_input_entry_box.delete(0, END)
                 
-                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(
-                    self, user_input, input_mode, file_extension, self.current_user)
+                (full_job_ref, backup_file_name, dest_file_name,
+                dest_duplicate_check) = userinputvalidation.rename_file(
+                    self, user_input, input_mode, file_extension,
+                    self.current_user)
 
                 backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
                 
                 if pw_type == "Cust PW":
-                    self.create_cust_pw(file, scan_dir, dest_dir, full_job_ref, dest_file_name, dest_duplicate_check)
+                    pdfwriter.create_cust_pw(
+                        self, file, scan_dir, dest_dir, 
+                        full_job_ref, dest_file_name, dest_duplicate_check)
 
                 elif pw_type == "Loading List" or pw_type == "POD":
                     self.create_loading_list_pod(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
@@ -837,116 +842,6 @@ class Application(Frame):
 
                 self.get_file(self.file_index, self.file_list)
 
-    def image_barcode_reader(self, file, scan_dir):
-        """ Reads barcodes on PNG, JPEG, JPG image files. TIFs should already be pre-converted to PDF. """
-        barcode_ref_list = []
-        
-        barcode_reader = decode(pil_image.open(scan_dir + "/" + file, "r"))
-
-        for barcode in barcode_reader:
-            job_ref = re.sub("[^0-9GR]", "", str(barcode.data).upper())
-
-            if len(job_ref) == 11 and job_ref[:2].upper() == "GR":
-                if job_ref not in barcode_ref_list:
-                    barcode_ref_list.append(job_ref)
-
-        return barcode_ref_list
-
-    def create_cust_pw(self, file, scan_dir, dest_dir, job_ref, dest_file_name, dest_duplicate_check):
-        file_name, file_extension = os.path.splitext(file)
-
-        # document generation for PDFs
-        if file_extension.lower() == ".pdf":
-            with open(scan_dir + "/" + file, "rb") as current_file_pdf:
-                current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
-                
-                current_file_page_amount = current_file_pdf_reader.getNumPages()
-
-                output = PyPDF2.PdfFileWriter()
-             
-                for page_number in range(current_file_page_amount):
-                    page_object = current_file_pdf_reader.getPage(page_number)
-                    temp_file_writer = PyPDF2.PdfFileWriter()
-                    temp_file_writer.addPage(page_object)
-                    temp_file = open(self.temp_dir + "/" + "temp.pdf", "wb")
-                    temp_file_writer.write(temp_file)
-                    temp_file.close()
-                    
-                    scan_doc = self.temp_dir + "/" + "temp.pdf"
-                    cust_pw = self.temp_dir + "/temp_image.png"
-                    
-                    with wand_image(filename = scan_doc, resolution = 300) as img:
-                        if img.width > img.height:
-                            img.rotate(270)
-                            img.save(filename = cust_pw)
-                        else:
-                            img.save(filename = cust_pw)
-
-                    packet = io.BytesIO()
-                    slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-                    slab.setFillColorRGB(0,0,0)
-                    barcode = code128.Code128(job_ref, barHeight = 10*mm, barWidth = .5*mm)
-                    barcode.drawOn(slab, 135*mm, 280*mm)
-
-                    slab.setFont("Calibri", 11)
-                    slab.drawString(162*mm, 275*mm, job_ref)
-                    slab.setFont("Calibri-Bold", 22)
-                    slab.drawString(5*mm, 280*mm, "Customer Paperwork")
-                    slab.drawImage(cust_pw, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
-
-                    slab.save()
-
-                    packet.seek(0)
-                    new_pdf = PyPDF2.PdfFileReader(packet)
-
-                    output.addPage(new_pdf.getPage(0))
-
-                current_file_pdf.close()
-            
-            output_stream = open(self.temp_dir + "/" + "result.pdf", "wb")
-            output.write(output_stream)
-            output_stream.close()
-
-        # document generation for image files (excluding TIF as these will always be pre-processed into PDFs by the document splitter function)
-        elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-            with pil_image.open(scan_dir + "/" + file) as img:
-                output = PyPDF2.PdfFileWriter()
-                temporary_png = self.temp_dir + "/" + file_name + ".png"
-                img.save(temporary_png)
-                img.close()
-
-            cust_pw = self.temp_dir + "/temp_image.png"
-
-            # arrange page into portrait orientation
-            with wand_image(filename = temporary_png, resolution = 200) as img_simulator:
-                if img_simulator.width > img_simulator.height:
-                    img_simulator.rotate(270)
-                    img_simulator.save(filename = cust_pw)
-                else:
-                    img_simulator.save(filename = cust_pw)
-
-            packet = io.BytesIO()
-            slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-            slab.setFillColorRGB(0,0,0)
-            barcode = code128.Code128(job_ref, barHeight = 10*mm, barWidth = .5*mm)
-            barcode.drawOn(slab, 135*mm, 280*mm)
-
-            slab.setFont("Calibri", 11)
-            slab.drawString(162*mm, 275*mm, job_ref)
-            slab.setFont("Calibri-Bold", 22)
-            slab.drawString(5*mm, 280*mm, "Customer Paperwork")
-            slab.drawImage(cust_pw, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
-
-            slab.save()
-
-            packet.seek(0)
-            new_pdf = PyPDF2.PdfFileReader(packet)
-
-            output.addPage(new_pdf.getPage(0))
-
-            output_stream = open(self.temp_dir + "/" + "result.pdf", "wb")
-            output.write(output_stream)
-            output_stream.close()
 
     def create_loading_list_pod(self, file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check):
         """Moves a loading list or POD with correct naming convention without having to modify the document other than PDF conversion"""
@@ -1075,7 +970,9 @@ class Application(Frame):
                         backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
                         
                         if pw_type == "Cust PW":
-                            self.create_cust_pw(file, scan_dir, dest_dir, full_job_ref, dest_file_name, dest_duplicate_check)
+                            pdfwriter.create_cust_pw(
+                                self, file, scan_dir, dest_dir,
+                                full_job_ref, dest_file_name, dest_duplicate_check)
                             
                         elif pw_type == "Loading List" or pw_type == "POD":
                             self.create_loading_list_pod(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
