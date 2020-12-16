@@ -1,10 +1,67 @@
 """A module containing functions for reading PDF files."""
 
 import filesystem
+import os
 import PyPDF2
+import re
 from PIL import Image as pil_image
+from popupbox import PopupBox
 from pyzbar.pyzbar import decode
 from wand.image import Image as wand_image
+
+def barcode_scanner(master_application, file_index, file_list):
+    scan_dir = master_application.current_user.scan_directory
+    multi_page_handling = master_application.multi_page_mode.get()
+    barcode_ref_list = []
+    
+    if not master_application.file_list:
+        if master_application.file_index == 0:
+            PopupBox(master_application, "Guess What",
+                "No more files remaining.",
+                "230", "75")
+            
+            master_application.pdf_viewer.close()
+    else:
+        file = master_application.file_list[master_application.file_index]
+        file_name, file_extension = os.path.splitext(master_application.file)
+        master_application.insert_file_attributes(file_name, file_extension)
+
+        if file_extension.lower() == ".pdf":
+            barcode_ref_list = read_barcodes(master_application.file, scan_dir)
+
+        elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
+            barcode_ref_list = master_application.image_barcode_reader(master_application.file, scan_dir)
+
+        # if no GR reference obtained, display the image for user to manually type in the reference
+        if not barcode_ref_list:
+            master_application.write_log("No barcode found")
+            master_application.pdf_viewer.show_image(master_application, master_application.file, master_application.current_user.scan_directory)
+
+        # if more than 1 GR reference obtained, split it apart and show the image
+        elif len(barcode_ref_list) > 1:
+            master_application.write_log("Too many conflicting barcodes?")
+            
+            split_file_list = master_application.document_splitter(
+                file, scan_dir, "Split")
+            
+            if split_file_list:
+                del master_application.file_list[master_application.file_index]
+                for file in reversed(split_file_list):
+                    master_application.file_list.insert(master_application.file_index, file)
+
+            file = master_application.file_list[master_application.file_index]
+            
+            master_application.pdf_viewer.show_image(
+                master_application, master_application.file, master_application.current_user.scan_directory)
+
+        # if 1 GR reference obtained, use this as the user input
+        elif len(barcode_ref_list) == 1:
+            job_ref = barcode_ref_list[0]
+            
+            master_application.write_log(
+                "Barcode " + job_ref + " found successfully")
+            
+            master_application.submit(job_ref, manual_submission = False)
 
 def read_barcodes(file_name, directory):
     """Reads barcodes on each page of a PDF file and returns them as

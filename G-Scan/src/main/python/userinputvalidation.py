@@ -46,18 +46,18 @@ def check_if_duplicate_file(file_name, directory_path):
                         
     return False
 
-def rename_file(user_input, input_mode, file_ext, user):
+def rename_file(master_application, user_input, input_mode, file_ext, user):
     job_ref = re.sub("[^0-9]", "", user_input)
 
     # If user input mode is set to Quick, will restructure the job ref
     # to fill in the missing digits from the user input.
     if input_mode == "Quick":
-        working_year = self.year_choice.get()
+        working_year = master_application.year_choice.get()
         
         year_prefix = re.sub("[^0-9]", "", str(
             [year.short for year in YEARS if year.full == working_year]))
 
-        working_month = self.month_choice.get()
+        working_month = master_application.month_choice.get()
         
         month_prefix = re.sub("[^0-9]", "", str(
             [month.short for month in MONTHS if month.full == working_month]))
@@ -73,7 +73,7 @@ def rename_file(user_input, input_mode, file_ext, user):
         # how many digits to knock off the template job reference.
         job_ref = template_ref[:-len(job_ref)] + job_ref
 
-    paperwork_type = self.pw_setting.get()
+    paperwork_type = master_application.pw_setting.get()
 
     customer_pwork_flags_suffix = "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork"
     loading_list_flags_suffix = "++xShxPaxIsVs0++OPSLDLST++Loading_List"

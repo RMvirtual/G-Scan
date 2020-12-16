@@ -626,7 +626,8 @@ class Application(Frame):
 
             # POD Automatic Processing Mode
             elif pw_type == "POD" and autoprocessing == "on":
-                self.barcode_scanner(self.file_index, self.file_list)
+                pdfreader.barcode_scanner(
+                    self, self.file_index, self.file_list)
 
     def document_splitter(self, file, scan_dir, multi_page_handling):
         file_name, file_extension = os.path.splitext(file)
@@ -803,7 +804,7 @@ class Application(Frame):
                 self.user_input_entry_box.delete(0, END)
                 
                 full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(
-                    user_input, input_mode, file_extension)
+                    self, user_input, input_mode, file_extension, self.current_user)
 
                 backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
                 
@@ -823,9 +824,10 @@ class Application(Frame):
         elif pw_type == "POD" and auto_processing == "on" and manual_submission == False:
                 self.user_input_entry_box.delete(0, END)
                 
-                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(barcode, input_mode, file_extension)
+                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(
+                    self, barcode, input_mode, file_extension, self.current_user)
 
-                self.backup_file(file, backup_file_name, scan_dir, backup_dir)
+                backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
 
                 self.create_loading_list_pod(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
                     
@@ -835,57 +837,6 @@ class Application(Frame):
 
                 self.get_file(self.file_index, self.file_list)
 
-    def barcode_scanner(self, file_index, file_list):
-        scan_dir = self.current_user.scan_directory
-        multi_page_handling = self.multi_page_mode.get()
-        barcode_ref_list = []
-        
-        if not self.file_list:
-            if self.file_index == 0:
-                PopupBox(self, "Guess What",
-                    "No more files remaining.",
-                    "230", "75")
-                
-                self.pdf_viewer.close()
-        else:
-            file = self.file_list[self.file_index]
-
-            file_name, file_extension = os.path.splitext(self.file)
-
-            self.insert_file_attributes(file_name, file_extension)
-
-            if file_extension.lower() == ".pdf":
-                barcode_ref_list = pdfreader.read_barcodes(self.file, scan_dir)
-
-            elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-                barcode_ref_list = self.image_barcode_reader(self.file, scan_dir)
-
-            # if no GR reference obtained, display the image for user to manually type in the reference
-            if not barcode_ref_list:
-                self.write_log("No barcode found")
-                self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
-
-            # if more than 1 GR reference obtained, split it apart and show the image
-            elif len(barcode_ref_list) > 1:
-                self.write_log("Too many conflicting barcodes?")
-                split_file_list = self.document_splitter(file, scan_dir, "Split")
-                
-                if split_file_list:
-                    del self.file_list[self.file_index]
-                    for file in reversed(split_file_list):
-                        self.file_list.insert(self.file_index, file)
-
-                file = self.file_list[self.file_index]
-                
-                self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
-
-            # if 1 GR reference obtained, use this as the user input
-            elif len(barcode_ref_list) == 1:
-                job_ref = barcode_ref_list[0]
-                self.write_log("Barcode " + job_ref + " found successfully")
-                self.submit(job_ref, manual_submission = False)
-
- 
     def image_barcode_reader(self, file, scan_dir):
         """ Reads barcodes on PNG, JPEG, JPG image files. TIFs should already be pre-converted to PDF. """
         barcode_ref_list = []
@@ -1121,7 +1072,7 @@ class Application(Frame):
                     if len(job_ref) == 9:
                         full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(job_ref, "Normal", file_extension)
 
-                        self.backup_file(file, backup_file_name, scan_dir, backup_dir)
+                        backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
                         
                         if pw_type == "Cust PW":
                             self.create_cust_pw(file, scan_dir, dest_dir, full_job_ref, dest_file_name, dest_duplicate_check)
