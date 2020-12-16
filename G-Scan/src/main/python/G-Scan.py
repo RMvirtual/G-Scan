@@ -2,6 +2,7 @@ import os
 import filesystem
 import backup
 import userinputvalidation
+import pdfreader
 from settingswindow import SettingsWindow
 from pdfviewer import PDFViewer
 from user import User
@@ -854,7 +855,7 @@ class Application(Frame):
             self.insert_file_attributes(file_name, file_extension)
 
             if file_extension.lower() == ".pdf":
-                barcode_ref_list = self.pdf_barcode_reader(self.file, scan_dir)
+                barcode_ref_list = pdfreader.read_barcodes(self.file, scan_dir)
 
             elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
                 barcode_ref_list = self.image_barcode_reader(self.file, scan_dir)
@@ -884,39 +885,6 @@ class Application(Frame):
                 self.write_log("Barcode " + job_ref + " found successfully")
                 self.submit(job_ref, manual_submission = False)
 
-    def pdf_barcode_reader(self, file, scan_dir):
-        """ Reads barcodes on each page of PDF file and returns them as a list. """
-        barcode_ref_list = []
-
-        with open(scan_dir + "/" + file, "rb") as current_file_pdf:
-            current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
-            current_file_page_amount = current_file_pdf_reader.getNumPages()
-
-            for page_number in range(current_file_page_amount):
-                page_object = current_file_pdf_reader.getPage(page_number)
-                temp_file_writer = PyPDF2.PdfFileWriter()
-                temp_file_writer.addPage(page_object)
-                with open(self.temp_dir + "/temp.pdf", "wb") as temp_file:
-                    temp_file_writer.write(temp_file)
-                    temp_file.close()
-
-                scan_doc = self.temp_dir + "/temp.pdf"
-                cust_pw = self.temp_dir + "/temp_image.png"
-
-                with wand_image(filename = scan_doc, resolution = 300) as img:
-                    img.save(filename = cust_pw)
-
-                barcode_reader = decode(pil_image.open(cust_pw, "r"))
-
-                for barcode in barcode_reader:
-
-                    job_ref = re.sub("[^0-9GR]", "", str(barcode.data).upper())
-
-                    if len(job_ref) == 11 and job_ref[:2].upper() == "GR":
-                        if job_ref not in barcode_ref_list:
-                            barcode_ref_list.append(job_ref)
-
-        return barcode_ref_list
  
     def image_barcode_reader(self, file, scan_dir):
         """ Reads barcodes on PNG, JPEG, JPG image files. TIFs should already be pre-converted to PDF. """
