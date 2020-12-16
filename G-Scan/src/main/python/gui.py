@@ -56,31 +56,10 @@ class GUI(Frame):
         self.quick_mode_hint_message()
         self.activity_log_row_count = 1
         
-        valid_directory_checks = self.check_user_directories_are_valid()
+        valid_directory_checks = (
+            self.main_application.check_user_directories_are_valid())
 
         self.write_log("Awaiting input")
-        
-    def check_user_directories_are_valid(self):
-        """Checks whether all the working directories of a user are
-        valid and accessible. Prints to the GUI's log if not and
-        returns an overall Boolean at the end on whether all
-        directories are valid or not."""
-
-        current_user = self.main_application.get_current_user()
-        directory_checks = current_user.validate_directories_check()
-        all_directories_valid = True
-
-        for directory in directory_checks:
-            is_directory_valid = directory_checks[directory]
-            
-            if not is_directory_valid:
-                all_directories_valid = False
-                
-                self.write_log(
-                    directory + " folder is invalid. Please check the " +
-                    "folder exists and update it within your settings.")
-        
-        return all_directories_valid
 
     def create_widgets(self, name, ext, job_ref, current_user):
         """Creates all the widgets required for the main GUI window."""
@@ -573,20 +552,12 @@ class GUI(Frame):
 
     def start(self):
         """ initialise looking for paperwork """
-        if self.check_user_directories_are_valid():
-            scan_dir = self.current_user.scan_directory
-            self.file_list = []
+        all_directories_valid = (
+            self.main_application.check_user_directories_are_valid())
+        
+        if all_directories_valid:
             self.file_index = 0
-
-            # Create a list of files in the scan folder that are either
-            # PDF, TIF, TIFF, JPG, JPEG or PNG.
-            valid_file_extensions = (
-                ".pdf", ".tif", ".tiff", ".tiff", ".jpeg", ".jpg", ".png")
-
-            for file in os.listdir(scan_dir):
-                if file.lower().endswith(valid_file_extensions):
-                    self.file_list.append(file)
-                    self.write_log("Adding " + file + " to list")
+            self.file_list = self.main_application.get_files_in_scan_folder()
 
             if not self.file_list:
                 PopupBox(self, "Failure", "No files found.", "200", "50")
@@ -597,7 +568,7 @@ class GUI(Frame):
     
     def get_file(self, file_index, file_list):
         # directories
-        scan_dir = self.current_user.scan_directory
+        scan_dir = self.main_application.current_user.scan_directory
 
         # user variables
         multi_page_handling = self.multi_page_mode.get()
@@ -630,7 +601,8 @@ class GUI(Frame):
 
             # Customer Paperwork/Loading List/Manual POD Processing Mode
             if pw_type == "Cust PW" or pw_type == "Loading List" or pw_type == "POD" and autoprocessing == "off":
-                self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
+                self.pdf_viewer.show_image(
+                    self, self.file, self.main_application.current_user.scan_directory)
 
             # POD Automatic Processing Mode
             elif pw_type == "POD" and autoprocessing == "on":
@@ -761,7 +733,9 @@ class GUI(Frame):
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are
         named as a GR number based on the paperwork type setting."""
-        all_directories_valid = self.check_user_directories_are_valid()
+
+        all_directories_valid = (
+            self.main_application.check_user_directories_are_valid())
         
         if all_directories_valid:
             # user input variables
@@ -769,9 +743,11 @@ class GUI(Frame):
             multi_page_handling = "Do Not Split"
 
             # directory variables
-            scan_dir = self.current_user.scan_directory
-            dest_dir = self.current_user.dest_directory
-            backup_dir = self.current_user.backup_directory
+            current_user = self.main_application.get_current_user()
+
+            scan_dir = current_user.scan_directory
+            dest_dir = current_user.dest_directory
+            backup_dir = current_user.backup_directory
 
             file_count = 0
             self.file_list = []
@@ -900,9 +876,15 @@ class GUI(Frame):
 
         # if input mode is set to normal, set the hint box to be an empty string
         if input_mode == "Normal":
-            self.quick_mode_notice_txt.config(font = ("Calibri", 11), bg = "White", highlightthickness = 0, borderwidth = 0, state = NORMAL)
+            self.quick_mode_notice_txt.config(
+                font = ("Calibri", 11), bg = "White",
+                highlightthickness = 0, borderwidth = 0, state = NORMAL)
+            
             self.quick_mode_notice_txt.delete(0.0, END)
-            self.quick_mode_notice_txt.config(font = ("Calibri", 11), bg = "White", highlightthickness = 0, borderwidth = 0, state = DISABLED)
+            
+            self.quick_mode_notice_txt.config(
+                font = ("Calibri", 11), bg = "White",
+                highlightthickness = 0, borderwidth = 0, state = DISABLED)
 
         # if input mode is set to quick, get the year and month dropdown box variables and make a template ref.
         elif input_mode == "Quick":
@@ -929,7 +911,9 @@ class GUI(Frame):
         SettingsWindow(
             self, current_user, filesystem.get_user_settings_data())
 
-    def refresh_settings(self, current_user):
+    def refresh_settings(self):
+        current_user = self.main_application.get_current_user()
+
         self.pw_setting.set(current_user.pw_type)
         self.current_input_mode.set(current_user.input_mode)
         self.multi_page_mode.set(current_user.multi_page_handling)

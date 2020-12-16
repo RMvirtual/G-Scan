@@ -88,3 +88,15 @@
 [1216/200212.658:ERROR:exception_snapshot_win.cc(99)] thread ID 7552 not found in process
 [1216/200212.675:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
 [1216/200212.675:ERROR:exception_snapshot_win.cc(99)] thread ID 8728 not found in process
+[1216/214031.191:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1216/214031.190:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1216/214031.207:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1216/214031.216:ERROR:exception_snapshot_win.cc(99)] thread ID 8284 not found in process
+[1216/214031.217:ERROR:exception_snapshot_win.cc(99)] thread ID 3540 not found in process
+[1216/214031.217:ERROR:exception_snapshot_win.cc(99)] thread ID 6016 not found in process
+[1216/214118.145:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1216/214118.147:ERROR:exception_snapshot_win.cc(99)] thread ID 12468 not found in process
+[1216/214118.152:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1216/214118.152:ERROR:exception_snapshot_win.cc(99)] thread ID 220 not found in process
+[1216/214118.169:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[1216/214118.169:ERROR:exception_snapshot_win.cc(99)] thread ID 14556 not found in process
