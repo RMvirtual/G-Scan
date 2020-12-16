@@ -552,19 +552,7 @@ class GUI(Frame):
 
     def start(self):
         """ initialise looking for paperwork """
-        all_directories_valid = (
-            self.main_application.check_user_directories_are_valid())
-        
-        if all_directories_valid:
-            self.file_index = 0
-            self.file_list = self.main_application.get_files_in_scan_folder()
-
-            if not self.file_list:
-                PopupBox(self, "Failure", "No files found.", "200", "50")
-
-            else:
-                self.start_browser()
-                self.get_file(self.file_index, self.file_list)
+        self.main_application.start()
     
     def get_file(self, file_index, file_list):
         # directories
@@ -576,24 +564,24 @@ class GUI(Frame):
         pw_type = self.pw_setting.get()
         autoprocessing = self.autoprocessing_mode.get()
         
-        if not self.file_list:
-            if self.file_index == 0:
+        if not self.main_application.file_list:
+            if self.main_application.file_index == 0:
                 PopupBox(self, "Guess What", "No more files remaining.", "230", "75")
                 self.pdf_viewer.close()
                 
         else:
-            self.file = self.file_list[self.file_index]
+            self.file = self.main_application.file_list[self.main_application.file_index]
 
             pdf_file = pdfwriter.image_converter(
                 self, self.file, scan_dir, multi_page_handling)
             
             split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, multi_page_handling)
 
-            del self.file_list[self.file_index]
+            del self.main_application.file_list[self.main_application.file_index]
             for split_file in reversed(split_file_list):
-                self.file_list.insert(self.file_index, split_file)
+                self.main_application.file_list.insert(self.main_application.file_index, split_file)
 
-            self.file = self.file_list[self.file_index]
+            self.file = self.main_application.file_list[self.main_application.file_index]
             file_name, file_ext = os.path.splitext(self.file)
 
             self.insert_file_attributes(file_name, file_ext)
@@ -607,7 +595,7 @@ class GUI(Frame):
             # POD Automatic Processing Mode
             elif pw_type == "POD" and autoprocessing == "on":
                 pdfreader.barcode_scanner(
-                    self, self.file_index, self.file_list)
+                    self, self.main_application.file_index, self.main_application.file_list)
 
     def submit(self, barcode = None, manual_submission = True):
         # user input variables
@@ -622,7 +610,7 @@ class GUI(Frame):
         backup_dir = self.current_user.backup_directory
 
         # file variables
-        file = self.file_list[self.file_index]
+        file = self.main_application.file_list[self.main_application.file_index]
         file_name, file_extension = os.path.splitext(file)
 
         valid_paperwork_types = ("Cust PW", "Loading List", "POD")
@@ -672,7 +660,7 @@ class GUI(Frame):
                         self, file, scan_dir, dest_dir, dest_file_name,
                         dest_duplicate_check)
                     
-                del self.file_list[self.file_index]
+                del self.main_application.file_list[self.main_application.file_index]
 
                 upload_success = pdfwriter.upload_doc(
                     file, scan_dir, dest_dir,
@@ -685,7 +673,7 @@ class GUI(Frame):
                 else:
                     self.write_log(dest_file_name + " upload error.")
 
-                self.get_file(self.file_index, self.file_list)
+                self.get_file(self.main_application.file_index, self.main_application.file_list)
 
         # POD autoprocessing mode
         elif pw_type == "POD" and auto_processing == "on" and manual_submission:
@@ -715,7 +703,7 @@ class GUI(Frame):
                     self, file, scan_dir, dest_dir,
                     dest_file_name, dest_duplicate_check)
                     
-                del self.file_list[self.file_index]
+                del self.main_application.file_list[self.main_application.file_index]
 
                 upload_success = pdfwriter.upload_doc(
                     file, scan_dir, dest_dir,
@@ -728,7 +716,7 @@ class GUI(Frame):
                 else:
                     self.write_log(dest_file_name + " upload error.")
 
-                self.get_file(self.file_index, self.file_list)
+                self.get_file(self.main_application.file_index, self.main_application.file_list)
 
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are
@@ -750,17 +738,17 @@ class GUI(Frame):
             backup_dir = current_user.backup_directory
 
             file_count = 0
-            self.file_list = []
+            self.main_application.file_list = []
 
             for file in os.listdir(scan_dir):
                 if file.lower().endswith(".pdf") or file.lower().endswith(".tif") or file.lower().endswith(".tiff") or file.lower().endswith(".jpeg") or file.lower().endswith(".jpg") or file.lower().endswith(".png"):
-                    self.file_list.append(file)
+                    self.main_application.file_list.append(file)
                     self.write_log("Adding " + file + ".")
 
             # Converts all image files in the list into PDFs and
             # rebuilds a new list for later use.
-            for file in self.file_list:
-                self.file_index = self.file_list.index(file)
+            for file in self.main_application.file_list:
+                self.main_application.file_index = self.main_application.file_list.index(file)
                 
                 pdf_file = pdfwriter.image_converter(
                     self, file, scan_dir, multi_page_handling)
@@ -768,12 +756,12 @@ class GUI(Frame):
                 split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, "Do Not Split")
 
                 for split_file in reversed(split_file_list):
-                    self.file_list.insert(self.file_index, split_file) 
+                    self.main_application.file_list.insert(self.main_application.file_index, split_file) 
 
-                self.file_list.remove(file)
+                self.main_application.file_list.remove(file)
                  
             # With all the TIF files converted, ready to start transforming files where the file name is a GR reference
-            for file in self.file_list:
+            for file in self.main_application.file_list:
                 if file.lower().endswith(".jpeg") or file.lower().endswith(".jpg") or file.lower().endswith(".png") or file.lower().endswith(".pdf") or file.lower().endswith(".tif") or file.lower().endswith(".tiff"):
                     file_name, file_extension = os.path.splitext(file)
 
@@ -828,20 +816,20 @@ class GUI(Frame):
                         
                     else:
                         self.write_log("Ignoring" + file)
-                        self.file_list.remove(file)
+                        self.main_application.file_list.remove(file)
 
             PopupBox(self,
                 "Michelin Man", str(file_count) + " files processed.",
                 "215", "60")
             
     def skip(self):
-        file_index = self.file_index
-        file_list = self.file_list
+        file_index = self.main_application.file_index
+        file_list = self.main_application.file_list
         file = file_list[file_index]
         
         self.user_input_entry_box.delete(0, END)
 
-        self.file_list.remove(self.file)
+        self.main_application.file_list.remove(self.file)
         self.write_log("Skipping " + self.file)
         
         self.get_file(file_index, file_list)

@@ -10,6 +10,7 @@ import os
 import filesystem
 from user import User
 import shelve
+from popupbox import PopupBox
 
 class MainApplication():
     """A class for the main application of the program to run."""
@@ -102,3 +103,20 @@ class MainApplication():
                 self.gui.write_log("Adding " + scan_file + " to list.")
         
         return file_list
+    
+    def start(self):
+        """Starts the workflow of reading/viewing and writing from
+        scan files."""
+
+        all_directories_valid = self.check_user_directories_are_valid()
+        
+        if all_directories_valid:
+            self.file_index = 0
+            self.file_list = self.get_files_in_scan_folder()
+
+            if not self.file_list:
+                PopupBox(self.gui, "Failure", "No files found.", "200", "50")
+
+            else:
+                self.gui.start_browser()
+                self.gui.get_file(self.file_index, self.file_list)
