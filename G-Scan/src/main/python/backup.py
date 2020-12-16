@@ -1,5 +1,7 @@
 import os
 import shutil
+import filesystem
+
 from datetime import datetime
 
 def backup_file(file_name, backup_file_name,
@@ -8,7 +10,7 @@ def backup_file(file_name, backup_file_name,
     directory. Returns a Boolean value of whether the backup directory
     exists or not (could do with changing to copyfile success)."""
 
-    if os.path.isdir(backup_dir):
+    if filesystem.check_path_is_directory(backup_dir):
         shutil.copyfile(
             scan_dir + "/" + file_name, backup_dir + "/" + backup_file_name)
         
@@ -23,7 +25,7 @@ def backup_housekeeping(backup_dir):
     to the wrong folder, deleting potentially important files on a
     server directory."""
     
-    if os.path.isdir(backup_dir):
+    if filesystem.check_path_is_directory(backup_dir):
         backup_folder = os.listdir(backup_dir)
         file_extensions = (".pdf", ".tif", ".tiff", ".jpeg", ".jpg", ".png")
 

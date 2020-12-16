@@ -671,14 +671,20 @@ class Application(Frame):
         file = self.file_list[self.file_index]
         file_name, file_extension = os.path.splitext(file)
 
-        if pw_type == "Cust PW" or pw_type == "Loading List" or pw_type == "POD" and auto_processing == "off" or auto_processing == "on" and manual_submission == True:
-            # check user has inputted correct amount of digits
-            check = None
-            check = userinputvalidation.check_user_input_length(
-                self, user_input, input_mode)
+        valid_paperwork_types = ("Cust PW", "Loading List", "POD")
 
-            # if the check passes, start the renaming/move file method and get the next one
-            if check == True:
+        if (pw_type in valid_paperwork_types and auto_processing == "off"
+                or auto_processing == "on" and manual_submission):
+            # check user has inputted correct amount of digits
+            user_input_check = userinputvalidation.check_user_input_length(
+                user_input, input_mode)
+
+            if not user_input_check[0]:
+                PopupBox(self, "Numpty", user_input_check[1], 200, 50)
+
+            # If the check passes, start the renaming/move file method
+            # and get the next one.
+            else:
                 self.user_input_entry_box.delete(0, END)
                 
                 (full_job_ref, backup_file_name, dest_file_name,
@@ -689,7 +695,7 @@ class Application(Frame):
                 backup_success = backup.backup_file(
                     file, backup_file_name, scan_dir, backup_dir)
 
-                if (backup_success):
+                if backup_success:
                     self.write_log("Backed up " + file_name)
                 
                 else:
@@ -709,14 +715,21 @@ class Application(Frame):
                     
                 del self.file_list[self.file_index]
 
-                pdfwriter.upload_doc(
-                    self, file, scan_dir, dest_dir,
+                upload_success = pdfwriter.upload_doc(
+                    file, scan_dir, dest_dir,
                     dest_file_name, dest_duplicate_check)
+
+                if upload_success:
+                    self.write_log(
+                        dest_file_name + " uploaded successfully\n")
+
+                else:
+                    self.write_log(dest_file_name + " upload error.")
 
                 self.get_file(self.file_index, self.file_list)
 
         # POD autoprocessing mode
-        elif pw_type == "POD" and auto_processing == "on" and manual_submission == False:
+        elif pw_type == "POD" and auto_processing == "on" and manual_submission:
                 self.user_input_entry_box.delete(0, END)
                 
                 full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(
@@ -739,13 +752,18 @@ class Application(Frame):
                     
                 del self.file_list[self.file_index]
 
-                pdfwriter.upload_doc(
-                    self, file, scan_dir, dest_dir,
+                upload_success = pdfwriter.upload_doc(
+                    file, scan_dir, dest_dir,
                     dest_file_name, dest_duplicate_check)
 
+                if upload_success:
+                    self.write_log(
+                        dest_file_name + " uploaded successfully\n")
+
+                else:
+                    self.write_log(dest_file_name + " upload error.")
+
                 self.get_file(self.file_index, self.file_list)
-
-
 
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are
@@ -820,10 +838,17 @@ class Application(Frame):
                                 self, file, scan_dir, dest_dir,
                                 dest_file_name, dest_duplicate_check)
 
-                        pdfwriter.upload_doc(
-                            self, file, scan_dir, dest_dir,
+                        upload_success = pdfwriter.upload_doc(
+                            file, scan_dir, dest_dir,
                             dest_file_name, dest_duplicate_check)
                         
+                        if upload_success:
+                            self.write_log(
+                                dest_file_name + " uploaded successfully\n")
+
+                        else:
+                            self.write_log(dest_file_name + " upload error.")
+
                         self.write_log("Uploaded " + file + " as " + dest_file_name)
                         file_count += 1
                         self.user_input_entry_box.delete(0, END)

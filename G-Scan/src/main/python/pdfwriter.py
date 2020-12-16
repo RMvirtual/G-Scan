@@ -16,7 +16,8 @@ from wand.image import Image as wand_image
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
-def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref, dest_file_name, dest_duplicate_check):
+def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
+        dest_file_name, dest_duplicate_check):
     file_name, file_extension = os.path.splitext(file)
 
     # document generation for PDFs
@@ -311,14 +312,14 @@ def image_converter(master_application, file, scan_dir, multi_page_handling):
 
     return pdf_file
 
-def upload_doc(master_application, file, scan_dir, dest_dir,
+def upload_doc(file, scan_dir, dest_dir,
         dest_file_name, dest_duplicate_check):
     """If duplicate file already exists in the destination directory,
     merge the pages together."""
 
     temp_directory = filesystem.get_temp_directory()
 
-    if dest_duplicate_check == True:
+    if dest_duplicate_check:
         temp_file_writer = PyPDF2.PdfFileWriter()
 
         dest_file_object = open(dest_dir + "/" + dest_file_name, "rb")
@@ -345,16 +346,16 @@ def upload_doc(master_application, file, scan_dir, dest_dir,
         shutil.move(
             temp_directory + "temp.pdf", dest_dir + "/" + dest_file_name)
 
-        master_application.write_log(dest_file_name + " created successfully")
-        master_application.write_log("")
         os.remove(scan_dir + "/" + file)
+
+        return True
         
     # If duplicate file does not already exist, straightforward moves
     # the current file to the dest folder.
-    elif dest_duplicate_check == False:
+    elif not dest_duplicate_check:
         shutil.move(
             temp_directory + "result.pdf", dest_dir + "/" + dest_file_name)
 
-        master_application.write_log(dest_file_name + " created successfully")
-        master_application.write_log("")
         os.remove(scan_dir + "/" + file)
+
+        return True

@@ -1,5 +1,4 @@
 import filesystem
-import os
 
 class User(object):
     """ A user with a couple of values to store """
@@ -34,7 +33,7 @@ class User(object):
         checks = []
 
         for directory in directories_to_check:
-            checks.append(os.path.isdir(directory))
+            checks.append(filesystem.check_path_is_directory(directory))
 
         valid_directory_checks = {
             "Scan": checks[0],

@@ -1,3 +1,4 @@
+import filesystem
 import os
 import re
 import userinputvalidation
@@ -5,119 +6,145 @@ from popupbox import PopupBox
 
 """Module for validating the users input within G-Scan."""
 
-def check_user_input_length(master_application, user_input, input_mode):
-    # Remove any alphabet characters in case Ops get carried away putting GR in front
+def check_user_input_length(user_input, input_mode):
+    """Checks the length of the user's input (removing any alphabetic
+    characters) to ensure it will create a valid job reference number
+    depending on whether the program is in Normal or Quick Mode for
+    inputting job numbers.
+    
+    Returns a tuple with Boolean value of whether the user input is
+    the right length and an error message to be used."""
+
     user_input = re.sub("[^0-9]", "", user_input)
     user_input_length = len(user_input)    
     
     if input_mode == "Normal":
         if user_input_length == 9:
-            return True
+            return (True, "")
 
         else:
-            Popup_Box(
-                master_application, "Numpty",
-                "Too many/few digits for a GR number.", "215", "60")
-            
-            return False
+            return (False, "Too many/few digits for a GR number.")
 
     elif input_mode == "Quick":
         if user_input_length <= 9 and user_input_length >= 4:
-            return True
+            return (True, "")
 
         else:
             if user_input_length > 9:
-                Popup_Box(
-                    master_application, "Numpty",
-                    "Too many digits for a GR number.", "215", "60")
-            
+                return (False, "Too many digits for a GR number.")
+
             elif user_input_length < 4:
-                Popup_Box(
-                    master_application, "Numpty",
-                    "Not enough digits for a GR number.", "215", "60")
-        
-            return False
+                return (False, "Not enough digits for a GR number.")
         
 def check_if_duplicate_file(file_name, directory_path):
     """Checks if a file already exists in a certain directory."""
 
-    if os.path.exists(directory_path + "/" + file_name):
+    if filesystem.check_path_exists(directory_path + "/" + file_name):
         return True
                         
     return False
 
-def rename_file(master_application, user_input, input_mode, file_ext, user):
-    job_ref = re.sub("[^0-9]", "", user_input)
+def calculate_base_job_reference(month, year):
+    """Calculates a basic job reference based on the year and month
+    and pads out the rest of the job reference with remaining zeroes
+    (e.g. GR190800000).
+    
+    Takes Date objects as the year and month parameters so it can
+    use their short attributes."""
+        
+    year_prefix = re.sub("[^0-9]", "", str(year.short))
+    month_prefix = re.sub("[^0-9]", "", str(month.short))
+
+    # Create the year + month job reference digits prefix,
+    # add 5 zeroes to the template ref that will be overwritten
+    # later.
+    job_ref_prefix = year_prefix + month_prefix
+    sacrificial_digits = str("00000")
+    template_ref = job_ref_prefix + sacrificial_digits
+
+def create_backup_file_name(job_reference, paperwork_type, file_extension,
+        directory):
+    """Creates the backup file name including the job reference,
+    paperwork counter (if applicable), paperwork type and file
+    extension.
+    
+    Checks if there is a duplicately named file already in the backup
+    directory and loops through appending increasing page numbers
+    to the file name till it is no longer duplicate."""
+
+    file_name = (
+        "GR" + job_reference + "_" + paperwork_type + file_extension)
+
+    is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
+        file_name, directory)
+    
+    page_counter = 1
+
+    while(is_file_name_duplicate):
+        file_name = ("GR" + job_reference + "_" + paperwork_type
+            + str(page_counter).zfill(3) + file_extension)
+        
+        is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
+            file_name, directory)
+        
+        page_counter += 1
+    
+    return file_name
+
+def create_destination_file_name(job_reference, paperwork_type):
+    """Creates the full file name of a file intended for the
+    destination directory (i.e. FCL server directory to be
+    uploaded)."""
+
+    # Dictionary of file name flags that FCL uses to differentiate
+    # between different paperwork types. 
+    paperwork_type_flags = {
+        "Cust PW": "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork",
+        "Loading List": "++xShxPaxIsVs0++OPSLDLST++Loading_List",
+        "POD": "++xShxPaIsVs2++KPIPOD++Scanned_POD"}
+
+    dest_file_name = (
+        "++" + job_reference + paperwork_type_flags[paperwork_type]
+        + ".pdf")
+
+    return dest_file_name
+
+def rename_file(master_application, user_input, input_mode, file_extension, user):
+    user_input = re.sub("[^0-9]", "", user_input)
 
     # If user input mode is set to Quick, will restructure the job ref
     # to fill in the missing digits from the user input.
     if input_mode == "Quick":
         working_year = master_application.year_choice.get()
-        
-        year_prefix = re.sub("[^0-9]", "", str(
-            [year.short for year in YEARS if year.full == working_year]))
-
         working_month = master_application.month_choice.get()
         
-        month_prefix = re.sub("[^0-9]", "", str(
-            [month.short for month in MONTHS if month.full == working_month]))
+        base_job_reference = calculate_base_job_reference(
+            working_month, working_year)
 
-        # Create the year + month job reference digits prefix,
-        # add 5 zeroes to the template ref that will be overwritten
-        # later.
-        job_ref_prefix = year_prefix + month_prefix
-        sacrificial_digits = str("00000")
-        template_ref = job_ref_prefix + sacrificial_digits
+        # Overwrites the base job reference from the right with
+        # the digits the user has inputted.
+        user_input_length = len(user_input)
 
-        # Get the length of the job ref from the user input so we know
-        # how many digits to knock off the template job reference.
-        job_ref = template_ref[:-len(job_ref)] + job_ref
+        complete_job_reference = (
+            base_job_reference[:-user_input_length] + user_input)
+
+    else:
+        complete_job_reference = "GR" + user_input
 
     paperwork_type = master_application.pw_setting.get()
 
-    customer_pwork_flags_suffix = "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork"
-    loading_list_flags_suffix = "++xShxPaxIsVs0++OPSLDLST++Loading_List"
-    POD_flags_suffix = "++xShxPaIsVs2++KPIPOD++Scanned_POD"
-
-    if paperwork_type == "Cust PW":
-        dest_flags_suffix = customer_pwork_flags_suffix
-
-    elif paperwork_type == "Loading List":
-        dest_flags_suffix = loading_list_flags_suffix
-
-    elif paperwork_type == "POD":
-        dest_flags_suffix = POD_flags_suffix
-
-    backup_file_name = "GR" + job_ref + "_" + paperwork_type + file_ext
-
-    backup_duplicate_check = userinputvalidation.check_if_duplicate_file(
-        backup_file_name, user.backup_directory)
-
-    if backup_duplicate_check == True:
-        # If there is a duplicate named file in the backup directory,
-        # append a paperwork counter to the backup filename, and loop
-        # till there is no longer a duplicate file name
-        pw_counter = 0
-        
-        while os.path.exists(user.backup_directory + "/" +  backup_file_name):
-            if pw_counter == 0:
-                pw_counter += 1
-                backup_file_name = (
-                    "GR" + job_ref + "_" + paperwork_type + "_" 
-                    + str(pw_counter).zfill(3) + file_ext)
-            else:
-                pw_counter += 1
-                backup_file_name = (
-                    "GR" + job_ref + "_" + paperwork_type + "_"
-                    + str(pw_counter).zfill(3) + file_ext)
-
-    dest_file_name = "++GR" + job_ref + dest_flags_suffix + ".pdf"
-    full_job_ref = "GR" + job_ref
+    backup_file_name = create_backup_file_name(
+        complete_job_reference, paperwork_type, file_extension,
+        master_application.current_user.backup_directory)
+            
+    dest_file_name = create_destination_file_name(
+        complete_job_reference, paperwork_type)
     
-    # Use the duplicate check method to append the correct page number
-    # and not overwrite it in error.
+    # Check if there is a file already existing in the destination
+    # directory with the same name so we know later that we need
+    # to merge the two files.
     dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
         dest_file_name, user.dest_directory)
 
-    return full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check
+    return complete_job_reference, backup_file_name, dest_file_name, dest_duplicate_check
 
