@@ -2,6 +2,7 @@
 
 import filesystem
 import os
+import pdfwriter
 import PyPDF2
 import re
 from PIL import Image as pil_image
@@ -41,8 +42,8 @@ def barcode_scanner(master_application, file_index, file_list):
         elif len(barcode_ref_list) > 1:
             master_application.write_log("Too many conflicting barcodes?")
             
-            split_file_list = master_application.document_splitter(
-                file, scan_dir, "Split")
+            split_file_list = pdfwriter.document_splitter(
+                master_application, file, scan_dir, "Split")
             
             if split_file_list:
                 del master_application.file_list[master_application.file_index]

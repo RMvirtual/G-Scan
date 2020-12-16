@@ -7,6 +7,7 @@ import pdfwriter
 from settingswindow import SettingsWindow
 from pdfviewer import PDFViewer
 from user import User
+import date
 from date import Date
 from popupbox import PopupBox
 import shelve
@@ -431,12 +432,12 @@ class Application(Frame):
 
         # Dropdown box for selecting the month that quick mode uses.
         self.month_choice = StringVar(settings_frame)
-        self.month_choice.set(CURRENT_MONTH)
+        self.month_choice.set(date.get_current_month())
         
         self.month_dropdown_box = OptionMenu(
             settings_frame,
             self.month_choice,
-            *MONTHS,
+            *date.get_months(),
             command = self.quick_mode_hint_message)
 
         self.month_dropdown_box.grid(
@@ -447,13 +448,13 @@ class Application(Frame):
         
         # Dropdown box for selecting the year that quick mode uses.
         self.year_choice = StringVar(settings_frame)
-        self.year_choice.set(CURRENT_YEAR)
+        self.year_choice.set(date.get_current_year())
 
         self.year_dropdown_box = OptionMenu(
             settings_frame,
             self.year_choice,
-            LAST_YEAR,
-            CURRENT_YEAR,
+            date.get_last_year(),
+            date.get_current_year(),
             command = self.quick_mode_hint_message)
         
         self.year_dropdown_box.grid(
@@ -703,8 +704,6 @@ class Application(Frame):
 
                 self.get_file(self.file_index, self.file_list)
 
-
-    
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are named as a GR number based on the paperwork type setting"""
         if self.current_user.validate_directories_check(self) == True:
@@ -863,50 +862,3 @@ class Application(Frame):
             exit()
         except:
             exit()
-
-CURRENT_YEAR = Date(datetime.now().strftime('%Y'),
-                    datetime.now().strftime('%y'))
-
-LAST_YEAR = Date(str(int(datetime.now().strftime('%Y')) - 1),
-                str(int(datetime.now().strftime('%y')) - 1))
-
-CURRENT_MONTH = Date(datetime.now().strftime('%m') + " - " + datetime.now().strftime('%B'),
-                     datetime.now().strftime('%m'))
-
-JANUARY = Date("01 - January", "01")
-FEBRUARY = Date("02 - February", "02")
-MARCH = Date("03 - March", "03")
-APRIL = Date("04 - April", "04")
-MAY = Date("05 - May", "05")
-JUNE = Date("06 - June", "06")
-JULY = Date("07 - July", "07")
-AUGUST = Date("08 - August", "08")
-SEPTEMBER = Date("09 - September", "09")
-OCTOBER = Date("10 - October", "10")
-NOVEMBER = Date("11 - November", "11")
-DECEMBER = Date("12 - December", "12")
-
-MONTHS = (JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER)
-YEARS = (CURRENT_YEAR, LAST_YEAR)
-
-DEFAULT_PW_OPTIONS =("Cust PW", "Loading List", "POD")
-DEFAULT_INPUT_OPTIONS = ("Normal", "Quick")
-DEFAULT_MULTI_PAGE_OPTIONS = ("Split", "Do Not Split")
-
-customer_pwork_flags_suffix = "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork"
-loading_list_flags_suffix = "++xShxPaxIsVs0++OPSLDLST++Loading_List"
-POD_flags_suffix = "++xShxPaIsVs2++KPIPOD++Scanned_POD"
-
-x_axis = str(int(GetSystemMetrics(0) / 4))
-y_axis = str(int(GetSystemMetrics(1) / 4))
-
-root = Tk()
-root.title("GrayScan")
-root.geometry("850x500+" + x_axis + "+" + y_axis)
-root.grid_rowconfigure(0, weight = 1)
-root.grid_columnconfigure(0, weight = 1)
-root.configure(background = "white")
-
-app = Application(root)
-
-root.mainloop()
