@@ -278,7 +278,7 @@ class Application(Frame):
         self.split_multi_page_bttn = Button(
             file_frame,
             text = "Split Document",
-            command = self.manual_document_splitter)
+            command = lambda: pdfwriter.manual_document_splitter(self))
         
         self.split_multi_page_bttn.grid(
             row = 3, column = 4, columnspan = 2, sticky = E)
@@ -529,7 +529,7 @@ class Application(Frame):
         self.settings_bttn = Button(
             settings_frame,
             text = "Settings",
-            command = lambda: self.settings(current_user))
+            command = lambda: self.open_settings(current_user))
 
         self.settings_bttn.grid(row = 7, column = 2, sticky = E, padx = 3)
         self.settings_bttn.bind("<Return>", self.settings_enter_key)
@@ -609,7 +609,7 @@ class Application(Frame):
 
             pdf_file = self.image_converter(self.file, scan_dir, multi_page_handling)
             
-            split_file_list = self.document_splitter(pdf_file, scan_dir, multi_page_handling)
+            split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, multi_page_handling)
 
             del self.file_list[self.file_index]
             for split_file in reversed(split_file_list):
@@ -629,16 +629,6 @@ class Application(Frame):
             elif pw_type == "POD" and autoprocessing == "on":
                 pdfreader.barcode_scanner(
                     self, self.file_index, self.file_list)
-
-    def document_splitter(self, file, scan_dir, multi_page_handling):
-        file_name, file_extension = os.path.splitext(file)
-        split_file_list = [file]
-        
-        # split PDF into smaller PDFs
-        if file_extension.lower() == ".pdf" and multi_page_handling == "Split":
-           split_file_list = self.split_pdf_document(file, scan_dir)
-            
-        return split_file_list
 
     def split_pdf_document(self, file, scan_dir):
         split_file_list = [file]
@@ -758,25 +748,6 @@ class Application(Frame):
             os.remove(scan_dir + "/" + file)
 
         return pdf_file
-
-    def manual_document_splitter(self):
-        file = self.file
-        scan_dir = self.current_user.scan_directory
-        multi_page_handling = "Split"
-
-        split_file_list = self.document_splitter(file, scan_dir, multi_page_handling)
-
-        del self.file_list[self.file_index]
-        for file in reversed(split_file_list):
-            self.file_list.insert(self.file_index, file)
-
-        self.file = self.file_list[self.file_index]
-        file_name, file_ext = os.path.splitext(self.file)
-
-        self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
-        
-        self.insert_file_attributes(file_name, file_ext)
-        self.user_input_entry_box.focus_set()
 
     def submit(self, barcode = None, manual_submission = True):
         # user input variables
@@ -911,7 +882,7 @@ class Application(Frame):
                 
                 pdf_file = self.image_converter(file, scan_dir, multi_page_handling)
                 
-                split_file_list = self.document_splitter(pdf_file, scan_dir, "Do Not Split")
+                split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, "Do Not Split")
 
                 for split_file in reversed(split_file_list):
                     self.file_list.insert(self.file_index, split_file) 
@@ -1015,7 +986,7 @@ class Application(Frame):
             self.quick_mode_notice_txt.insert(0.0, hint_message)
             self.quick_mode_notice_txt.config(font = ("Calibri", 11), bg = "White", highlightthickness = 0, borderwidth = 0, state = DISABLED)
             
-    def settings(self, current_user):
+    def open_settings(self, current_user):
         """Opens a settings window to act as a user interface for
         amending the user settings data file to change default
         directories and user options."""

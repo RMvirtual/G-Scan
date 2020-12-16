@@ -158,3 +158,66 @@ def create_loading_list_pod(master_application, file, scan_dir,
         output.write(output_stream)
         output_stream.close()
 
+def document_splitter(master_application, file, scan_dir,
+        multi_page_handling):
+    file_name, file_extension = os.path.splitext(file)
+    split_file_list = [file]
+    
+    # split PDF into smaller PDFs
+    if file_extension.lower() == ".pdf" and multi_page_handling == "Split":
+        split_file_list = split_pdf_document(
+            master_application, file, scan_dir)
+        
+    return split_file_list
+
+def manual_document_splitter(master_application):
+    file = master_application.file
+    scan_dir = master_application.current_user.scan_directory
+    multi_page_handling = "Split"
+
+    split_file_list = document_splitter(
+        master_application, file, scan_dir, multi_page_handling)
+
+    del master_application.file_list[master_application.file_index]
+    for file in reversed(split_file_list):
+        master_application.file_list.insert(master_application.file_index, file)
+
+    master_application.file = master_application.file_list[master_application.file_index]
+    file_name, file_ext = os.path.splitext(master_application.file)
+
+    master_application.pdf_viewer.show_image(master_application, master_application.file, master_application.current_user.scan_directory)
+    
+    master_application.insert_file_attributes(file_name, file_ext)
+    master_application.user_input_entry_box.focus_set()
+
+def split_pdf_document(master_application, file, scan_dir):
+    split_file_list = [file]
+    file_name, file_extension = os.path.splitext(file)
+    
+    with open(scan_dir + "/" + file, "rb") as current_file_pdf:
+        current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
+        
+        current_file_page_amount = current_file_pdf_reader.getNumPages()
+
+        if current_file_page_amount > 1:
+            master_application.write_log("Splitting apart " + file)
+            split_file_list.remove(file)
+            page_counter = 0
+            
+            for page_number in range(current_file_page_amount):
+                page_counter += 1
+                split_pdf_holder = PyPDF2.PdfFileWriter()
+                split_pdf_holder.addPage(current_file_pdf_reader.getPage(page_number))
+
+                split_pdf_file_name = file_name + "_" + str(page_counter) + file_extension
+                with open(scan_dir + "/" + split_pdf_file_name, "wb") as split_pdf_file:
+                    split_pdf_holder.write(split_pdf_file)
+                split_pdf_file.close()
+                master_application.write_log("Created " + split_pdf_file_name)
+
+                split_file_list.append(split_pdf_file_name)
+                                    
+            current_file_pdf.close()
+            os.remove(scan_dir + "/" + file)
+    
+    return split_file_list
