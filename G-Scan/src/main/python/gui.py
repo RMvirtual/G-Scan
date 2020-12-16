@@ -51,7 +51,9 @@ class Application(Frame):
             name = "", ext = "", job_ref = "", current_user = self.current_user)
         self.quick_mode_hint_message()
         self.activity_log_row_count = 1
-        self.current_user.validate_directories_check(self)
+        
+        valid_directory_checks = self.check_user_directories_are_valid()
+
         self.write_log("Awaiting input")
         
     def get_user_settings(self):
@@ -79,6 +81,27 @@ class Application(Frame):
         user_settings_data.close()
 
         return current_user
+
+    def check_user_directories_are_valid(self):
+        """Checks whether all the working directories of a user are
+        valid and accessible. Prints to the GUI's log if not and
+        returns an overall Boolean at the end on whether all
+        directories are valid or not."""
+
+        directory_checks = self.current_user.validate_directories_check()
+        all_directories_valid = True
+
+        for directory in directory_checks:
+            is_directory_valid = directory_checks[directory]
+            
+            if not is_directory_valid:
+                all_directories_valid = False
+                
+                self.write_log(
+                    directory + " folder is invalid. Please check the " +
+                    "folder exists and update it within your settings.")
+        
+        return all_directories_valid
 
     def create_widgets(self, name, ext, job_ref, current_user):
         """Creates all the widgets required for the main GUI window."""
@@ -571,7 +594,7 @@ class Application(Frame):
 
     def start(self):
         """ initialise looking for paperwork """
-        if self.current_user.validate_directories_check(self) == True:
+        if self.check_user_directories_are_valid():
             scan_dir = self.current_user.scan_directory
             self.file_list = []
             self.file_index = 0
@@ -674,7 +697,6 @@ class Application(Frame):
                         "Backup directory not found. " +
                         "Please check your settings.")
 
-                
                 if pw_type == "Cust PW":
                     pdfwriter.create_cust_pw(
                         self, file, scan_dir, dest_dir, 
@@ -700,7 +722,16 @@ class Application(Frame):
                 full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(
                     self, barcode, input_mode, file_extension, self.current_user)
 
-                backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
+                backup_success = backup.backup_file(
+                    file, backup_file_name, scan_dir, backup_dir)
+
+                if (backup_success):
+                    self.write_log("Backed up " + file_name)
+                
+                else:
+                    self.write_log(
+                        "Backup directory not found. " +
+                        "Please check your settings.")
 
                 pdfwriter.create_loading_list_pod(
                     self, file, scan_dir, dest_dir,
@@ -714,10 +745,17 @@ class Application(Frame):
 
                 self.get_file(self.file_index, self.file_list)
 
+
+
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are
         named as a GR number based on the paperwork type setting."""
-        if self.current_user.validate_directories_check(self) == True:
+
+        valid_directory_checks = self.current_user.validate_directories_check()
+
+        all_directories_valid = self.check_user_directories_are_valid()
+        
+        if all_directories_valid():
             # user input variables
             pw_type = self.pw_setting.get()
             multi_page_handling = "Do Not Split"
@@ -761,8 +799,17 @@ class Application(Frame):
                     if len(job_ref) == 9:
                         full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(job_ref, "Normal", file_extension)
 
-                        backup.backup_file(self, file, backup_file_name, scan_dir, backup_dir)
+                        backup_success = backup.backup_file(
+                            file, backup_file_name, scan_dir, backup_dir)
                         
+                        if (backup_success):
+                            self.write_log("Backed up " + file_name)
+                
+                        else:
+                            self.write_log(
+                                "Backup directory not found. " +
+                                "Please check your settings.")
+
                         if pw_type == "Cust PW":
                             pdfwriter.create_cust_pw(
                                 self, file, scan_dir, dest_dir,

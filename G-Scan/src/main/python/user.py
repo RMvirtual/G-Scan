@@ -23,28 +23,22 @@ class User(object):
 
         user_settings_data.close()
 
-    def validate_directories_check(self, master_application):
-        scan_dir_check = os.path.isdir(self.scan_directory)
-        dest_dir_check = os.path.isdir(self.dest_directory)
-        backup_dir_check = os.path.isdir(self.backup_directory)
+    def validate_directories_check(self):
+        """Returns an a dictionary (hash map) with the keys
+        as the directory type (scan, dest, backup) and the values
+        as Boolean type denoting whether the directory exists."""
 
-        if not scan_dir_check:
-            master_application.write_log(
-                "Scan folder is invalid. Please check the " +
-                "folder exists and update it within your settings.")
+        directories_to_check = (
+            self.scan_directory, self.dest_directory, self.backup_directory)
 
-        if not dest_dir_check:
-            master_application.write_log(
-                "Destination folder is invalid. Please check the " +
-                "folder exists and update it within your settings.")
-        
-        if not backup_dir_check:
-            master_application.write_log(
-                "Backup folder is invalid. Please check the " +
-                "folder exists and update it within your settings.")
+        checks = []
 
-        if(scan_dir_check and dest_dir_check and backup_dir_check):
-            return True
+        for directory in directories_to_check:
+            checks.append(os.path.isdir(directory))
 
-        else:
-            return False
+        valid_directory_checks = {
+            "Scan": checks[0],
+            "Destination": checks[1],
+            "Backup": checks[2]}
+
+        return valid_directory_checks
