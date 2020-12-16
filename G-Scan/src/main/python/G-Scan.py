@@ -817,11 +817,14 @@ class Application(Frame):
                         full_job_ref, dest_file_name, dest_duplicate_check)
 
                 elif pw_type == "Loading List" or pw_type == "POD":
-                    self.create_loading_list_pod(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
+                    pdfwriter.create_loading_list_pod(
+                        self, file, scan_dir, dest_dir, dest_file_name,
+                        dest_duplicate_check)
                     
                 del self.file_list[self.file_index]
 
-                self.upload_doc(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
+                self.upload_doc(
+                    file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
 
                 self.get_file(self.file_index, self.file_list)
 
@@ -841,47 +844,6 @@ class Application(Frame):
                 self.upload_doc(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
 
                 self.get_file(self.file_index, self.file_list)
-
-
-    def create_loading_list_pod(self, file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check):
-        """Moves a loading list or POD with correct naming convention without having to modify the document other than PDF conversion"""
-        file_name, file_extension = os.path.splitext(file)
-
-        # PDF files should be fine for a straight move
-        if file_extension.lower() == ".pdf":
-            shutil.copyfile(scan_dir + "/" + file, self.temp_dir + "/" "result.pdf")
-
-        # just image files need converting.
-        if file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-            with pil_image.open(scan_dir + "/" + file) as img:
-                output = PyPDF2.PdfFileWriter()
-                temporary_image = self.temp_dir + "/" + file_name + ".png"
-                img.save(temporary_image)
-                img.close()
-
-            final_image = self.temp_dir + "/" + "temp_image.png"
-            # arrange page into portrait orientation
-            with wand_image(filename = temporary_image, resolution = 200) as img_simulator:
-                if img_simulator.width > img_simulator.height:
-                    img_simulator.rotate(270)
-                    img_simulator.save(filename = final_image)
-                else:
-                    img_simulator.save(filename = final_image)
-
-            packet = io.BytesIO()
-            slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-            slab.setFillColorRGB(0,0,0)
-            slab.drawImage(final_image, -110, 20, width = 815, height = 815, mask = None, preserveAspectRatio = True)
-            slab.save()
-
-            packet.seek(0)
-            new_pdf = PyPDF2.PdfFileReader(packet)
-
-            output.addPage(new_pdf.getPage(0))
-
-            output_stream = open(self.temp_dir + "/" + "result.pdf", "wb")
-            output.write(output_stream)
-            output_stream.close()
 
     def upload_doc(self, file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check):
         """if duplicate file already exists in the destination directory, merge the pages together."""
