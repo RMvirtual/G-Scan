@@ -15,7 +15,7 @@ class PDFViewer():
         """Loads image in Google Chrome."""
 
         master_application.write_log("Displaying " + file_name)
-        self.pdf_window.get("file:" + scan_directory + "/" + file)
+        self.pdf_window.get("file:" + scan_directory + "/" + file_name)
 
     def close(self):
         """Closes the PDF viewer."""

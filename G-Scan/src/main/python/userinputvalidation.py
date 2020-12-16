@@ -1,7 +1,7 @@
 import os
 import re
 import userinputvalidation
-from popupbox import Popup_Box
+from popupbox import PopupBox
 
 """Module for validating the users input within G-Scan."""
 

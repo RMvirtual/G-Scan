@@ -2,7 +2,7 @@ from win32api import GetSystemMetrics
 from tkinter import *
 from tkinter import filedialog
 
-class Popup_Box():
+class PopupBox():
     """A class representing a pop up notification window."""
 
     def __init__(self, master_application, title, popup_text, length, height):

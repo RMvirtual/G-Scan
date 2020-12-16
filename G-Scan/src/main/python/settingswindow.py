@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from win32api import GetSystemMetrics
 
-class Settings_Window(Frame):
+class SettingsWindow(Frame):
     """A class representing a Settings window to act as a
     user interface for amending the user settings data file."""
     

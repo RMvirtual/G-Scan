@@ -1,4 +1,5 @@
 import filesystem
+import os
 
 class User(object):
     """ A user with a couple of values to store """
@@ -21,3 +22,29 @@ class User(object):
         user_settings_data.sync()
 
         user_settings_data.close()
+
+    def validate_directories_check(self, master_application):
+        scan_dir_check = os.path.isdir(self.scan_directory)
+        dest_dir_check = os.path.isdir(self.dest_directory)
+        backup_dir_check = os.path.isdir(self.backup_directory)
+
+        if not scan_dir_check:
+            master_application.write_log(
+                "Scan folder is invalid. Please check the " +
+                "folder exists and update it within your settings.")
+
+        if not dest_dir_check:
+            master_application.write_log(
+                "Destination folder is invalid. Please check the " +
+                "folder exists and update it within your settings.")
+        
+        if not backup_dir_check:
+            master_application.write_log(
+                "Backup folder is invalid. Please check the " +
+                "folder exists and update it within your settings.")
+
+        if(scan_dir_check and dest_dir_check and backup_dir_check):
+            return True
+
+        else:
+            return False

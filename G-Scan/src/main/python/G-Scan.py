@@ -2,11 +2,11 @@ import os
 import filesystem
 import backup
 import userinputvalidation
-from settingswindow import Settings_Window
+from settingswindow import SettingsWindow
 from pdfviewer import PDFViewer
 from user import User
 from date import Date
-from popupbox import Popup_Box
+from popupbox import PopupBox
 import shelve
 import shutil
 import re
@@ -48,7 +48,7 @@ class Application(Frame):
             name = "", ext = "", job_ref = "", current_user = self.current_user)
         self.quick_mode_hint_message()
         self.activity_log_row_count = 1
-        self.validate_directories_check()
+        self.current_user.validate_directories_check(self)
         self.write_log("Awaiting input")
         
     def open_user_settings(self):
@@ -568,7 +568,7 @@ class Application(Frame):
 
     def start(self):
         """ initialise looking for paperwork """
-        if self.validate_directories_check() == True:
+        if self.current_user.validate_directories_check(self) == True:
             scan_dir = self.current_user.scan_directory
             self.file_list = []
             self.file_index = 0
@@ -581,37 +581,11 @@ class Application(Frame):
                     self.write_log("Adding " + file + " to list")
 
             if not self.file_list:
-                Popup_Box(self, "Failure", "No files found.", "200", "50")
+                PopupBox(self, "Failure", "No files found.", "200", "50")
 
             else:
                 self.start_browser()
                 self.get_file(self.file_index, self.file_list)
-
-    def validate_directories_check(self):
-        user = self.current_user
-
-        scan_dir_check = os.path.isdir(user.scan_directory)
-        dest_dir_check = os.path.isdir(user.dest_directory)
-        backup_dir_check = os.path.isdir(user.backup_directory)
-
-        if scan_dir_check == False:
-            self.write_log("Scan folder is invalid. Please check the " +
-                           "folder exists and update it within your settings.")
-
-        if dest_dir_check == False:
-            self.write_log("Destination folder is invalid. Please check the " +
-                           "folder exists and update it within your settings.")
-        
-        if backup_dir_check == False:
-            self.write_log("Backup folder is invalid. Please check the " +
-                           "folder exists and update it within your settings.")
-
-        if(scan_dir_check == False or dest_dir_check == False
-                or backup_dir_check == False):
-            return False
-
-        else:
-            return True
     
     def get_file(self, file_index, file_list):
         # directories
@@ -625,7 +599,7 @@ class Application(Frame):
         
         if not self.file_list:
             if self.file_index == 0:
-                self.popup_box("Guess What", "No more files remaining.", "230", "75")
+                PopupBox(self, "Guess What", "No more files remaining.", "230", "75")
                 self.pdf_viewer.close()
                 
         else:
@@ -647,7 +621,7 @@ class Application(Frame):
 
             # Customer Paperwork/Loading List/Manual POD Processing Mode
             if pw_type == "Cust PW" or pw_type == "Loading List" or pw_type == "POD" and autoprocessing == "off":
-                self.show_image(self, self.file, self.current_user.scan_directory)
+                self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
 
             # POD Automatic Processing Mode
             elif pw_type == "POD" and autoprocessing == "on":
@@ -867,7 +841,10 @@ class Application(Frame):
         
         if not self.file_list:
             if self.file_index == 0:
-                self.popup_box("Guess What", "No more files remaining.", "230", "75")
+                PopupBox(self, "Guess What",
+                    "No more files remaining.",
+                    "230", "75")
+                
                 self.pdf_viewer.close()
         else:
             file = self.file_list[self.file_index]
@@ -899,7 +876,7 @@ class Application(Frame):
 
                 file = self.file_list[self.file_index]
                 
-                self.show_image(self, self.file, self.current_user.scan_directory)
+                self.pdf_viewer.show_image(self, self.file, self.current_user.scan_directory)
 
             # if 1 GR reference obtained, use this as the user input
             elif len(barcode_ref_list) == 1:
@@ -1134,7 +1111,7 @@ class Application(Frame):
     
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are named as a GR number based on the paperwork type setting"""
-        if self.validate_directories_check() == True:
+        if self.current_user.validate_directories_check(self) == True:
             # user input variables
             pw_type = self.pw_setting.get()
             multi_page_handling = "Do Not Split"
@@ -1193,7 +1170,9 @@ class Application(Frame):
                         self.write_log("Ignoring" + file)
                         self.file_list.remove(file)
 
-            self.popup_box("Michelin Man", str(file_count) + " files processed.", "215", "60")
+            PopupBox(self,
+                "Michelin Man", str(file_count) + " files processed.",
+                "215", "60")
             
     def skip(self):
         file_index = self.file_index
@@ -1263,7 +1242,7 @@ class Application(Frame):
         amending the user settings data file to change default
         directories and user options."""
 
-        Settings_Window(
+        SettingsWindow(
             self, current_user, filesystem.get_user_settings_data())
 
     def refresh_settings(self, current_user):
