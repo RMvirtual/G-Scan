@@ -30,7 +30,7 @@ def barcode_scanner(master_application, file_index, file_list):
             barcode_ref_list = read_barcodes(master_application.file, scan_dir)
 
         elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-            barcode_ref_list = master_application.image_barcode_reader(master_application.file, scan_dir)
+            barcode_ref_list = image_barcode_reader(master_application.file, scan_dir)
 
         # if no GR reference obtained, display the image for user to manually type in the reference
         if not barcode_ref_list:
@@ -101,3 +101,19 @@ def read_barcodes(file_name, directory):
 
     return barcode_ref_list
 
+def image_barcode_reader(self, file, scan_dir):
+    """Reads barcodes on PNG, JPEG, JPG image files. TIFs should
+    already be pre-converted to PDF."""
+    
+    barcode_ref_list = []
+    
+    barcode_reader = decode(pil_image.open(scan_dir + "/" + file, "r"))
+
+    for barcode in barcode_reader:
+        job_ref = re.sub("[^0-9GR]", "", str(barcode.data).upper())
+
+        if (len(job_ref) == 11 and job_ref[:2].upper() == "GR"
+                and job_ref not in barcode_ref_list):
+            barcode_ref_list.append(job_ref)
+
+    return barcode_ref_list

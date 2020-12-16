@@ -103,12 +103,12 @@ def rename_file(master_application, user_input, input_mode, file_ext, user):
             if pw_counter == 0:
                 pw_counter += 1
                 backup_file_name = (
-                    "GR" + job_ref + "_" + backup_suffix + "_" 
+                    "GR" + job_ref + "_" + paperwork_type + "_" 
                     + str(pw_counter).zfill(3) + file_ext)
             else:
                 pw_counter += 1
                 backup_file_name = (
-                    "GR" + job_ref + "_" + backup_suffix + "_"
+                    "GR" + job_ref + "_" + paperwork_type + "_"
                     + str(pw_counter).zfill(3) + file_ext)
 
     dest_file_name = "++GR" + job_ref + dest_flags_suffix + ".pdf"
