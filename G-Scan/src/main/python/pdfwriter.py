@@ -310,3 +310,51 @@ def image_converter(master_application, file, scan_dir, multi_page_handling):
         os.remove(scan_dir + "/" + file)
 
     return pdf_file
+
+def upload_doc(master_application, file, scan_dir, dest_dir,
+        dest_file_name, dest_duplicate_check):
+    """If duplicate file already exists in the destination directory,
+    merge the pages together."""
+
+    temp_directory = filesystem.get_temp_directory()
+
+    if dest_duplicate_check == True:
+        temp_file_writer = PyPDF2.PdfFileWriter()
+
+        dest_file_object = open(dest_dir + "/" + dest_file_name, "rb")
+        dest_file_reader = PyPDF2.PdfFileReader(dest_file_object)
+
+        for pageNum in range(0, dest_file_reader.numPages):
+            page_object = dest_file_reader.getPage(pageNum)
+            temp_file_writer.addPage(page_object)
+
+        result = open(temp_directory + "result.pdf", "rb")
+        result_reader = PyPDF2.PdfFileReader(result)
+
+        for page_number in range(0, result_reader.numPages):
+            result_page = result_reader.getPage(page_number)
+            temp_file_writer.addPage(result_page)
+
+        temp_file = open(temp_directory + "temp.pdf", "wb")
+        temp_file_writer.write(temp_file)
+        temp_file.close()
+                        
+        result.close()
+        dest_file_object.close()
+        
+        shutil.move(
+            temp_directory + "temp.pdf", dest_dir + "/" + dest_file_name)
+
+        master_application.write_log(dest_file_name + " created successfully")
+        master_application.write_log("")
+        os.remove(scan_dir + "/" + file)
+        
+    # If duplicate file does not already exist, straightforward moves
+    # the current file to the dest folder.
+    elif dest_duplicate_check == False:
+        shutil.move(
+            temp_directory + "result.pdf", dest_dir + "/" + dest_file_name)
+
+        master_application.write_log(dest_file_name + " created successfully")
+        master_application.write_log("")
+        os.remove(scan_dir + "/" + file)

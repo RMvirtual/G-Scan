@@ -44,7 +44,7 @@ class Application(Frame):
         self.grid()
         self.grid_rowconfigure(0, weight = 1)
         self.grid_columnconfigure(0, weight = 1)
-        self.current_user = self.open_user_settings()
+        self.current_user = self.get_user_settings()
         self.temp_dir = filesystem.get_temp_directory()
         self.create_widgets(
             name = "", ext = "", job_ref = "", current_user = self.current_user)
@@ -53,7 +53,7 @@ class Application(Frame):
         self.current_user.validate_directories_check(self)
         self.write_log("Awaiting input")
         
-    def open_user_settings(self):
+    def get_user_settings(self):
         """Opens the user settings file for the user's directory and
         workspace settings."""
 
@@ -676,8 +676,9 @@ class Application(Frame):
                     
                 del self.file_list[self.file_index]
 
-                self.upload_doc(
-                    file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
+                pdfwriter.upload_doc(
+                    self, file, scan_dir, dest_dir,
+                    dest_file_name, dest_duplicate_check)
 
                 self.get_file(self.file_index, self.file_list)
 
@@ -696,49 +697,13 @@ class Application(Frame):
                     
                 del self.file_list[self.file_index]
 
-                self.upload_doc(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
+                pdfwriter.upload_doc(
+                    self, file, scan_dir, dest_dir,
+                    dest_file_name, dest_duplicate_check)
 
                 self.get_file(self.file_index, self.file_list)
 
-    def upload_doc(self, file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check):
-        """if duplicate file already exists in the destination directory, merge the pages together."""
-        if dest_duplicate_check == True:
-            temp_file_writer = PyPDF2.PdfFileWriter()
 
-            dest_file_object = open(dest_dir + "/" + dest_file_name, "rb")
-            dest_file_reader = PyPDF2.PdfFileReader(dest_file_object)
-
-            for pageNum in range(0, dest_file_reader.numPages):
-                page_object = dest_file_reader.getPage(pageNum)
-                temp_file_writer.addPage(page_object)
-
-            result = open(self.temp_dir + "/" + "result.pdf", "rb")
-            result_reader = PyPDF2.PdfFileReader(result)
-
-            for page_number in range(0, result_reader.numPages):
-                result_page = result_reader.getPage(page_number)
-                temp_file_writer.addPage(result_page)
-
-            temp_file = open(self.temp_dir + "/" + "temp.pdf", "wb")
-            temp_file_writer.write(temp_file)
-            temp_file.close()
-                           
-            result.close()
-            dest_file_object.close()
-            
-            shutil.move(self.temp_dir + "/" + "temp.pdf", dest_dir + "/" + dest_file_name)
-
-            self.write_log(dest_file_name + " created successfully")
-            self.write_log("")
-            os.remove(scan_dir + "/" + file)
-            
-        # if duplicate file does not already exist, straightforward moves the current file to the dest folder.
-        elif dest_duplicate_check == False:
-            shutil.move(self.temp_dir + "/" + "result.pdf", dest_dir + "/" + dest_file_name)
-
-            self.write_log(dest_file_name + " created successfully")
-            self.write_log("")
-            os.remove(scan_dir + "/" + file)
     
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are named as a GR number based on the paperwork type setting"""
@@ -798,7 +763,10 @@ class Application(Frame):
                                 self, file, scan_dir, dest_dir,
                                 dest_file_name, dest_duplicate_check)
 
-                        self.upload_doc(file, scan_dir, dest_dir, dest_file_name, dest_duplicate_check)
+                        pdfwriter.upload_doc(
+                            self, file, scan_dir, dest_dir,
+                            dest_file_name, dest_duplicate_check)
+                        
                         self.write_log("Uploaded " + file + " as " + dest_file_name)
                         file_count += 1
                         self.user_input_entry_box.delete(0, END)
