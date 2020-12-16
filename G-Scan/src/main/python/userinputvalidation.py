@@ -62,54 +62,11 @@ def calculate_base_job_reference(month, year):
     sacrificial_digits = str("00000")
     template_ref = job_ref_prefix + sacrificial_digits
 
-def create_backup_file_name(job_reference, paperwork_type, file_extension,
-        directory):
-    """Creates the backup file name including the job reference,
-    paperwork counter (if applicable), paperwork type and file
-    extension.
-    
-    Checks if there is a duplicately named file already in the backup
-    directory and loops through appending increasing page numbers
-    to the file name till it is no longer duplicate."""
+def create_job_reference(master_application, user_input, input_mode):
+    """Creates a full FCL format job reference based on the user's
+    input and the inputting mode the program is currently running
+    in."""
 
-    file_name = (
-        "GR" + job_reference + "_" + paperwork_type + file_extension)
-
-    is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
-        file_name, directory)
-    
-    page_counter = 1
-
-    while(is_file_name_duplicate):
-        file_name = ("GR" + job_reference + "_" + paperwork_type
-            + str(page_counter).zfill(3) + file_extension)
-        
-        is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
-            file_name, directory)
-        
-        page_counter += 1
-    
-    return file_name
-
-def create_destination_file_name(job_reference, paperwork_type):
-    """Creates the full file name of a file intended for the
-    destination directory (i.e. FCL server directory to be
-    uploaded)."""
-
-    # Dictionary of file name flags that FCL uses to differentiate
-    # between different paperwork types. 
-    paperwork_type_flags = {
-        "Cust PW": "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork",
-        "Loading List": "++xShxPaxIsVs0++OPSLDLST++Loading_List",
-        "POD": "++xShxPaIsVs2++KPIPOD++Scanned_POD"}
-
-    dest_file_name = (
-        "++" + job_reference + paperwork_type_flags[paperwork_type]
-        + ".pdf")
-
-    return dest_file_name
-
-def rename_file(master_application, user_input, input_mode, file_extension, user):
     user_input = re.sub("[^0-9]", "", user_input)
 
     # If user input mode is set to Quick, will restructure the job ref
@@ -130,21 +87,69 @@ def rename_file(master_application, user_input, input_mode, file_extension, user
 
     else:
         complete_job_reference = "GR" + user_input
+    
+    return complete_job_reference
+
+def create_backup_file_name(job_reference, paperwork_type, file_extension,
+        directory):
+    """Creates the backup file name including the job reference,
+    paperwork counter (if applicable), paperwork type and file
+    extension.
+    
+    Checks if there is a duplicately named file already in the backup
+    directory and loops through appending increasing page numbers
+    to the file name till it is no longer duplicate."""
+
+    file_name = (
+        "GR" + job_reference + "_" + paperwork_type + file_extension)
+
+    is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
+        file_name, directory)
+    
+    page_counter = 1
+
+    while(is_file_name_duplicate):
+        file_name = ("GR" + job_reference + "_" + paperwork_type + "_"
+            + str(page_counter).zfill(3) + file_extension)
+        
+        is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
+            file_name, directory)
+        
+        page_counter += 1
+    
+    return file_name
+
+def create_destination_file_name(job_reference, paperwork_type,
+        file_extension):
+    """Creates the full file name of a file intended for the
+    destination directory (i.e. FCL server directory to be
+    uploaded)."""
+
+    # Dictionary of file name flags that FCL uses to differentiate
+    # between different paperwork types. 
+    paperwork_type_flags = {
+        "Cust PW": "++xShPaxIsVs0++OPSPWAT++Customer_Paperwork",
+        "Loading List": "++xShxPaxIsVs0++OPSLDLST++Loading_List",
+        "POD": "++xShxPaIsVs2++KPIPOD++Scanned_POD"}
+
+    file_name = (
+        "++" + job_reference + paperwork_type_flags[paperwork_type]
+        + file_extension)
+
+    return file_name
+
+def rename_file(master_application, user_input, input_mode, file_extension):
+    job_reference = create_job_reference(
+        master_application, user_input, input_mode)
 
     paperwork_type = master_application.pw_setting.get()
 
     backup_file_name = create_backup_file_name(
-        complete_job_reference, paperwork_type, file_extension,
+        job_reference, paperwork_type, file_extension,
         master_application.current_user.backup_directory)
             
     dest_file_name = create_destination_file_name(
-        complete_job_reference, paperwork_type)
-    
-    # Check if there is a file already existing in the destination
-    # directory with the same name so we know later that we need
-    # to merge the two files.
-    dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
-        dest_file_name, user.dest_directory)
+        job_reference, paperwork_type, ".pdf")
 
-    return complete_job_reference, backup_file_name, dest_file_name, dest_duplicate_check
+    return job_reference, backup_file_name, dest_file_name
 

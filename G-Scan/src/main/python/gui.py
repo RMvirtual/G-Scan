@@ -599,10 +599,13 @@ class Application(Frame):
             self.file_list = []
             self.file_index = 0
 
-            # create a list of files in the scan folder that are either PDF, TIF, JPG, JPEG or PNG
-            
+            # Create a list of files in the scan folder that are either
+            # PDF, TIF, TIFF, JPG, JPEG or PNG.
+            valid_file_extensions = (
+                ".pdf", ".tif", ".tiff", ".tiff", ".jpeg", ".jpg", ".png")
+
             for file in os.listdir(scan_dir):
-                if file.lower().endswith(".pdf") or file.lower().endswith(".tif") or file.lower().endswith(".tiff") or file.lower().endswith(".jpeg")or file.lower().endswith(".jpg") or file.lower().endswith(".png"):
+                if file.lower().endswith(valid_file_extensions):
                     self.file_list.append(file)
                     self.write_log("Adding " + file + " to list")
 
@@ -687,10 +690,15 @@ class Application(Frame):
             else:
                 self.user_input_entry_box.delete(0, END)
                 
-                (full_job_ref, backup_file_name, dest_file_name,
-                dest_duplicate_check) = userinputvalidation.rename_file(
-                    self, user_input, input_mode, file_extension,
-                    self.current_user)
+                full_job_ref, backup_file_name, dest_file_name = (
+                    userinputvalidation.rename_file(
+                        self, user_input, input_mode, file_extension))
+
+                # Check if there is a file already existing in the destination
+                # directory with the same name so we know later that we need
+                # to merge the two files.
+                dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
+                    dest_file_name, self.current_user.dest_directory)
 
                 backup_success = backup.backup_file(
                     file, backup_file_name, scan_dir, backup_dir)
@@ -732,8 +740,14 @@ class Application(Frame):
         elif pw_type == "POD" and auto_processing == "on" and manual_submission:
                 self.user_input_entry_box.delete(0, END)
                 
-                full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(
-                    self, barcode, input_mode, file_extension, self.current_user)
+                full_job_ref, backup_file_name, dest_file_name = userinputvalidation.rename_file(
+                    self, barcode, input_mode, file_extension)
+
+                # Check if there is a file already existing in the destination
+                # directory with the same name so we know later that we need
+                # to merge the two files.
+                dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
+                    dest_file_name, self.current_user.dest_directory)
 
                 backup_success = backup.backup_file(
                     file, backup_file_name, scan_dir, backup_dir)
@@ -815,7 +829,14 @@ class Application(Frame):
                     self.write_log("\nJob reference is " + job_ref)
                     
                     if len(job_ref) == 9:
-                        full_job_ref, backup_file_name, dest_file_name, dest_duplicate_check = userinputvalidation.rename_file(job_ref, "Normal", file_extension)
+                        full_job_ref, backup_file_name, dest_file_name = userinputvalidation.rename_file(
+                            job_ref, "Normal", file_extension)
+
+                        # Check if there is a file already existing in the destination
+                        # directory with the same name so we know later that we need
+                        # to merge the two files.
+                        dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
+                            dest_file_name, self.current_user.dest_directory)
 
                         backup_success = backup.backup_file(
                             file, backup_file_name, scan_dir, backup_dir)
