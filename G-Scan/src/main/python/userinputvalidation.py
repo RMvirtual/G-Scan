@@ -108,7 +108,7 @@ def create_backup_file_name(job_reference, paperwork_type, file_extension,
     
     page_counter = 1
 
-    while(is_file_name_duplicate):
+    while is_file_name_duplicate:
         file_name = ("GR" + job_reference + "_" + paperwork_type + "_"
             + str(page_counter).zfill(3) + file_extension)
         
@@ -142,7 +142,7 @@ def rename_file(master_application, user_input, input_mode, file_extension):
     job_reference = create_job_reference(
         master_application, user_input, input_mode)
 
-    paperwork_type = master_application.pw_setting.get()
+    paperwork_type = master_application.gui.get_current_paperwork_type()
 
     backup_file_name = create_backup_file_name(
         job_reference, paperwork_type, file_extension,

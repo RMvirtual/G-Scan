@@ -548,66 +548,69 @@ class GUI(Frame):
         self.kill_program()
 
     def start_browser(self):
-        self.pdf_viewer = PDFViewer()
+        self.main_application.start_pdf_viewer()
 
     def start(self):
         """ initialise looking for paperwork """
         self.main_application.start()
+
+    def get_current_input_mode(self):
+        """Gets a string of the current input mode as set by the
+        radio buttons for input mode (e.g. Quick or Normal)."""
+
+        return self.current_input_mode.get()
+
+    def get_current_paperwork_type(self):
+        """Gets a string representing the current selection for
+        paperwork type on the radio buttons for paperwork type
+        (e.g. Cust PW, Loading List or POD)."""
+
+        return self.pw_setting.get()
     
-    def get_file(self, file_index, file_list):
-        # directories
-        scan_dir = self.main_application.current_user.scan_directory
+    def get_user_input(self):
+        """Gets a string of the contents the user has entered
+        into the user input box."""
 
-        # user variables
-        multi_page_handling = self.multi_page_mode.get()
-        input_mode = self.current_input_mode.get()
-        pw_type = self.pw_setting.get()
-        autoprocessing = self.autoprocessing_mode.get()
-        
-        if not self.main_application.file_list:
-            if self.main_application.file_index == 0:
-                PopupBox(self, "Guess What", "No more files remaining.", "230", "75")
-                self.pdf_viewer.close()
-                
-        else:
-            self.file = self.main_application.file_list[self.main_application.file_index]
+        return self.user_input_entry_box.get()
 
-            pdf_file = pdfwriter.image_converter(
-                self, self.file, scan_dir, multi_page_handling)
-            
-            split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, multi_page_handling)
+    def get_autoprocessing_mode(self):
+        """Gets a string representing whether autoprocessing mode
+        is "on" or "off"."""
 
-            del self.main_application.file_list[self.main_application.file_index]
-            for split_file in reversed(split_file_list):
-                self.main_application.file_list.insert(self.main_application.file_index, split_file)
+        return self.autoprocessing_mode.get()
+    
+    def get_multi_page_mode(self):
+        """Gets a string representing whether multi-page handling
+        is set to "Split" or "Do Not Split"."""
 
-            self.file = self.main_application.file_list[self.main_application.file_index]
-            file_name, file_ext = os.path.splitext(self.file)
+        return self.multi_page_mode.get()
 
-            self.insert_file_attributes(file_name, file_ext)
-            self.user_input_entry_box.focus_set()
+    def move_cursor_to_user_input_box(self):
+        """Focuses the cursor position in the GUI from the last thing
+        it clicked back to the user input box for the user to start
+        typing again."""
 
-            # Customer Paperwork/Loading List/Manual POD Processing Mode
-            if pw_type == "Cust PW" or pw_type == "Loading List" or pw_type == "POD" and autoprocessing == "off":
-                self.pdf_viewer.show_image(
-                    self, self.file, self.main_application.current_user.scan_directory)
+        self.user_input_entry_box.focus_set()
 
-            # POD Automatic Processing Mode
-            elif pw_type == "POD" and autoprocessing == "on":
-                pdfreader.barcode_scanner(
-                    self, self.main_application.file_index, self.main_application.file_list)
+    def clear_user_input(self):
+        """Clears the text in the user input box, making it appear
+        as though it has been accepted."""
+
+        self.user_input_entry_box.delete(0, END)
 
     def submit(self, barcode = None, manual_submission = True):
-        # user input variables
-        input_mode = self.current_input_mode.get()
-        pw_type = self.pw_setting.get()
-        user_input = self.user_input_entry_box.get()
-        auto_processing = self.autoprocessing_mode.get()
+        # User input variables.
+        input_mode = self.get_current_input_mode()
+        paperwork_type = self.get_current_paperwork_type()
+        user_input = self.get_user_input()
+        auto_processing = self.get_autoprocessing_mode()
 
-        # directory variables
-        scan_dir = self.current_user.scan_directory
-        dest_dir = self.current_user.dest_directory
-        backup_dir = self.current_user.backup_directory
+        # Directory variables.
+        current_user = self.main_application.get_current_user()
+
+        scan_dir = current_user.scan_directory
+        dest_dir = current_user.dest_directory
+        backup_dir = current_user.backup_directory
 
         # file variables
         file = self.main_application.file_list[self.main_application.file_index]
@@ -615,7 +618,8 @@ class GUI(Frame):
 
         valid_paperwork_types = ("Cust PW", "Loading List", "POD")
 
-        if (pw_type in valid_paperwork_types and auto_processing == "off"
+        if (paperwork_type in valid_paperwork_types
+                and auto_processing == "off"
                 or auto_processing == "on" and manual_submission):
             # check user has inputted correct amount of digits
             user_input_check = userinputvalidation.check_user_input_length(
@@ -627,17 +631,17 @@ class GUI(Frame):
             # If the check passes, start the renaming/move file method
             # and get the next one.
             else:
-                self.user_input_entry_box.delete(0, END)
+                self.clear_user_input()
                 
                 full_job_ref, backup_file_name, dest_file_name = (
                     userinputvalidation.rename_file(
-                        self, user_input, input_mode, file_extension))
+                        self.main_application, user_input, input_mode, file_extension))
 
                 # Check if there is a file already existing in the destination
                 # directory with the same name so we know later that we need
                 # to merge the two files.
                 dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
-                    dest_file_name, self.current_user.dest_directory)
+                    dest_file_name, current_user.dest_directory)
 
                 backup_success = backup.backup_file(
                     file, backup_file_name, scan_dir, backup_dir)
@@ -650,12 +654,12 @@ class GUI(Frame):
                         "Backup directory not found. " +
                         "Please check your settings.")
 
-                if pw_type == "Cust PW":
+                if paperwork_type == "Cust PW":
                     pdfwriter.create_cust_pw(
                         self, file, scan_dir, dest_dir, 
                         full_job_ref, dest_file_name, dest_duplicate_check)
 
-                elif pw_type == "Loading List" or pw_type == "POD":
+                elif paperwork_type == "Loading List" or paperwork_type == "POD":
                     pdfwriter.create_loading_list_pod(
                         self, file, scan_dir, dest_dir, dest_file_name,
                         dest_duplicate_check)
@@ -676,17 +680,19 @@ class GUI(Frame):
                 self.get_file(self.main_application.file_index, self.main_application.file_list)
 
         # POD autoprocessing mode
-        elif pw_type == "POD" and auto_processing == "on" and manual_submission:
-                self.user_input_entry_box.delete(0, END)
+        elif paperwork_type == "POD" and auto_processing == "on" and manual_submission:
+                self.clear_user_input()
                 
-                full_job_ref, backup_file_name, dest_file_name = userinputvalidation.rename_file(
-                    self, barcode, input_mode, file_extension)
+                full_job_ref, backup_file_name, dest_file_name = (
+                    userinputvalidation.rename_file(
+                        self.main_application, barcode, input_mode, file_extension))
 
                 # Check if there is a file already existing in the destination
                 # directory with the same name so we know later that we need
                 # to merge the two files.
-                dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
-                    dest_file_name, self.current_user.dest_directory)
+                dest_duplicate_check = (
+                    userinputvalidation.check_if_duplicate_file(
+                        dest_file_name, self.current_user.dest_directory))
 
                 backup_success = backup.backup_file(
                     file, backup_file_name, scan_dir, backup_dir)
@@ -716,7 +722,9 @@ class GUI(Frame):
                 else:
                     self.write_log(dest_file_name + " upload error.")
 
-                self.get_file(self.main_application.file_index, self.main_application.file_list)
+                self.get_file(
+                    self.main_application.file_index,
+                    self.main_application.file_list)
 
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are

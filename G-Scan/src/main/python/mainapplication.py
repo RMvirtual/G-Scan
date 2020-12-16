@@ -11,6 +11,9 @@ import filesystem
 from user import User
 import shelve
 from popupbox import PopupBox
+from pdfviewer import PDFViewer
+import pdfreader
+import pdfwriter
 
 class MainApplication():
     """A class for the main application of the program to run."""
@@ -118,5 +121,58 @@ class MainApplication():
                 PopupBox(self.gui, "Failure", "No files found.", "200", "50")
 
             else:
-                self.gui.start_browser()
-                self.gui.get_file(self.file_index, self.file_list)
+                self.start_pdf_viewer()
+                self.get_file(self.file_index, self.file_list)
+
+    def start_pdf_viewer(self):
+        self.pdf_viewer = PDFViewer()
+
+    def get_file(self, file_index, file_list):
+        # directories
+        scan_dir = self.current_user.scan_directory
+
+        # user variables
+        multi_page_handling = self.gui.get_multi_page_mode()
+        input_mode = self.gui.get_current_input_mode()
+        pw_type = self.gui.get_current_paperwork_type()
+        autoprocessing = self.gui.get_autoprocessing_mode()
+        
+        if not self.file_list:
+            if self.file_index == 0:
+                PopupBox(
+                    self.gui, "Guess What", "No more files remaining.",
+                    "230", "75")
+                
+                self.pdf_viewer.close()
+                
+        else:
+            self.file = self.file_list[self.file_index]
+
+            pdf_file = pdfwriter.image_converter(
+                self, self.file, scan_dir, multi_page_handling)
+            
+            split_file_list = pdfwriter.document_splitter(
+                self, pdf_file, scan_dir, multi_page_handling)
+
+            del self.file_list[self.file_index]
+            
+            for split_file in reversed(split_file_list):
+                self.file_list.insert(
+                    self.file_index, split_file)
+
+            self.file = self.file_list[self.file_index]
+            file_name, file_ext = os.path.splitext(self.file)
+
+            self.gui.insert_file_attributes(file_name, file_ext)
+            self.gui.move_cursor_to_user_input_box()
+
+            # Customer Paperwork/Loading List/Manual POD Processing Mode
+            if (pw_type == "Cust PW" or pw_type == "Loading List"
+                    or pw_type == "POD" and autoprocessing == "off"):
+                self.pdf_viewer.show_image(
+                    self.gui, self.file, self.current_user.scan_directory)
+
+            # POD Automatic Processing Mode
+            elif pw_type == "POD" and autoprocessing == "on":
+                pdfreader.barcode_scanner(
+                    self.gui, self.file_index, self.file_list)
