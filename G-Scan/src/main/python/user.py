@@ -16,7 +16,7 @@ class User(object):
     def __str__(self):
         return self.name
 
-    def overwrite_user(self, new_user, user_settings_file):
+    def overwrite_user(self, new_user):
         user_settings_data = filesystem.get_user_settings_data()
         user_settings_data[self.name] = new_user
         user_settings_data.sync()

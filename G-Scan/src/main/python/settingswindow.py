@@ -170,7 +170,7 @@ class SettingsWindow(Frame):
         current_user.dest_directory = self.dest_dir_ent.get()
         current_user.backup_directory = self.backup_dir_ent.get()
         current_user.autoprocessing = self.default_autoprocess.get()
-        current_user.overwrite_user(current_user, user_settings_file)
+        current_user.overwrite_user(current_user)
         main_application.refresh_settings(current_user)
         self.root.destroy()
 
