@@ -39,17 +39,20 @@ pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 class GUI(Frame):
     """GUI Box for inputting a GR Number when viewing a page of paperwork"""
 
-    def __init__(self, master):
+    def __init__(self, master, main_application):
         """ Initialise the frame, whatever that means."""
 
         super(GUI, self).__init__(master)
+        self.main_application = main_application
         self.grid()
         self.grid_rowconfigure(0, weight = 1)
         self.grid_columnconfigure(0, weight = 1)
-        self.current_user = self.get_user_settings()
         self.temp_dir = filesystem.get_temp_directory()
+        
         self.create_widgets(
-            name = "", ext = "", job_ref = "", current_user = self.current_user)
+            name = "", ext = "", job_ref = "",
+            current_user = self.main_application.get_current_user())
+        
         self.quick_mode_hint_message()
         self.activity_log_row_count = 1
         
@@ -57,39 +60,14 @@ class GUI(Frame):
 
         self.write_log("Awaiting input")
         
-    def get_user_settings(self):
-        """Opens the user settings file for the user's directory and
-        workspace settings."""
-
-        current_username = os.getlogin()
-
-        # If the user already exists in the user settings data file,
-        # load the user up as the current user and pass it back as a
-        # user object.
-        user_settings_data = shelve.open(
-            filesystem.get_user_settings_data_path())
-        
-        if current_username in user_settings_data:
-            current_user = user_settings_data[current_username]
-
-        # If the user does not exist, creates a new user and adds it to
-        # the user settings data file, passing back the user object.
-        else:
-            current_user = User(current_username)
-            user_settings_data[current_username] = current_user
-            user_settings_data.sync()
-        
-        user_settings_data.close()
-
-        return current_user
-
     def check_user_directories_are_valid(self):
         """Checks whether all the working directories of a user are
         valid and accessible. Prints to the GUI's log if not and
         returns an overall Boolean at the end on whether all
         directories are valid or not."""
 
-        directory_checks = self.current_user.validate_directories_check()
+        current_user = self.main_application.get_current_user()
+        directory_checks = current_user.validate_directories_check()
         all_directories_valid = True
 
         for directory in directory_checks:
@@ -783,12 +761,9 @@ class GUI(Frame):
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are
         named as a GR number based on the paperwork type setting."""
-
-        valid_directory_checks = self.current_user.validate_directories_check()
-
         all_directories_valid = self.check_user_directories_are_valid()
         
-        if all_directories_valid():
+        if all_directories_valid:
             # user input variables
             pw_type = self.pw_setting.get()
             multi_page_handling = "Do Not Split"
