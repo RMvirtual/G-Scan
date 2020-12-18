@@ -11,6 +11,18 @@ class Date(object):
     def __str__(self):
         return str(self.full)
 
+    def get_short_code(self):
+        """Returns the short string representation of the date
+        (e.g. 02 for "02 - February" or 19 for "2019")."""
+
+        return self.short
+
+    def get_full_code(self):
+        """Returns the full string representation of the date
+        (e.g. "02 - February" or "2019")."""
+
+        return self.full
+
 def get_months():
     """Returns a tuple of the months of the year."""
 

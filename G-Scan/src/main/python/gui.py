@@ -48,13 +48,10 @@ class GUI(Frame):
         self.grid_rowconfigure(0, weight = 1)
         self.grid_columnconfigure(0, weight = 1)
         self.temp_dir = filesystem.get_temp_directory()
-        
-        self.create_widgets(self.main_application.get_current_user())
-        
-        self.quick_mode_hint_message()
+        self.create_widgets()
         self.activity_log_row_count = 1
 
-    def create_widgets(self, current_user):
+    def create_widgets(self):
         """Creates all the widgets required for the main GUI window."""
 
         # Left master frame to contain the logo frame and the
@@ -79,7 +76,7 @@ class GUI(Frame):
         right_master_frame.grid_columnconfigure(0, weight = 1)
         
         self.create_right_master_frame_widgets(
-            right_master_frame, current_user)
+            right_master_frame)
 
         # Activity log frame along the bottom.
         activity_log_frame = Frame(
@@ -115,6 +112,8 @@ class GUI(Frame):
             bg = "light grey",
             state = DISABLED,
             yscrollcommand=self.scroll_bar.set)
+
+        self.create_bottom_widgets(activity_log_frame)
 
         for i in range(1,10):
             self.columnconfigure(i, weight = 1)
@@ -154,8 +153,7 @@ class GUI(Frame):
 
         self.create_file_frame_widgets(self.file_frame)        
 
-    def create_right_master_frame_widgets(self, right_master_frame,
-            current_user):
+    def create_right_master_frame_widgets(self, right_master_frame):
         """Creates the right master frame's widgets."""
 
         # Frame for the settings panel inside the right master frame.
@@ -167,7 +165,7 @@ class GUI(Frame):
         settings_frame.grid_rowconfigure(0, weight = 1)
         settings_frame.grid_columnconfigure(0, weight = 1)
 
-        self.create_settings_frame_widgets(settings_frame, current_user)
+        self.create_settings_frame_widgets(settings_frame)
 
     def create_file_frame_widgets(self, file_frame):
         """Creates widgets required for the file frame."""
@@ -260,6 +258,7 @@ class GUI(Frame):
         self.split_multi_page_bttn.bind(
             "<KP_Enter>", self.split_pdf_enter_key)
 
+    def create_bottom_widgets(self, file_frame):
         # Start button.
         self.start_bttn = Button(
             file_frame, text = "Start", command = self.start)
@@ -284,9 +283,50 @@ class GUI(Frame):
             highlightthickness = 0, borderwidth = 0,
             state = DISABLED)
 
-    def create_settings_frame_widgets(self, settings_frame, current_user):
+        # Michelin button for performing the special michelin function
+        # wherein paperwork processing is done based on using the
+        # file name as a job reference without requiring user input
+        # or document scanning.
+        michelin_image_path = (filesystem.get_resources_directory()
+            + "images\\michelin_logo.jpg")
+        
+        rendered_michelin_image = pil_image.open(michelin_image_path)
+        rendered_michelin_image.thumbnail((25, 25), pil_image.ANTIALIAS)
+        self.michelin_logo = PIL.ImageTk.PhotoImage(rendered_michelin_image)
+        
+        self.michelin_bttn = Button(
+            file_frame,
+            image = self.michelin_logo,
+            command = self.michelin_man)
+        
+        self.michelin_bttn.grid(row = 7, column = 1, sticky = E)
+
+        # Settings button.
+        self.settings_bttn = Button(
+            file_frame,
+            text = "Settings",
+            command = lambda: self.open_settings(current_user))
+
+        self.settings_bttn.grid(row = 7, column = 2, sticky = E, padx = 3)
+        self.settings_bttn.bind("<Return>", self.settings_enter_key)
+        self.settings_bttn.bind("<KP_Enter>", self.settings_enter_key)
+        self.settings_bttn.config(font=("Calibri", 11))
+
+        # Exit button.
+        self.exit_bttn = Button(
+            file_frame,
+            text = "Exit",
+            command = self.kill_program)
+        
+        self.exit_bttn.grid(row = 7, column = 3, columnspan = 2, sticky = W)
+        self.exit_bttn.config(font=("Calibri", 11))
+        self.exit_bttn.bind("<Return>", self.exit_enter_key)
+        self.exit_bttn.bind("<KP_Enter>", self.exit_enter_key)
+
+    def create_settings_frame_widgets(self, settings_frame):
         # Paperwork type heading for the radio dial to determine
         # the type of paperwork being processed.
+        current_user = self.main_application.get_current_user()
 
         self.pw_type_lbl = Label(settings_frame, text = "Paperwork Type")
         self.pw_type_lbl.config(font=("Calibri", 13), bg = "white")
@@ -379,7 +419,7 @@ class GUI(Frame):
             bg = "White",
             font = ("Calibri", 11),
             highlightthickness = 0,
-            command = self.quick_mode_hint_message)
+            command = self.main_application.calculate_quick_mode_hint_message)
             
         self.normal_mode_radio_bttn.grid(
             row = 3, column = 0,
@@ -394,8 +434,7 @@ class GUI(Frame):
             bg = "White",
             font = ("Calibri", 11),
             highlightthickness = 0,
-            command = self.quick_mode_hint_message
-            )
+            command = self.main_application.calculate_quick_mode_hint_message)
         
         self.quick_mode_radio_bttn.grid(
             row = 3, column = 1, rowspan = 2, pady = 5, sticky = NW)
@@ -408,7 +447,7 @@ class GUI(Frame):
             settings_frame,
             self.month_choice,
             *date.get_months(),
-            command = self.quick_mode_hint_message)
+            command = self.main_application.calculate_quick_mode_hint_message)
 
         self.month_dropdown_box.grid(
             row = 3, column = 2, columnspan = 2, padx = 10, sticky = NW)
@@ -425,7 +464,7 @@ class GUI(Frame):
             self.year_choice,
             date.get_last_year(),
             date.get_current_year(),
-            command = self.quick_mode_hint_message)
+            command = self.main_application.calculate_quick_mode_hint_message)
         
         self.year_dropdown_box.grid(
             row = 4, column = 2, columnspan = 2, padx = 10, sticky = NW)
@@ -477,46 +516,6 @@ class GUI(Frame):
         
         self.do_not_split_mode_radio_bttn.grid(
             row = 6, column = 1, sticky = W, pady = 3)
-
-        # Michelin button for performing the special michelin function
-        # wherein paperwork processing is done based on using the
-        # file name as a job reference without requiring user input
-        # or document scanning.
-        michelin_image_path = (filesystem.get_resources_directory()
-            + "images\\michelin_logo.jpg")
-        
-        rendered_michelin_image = pil_image.open(michelin_image_path)
-        rendered_michelin_image.thumbnail((25, 25), pil_image.ANTIALIAS)
-        self.michelin_logo = PIL.ImageTk.PhotoImage(rendered_michelin_image)
-        
-        self.michelin_bttn = Button(
-            settings_frame,
-            image = self.michelin_logo,
-            command = self.michelin_man)
-        
-        self.michelin_bttn.grid(row = 7, column = 1, sticky = E)
-
-        # Settings button.
-        self.settings_bttn = Button(
-            settings_frame,
-            text = "Settings",
-            command = lambda: self.open_settings(current_user))
-
-        self.settings_bttn.grid(row = 7, column = 2, sticky = E, padx = 3)
-        self.settings_bttn.bind("<Return>", self.settings_enter_key)
-        self.settings_bttn.bind("<KP_Enter>", self.settings_enter_key)
-        self.settings_bttn.config(font=("Calibri", 11))
-
-        # Exit button.
-        self.exit_bttn = Button(
-            settings_frame,
-            text = "Exit",
-            command = self.kill_program)
-        
-        self.exit_bttn.grid(row = 7, column = 3, columnspan = 2, sticky = W)
-        self.exit_bttn.config(font=("Calibri", 11))
-        self.exit_bttn.bind("<Return>", self.exit_enter_key)
-        self.exit_bttn.bind("<KP_Enter>", self.exit_enter_key)
 
     def submit_enter_key(self, event = None):
         self.submit()
@@ -573,6 +572,18 @@ class GUI(Frame):
 
         return self.multi_page_mode.get()
 
+    def get_current_year_choice(self):
+        """Gets a string representing the value of the selection
+        from the Year dropdown menu."""
+
+        return self.year_choice.get()
+
+    def get_current_month_choice(self):
+        """Gets a string representing the value of the selection
+        from the Month dropdown menu."""
+
+        return self.month_choice.get()
+
     def move_cursor_to_user_input_box(self):
         """Focuses the cursor position in the GUI from the last thing
         it clicked back to the user input box for the user to start
@@ -603,247 +614,16 @@ class GUI(Frame):
         self.file_ext_txt.config(state = DISABLED)
 
     def submit(self, barcode = None, manual_submission = True):
-        # User input variables.
-        input_mode = self.get_current_input_mode()
-        paperwork_type = self.get_current_paperwork_type()
-        user_input = self.get_user_input()
-        auto_processing = self.get_autoprocessing_mode()
-
-        # Directory variables.
-        current_user = self.main_application.get_current_user()
-
-        scan_dir = current_user.scan_directory
-        dest_dir = current_user.dest_directory
-        backup_dir = current_user.backup_directory
-
-        # file variables
-        file = self.main_application.file_list[self.main_application.file_index]
-        file_name, file_extension = os.path.splitext(file)
-
-        valid_paperwork_types = ("Cust PW", "Loading List", "POD")
-
-        if (paperwork_type in valid_paperwork_types
-                and auto_processing == "off"
-                or auto_processing == "on" and manual_submission):
-            # check user has inputted correct amount of digits
-            user_input_check = userinputvalidation.check_user_input_length(
-                user_input, input_mode)
-
-            if not user_input_check[0]:
-                PopupBox(self, "Numpty", user_input_check[1], 200, 50)
-
-            # If the check passes, start the renaming/move file method
-            # and get the next one.
-            else:
-                self.clear_user_input()
-                
-                full_job_ref, backup_file_name, dest_file_name = (
-                    userinputvalidation.rename_file(
-                        self.main_application, user_input, input_mode, file_extension))
-
-                # Check if there is a file already existing in the destination
-                # directory with the same name so we know later that we need
-                # to merge the two files.
-                dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
-                    dest_file_name, current_user.dest_directory)
-
-                backup_success = backup.backup_file(
-                    file, backup_file_name, scan_dir, backup_dir)
-
-                if backup_success:
-                    self.write_log("Backed up " + file_name)
-                
-                else:
-                    self.write_log(
-                        "Backup directory not found. " +
-                        "Please check your settings.")
-
-                if paperwork_type == "Cust PW":
-                    pdfwriter.create_cust_pw(
-                        self, file, scan_dir, dest_dir, 
-                        full_job_ref, dest_file_name, dest_duplicate_check)
-
-                elif paperwork_type == "Loading List" or paperwork_type == "POD":
-                    pdfwriter.create_loading_list_pod(
-                        self, file, scan_dir, dest_dir, dest_file_name,
-                        dest_duplicate_check)
-                    
-                del self.main_application.file_list[self.main_application.file_index]
-
-                upload_success = pdfwriter.upload_doc(
-                    file, scan_dir, dest_dir,
-                    dest_file_name, dest_duplicate_check)
-
-                if upload_success:
-                    self.write_log(
-                        dest_file_name + " uploaded successfully\n")
-
-                else:
-                    self.write_log(dest_file_name + " upload error.")
-
-                self.get_file(self.main_application.file_index, self.main_application.file_list)
-
-        # POD autoprocessing mode
-        elif paperwork_type == "POD" and auto_processing == "on" and manual_submission:
-                self.clear_user_input()
-                
-                full_job_ref, backup_file_name, dest_file_name = (
-                    userinputvalidation.rename_file(
-                        self.main_application, barcode, input_mode, file_extension))
-
-                # Check if there is a file already existing in the destination
-                # directory with the same name so we know later that we need
-                # to merge the two files.
-                dest_duplicate_check = (
-                    userinputvalidation.check_if_duplicate_file(
-                        dest_file_name, self.current_user.dest_directory))
-
-                backup_success = backup.backup_file(
-                    file, backup_file_name, scan_dir, backup_dir)
-
-                if (backup_success):
-                    self.write_log("Backed up " + file_name)
-                
-                else:
-                    self.write_log(
-                        "Backup directory not found. " +
-                        "Please check your settings.")
-
-                pdfwriter.create_loading_list_pod(
-                    self, file, scan_dir, dest_dir,
-                    dest_file_name, dest_duplicate_check)
-                    
-                del self.main_application.file_list[self.main_application.file_index]
-
-                upload_success = pdfwriter.upload_doc(
-                    file, scan_dir, dest_dir,
-                    dest_file_name, dest_duplicate_check)
-
-                if upload_success:
-                    self.write_log(
-                        dest_file_name + " uploaded successfully\n")
-
-                else:
-                    self.write_log(dest_file_name + " upload error.")
-
-                self.get_file(
-                    self.main_application.file_index,
-                    self.main_application.file_list)
+        self.main_application.submit(barcode, manual_submission)
 
     def michelin_man(self):
         """Autoprocesses all the files in the scan directory that are
         named as a GR number based on the paperwork type setting."""
 
-        directories_valid = self.main_application.validate_user_directories()
-        
-        if directories_valid:
-            # user input variables
-            pw_type = self.pw_setting.get()
-            multi_page_handling = "Do Not Split"
-
-            # directory variables
-            current_user = self.main_application.get_current_user()
-
-            scan_dir = current_user.scan_directory
-            dest_dir = current_user.dest_directory
-            backup_dir = current_user.backup_directory
-
-            file_count = 0
-            self.main_application.file_list = []
-
-            for file in os.listdir(scan_dir):
-                if file.lower().endswith(".pdf") or file.lower().endswith(".tif") or file.lower().endswith(".tiff") or file.lower().endswith(".jpeg") or file.lower().endswith(".jpg") or file.lower().endswith(".png"):
-                    self.main_application.file_list.append(file)
-                    self.write_log("Adding " + file + ".")
-
-            # Converts all image files in the list into PDFs and
-            # rebuilds a new list for later use.
-            for file in self.main_application.file_list:
-                self.main_application.file_index = self.main_application.file_list.index(file)
-                
-                pdf_file = pdfwriter.image_converter(
-                    self, file, scan_dir, multi_page_handling)
-                
-                split_file_list = pdfwriter.document_splitter(self, pdf_file, scan_dir, "Do Not Split")
-
-                for split_file in reversed(split_file_list):
-                    self.main_application.file_list.insert(self.main_application.file_index, split_file) 
-
-                self.main_application.file_list.remove(file)
-                 
-            # With all the TIF files converted, ready to start transforming files where the file name is a GR reference
-            for file in self.main_application.file_list:
-                if file.lower().endswith(".jpeg") or file.lower().endswith(".jpg") or file.lower().endswith(".png") or file.lower().endswith(".pdf") or file.lower().endswith(".tif") or file.lower().endswith(".tiff"):
-                    file_name, file_extension = os.path.splitext(file)
-
-                    job_ref = re.sub("[^0-9]", "", re.search("^[^_]*", file_name).group(0).upper())
-                    self.write_log("\nJob reference is " + job_ref)
-                    
-                    if len(job_ref) == 9:
-                        full_job_ref, backup_file_name, dest_file_name = userinputvalidation.rename_file(
-                            job_ref, "Normal", file_extension)
-
-                        # Check if there is a file already existing in the destination
-                        # directory with the same name so we know later that we need
-                        # to merge the two files.
-                        dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
-                            dest_file_name, self.current_user.dest_directory)
-
-                        backup_success = backup.backup_file(
-                            file, backup_file_name, scan_dir, backup_dir)
-                        
-                        if (backup_success):
-                            self.write_log("Backed up " + file_name)
-                
-                        else:
-                            self.write_log(
-                                "Backup directory not found. " +
-                                "Please check your settings.")
-
-                        if pw_type == "Cust PW":
-                            pdfwriter.create_cust_pw(
-                                self, file, scan_dir, dest_dir,
-                                full_job_ref, dest_file_name, dest_duplicate_check)
-                            
-                        elif pw_type == "Loading List" or pw_type == "POD":
-                            pdfwriter.create_loading_list_pod(
-                                self, file, scan_dir, dest_dir,
-                                dest_file_name, dest_duplicate_check)
-
-                        upload_success = pdfwriter.upload_doc(
-                            file, scan_dir, dest_dir,
-                            dest_file_name, dest_duplicate_check)
-                        
-                        if upload_success:
-                            self.write_log(
-                                dest_file_name + " uploaded successfully\n")
-
-                        else:
-                            self.write_log(dest_file_name + " upload error.")
-
-                        self.write_log("Uploaded " + file + " as " + dest_file_name)
-                        file_count += 1
-                        self.user_input_entry_box.delete(0, END)
-                        
-                    else:
-                        self.write_log("Ignoring" + file)
-                        self.main_application.file_list.remove(file)
-
-            PopupBox(self,
-                "Michelin Man", str(file_count) + " files processed.",
-                "215", "60")
+        self.main_application.michelin_man()
             
     def skip(self):
-        file_index = self.main_application.file_index
-        file_list = self.main_application.file_list
-        file = file_list[file_index]
-        
-        self.user_input_entry_box.delete(0, END)
-
-        self.main_application.file_list.remove(self.file)
-        self.write_log("Skipping " + self.file)
-        
-        self.get_file(file_index, file_list)
+        self.main_application.skip()
         
     def write_log(self, text):
         """Inserts text into the box and removes an extra line if
@@ -862,30 +642,6 @@ class GUI(Frame):
         self.quick_mode_notice_txt.delete(0.0, END)
         self.quick_mode_notice_txt.insert(0.0, END)
         self.quick_mode_notice_txt.config(state = DISABLED)
-
-    def quick_mode_hint_message(self, event = None):
-        """ Check the current input mode setting, and if switched on, provide a handy hint for what the template GR ref looks like """
-        input_mode = self.current_input_mode.get()
-
-        # if input mode is set to normal, set the hint box to be an empty string
-        if input_mode == "Normal":
-            self.set_quick_mode_hint_text("")
-
-        # if input mode is set to quick, get the year and month dropdown box variables and make a template ref.
-        elif input_mode == "Quick":
-            working_year = self.year_choice.get()
-            year_prefix = re.sub("[^0-9]", "",
-                str([year.short for year in YEARS if year.full == working_year]))
-
-            working_month = self.month_choice.get()
-            month_prefix = re.sub("[^0-9]", "",
-                str([month.short for month in MONTHS if month.full == working_month]))
-
-            template_ref = "GR" + year_prefix + month_prefix + "0"
-            hint_message = "Current GR Number: " + template_ref
-
-            # delete anything already in the hint box, and replace it with the new message
-            self.set_quick_mode_hint_text(hint_message)
 
     def open_settings(self, current_user):
         """Opens a settings window to act as a user interface for
