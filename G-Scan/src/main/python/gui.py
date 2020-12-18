@@ -536,11 +536,10 @@ class GUI(Frame):
     def exit_enter_key(self, event = None):
         self.kill_program()
 
-    def start_browser(self):
-        self.main_application.start_pdf_viewer()
-
     def start(self):
-        """ initialise looking for paperwork """
+        """Start the main application's workflow for processing
+        paperwork based on the user's selected settings."""
+        
         self.main_application.start()
 
     def get_current_input_mode(self):
@@ -735,10 +734,9 @@ class GUI(Frame):
         """Autoprocesses all the files in the scan directory that are
         named as a GR number based on the paperwork type setting."""
 
-        all_directories_valid = (
-            self.main_application.check_user_directories_are_valid())
+        directories_valid = self.main_application.validate_user_directories()
         
-        if all_directories_valid:
+        if directories_valid:
             # user input variables
             pw_type = self.pw_setting.get()
             multi_page_handling = "Do Not Split"
@@ -847,21 +845,6 @@ class GUI(Frame):
         
         self.get_file(file_index, file_list)
         
-    def insert_file_attributes(self, file_name, file_ext):
-        # make the name & ext text boxes writable
-        self.file_name_txt.config(state = NORMAL)
-        self.file_ext_txt.config(state = NORMAL)        
-
-        # clear the current text and insert the file name and extension
-        self.file_name_txt.delete(0.0, END)
-        self.file_ext_txt.delete(0.0, END)
-        self.file_name_txt.insert(0.0, file_name)
-        self.file_ext_txt.insert(0.0, file_ext)
-
-        # make the name and ext text boxes read only again
-        self.file_name_txt.config(state = DISABLED)
-        self.file_ext_txt.config(state = DISABLED)
-
     def write_log(self, text):
         """Inserts text into the box and removes an extra line if
         it is too full."""
@@ -871,39 +854,39 @@ class GUI(Frame):
         self.activity_log_textbox.see("end")
         self.activity_log_row_count += 1
 
+    def set_quick_mode_hint_text(self, event = None):
+        """Overwrites the text found in the quick mode hint text
+        box."""
+        
+        self.quick_mode_notice_txt.config(state = NORMAL)
+        self.quick_mode_notice_txt.delete(0.0, END)
+        self.quick_mode_notice_txt.insert(0.0, END)
+        self.quick_mode_notice_txt.config(state = DISABLED)
+
     def quick_mode_hint_message(self, event = None):
         """ Check the current input mode setting, and if switched on, provide a handy hint for what the template GR ref looks like """
         input_mode = self.current_input_mode.get()
 
         # if input mode is set to normal, set the hint box to be an empty string
         if input_mode == "Normal":
-            self.quick_mode_notice_txt.config(
-                font = ("Calibri", 11), bg = "White",
-                highlightthickness = 0, borderwidth = 0, state = NORMAL)
-            
-            self.quick_mode_notice_txt.delete(0.0, END)
-            
-            self.quick_mode_notice_txt.config(
-                font = ("Calibri", 11), bg = "White",
-                highlightthickness = 0, borderwidth = 0, state = DISABLED)
+            self.set_quick_mode_hint_text("")
 
         # if input mode is set to quick, get the year and month dropdown box variables and make a template ref.
         elif input_mode == "Quick":
             working_year = self.year_choice.get()
-            year_prefix = re.sub("[^0-9]", "", str([year.short for year in YEARS if year.full == working_year]))
+            year_prefix = re.sub("[^0-9]", "",
+                str([year.short for year in YEARS if year.full == working_year]))
 
             working_month = self.month_choice.get()
-            month_prefix = re.sub("[^0-9]", "", str([month.short for month in MONTHS if month.full == working_month]))
+            month_prefix = re.sub("[^0-9]", "",
+                str([month.short for month in MONTHS if month.full == working_month]))
 
             template_ref = "GR" + year_prefix + month_prefix + "0"
             hint_message = "Current GR Number: " + template_ref
 
             # delete anything already in the hint box, and replace it with the new message
-            self.quick_mode_notice_txt.config(font = ("Calibri", 11), bg = "White", highlightthickness = 0, borderwidth = 0, state = NORMAL)
-            self.quick_mode_notice_txt.delete(0.0, END)
-            self.quick_mode_notice_txt.insert(0.0, hint_message)
-            self.quick_mode_notice_txt.config(font = ("Calibri", 11), bg = "White", highlightthickness = 0, borderwidth = 0, state = DISABLED)
-            
+            self.set_quick_mode_hint_text(hint_message)
+
     def open_settings(self, current_user):
         """Opens a settings window to act as a user interface for
         amending the user settings data file to change default
@@ -920,10 +903,12 @@ class GUI(Frame):
         self.multi_page_mode.set(current_user.multi_page_handling)
         self.autoprocessing_mode.set(current_user.autoprocessing)
         self.quick_mode_hint_message()
+        self.main_application.validate_user_directories()
 
     def kill_program(self):
         try:
             self.pdf_viewer.close()
             exit()
+
         except:
             exit()

@@ -33,10 +33,12 @@ class MainApplication():
         root.configure(background = "white")
 
         self.gui = GUI(root, self)
-
-        self.validate_user_directories()
-
-        self.gui.write_log("\nAwaiting input")
+        directories_valid = self.validate_user_directories()
+        
+        if not directories_valid:
+            self.gui.write_log("\n")
+        
+        self.gui.write_log("Awaiting user input.")
 
         root.mainloop()
     
@@ -167,7 +169,8 @@ class MainApplication():
             self.file = self.file_list[self.file_index]
             file_name, file_ext = os.path.splitext(self.file)
 
-            self.gui.insert_file_attributes(file_name, file_ext)
+            self.gui.set_file_name(file_name)
+            self.gui.set_file_extension(file_ext)
             self.gui.move_cursor_to_user_input_box()
 
             # Customer Paperwork/Loading List/Manual POD Processing Mode

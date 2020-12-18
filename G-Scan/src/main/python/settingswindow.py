@@ -171,7 +171,7 @@ class SettingsWindow(Frame):
         current_user.backup_directory = self.backup_dir_ent.get()
         current_user.autoprocessing = self.default_autoprocess.get()
         current_user.overwrite_user(current_user)
-        main_application.gui.refresh_settings(current_user)
+        main_application.refresh_settings()
         self.root.destroy()
 
     def find_folder(self, directory):
