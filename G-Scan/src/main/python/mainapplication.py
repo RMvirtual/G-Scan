@@ -34,6 +34,10 @@ class MainApplication():
 
         self.gui = GUI(root, self)
 
+        self.validate_user_directories()
+
+        self.gui.write_log("\nAwaiting input")
+
         root.mainloop()
     
     def get_user_settings(self):
@@ -67,7 +71,7 @@ class MainApplication():
 
         return self.current_user
 
-    def check_user_directories_are_valid(self):
+    def validate_user_directories(self):
         """Checks whether all the working directories of a user are
         valid and accessible. Prints to the GUI's log if not and
         returns an overall Boolean at the end on whether all
@@ -111,7 +115,7 @@ class MainApplication():
         """Starts the workflow of reading/viewing and writing from
         scan files."""
 
-        all_directories_valid = self.check_user_directories_are_valid()
+        all_directories_valid = self.validate_user_directories()
         
         if all_directories_valid:
             self.file_index = 0

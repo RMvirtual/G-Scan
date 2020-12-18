@@ -21,7 +21,7 @@ class SettingsWindow(Frame):
 
         self.root.geometry("820x220+" + x_axis + "+" + y_axis)
         self.root.title("User Settings: " + current_user.name)
-        
+
     def create_widgets(self, main_application, current_user, user_settings_file):
         # frame for the settings widgets
         main_frame = Frame(self.root, width = 600, height = 250, borderwidth = 0, highlightthickness = 0, bg = "white")
@@ -171,7 +171,7 @@ class SettingsWindow(Frame):
         current_user.backup_directory = self.backup_dir_ent.get()
         current_user.autoprocessing = self.default_autoprocess.get()
         current_user.overwrite_user(current_user)
-        main_application.refresh_settings(current_user)
+        main_application.gui.refresh_settings(current_user)
         self.root.destroy()
 
     def find_folder(self, directory):

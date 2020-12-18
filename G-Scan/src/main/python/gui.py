@@ -49,19 +49,12 @@ class GUI(Frame):
         self.grid_columnconfigure(0, weight = 1)
         self.temp_dir = filesystem.get_temp_directory()
         
-        self.create_widgets(
-            name = "", ext = "", job_ref = "",
-            current_user = self.main_application.get_current_user())
+        self.create_widgets(self.main_application.get_current_user())
         
         self.quick_mode_hint_message()
         self.activity_log_row_count = 1
-        
-        valid_directory_checks = (
-            self.main_application.check_user_directories_are_valid())
 
-        self.write_log("Awaiting input")
-
-    def create_widgets(self, name, ext, job_ref, current_user):
+    def create_widgets(self, current_user):
         """Creates all the widgets required for the main GUI window."""
 
         # Left master frame to contain the logo frame and the
@@ -74,8 +67,7 @@ class GUI(Frame):
         left_master_frame.grid_rowconfigure(0, weight = 1)
         left_master_frame.grid_columnconfigure(0, weight = 1)
 
-        self.create_left_master_frame_widgets(
-            left_master_frame, name, ext, job_ref)
+        self.create_left_master_frame_widgets(left_master_frame)
 
         # Right master frame.
         right_master_frame = Frame(
@@ -130,8 +122,7 @@ class GUI(Frame):
         for i in range(1,10):
             self.rowconfigure(1, weight = 1)
 
-    def create_left_master_frame_widgets(self, left_master_frame, name, ext,
-            job_ref):
+    def create_left_master_frame_widgets(self, left_master_frame):
         """Creates the widgets for the left master frame."""
 
         # Logo frame inside the left master frame.
@@ -161,7 +152,7 @@ class GUI(Frame):
             bg = "white", highlightthickness=0,
             width = 375, height = 350, bd = 0)
 
-        self.create_file_frame_widgets(self.file_frame, name, ext, job_ref)        
+        self.create_file_frame_widgets(self.file_frame)        
 
     def create_right_master_frame_widgets(self, right_master_frame,
             current_user):
@@ -178,7 +169,7 @@ class GUI(Frame):
 
         self.create_settings_frame_widgets(settings_frame, current_user)
 
-    def create_file_frame_widgets(self, file_frame, name, ext, job_ref):
+    def create_file_frame_widgets(self, file_frame):
         """Creates widgets required for the file frame."""
 
         file_frame.grid(row = 1, column = 0, sticky = S)
@@ -196,8 +187,7 @@ class GUI(Frame):
         
         self.file_name_txt.grid(
             row = 0, column = 1, columnspan = 4, sticky = W)
-        
-        self.file_name_txt.insert(0.0, name)
+
         self.file_name_txt.config(
             font = ("Calibri", 11), bg = "light grey", state = DISABLED)
 
@@ -213,7 +203,6 @@ class GUI(Frame):
         self.file_ext_txt.grid(
             row = 1, column = 1, columnspan = 4, sticky = W)
         
-        self.file_ext_txt.insert(0.0, ext)
         self.file_ext_txt.config(
             font = ("Calibri", 11), bg = "light grey", state = DISABLED)
 
@@ -597,6 +586,22 @@ class GUI(Frame):
         as though it has been accepted."""
 
         self.user_input_entry_box.delete(0, END)
+
+    def set_file_name(self, file_name):
+        """Sets the file name text box value of the GUI."""
+
+        self.file_name_txt.config(state = NORMAL)
+        self.file_name_txt.delete(0.0, END)
+        self.file_name_txt.insert(0.0, file_name)
+        self.file_name_txt.config(state = DISABLED)
+
+    def set_file_extension(self, file_extension):
+        """Sets the file extension text box value of the GUI."""
+
+        self.file_ext_txt.config(state = NORMAL)
+        self.file_ext_txt.delete(0.0, END)
+        self.file_ext_txt.insert(0.0, file_extension)
+        self.file_ext_txt.config(state = DISABLED)
 
     def submit(self, barcode = None, manual_submission = True):
         # User input variables.
