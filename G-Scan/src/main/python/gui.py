@@ -23,6 +23,13 @@ class GUI():
         
         self.__frame.SetBackgroundColour("WHITE")
 
+        self.__create_panels()
+
+        self.__frame.Show()
+
+    def __create_panels(self):
+        """Creates the main panels for widgets to be instantiated in.
+        For use with the __create_widgets() method."""
         # Panel for upper half of the GUI
         # (excluding the middle toolbar).
         self.__top_panel = wx.Panel(
@@ -51,5 +58,3 @@ class GUI():
         )
 
         self.__bottom_panel.SetBackgroundColour("BLUE")
-
-        self.__frame.Show()
