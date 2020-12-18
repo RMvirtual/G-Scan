@@ -29,7 +29,7 @@ class MainApplication():
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
-        root = Tk()
+        """root = Tk()
         root.title("GrayScan")
         root.geometry("850x500+" + x_axis + "+" + y_axis)
         root.grid_rowconfigure(0, weight = 1)
@@ -44,7 +44,9 @@ class MainApplication():
         
         self.calculate_quick_mode_hint_message()
         self.gui.write_log("Awaiting user input.")
-        root.mainloop()
+        root.mainloop()"""
+        self.gui = GUI(self)
+        
     
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and
