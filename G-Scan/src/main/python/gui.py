@@ -23,7 +23,6 @@ class GUI():
         )
         
         self.__frame.SetBackgroundColour("WHITE")
-
         self.__create_panels()
 
         self.__frame.Show()
@@ -31,17 +30,8 @@ class GUI():
     def __create_panels(self):
         """Creates the main panels for widgets to be instantiated in.
         For use with the __create_widgets() method."""
-        # Panel for upper half of the GUI
-        # (excluding the middle toolbar).
-        self.__top_panel = wx.Panel(
-            self.__frame,
-            size = (850, 250),
-            pos = (0, 0)
-        )
 
-        self.__top_panel.SetBackgroundColour("PINK")
-
-        self.__create_file_panel()
+        self.__create_top_panel()
 
         # Panel for middle toolbar.
         self.__middle_panel = wx.Panel(
@@ -61,7 +51,21 @@ class GUI():
         )
 
         self.__bottom_panel.SetBackgroundColour("BLUE")
-    
+
+    def __create_top_panel(self):
+        """Creates the top panel's sub-panels and corresponding
+        widgets."""
+        # Panel for upper half of the GUI
+        # (excluding the middle toolbar).
+        self.__top_panel = wx.Panel(
+            self.__frame,
+            size = (850, 250),
+            pos = (0, 0)
+        )
+
+        self.__top_panel.SetBackgroundColour("PINK")
+        self.__create_file_panel()
+
     def __create_file_panel(self):
         """Creates the top-left panel containing the logo,
         file name and type, user input entry box, submit button,
@@ -76,10 +80,10 @@ class GUI():
         gscan_logo_path = (
             filesystem.get_resources_directory() + "images\\g-scan_logo.png")
 
-        logo_image = wx.Image(gscan_logo_path, wx.BITMAP_TYPE_ANY)
+        logo_image = wx.Bitmap(wx.Image(gscan_logo_path, wx.BITMAP_TYPE_ANY))
         
         self.__logo_image_gui = wx.StaticBitmap(
             self.__file_panel,
             wx.ID_ANY,
-            wx.Bitmap(logo_image),            
+            logo_image
         )
