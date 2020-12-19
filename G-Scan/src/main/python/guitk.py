@@ -187,7 +187,7 @@ class GUI(Frame):
             row = 0, column = 1, columnspan = 4, sticky = W)
 
         self.file_name_txt.config(
-            font = ("Calibri", 11), bg = "light grey", state = DISABLED)
+            font = ("Calibri", 16), bg = "light grey", state = DISABLED)
 
         # File extension label.
         self.file_ext_lbl = Label(file_frame, text = "File Type:\t")

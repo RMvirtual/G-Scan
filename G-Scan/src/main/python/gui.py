@@ -1,5 +1,7 @@
 import wx
 import filesystem
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 class GUI():
     """GUI for running the main application."""
@@ -21,7 +23,10 @@ class GUI():
             size = (866, 548),
             title = "G-Scan"
         )
-        
+
+        pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
+        pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
+
         self.__frame.SetBackgroundColour("WHITE")
         self.__create_panels()
 
@@ -100,12 +105,58 @@ class GUI():
             size = (70, 20),
             style = wx.BORDER_NONE
         )
+
+        self.__file_name_label.SetFont(wx.Font(
+            14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # File name value label.
+        self.__file_name_text_ctrl = wx.StaticText(
+            self.__file_panel,
+            label = "I AM A FILE NAME",
+            pos = (100, 130),
+            size = (285, 25),
+            style = wx.BORDER_SIMPLE
+        )
+
+        self.__file_name_text_ctrl.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
         
+        self.__file_name_text_ctrl.SetBackgroundColour("LIGHT GREY")
+
         # File extension label.
         self.__file_extension_label = wx.StaticText(
             self.__file_panel,
             label = "File Type:",
-            pos = (0, 150),
+            pos = (0, 160),
             size = (70, 20),
             style = wx.BORDER_NONE
         )
+
+        self.__file_extension_label.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+        
+        # File extension value label.
+        self.__file_extension_value_label = wx.StaticText(
+            self.__file_panel,
+            label = ".ext",
+            pos = (100, 160),
+            size = (285, 25),
+            style = wx.BORDER_SIMPLE
+        )
+
+        self.__file_extension_value_label.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+        
+        self.__file_extension_value_label.SetBackgroundColour("LIGHT GREY")
+
+        # Input instruction label.
+        self.__input_instruction_label = wx.StaticText(
+            self.__file_panel,
+            label = "Please enter the job reference (excluding \"GR\")",
+            pos = (0, 190),
+            size = (285, 25),
+            style = wx.BORDER_NONE
+        )
+
+        self.__input_instruction_label.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
