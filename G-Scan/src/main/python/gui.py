@@ -1,4 +1,5 @@
 import wx
+import filesystem
 
 class GUI():
     """GUI for running the main application."""
@@ -40,6 +41,8 @@ class GUI():
 
         self.__top_panel.SetBackgroundColour("PINK")
 
+        self.__create_file_panel()
+
         # Panel for middle toolbar.
         self.__middle_panel = wx.Panel(
             self.__frame,
@@ -58,3 +61,25 @@ class GUI():
         )
 
         self.__bottom_panel.SetBackgroundColour("BLUE")
+    
+    def __create_file_panel(self):
+        """Creates the top-left panel containing the logo,
+        file name and type, user input entry box, submit button,
+        skip button and split document button."""
+
+        self.__file_panel = wx.Panel(
+            self.__top_panel,
+            size = (425, 250),
+            pos = (10, 10)
+        )
+
+        gscan_logo_path = (
+            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
+
+        logo_image = wx.Image(gscan_logo_path, wx.BITMAP_TYPE_ANY)
+        
+        self.__logo_image_gui = wx.StaticBitmap(
+            self.__file_panel,
+            wx.ID_ANY,
+            wx.Bitmap(logo_image),            
+        )
