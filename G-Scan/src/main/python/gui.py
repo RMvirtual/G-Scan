@@ -60,7 +60,7 @@ class GUI():
         self.__top_panel = wx.Panel(
             self.__frame,
             size = (850, 250),
-            pos = (0, 0)
+            pos = (10, 10)
         )
 
         self.__top_panel.SetBackgroundColour("PINK")
@@ -71,19 +71,41 @@ class GUI():
         file name and type, user input entry box, submit button,
         skip button and split document button."""
 
+        # File panel to contain all the widgets.
         self.__file_panel = wx.Panel(
             self.__top_panel,
             size = (425, 250),
-            pos = (10, 10)
+            pos = (0, 0)
         )
 
+        # self.__file_panel.SetBackgroundColour("White")
+
+        # Logo image.
         gscan_logo_path = (
             filesystem.get_resources_directory() + "images\\g-scan_logo.png")
 
-        logo_image = wx.Bitmap(wx.Image(gscan_logo_path, wx.BITMAP_TYPE_ANY))
+        logo_image_bitmap = wx.Bitmap(wx.Image(gscan_logo_path, wx.BITMAP_TYPE_ANY))
         
-        self.__logo_image_gui = wx.StaticBitmap(
+        self.__logo_image = wx.StaticBitmap(
             self.__file_panel,
             wx.ID_ANY,
-            logo_image
+            logo_image_bitmap
+        )
+
+        # File name label.
+        self.__file_name_label = wx.StaticText(
+            self.__file_panel,
+            label = "File Name:",
+            pos = (0, 130),
+            size = (70, 20),
+            style = wx.BORDER_NONE
+        )
+        
+        # File extension label.
+        self.__file_extension_label = wx.StaticText(
+            self.__file_panel,
+            label = "File Type:",
+            pos = (0, 150),
+            size = (70, 20),
+            style = wx.BORDER_NONE
         )
