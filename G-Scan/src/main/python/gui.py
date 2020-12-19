@@ -181,10 +181,31 @@ class GUI():
             self.__file_panel,
             label = "Submit",
             size = (60, 25),
-            pos = (145, 225))
+            pos = (140, 225))
 
         self.__submit_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
 
         #self.__frame.Bind(wx.EVT_BUTTON, self.button_click,
          #   self.__submit_button)
+
+        # Skip button.
+        self.__skip_button = wx.Button(
+            self.__file_panel,
+            label = "Skip",
+            size = (60, 25),
+            pos = (208, 225))
+
+        self.__skip_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Split Document button.
+        self.__split_document_button = wx.Button(
+            self.__file_panel,
+            label = "Split Document",
+            size = (120, 25),
+            pos = (270, 225)
+        )
+
+        self.__split_document_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
