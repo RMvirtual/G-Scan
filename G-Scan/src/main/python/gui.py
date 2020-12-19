@@ -83,7 +83,7 @@ class GUI():
             pos = (0, 0)
         )
 
-        # self.__file_panel.SetBackgroundColour("White")
+        self.__file_panel.SetBackgroundColour("White")
 
         # Logo image.
         gscan_logo_path = (
