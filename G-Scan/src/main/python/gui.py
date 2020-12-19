@@ -42,7 +42,7 @@ class GUI():
         self.__middle_panel = wx.Panel(
             self.__frame,
             size = (850, 30),
-            pos = (0, 250)
+            pos = (0, 265)
         )
 
         self.__middle_panel.SetBackgroundColour("YELLOW")
@@ -52,7 +52,7 @@ class GUI():
         self.__bottom_panel = wx.Panel(
             self.__frame,
             size = (850, 230),
-            pos = (0, 280)
+            pos = (0, 295)
         )
 
         self.__bottom_panel.SetBackgroundColour("BLUE")
@@ -64,7 +64,7 @@ class GUI():
         # (excluding the middle toolbar).
         self.__top_panel = wx.Panel(
             self.__frame,
-            size = (850, 250),
+            size = (850, 255),
             pos = (10, 10)
         )
 
@@ -79,7 +79,7 @@ class GUI():
         # File panel to contain all the widgets.
         self.__file_panel = wx.Panel(
             self.__top_panel,
-            size = (425, 250),
+            size = (425, 255),
             pos = (0, 0)
         )
 
@@ -153,10 +153,38 @@ class GUI():
         self.__input_instruction_label = wx.StaticText(
             self.__file_panel,
             label = "Please enter the job reference (excluding \"GR\")",
-            pos = (0, 190),
+            pos = (0, 195),
             size = (285, 25),
             style = wx.BORDER_NONE
         )
 
         self.__input_instruction_label.SetFont(wx.Font(
             14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # User input entry box.
+        self.__user_input_entry_box = wx.TextCtrl(
+            self.__file_panel,
+            value = wx.EmptyString,
+            pos = (0, 225),
+            size = (140, 25),
+            style = wx.BORDER_SIMPLE
+        )
+
+        self.__user_input_entry_box.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        self.__user_input_entry_box.SetBackgroundColour("LIGHT GREY")
+        self.__user_input_entry_box.SetMaxLength(11)
+
+        # Submit button.
+        self.__submit_button = wx.Button(
+            self.__file_panel,
+            label = "Submit",
+            size = (60, 25),
+            pos = (145, 225))
+
+        self.__submit_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        #self.__frame.Bind(wx.EVT_BUTTON, self.button_click,
+         #   self.__submit_button)
