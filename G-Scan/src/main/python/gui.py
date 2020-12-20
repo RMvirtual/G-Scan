@@ -37,16 +37,7 @@ class GUI():
         For use with the __create_widgets() method."""
 
         self.__create_top_panel()
-
-        # Panel for middle toolbar.
-        self.__middle_panel = wx.Panel(
-            self.__frame,
-            size = (850, 30),
-            pos = (10, 265)
-        )
-
-        self.__middle_panel.SetBackgroundColour("YELLOW")
-
+        self.__create_middle_panel()
         # Panel for bottom half of the GUI
         # (excluding the middle toolbar).
         self.__bottom_panel = wx.Panel(
@@ -377,4 +368,50 @@ class GUI():
         )
 
         self.__do_not_split_radio_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+    def __create_middle_panel(self):
+        """Creates the toolbar that runs across the middle of the GUI
+        in between the top and bottom panels."""
+
+        # Panel for middle toolbar.
+        self.__middle_panel = wx.Panel(
+            self.__frame,
+            size = (850, 30),
+            pos = (10, 265)
+        )
+
+        self.__middle_panel.SetBackgroundColour("YELLOW")
+
+        # Start button.
+        self.__start_button = wx.Button(
+            self.__middle_panel,
+            label = "Start",
+            size = (60, 25),
+            pos = (0, 0)
+        )
+
+        self.__start_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Settings button.
+        self.__settings_button = wx.Button(
+            self.__middle_panel,
+            label = "Settings",
+            size = (60, 25),
+            pos = (710, 0)
+        )
+
+        self.__settings_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Exit button.
+        self.__exit_button = wx.Button(
+            self.__middle_panel,
+            label = "Exit",
+            size = (60, 25),
+            pos = (775, 0)
+        )
+
+        self.__exit_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
