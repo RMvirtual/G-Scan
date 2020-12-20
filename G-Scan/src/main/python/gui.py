@@ -38,15 +38,7 @@ class GUI():
 
         self.__create_top_panel()
         self.__create_middle_panel()
-        # Panel for bottom half of the GUI
-        # (excluding the middle toolbar).
-        self.__bottom_panel = wx.Panel(
-            self.__frame,
-            size = (850, 230),
-            pos = (0, 295)
-        )
-
-        self.__bottom_panel.SetBackgroundColour("BLUE")
+        self.__create_bottom_panel()
 
     def __create_top_panel(self):
         """Creates the top panel's sub-panels and corresponding
@@ -381,7 +373,7 @@ class GUI():
             pos = (10, 265)
         )
 
-        self.__middle_panel.SetBackgroundColour("YELLOW")
+        self.__middle_panel.SetBackgroundColour("WHITE")
 
         # Start button.
         self.__start_button = wx.Button(
@@ -394,6 +386,7 @@ class GUI():
         self.__start_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
 
+        # Michelin Man button.
         michelin_man_logo_path = (
             filesystem.get_resources_directory() + "images\\michelin_logo.jpg")
 
@@ -428,3 +421,18 @@ class GUI():
 
         self.__exit_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+    def __create_bottom_panel(self):
+        """Creates the bottom panel of GUI which contains the text
+        console for communicating messages and feedback to the
+        user."""
+
+        # Bottom panel.
+        self.__bottom_panel = wx.Panel(
+            self.__frame,
+            size = (850, 230),
+            pos = (0, 295)
+        )
+
+        self.__bottom_panel.SetBackgroundColour("BLUE")
+
