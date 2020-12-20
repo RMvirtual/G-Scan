@@ -42,7 +42,7 @@ class GUI():
         self.__middle_panel = wx.Panel(
             self.__frame,
             size = (850, 30),
-            pos = (0, 265)
+            pos = (10, 265)
         )
 
         self.__middle_panel.SetBackgroundColour("YELLOW")
@@ -64,12 +64,13 @@ class GUI():
         # (excluding the middle toolbar).
         self.__top_panel = wx.Panel(
             self.__frame,
-            size = (850, 255),
+            size = (840, 255),
             pos = (10, 10)
         )
 
         self.__top_panel.SetBackgroundColour("PINK")
         self.__create_file_panel()
+        self.__create_user_settings_panel()
 
     def __create_file_panel(self):
         """Creates the top-left panel containing the logo,
@@ -83,7 +84,7 @@ class GUI():
             pos = (0, 0)
         )
 
-        self.__file_panel.SetBackgroundColour("White")
+        self.__file_panel.SetBackgroundColour("WHITE")
 
         # Logo image.
         gscan_logo_path = (
@@ -208,4 +209,63 @@ class GUI():
         )
 
         self.__split_document_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+    def __create_user_settings_panel(self):
+        """Creates the user settings panel in the top right of the
+        GUI."""
+
+        # User settings panel to contain all the user settings,
+        # file handling and mode widgets.
+        self.__user_settings_panel = wx.Panel(
+            self.__top_panel,
+            size = (420, 255),
+            pos = (425, 0)
+        )
+
+        self.__user_settings_panel.SetBackgroundColour("GREEN")
+
+        # Paperwork type heading label.
+        self.__paperwork_type_label = wx.StaticText(
+            self.__user_settings_panel,
+            label = "Paperwork Type",
+            size = (60, 25),
+            pos = (0, 0)
+        )
+
+        self.__paperwork_type_label.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # "Customer Paperwork" paperwork type radio button.
+        self.__customer_paperwork_radio_button = wx.RadioButton(
+            self.__user_settings_panel,
+            label = "Customer Paperwork",
+            size = (160, 25),
+            pos = (0, 25),
+            style = wx.RB_GROUP
+        )
+
+        self.__customer_paperwork_radio_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # "Loading List" paperwork type radio button.
+        self.__loading_list_radio_button = wx.RadioButton(
+            self.__user_settings_panel,
+            label = "Loading List",
+            size = (90, 25),
+            pos = (160, 25),
+        )
+
+        self.__loading_list_radio_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # "POD" paperwork type radio button.
+        self.__pod_radio_button = wx.RadioButton(
+            self.__user_settings_panel,
+            label = "POD",
+            size = (160, 25),
+            pos = (265, 25)
+        )
+
+        self.__pod_radio_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
