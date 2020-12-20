@@ -394,6 +394,19 @@ class GUI():
         self.__start_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
 
+        michelin_man_logo_path = (
+            filesystem.get_resources_directory() + "images\\michelin_logo.jpg")
+
+        michelin_man_logo = wx.Image(
+            michelin_man_logo_path, wx.BITMAP_TYPE_ANY).Scale(20, 20)
+        
+        self.__michelin_man_button = wx.BitmapButton(
+            self.__middle_panel,
+            bitmap = michelin_man_logo.ConvertToBitmap(),
+            size = (25, 25),
+            pos = (680, 0)
+        )
+
         # Settings button.
         self.__settings_button = wx.Button(
             self.__middle_panel,
