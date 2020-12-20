@@ -1,7 +1,5 @@
 import wx
 import filesystem
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 
 class GUI():
     """GUI for running the main application."""
@@ -23,9 +21,6 @@ class GUI():
             size = (870, 575),
             title = "G-Scan"
         )
-
-        pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
-        pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
         self.__frame.SetBackgroundColour("WHITE")
         self.__create_panels()
@@ -51,7 +46,6 @@ class GUI():
             pos = (10, 10)
         )
 
-        self.__top_panel.SetBackgroundColour("PINK")
         self.__create_file_panel()
         self.__create_user_settings_panel()
 
@@ -66,8 +60,6 @@ class GUI():
             size = (425, 255),
             pos = (0, 0)
         )
-
-        self.__file_panel.SetBackgroundColour("WHITE")
 
         # Logo image.
         gscan_logo_path = (
@@ -205,8 +197,6 @@ class GUI():
             size = (420, 255),
             pos = (425, 0)
         )
-
-        self.__user_settings_panel.SetBackgroundColour("WHITE")
 
         # Paperwork type heading label.
         self.__paperwork_type_label = wx.StaticText(
@@ -373,8 +363,6 @@ class GUI():
             pos = (10, 265)
         )
 
-        self.__middle_panel.SetBackgroundColour("WHITE")
-
         # Start button.
         self.__start_button = wx.Button(
             self.__middle_panel,
@@ -457,8 +445,6 @@ class GUI():
             size = (840, 230),
             pos = (10, 295)
         )
-
-        self.__bottom_panel.SetBackgroundColour("WHITE")
 
         # Text console display.
         self.__text_console_output_box = wx.TextCtrl(
