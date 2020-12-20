@@ -259,7 +259,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Input Mode",
             size = (60, 25),
-            pos = (0, 75)
+            pos = (0, 85)
         )
 
         self.__input_mode_label.SetFont(wx.Font(
@@ -270,7 +270,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Normal Mode",
             size = (120, 25),
-            pos = (0, 100),
+            pos = (0, 110),
             style = wx.RB_GROUP
         )
 
@@ -282,7 +282,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Quick Mode",
             size = (90, 25),
-            pos = (160, 100),
+            pos = (160, 110),
         )
 
         self.__quick_mode_radio_button.SetFont(wx.Font(
@@ -293,7 +293,7 @@ class GUI():
             self.__user_settings_panel,
             value = "01 - January",
             size = (120, 25),
-            pos = (275, 100),
+            pos = (275, 110),
             choices = ["01 - January", "02 - February", "03 - March"],
             style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
@@ -308,7 +308,7 @@ class GUI():
             self.__user_settings_panel,
             value = "2020",
             size = (120, 25),
-            pos = (275, 130),
+            pos = (275, 140),
             choices = ["2019", "2020"],
             style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
@@ -323,7 +323,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Multi-Page Handling",
             size = (160, 25),
-            pos = (0, 155)
+            pos = (0, 175)
         )
 
         self.__multi_page_handling_label.SetFont(wx.Font(
@@ -334,7 +334,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Split Documents",
             size = (120, 25),
-            pos = (0, 180),
+            pos = (0, 200),
             style = wx.RB_GROUP
         )
 
@@ -346,7 +346,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Do Not Split Documents",
             size = (90, 25),
-            pos = (160, 180)
+            pos = (160, 200)
         )
 
         self.__do_not_split_radio_button.SetFont(wx.Font(
