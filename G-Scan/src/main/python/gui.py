@@ -386,6 +386,30 @@ class GUI():
         self.__start_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
 
+        # Quick Mode user aid message for displaying a preview of the
+        # output that quick mode will calculate based on the current
+        # user settings and what they have entered so far in the user
+        # input entry box.
+
+        # Saving status strings for later.
+        possible_status_strings = (
+            "Quick Mode Preview: GR190506111",
+            "Too many digits",
+            "Not enough digits",
+            "Should not contain letters/symbols"
+        )
+
+        self.__quick_mode_preview_text = wx.StaticText(
+            self.__middle_panel,
+            label = "Quick Mode Preview: GR190506111",
+            size = (180, 14),
+            pos = (155, 3),
+            style = wx.ALIGN_RIGHT
+        )
+
+        self.__quick_mode_preview_text.SetFont(wx.Font(
+            12, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
         # Michelin Man button.
         michelin_man_logo_path = (
             filesystem.get_resources_directory() + "images\\michelin_logo.jpg")
