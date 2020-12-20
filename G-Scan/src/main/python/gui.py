@@ -263,9 +263,20 @@ class GUI():
         self.__pod_radio_button = wx.RadioButton(
             self.__user_settings_panel,
             label = "POD",
-            size = (160, 25),
+            size = (45, 25),
             pos = (265, 25)
         )
 
         self.__pod_radio_button.SetFont(wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Autoprocessing checkbox.
+        self.__autoprocessing_checkbox = wx.CheckBox(
+            self.__user_settings_panel,
+            label = "Autoprocess",
+            size = (85, 25),
+            pos = (320, 25)
+        )
+
+        self.__autoprocessing_checkbox.SetFont(wx.Font(
+            9, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
