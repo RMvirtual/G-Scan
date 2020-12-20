@@ -223,7 +223,7 @@ class GUI():
             pos = (425, 0)
         )
 
-        self.__user_settings_panel.SetBackgroundColour("GREEN")
+        self.__user_settings_panel.SetBackgroundColour("WHITE")
 
         # Paperwork type heading label.
         self.__paperwork_type_label = wx.StaticText(
@@ -286,7 +286,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Input Mode",
             size = (60, 25),
-            pos = (0, 60)
+            pos = (0, 75)
         )
 
         self.__input_mode_label.SetFont(wx.Font(
@@ -297,7 +297,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Normal Mode",
             size = (120, 25),
-            pos = (0, 85),
+            pos = (0, 100),
             style = wx.RB_GROUP
         )
 
@@ -309,7 +309,7 @@ class GUI():
             self.__user_settings_panel,
             label = "Quick Mode",
             size = (90, 25),
-            pos = (160, 85),
+            pos = (160, 100),
         )
 
         self.__quick_mode_radio_button.SetFont(wx.Font(
@@ -320,7 +320,7 @@ class GUI():
             self.__user_settings_panel,
             value = "01 - January",
             size = (120, 25),
-            pos = (275, 85),
+            pos = (275, 100),
             choices = ["01 - January", "02 - February", "03 - March"],
             style = wx.TE_READONLY
         )
@@ -335,7 +335,7 @@ class GUI():
             self.__user_settings_panel,
             value = "2020",
             size = (120, 25),
-            pos = (275, 115),
+            pos = (275, 130),
             choices = ["2019", "2020"],
             style = wx.TE_READONLY
         )
@@ -344,3 +344,37 @@ class GUI():
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
 
         self.__years_dropdown_box.SetBackgroundColour("LIGHT GREY")
+    
+        # Multi-Page Handling heading label.
+        self.__multi_page_handling_label = wx.StaticText(
+            self.__user_settings_panel,
+            label = "Multi-Page Handling",
+            size = (160, 25),
+            pos = (0, 155)
+        )
+
+        self.__multi_page_handling_label.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Split radio button.
+        self.__split_radio_button = wx.RadioButton(
+            self.__user_settings_panel,
+            label = "Split Documents",
+            size = (120, 25),
+            pos = (0, 180),
+            style = wx.RB_GROUP
+        )
+
+        self.__split_radio_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Do Not Split radio button.
+        self.__do_not_split_radio_button = wx.RadioButton(
+            self.__user_settings_panel,
+            label = "Do Not Split Documents",
+            size = (90, 25),
+            pos = (160, 180)
+        )
+
+        self.__do_not_split_radio_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
