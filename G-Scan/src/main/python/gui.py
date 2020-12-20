@@ -20,7 +20,7 @@ class GUI():
         # Frame for the entire window.
         self.__frame = wx.Frame(
             None,
-            size = (866, 548),
+            size = (870, 575),
             title = "G-Scan"
         )
 
@@ -305,7 +305,7 @@ class GUI():
             size = (120, 25),
             pos = (275, 100),
             choices = ["01 - January", "02 - February", "03 - March"],
-            style = wx.TE_READONLY
+            style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
         self.__months_dropdown_box.SetFont(wx.Font(
@@ -320,7 +320,7 @@ class GUI():
             size = (120, 25),
             pos = (275, 130),
             choices = ["2019", "2020"],
-            style = wx.TE_READONLY
+            style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
         self.__years_dropdown_box.SetFont(wx.Font(
@@ -430,9 +430,18 @@ class GUI():
         # Bottom panel.
         self.__bottom_panel = wx.Panel(
             self.__frame,
-            size = (850, 230),
-            pos = (0, 295)
+            size = (840, 230),
+            pos = (10, 295)
         )
 
-        self.__bottom_panel.SetBackgroundColour("BLUE")
+        self.__bottom_panel.SetBackgroundColour("WHITE")
 
+        # Text console display.
+        self.__text_console_output_box = wx.TextCtrl(
+            self.__bottom_panel,
+            size = (835, 230),
+            pos = (0, 0),
+            style = wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE
+        )
+
+        self.__text_console_output_box.SetBackgroundColour("LIGHT GREY")
