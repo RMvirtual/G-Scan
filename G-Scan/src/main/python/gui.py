@@ -280,3 +280,67 @@ class GUI():
 
         self.__autoprocessing_checkbox.SetFont(wx.Font(
             9, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Input Mode heading label.
+        self.__input_mode_label = wx.StaticText(
+            self.__user_settings_panel,
+            label = "Input Mode",
+            size = (60, 25),
+            pos = (0, 60)
+        )
+
+        self.__input_mode_label.SetFont(wx.Font(
+            14, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Normal Mode radio button.
+        self.__normal_mode_radio_button = wx.RadioButton(
+            self.__user_settings_panel,
+            label = "Normal Mode",
+            size = (120, 25),
+            pos = (0, 85),
+            style = wx.RB_GROUP
+        )
+
+        self.__normal_mode_radio_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Quick Mode radio button.
+        self.__quick_mode_radio_button = wx.RadioButton(
+            self.__user_settings_panel,
+            label = "Quick Mode",
+            size = (90, 25),
+            pos = (160, 85),
+        )
+
+        self.__quick_mode_radio_button.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        # Months dropdown box.
+        self.__months_dropdown_box = wx.ComboBox(
+            self.__user_settings_panel,
+            value = "01 - January",
+            size = (120, 25),
+            pos = (275, 85),
+            choices = ["01 - January", "02 - February", "03 - March"],
+            style = wx.TE_READONLY
+        )
+
+        self.__months_dropdown_box.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        self.__months_dropdown_box.SetBackgroundColour("LIGHT GREY")
+
+        # Years dropdown box.
+        self.__years_dropdown_box = wx.ComboBox(
+            self.__user_settings_panel,
+            value = "2020",
+            size = (120, 25),
+            pos = (275, 115),
+            choices = ["2019", "2020"],
+            style = wx.TE_READONLY
+        )
+
+        self.__years_dropdown_box.SetFont(wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+        self.__years_dropdown_box.SetBackgroundColour("LIGHT GREY")
