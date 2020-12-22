@@ -54,6 +54,41 @@ class GUI():
         self.__create_file_panel()
         self.__create_user_settings_panel()
 
+    def __create_middle_panel(self):
+        """Creates the middle panel that contains the toolbar that runs
+        across the middle of the GUI in between the top and bottom
+        panels."""
+
+        self.__middle_panel = wx.Panel(
+            self.__frame,
+            size = (850, 30),
+            pos = (10, 265)
+        )
+
+        self.__create_toolbar_widgets()
+
+    def __create_bottom_panel(self):
+        """Creates the bottom panel of GUI which contains the text
+        console for communicating messages and feedback to the
+        user."""
+
+        # Bottom panel.
+        self.__bottom_panel = wx.Panel(
+            self.__frame,
+            size = (840, 230),
+            pos = (10, 295)
+        )
+
+        # Text console display.
+        self.__text_console_output_box = wx.TextCtrl(
+            self.__bottom_panel,
+            size = (835, 230),
+            pos = (0, 0),
+            style = wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE
+        )
+
+        self.__text_console_output_box.SetBackgroundColour("LIGHT GREY")
+
     def __create_file_panel(self):
         """Creates the top-left panel containing the logo,
         file name and type, user input entry box, submit button,
@@ -82,19 +117,6 @@ class GUI():
         self.__create_paperwork_type_widgets()
         self.__create_input_mode_widgets()
         self.__create_multi_page_handling_widgets()
-
-    def __create_middle_panel(self):
-        """Creates the middle panel that contains the toolbar that runs
-        across the middle of the GUI in between the top and bottom
-        panels."""
-
-        self.__middle_panel = wx.Panel(
-            self.__frame,
-            size = (850, 30),
-            pos = (10, 265)
-        )
-
-        self.__create_toolbar_widgets()
 
     def __create_toolbar_widgets(self):
         """Creates widgets related to the middle toolbar."""
@@ -166,28 +188,6 @@ class GUI():
         )
 
         self.__exit_button.SetFont(self.__button_font)
-
-    def __create_bottom_panel(self):
-        """Creates the bottom panel of GUI which contains the text
-        console for communicating messages and feedback to the
-        user."""
-
-        # Bottom panel.
-        self.__bottom_panel = wx.Panel(
-            self.__frame,
-            size = (840, 230),
-            pos = (10, 295)
-        )
-
-        # Text console display.
-        self.__text_console_output_box = wx.TextCtrl(
-            self.__bottom_panel,
-            size = (835, 230),
-            pos = (0, 0),
-            style = wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE
-        )
-
-        self.__text_console_output_box.SetBackgroundColour("LIGHT GREY")
 
     def __create_logo_widget(self):
         """Creates the logo in the file panel."""
@@ -289,6 +289,12 @@ class GUI():
             pos = (140, 225))
 
         self.__submit_button.SetFont(self.__button_font)
+
+        self.__submit_button.Bind(
+            wx.EVT_BUTTON,
+            self.__submit_button_click,
+            self.__submit_button
+        )
 
         #self.__frame.Bind(wx.EVT_BUTTON, self.button_click,
          #   self.__submit_button)
@@ -463,3 +469,11 @@ class GUI():
         )
 
         self.__do_not_split_radio_button.SetFont(self.__button_font)
+
+    def __submit_button_click(self, event = None):
+        """Defines the behaviour to follow when the submit button
+        is clicked, activating the main application's submit
+        workflow method."""
+
+        print("Hello")
+
