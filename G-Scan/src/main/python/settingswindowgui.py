@@ -21,8 +21,8 @@ class SettingsWindowGUI():
 
         self.__frame = wx.Frame(
             None,
-            size = (820, 220),
-            title = "User Settings: " + self.__current_user.get_name() 
+            size = (895, 220),
+            title = "User Settings" 
         )
 
         self.__frame.SetBackgroundColour("WHITE")
@@ -49,7 +49,7 @@ class SettingsWindowGUI():
         # Text Values panel for holding the widgets.
         self.__text_values_panel = wx.Panel(
             self.__frame,
-            size = (790, 125),
+            size = (860, 125),
             pos = (10, 10)
         )
 
@@ -69,21 +69,23 @@ class SettingsWindowGUI():
         # Mode Options panel for holding the widgets.
         self.__mode_options_panel = wx.Panel(
             self.__frame,
-            size = (790, 100),
+            size = (860, 100),
             pos = (10, 135)
         )
 
         self.__mode_options_panel.SetBackgroundColour("GREEN")
 
         self.__create_paperwork_type_widgets()
+        self.__create_multi_page_handling_widgets()
+        self.__create_input_mode_widgets()
 
     def __create_buttons_panel(self):
         """Creates a panel for setting the buttons."""
 
         self.__buttons_panel = wx.Panel(
             self.__frame,
-            size = (790, 50),
-            pos = (10, 160)
+            size = (860, 50),
+            pos = (10, 200)
         )
 
         self.__buttons_panel.SetBackgroundColour("RED")
@@ -224,3 +226,60 @@ class SettingsWindowGUI():
 
         self.__paperwork_type_dropdown_box.SetFont(self.__button_font)
         self.__paperwork_type_dropdown_box.SetBackgroundColour("LIGHT GREY")
+
+    def __create_multi_page_handling_widgets(self):
+        """Creates widgets related to the default value for
+        multi-page handling."""
+
+        # Multi-Page Handling label.
+        self.__multi_page_handling_label = wx.StaticText(
+            self.__mode_options_panel,
+            label = "Multi-Page Handling:",
+            pos = (330, 0),
+            size = (165, 20),
+            style = wx.BORDER_NONE
+        )
+
+        self.__multi_page_handling_label.SetFont(self.__body_font)
+
+        # Multi-Page Handling default value dropdown box.
+        self.__multi_page_handling_dropdown_box = wx.ComboBox(
+            self.__mode_options_panel,
+            value = "Split",
+            pos = (500, 0),
+            size = (120, 25),
+            choices = ["Do Not Split", "Split"],
+            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        )
+
+        self.__multi_page_handling_dropdown_box.SetFont(self.__button_font)
+        self.__multi_page_handling_dropdown_box.SetBackgroundColour(
+            "LIGHT GREY")
+
+    def __create_input_mode_widgets(self):
+        """Creates widgets related to the default user input mode."""
+
+        # Input Mode label.
+        self.__input_mode_label = wx.StaticText(
+            self.__mode_options_panel,
+            label = "Input Mode:",
+            pos = (630, 0),
+            size = (80, 20),
+            style = wx.BORDER_NONE
+        )
+
+        self.__input_mode_label.SetFont(self.__body_font)
+
+        # Input Mode default value dropdown box.
+        self.__input_mode_dropdown_box = wx.ComboBox(
+            self.__mode_options_panel,
+            value = "Normal",
+            pos = (735, 0),
+            size = (120, 25),
+            choices = ["Normal", "Quick"],
+            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        )
+
+        self.__input_mode_dropdown_box.SetFont(self.__button_font)
+        self.__input_mode_dropdown_box.SetBackgroundColour(
+            "LIGHT GREY")
