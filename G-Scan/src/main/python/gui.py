@@ -17,12 +17,7 @@ class GUI():
         self.__gui_semaphore.acquire()
 
         self.__app = wx.App(False)
-        self.__button_font = wx.Font(
-            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
-
-        self.__body_font = wx.Font(
-            14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
-
+        self.__set_fonts()
         self.__create_widgets()
 
         self.__gui_semaphore.release()
@@ -42,6 +37,15 @@ class GUI():
         self.__create_panels()
 
         self.__frame.Show()
+
+    def __set_fonts(self):
+        """Sets the fonts to be used for the widget types."""
+
+        self.__button_font = wx.Font(
+            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
+
+        self.__body_font = wx.Font(
+            14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
 
     def __create_panels(self):
         """Creates the main panels for widgets to be instantiated in.
@@ -150,7 +154,6 @@ class GUI():
         # output that quick mode will calculate based on the current
         # user settings and what they have entered so far in the user
         # input entry box.
-
         self.__quick_mode_preview_text = wx.StaticText(
             self.__middle_panel,
             label = "",
