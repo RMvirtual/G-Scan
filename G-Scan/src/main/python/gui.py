@@ -5,13 +5,16 @@ import threading
 class GUI():
     """GUI for running the main application."""
 
-    def __init__(self, main_application):
+    def __init__(self, main_application, gui_semaphore):
         """Constructor method."""
 
         self.__main_application = main_application
+        self.__gui_semaphore = gui_semaphore
         
     def run(self):
         """Starts the GUI application."""
+
+        self.__gui_semaphore.acquire()
 
         self.__app = wx.App(False)
         self.__button_font = wx.Font(
@@ -21,6 +24,8 @@ class GUI():
             14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
 
         self.__create_widgets()
+
+        self.__gui_semaphore.release()
 
         self.__app.MainLoop()
 

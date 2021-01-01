@@ -30,7 +30,8 @@ class MainApplication():
 
         self.current_user = self.get_user_settings()
 
-        self.__gui = GUI(self)
+        self.__gui_semaphore = threading.Semaphore()
+        self.__gui = GUI(self, self.__gui_semaphore)
         self.__gui_thread = GUI_Thread(self.__gui)
 
         self.__gui_thread.start()
@@ -39,14 +40,18 @@ class MainApplication():
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
+
+        self.__gui_semaphore.acquire()
         directories_valid = self.validate_user_directories()
         
         if not directories_valid:
             self.__gui.write_log("\n")
         
         # self.calculate_quick_mode_hint_message()
-        time.sleep(10)
+        
         self.__gui.write_log("Awaiting user input.")
+
+        self.__gui_semaphore.release()
             
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and
