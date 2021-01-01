@@ -204,6 +204,11 @@ class GUI():
 
         self.__exit_button.SetFont(self.__button_font)
 
+        self.__exit_button.Bind(
+            wx.EVT_BUTTON,
+            self.__exit_button_click
+        )
+
     def __create_logo_widget(self):
         """Creates the logo in the file panel."""
 
@@ -495,6 +500,13 @@ class GUI():
         workflow method."""
 
         self.__main_application.start()
+
+    def __exit_button_click(self, event = None):
+        """Defines the behaviour to follow when the exit button
+        is clicked on, activating the main application's exit
+        workflow method."""
+
+        self.__main_application.exit()
 
     def get_current_paperwork_type(self):
         """Gets the value of the paperwork type variable based on

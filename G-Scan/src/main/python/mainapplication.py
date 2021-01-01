@@ -35,13 +35,12 @@ class MainApplication():
         self.__gui_thread = GUI_Thread(self.__gui)
 
         self.__gui_thread.start()
-        print("Started gui thread")
 
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
-
         self.__gui_semaphore.acquire()
+
         directories_valid = self.validate_user_directories()
         
         if not directories_valid:
@@ -667,3 +666,13 @@ class MainApplication():
         self.write_log("Skipping " + current_file)
         
         self.get_file(file_index, file_list)
+
+    def exit(self):
+        """Exits the program."""
+
+        try:
+            self.pdf_viewer.close()
+            exit()
+
+        except:
+            exit()
