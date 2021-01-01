@@ -21,7 +21,7 @@ class SettingsWindowGUI():
 
         self.__frame = wx.Frame(
             None,
-            size = (895, 220),
+            size = (895, 270),
             title = "User Settings" 
         )
 
@@ -53,8 +53,6 @@ class SettingsWindowGUI():
             pos = (10, 10)
         )
 
-        self.__text_values_panel.SetBackgroundColour("YELLOW")
-
         self.__create_user_name_widgets()
         self.__create_scan_directory_widgets()
         self.__create_destination_directory_widgets()
@@ -69,26 +67,25 @@ class SettingsWindowGUI():
         # Mode Options panel for holding the widgets.
         self.__mode_options_panel = wx.Panel(
             self.__frame,
-            size = (860, 100),
+            size = (860, 55),
             pos = (10, 135)
         )
-
-        self.__mode_options_panel.SetBackgroundColour("GREEN")
 
         self.__create_paperwork_type_widgets()
         self.__create_multi_page_handling_widgets()
         self.__create_input_mode_widgets()
+        self.__create_autoprocessing_widgets()
 
     def __create_buttons_panel(self):
         """Creates a panel for setting the buttons."""
 
         self.__buttons_panel = wx.Panel(
             self.__frame,
-            size = (860, 50),
-            pos = (10, 200)
+            size = (860, 30),
+            pos = (10, 195)
         )
 
-        self.__buttons_panel.SetBackgroundColour("RED")
+        self.__create_buttons()
 
     def __create_user_name_widgets(self):
         """Creates widgets related to the name of the current user."""
@@ -283,3 +280,53 @@ class SettingsWindowGUI():
         self.__input_mode_dropdown_box.SetFont(self.__button_font)
         self.__input_mode_dropdown_box.SetBackgroundColour(
             "LIGHT GREY")
+
+    def __create_autoprocessing_widgets(self):
+        """Creates widgets related to the value of autoprocessing
+        mode."""
+
+        # Autoprocessing checkbox.
+        self.__autoprocessing_checkbox = wx.CheckBox(
+            self.__mode_options_panel,
+            label = "POD Autoprocessing",
+            size = (160, 25),
+            pos = (200, 30)
+        )
+
+        self.__autoprocessing_checkbox.SetFont(wx.Font(
+            9, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+
+    def __create_buttons(self):
+        """Creates widgets for the Save and Cancel buttons."""
+
+        # Save button.
+        self.__save_button = wx.Button(
+            self.__buttons_panel,
+            label = "Save",
+            size = (60, 25),
+            pos = (200, 0))
+
+        self.__save_button.SetFont(self.__button_font)
+
+        self.__save_button.Bind(
+            wx.EVT_BUTTON,
+            self.__save_button_click
+        )
+
+        # Cancel button.
+        self.__cancel_button = wx.Button(
+            self.__buttons_panel,
+            label = "Cancel",
+            size = (60, 25),
+            pos = (270, 0))
+
+        self.__cancel_button.SetFont(self.__button_font)
+
+        self.__cancel_button.Bind(
+            wx.EVT_BUTTON,
+            self.__save_button_click
+        )
+
+    def __save_button_click(self):
+        """Performs the behaviour required when the save button is
+        clicked."""
