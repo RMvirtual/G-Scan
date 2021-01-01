@@ -49,7 +49,7 @@ class SettingsWindowGUI():
         # Text Values panel for holding the widgets.
         self.__text_values_panel = wx.Panel(
             self.__frame,
-            size = (790, 100),
+            size = (790, 125),
             pos = (10, 10)
         )
 
@@ -70,7 +70,7 @@ class SettingsWindowGUI():
         self.__mode_options_panel = wx.Panel(
             self.__frame,
             size = (790, 100),
-            pos = (10, 120)
+            pos = (10, 135)
         )
 
         self.__mode_options_panel.SetBackgroundColour("GREEN")
@@ -122,7 +122,7 @@ class SettingsWindowGUI():
         self.__scan_directory_label = wx.StaticText(
             self.__text_values_panel,
             label = "Scan Directory:",
-            pos = (0, 25),
+            pos = (0, 30),
             size = (200, 20),
             style = wx.BORDER_NONE
         )
@@ -133,7 +133,7 @@ class SettingsWindowGUI():
         self.__scan_directory_value_text_box = wx.StaticText(
             self.__text_values_panel,
             label = self.__current_user.get_name(),
-            pos = (200, 25),
+            pos = (200, 30),
             size = (285, 25),
             style = wx.BORDER_SIMPLE
         )
@@ -149,7 +149,7 @@ class SettingsWindowGUI():
         self.__destination_directory_label = wx.StaticText(
             self.__text_values_panel,
             label = "Destination Directory:",
-            pos = (0, 50),
+            pos = (0, 60),
             size = (200, 20),
             style = wx.BORDER_NONE
         )
@@ -160,7 +160,7 @@ class SettingsWindowGUI():
         self.__destination_directory_value_text_box = wx.StaticText(
             self.__text_values_panel,
             label = self.__current_user.get_name(),
-            pos = (200, 50),
+            pos = (200, 60),
             size = (285, 25),
             style = wx.BORDER_SIMPLE
         )
@@ -177,7 +177,7 @@ class SettingsWindowGUI():
         self.__backup_directory_label = wx.StaticText(
             self.__text_values_panel,
             label = "Backup Directory:",
-            pos = (0, 75),
+            pos = (0, 90),
             size = (200, 20),
             style = wx.BORDER_NONE
         )
@@ -188,7 +188,7 @@ class SettingsWindowGUI():
         self.__backup_directory_value_text_box = wx.StaticText(
             self.__text_values_panel,
             label = self.__current_user.get_name(),
-            pos = (200, 75),
+            pos = (200, 90),
             size = (285, 25),
             style = wx.BORDER_SIMPLE
         )
@@ -215,10 +215,10 @@ class SettingsWindowGUI():
         # Paperwork Type value dropdown box.
         self.__paperwork_type_dropdown_box = wx.ComboBox(
             self.__mode_options_panel,
-            value = "Cust PW",
+            value = "Customer PW",
             size = (120, 25),
             pos = (200, 0),
-            choices = ["Cust PW", "Loading List", "POD"],
+            choices = ["Customer PW", "Loading List", "POD"],
             style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
