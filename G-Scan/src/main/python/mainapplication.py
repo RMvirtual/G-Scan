@@ -21,6 +21,7 @@ import re
 import threading
 from guithread import GUI_Thread
 import time
+from settingswindowgui import SettingsWindowGUI
 
 class MainApplication():
     """A class for the main application of the program to run."""
@@ -33,23 +34,20 @@ class MainApplication():
         self.__gui_semaphore = threading.Semaphore()
         self.__gui = GUI(self, self.__gui_semaphore)
         self.__gui_thread = GUI_Thread(self.__gui)
-
         self.__gui_thread.start()
 
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
-        self.__gui_semaphore.acquire()
-
+        self.__gui_semaphore.acquire() 
         directories_valid = self.validate_user_directories()
-        
+            
         if not directories_valid:
             self.__gui.write_log("\n")
 
-        self.__gui.calculate_quick_mode_hint_text()
-                
+        self.calculate_quick_mode_hint_message()
         self.__gui.write_log("Awaiting user input.")
-
+        
         self.__gui_semaphore.release()
             
     def get_user_settings(self):
@@ -105,6 +103,17 @@ class MainApplication():
         return all_directories_valid
 
     def calculate_quick_mode_hint_message(self):
+        """Calculates the message to be displayed in the GUI's quick
+        mode hint box."""
+
+        # Saving status strings for later.
+        possible_status_strings = (
+            "Quick Mode Preview: GR190506111",
+            "Too many digits",
+            "Not enough digits",
+            "Should not contain letters/symbols"
+        )
+
         input_mode = self.__gui.get_current_input_mode()
 
         # If input mode is set to normal, set the hint box to be an
@@ -677,3 +686,9 @@ class MainApplication():
         except:
             exit()
 
+    def open_settings_menu(self):
+        """Opens the settings menu."""
+
+        self.__settings_menu = SettingsWindowGUI(self)
+        self.__settings_menu_thread = GUI_Thread(self.__settings_menu)
+        self.__settings_menu_thread.start()

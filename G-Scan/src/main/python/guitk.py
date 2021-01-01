@@ -625,24 +625,6 @@ class GUI(Frame):
     def skip(self):
         self.main_application.skip()
         
-    def write_log(self, text):
-        """Inserts text into the box and removes an extra line if
-        it is too full."""
-        row = str(self.activity_log_row_count) + ".0"
-        self.activity_log_textbox.config(state = NORMAL)
-        self.activity_log_textbox.insert(row, text + "\n")
-        self.activity_log_textbox.see("end")
-        self.activity_log_row_count += 1
-
-    def set_quick_mode_hint_text(self, event = None):
-        """Overwrites the text found in the quick mode hint text
-        box."""
-        
-        self.quick_mode_notice_txt.config(state = NORMAL)
-        self.quick_mode_notice_txt.delete(0.0, END)
-        self.quick_mode_notice_txt.insert(0.0, END)
-        self.quick_mode_notice_txt.config(state = DISABLED)
-
     def open_settings(self, current_user):
         """Opens a settings window to act as a user interface for
         amending the user settings data file to change default

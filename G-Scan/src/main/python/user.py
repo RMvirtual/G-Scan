@@ -41,3 +41,8 @@ class User(object):
             "Backup": checks[2]}
 
         return valid_directory_checks
+
+    def get_name(self):
+        """Returns a string of the current user's name."""
+        
+        return self.name

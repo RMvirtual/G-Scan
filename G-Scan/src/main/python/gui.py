@@ -186,6 +186,11 @@ class GUI():
 
         self.__settings_button.SetFont(self.__button_font)
 
+        self.__settings_button.Bind(
+            wx.EVT_BUTTON,
+            self.__settings_button_click
+        )
+
         # Exit button.
         self.__exit_button = wx.Button(
             self.__middle_panel,
@@ -500,6 +505,14 @@ class GUI():
 
         self.__main_application.exit()
 
+    def __settings_button_click(self, event = None):
+        """Defines the behaviour to follow when the exit button
+        is clicked on, activating the main application's exit
+        workflow method."""
+        
+        print("Settings button clicked.")
+        self.__main_application.open_settings_menu()
+
     def get_current_paperwork_type(self):
         """Gets the value of the paperwork type variable based on
         which button has been selected."""
@@ -539,24 +552,8 @@ class GUI():
 
         self.__text_console_output_box.write(text)
 
-
     def set_quick_mode_hint_text(self, text):
         """Overwrites the text found in the quick mode hint text
         box."""
         
         self.__quick_mode_preview_text.SetLabel(text)
-
-    def calculate_quick_mode_hint_text(self):
-        """Calculates the message to be displayed in the quick mode
-        hint box.""" # In Progress
-
-        # Saving status strings for later.
-        possible_status_strings = (
-            "Quick Mode Preview: GR190506111",
-            "Too many digits",
-            "Not enough digits",
-            "Should not contain letters/symbols"
-        )
-
-        self.set_quick_mode_hint_text(possible_status_strings[0])
-
