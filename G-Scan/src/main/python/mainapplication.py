@@ -18,36 +18,42 @@ from pdfviewer import PDFViewer
 import pdfreader
 import pdfwriter
 import re
+import threading
+from guithread import GUI_Thread
 
 class MainApplication():
     """A class for the main application of the program to run."""
 
     def __init__(self):
         """Constructor method."""
+
         self.current_user = self.get_user_settings()
+
+        self.__gui = GUI(self)
+        self.__gui_thread = GUI_Thread(self.__gui)
+
+        print("Created thread ", self.__gui_thread)
+
+        self.__gui_thread.start()
+        print("Started gui thread")
+
+        # self.__gui = GUI(self)
+        # self.__gui.write_log("Test")
+
+        print("Got here.")
 
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
-        """root = Tk()
-        root.title("GrayScan")
-        root.geometry("850x500+" + x_axis + "+" + y_axis)
-        root.grid_rowconfigure(0, weight = 1)
-        root.grid_columnconfigure(0, weight = 1)
-        root.configure(background = "white")
-
-        self.gui = GUI(root, self)
         directories_valid = self.validate_user_directories()
         
         if not directories_valid:
-            self.gui.write_log("\n")
+            self.__gui.write_log("\n")
         
-        self.calculate_quick_mode_hint_message()
+        """ self.calculate_quick_mode_hint_message()
         self.gui.write_log("Awaiting user input.")
         root.mainloop()"""
-        self.gui = GUI(self)
-        
-    
+            
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and
         workspace settings."""
@@ -94,24 +100,24 @@ class MainApplication():
             if not is_directory_valid:
                 all_directories_valid = False
                 
-                self.gui.write_log(
+                self.__gui.write_log(
                     directory + " folder is invalid. Please check the " +
                     "folder exists and update it within your settings.")
         
         return all_directories_valid
 
     def calculate_quick_mode_hint_message(self):
-        input_mode = self.gui.get_current_input_mode()
+        input_mode = self.__gui.get_current_input_mode()
 
         # If input mode is set to normal, set the hint box to be an
         # empty string.
         if input_mode == "Normal":
-            self.gui.set_quick_mode_hint_text("")
+            self.__gui.set_quick_mode_hint_text("")
 
         # If input mode is set to quick, get the year and month
         # dropdown box variables and make a template ref.
         elif input_mode == "Quick":
-            working_year = self.gui.get_current_year_choice()
+            working_year = self.__gui.get_current_year_choice()
             years = date.get_years()
 
             year_prefix = (
@@ -124,7 +130,7 @@ class MainApplication():
             # year_prefix = re.sub("[^0-9]", "",
             #    str([year.short for year in YEARS if year.full == working_year]))
 
-            working_month = self.gui.get_current_month_choice()
+            working_month = self.__gui.get_current_month_choice()
             months = date.get_months()
             #month_prefix = working_month.get_short_code()
 
@@ -140,7 +146,7 @@ class MainApplication():
             hint_message = "Current GR Number: " + template_ref
 
             # delete anything already in the hint box, and replace it with the new message
-            self.gui.set_quick_mode_hint_text(hint_message)
+            self.__gui.set_quick_mode_hint_text(hint_message)
 
     def get_files_in_scan_folder(self):
         """Gets a list of all files in the current user's scan folder
@@ -157,7 +163,7 @@ class MainApplication():
             if scan_file.lower().endswith(valid_file_extensions):
                 file_list.append(scan_file)
 
-                self.gui.write_log("Adding " + scan_file + " to list.")
+                self.__gui.write_log("Adding " + scan_file + " to list.")
         
         return file_list
     
@@ -165,81 +171,250 @@ class MainApplication():
         """Starts the workflow of reading/viewing and writing from
         scan files."""
 
-        all_directories_valid = self.validate_user_directories()
+        if not self.validate_user_directories():
+            return
+
+        self.file_list = self.get_files_in_scan_folder()
+
+        if not self.file_list:
+            PopupBox(
+                self.__gui, 
+                "Failure",
+                "No files found.",
+                "200", "50"
+            )
+            
+            return
+
+        autoprocessing_mode = self.__gui.get_autoprocessing_mode()
+        paperwork_type = self.__gui.get_current_paperwork_type()
+        self.file_index = 0
+        self.start_pdf_viewer()
         
-        if all_directories_valid:
-            self.file_index = 0
-            self.file_list = self.get_files_in_scan_folder()
+        if paperwork_type == "POD" and autoprocessing_mode:
+            self.submit_by_barcode(self.file_index, self.file_list)
 
-            if not self.file_list:
-                PopupBox(self.gui, "Failure", "No files found.", "200", "50")
-
-            else:
-                self.start_pdf_viewer()
-                self.get_file(self.file_index, self.file_list)
+        else:
+            self.get_file(self.file_index, self.file_list)
 
     def start_pdf_viewer(self):
         self.pdf_viewer = PDFViewer()
 
-    def get_file(self, file_index, file_list):
-        # directories
-        scan_dir = self.current_user.scan_directory
+    def get_next_file(self):
+        """Gets the next file in the scan directory, determining
+        the behaviour dependent on the paperwork type and whether
+        autoprocessing is on or not."""
 
-        # user variables
-        multi_page_handling = self.gui.get_multi_page_mode()
-        input_mode = self.gui.get_current_input_mode()
-        pw_type = self.gui.get_current_paperwork_type()
-        autoprocessing = self.gui.get_autoprocessing_mode()
-        
+        # If the scan folder is empty and the current file index is 0
+        # indicating no skipped files remain.
         if not self.file_list:
-            if self.file_index == 0:
-                PopupBox(
-                    self.gui, "Guess What", "No more files remaining.",
-                    "230", "75")
-                
-                self.pdf_viewer.close()
-                
-        else:
-            self.file = self.file_list[self.file_index]
-
-            pdf_file = pdfwriter.image_converter(
-                self, self.file, scan_dir, multi_page_handling)
+            PopupBox(
+                self.__gui, "Guess What",
+                "No available files found in scan directory.",
+                230, 75)
             
-            split_file_list = pdfwriter.document_splitter(
-                self, pdf_file, scan_dir, multi_page_handling)
+            self.pdf_viewer.close()
+
+            return
+
+        paperwork_type = self.__gui.get_current_paperwork_type()
+        autoprocessing = self.__gui.get_autoprocessing_mode()
+
+        # If the paperwork type is a POD and the system is set to scan
+        # the paperwork by barcode number, scan the next file for barcode
+        # readings.
+        if paperwork_type == "POD" and autoprocessing:
+            self.get_file_with_barcode_scanner()
+
+        # If the paperwork type is either Customer Paperwork or
+        # Loading List, or autoprocessing is switched off, load up the
+        # next scan with the PDF viewer for the user to check for a
+        # job number manually rather than automatic barcode scanning.
+        else:
+            self.get_file_with_pdf_viewer()
+
+    def get_file_with_pdf_viewer(self):
+        # Directories
+        scan_directory = self.current_user.scan_directory
+        multi_page_handling = self.__gui.get_multi_page_handling_mode()
+
+        current_file = self.file_list[self.file_index]
+
+        # If file is an image format rather than PDF, convert it to
+        # PDF.
+        if not current_file.lower().endswith(".pdf"):    
+            pdf_file = pdfwriter.image_converter(
+                self, current_file, scan_directory, multi_page_handling)
+
+        # If the multi page handling setting is set to split multiple
+        # pages of paperwork apart, split it and return them as an
+        # array of new pdf files.
+        if multi_page_handling:
+            split_files = pdfwriter.document_splitter(
+                self, pdf_file, scan_directory, multi_page_handling)
 
             del self.file_list[self.file_index]
             
-            for split_file in reversed(split_file_list):
+            # Insert the split PDF files into the current index
+            # position of the list of files to be processed.
+            # Reverse order to maintain the ordering of the files
+            # as they would be end up added as 3rd, 2nd, 1st rather
+            # than 1st, 2nd, 3rd.
+            for new_file in reversed(split_files):
                 self.file_list.insert(
-                    self.file_index, split_file)
+                    self.file_index, new_file)
 
-            self.file = self.file_list[self.file_index]
-            file_name, file_ext = os.path.splitext(self.file)
+            current_file = self.file_list[self.file_index]
 
-            self.gui.set_file_name(file_name)
-            self.gui.set_file_extension(file_ext)
-            self.gui.move_cursor_to_user_input_box()
+        self.pdf_viewer.show_image(current_file, scan_directory)
+        file_name, file_ext = os.path.splitext(current_file)
 
-            # Customer Paperwork/Loading List/Manual POD Processing Mode
-            if (pw_type == "Cust PW" or pw_type == "Loading List"
-                    or pw_type == "POD" and autoprocessing == "off"):
-                self.pdf_viewer.show_image(
-                    self.gui, self.file, self.current_user.scan_directory)
+        self.__gui.set_file_name(file_name)
+        self.__gui.set_file_extension(file_ext)
+        self.__gui.write_log("Displaying " + current_file)
+        self.__gui.move_cursor_to_user_input_box()
 
-            # POD Automatic Processing Mode
-            elif pw_type == "POD" and autoprocessing == "on":
-                pdfreader.barcode_scanner(
-                    self.gui, self.file_index, self.file_list)
+    def get_file_with_barcode_scanner(self):
+        """Gets the next file by scanning it's barcode contents first,
+        submitting it immediately if a valid barcode is found with
+        no other conflicting conditions."""
 
-    def submit(self, barcode = None, manual_submission = True):
+        scan_directory = self.current_user.scan_directory
+        multi_page_handling = self.__gui.get_multi_page_handling_mode()
+        barcode_ref_list = []
+
+        current_file = self.file_list[self.file_index]
+        file_name, file_extension = os.path.splitext(current_file)
+        self.__gui.insert_file_attributes(file_name, file_extension)
+
+        valid_image_extensions = (".jpeg", ".jpg", ".png")
+
+        if file_extension.lower() == ".pdf":
+            barcode_ref_list = pdfreader.read_barcodes(
+                current_file, scan_directory)
+
+        elif file_extension.lower() in valid_image_extensions:
+            barcode_ref_list = pdfreader.image_barcode_reader(
+                current_file, scan_directory)
+
+        # If no GR reference obtained, get the file using the PDF
+        # viewer instead to manually type in the reference.
+        if not barcode_ref_list:
+            self.__gui.write_log("No barcode found")
+            self.get_file_with_pdf_viewer()
+
+        # If more than 1 GR reference obtained, split it apart and
+        # show the image.
+        elif len(barcode_ref_list) > 1:
+            self.__gui.write_log("Too many conflicting barcodes?")
+            
+            split_file_list = pdfwriter.document_splitter(
+                self, current_file, scan_directory, "Split")
+            
+            if split_file_list:
+                del self.file_list[self.file_index]
+
+                for file_name in reversed(split_file_list):
+                    self.file_list.insert(self.file_index, file_name)
+          
+            self.get_file_with_pdf_viewer()
+
+        # If 1 GR reference obtained, use this as the user input.
+        elif len(barcode_ref_list) == 1:
+            job_reference = barcode_ref_list[0]
+            
+            self.__gui.write_log(
+                "Barcode " + job_reference + " found successfully")
+            
+            self.submit_by_barcode(job_reference)
+
+    def submit_by_barcode(self, barcode_reference):
+        """Submits a file based on the job reference that has been 
+        read from a barcode."""
+        
+        input_mode = self.__gui.get_current_input_mode()
+        current_file = self.file_list[self.file_index]
+        file_name = filesystem.get_file_name(current_file)
+        file_extension = filesystem.get_file_ext(current_file)
+
+        job_reference = userinputvalidation.create_job_reference(
+            self.__gui,
+            barcode_reference,
+            "Normal"
+        )
+
+        backup_directory = self.current_user.backup_directory
+        paperwork_type = self.__gui.get_current_paperwork_type()
+
+        backup_file_name = userinputvalidation.create_backup_file_name(
+            job_reference, paperwork_type, file_extension, backup_directory)
+        
+        backup_success = backup.backup_file(
+            current_file, backup_file_name, scan_directory, backup_directory)
+
+        if backup_success:
+            self.__gui.write_log("Backed up " + file_name)
+        
+        else:
+            self.__gui.write_log(
+                "Backup directory not found. " +
+                "Please check your settings.")
+            
+            return
+
+        dest_file_name = userinputvalidation.create_destination_file_name(
+            job_reference, paperwork_type, file_extension)
+
+        dest_directory = self.current_user.destination_directory
+
+        # Check if there is a file already existing in the
+        # destination directory with the same name so we know later
+        # that we need to merge the two files.
+        dest_duplicate_check = (
+            userinputvalidation.check_if_duplicate_file(
+                dest_file_name, dest_directory))
+
+        scan_directory = self.current_user.scan_directory
+
+        pdfwriter.create_loading_list_pod(
+            self.__gui, current_file, scan_directory, dest_directory,
+            dest_file_name, dest_duplicate_check)
+
+        upload_success = pdfwriter.upload_doc(
+            current_file, scan_directory, dest_directory,
+            dest_file_name, dest_duplicate_check)
+
+        if upload_success:
+            self.__gui.write_log(
+                dest_file_name + " uploaded successfully\n")
+
+            del self.file_list[self.file_index]
+
+        else:
+            self.__gui.write_log(dest_file_name + " upload error.")
+
+            return
+
+        # If no more files remaining (whether skipped or empty).
+        if self.file_index >= len(self.file_list):
+            message = "No more files remaining."
+
+            if self.file_index > 0:
+                message += "\n" + self.file_index + " files skipped."
+
+            PopupBox(self.__gui, "Job Complete", message, 300, 300)
+        
+        else:
+            self.get_next_file()
+
+    def submit(self):
         """Runs the submission process workflow."""
 
         # User input variables.
-        input_mode = self.gui.get_current_input_mode()
-        paperwork_type = self.gui.get_current_paperwork_type()
-        user_input = self.gui.get_user_input()
-        auto_processing = self.gui.get_autoprocessing_mode()
+        user_input = self.__gui.get_user_input()
+        input_mode = self.__gui.get_current_input_mode()
+        paperwork_type = self.__gui.get_current_paperwork_type()
+        auto_processing = self.__gui.get_autoprocessing_mode()
 
         # Directory variables.
         current_user = self.get_current_user()
@@ -249,9 +424,7 @@ class MainApplication():
         backup_dir = current_user.backup_directory
 
         # File variables.
-        current_file = self.file_list[
-            self.file_index]
-
+        current_file = self.file_list[self.file_index]
         file_name, file_extension = os.path.splitext(current_file)
 
         valid_paperwork_types = ("Cust PW", "Loading List", "POD")
@@ -269,10 +442,16 @@ class MainApplication():
             # If the check passes, start the renaming/move file method
             # and get the next one.
             else:
-                self.gui.clear_user_input()
+                self.__gui.clear_user_input()
                 
-                full_job_ref, backup_file_name, dest_file_name = (
-                    userinputvalidation.rename_file(
+                full_job_ref = userinputvalidation.create_job_reference(
+                    self.__gui,
+                    user_input,
+                    input_mode
+                )
+
+                backup_file_name, dest_file_name = (
+                    userinputvalidation.create_file_names(
                         self, user_input, input_mode, file_extension))
 
                 # Check if there is a file already existing in the destination
@@ -285,84 +464,74 @@ class MainApplication():
                     current_file, backup_file_name, scan_dir, backup_dir)
 
                 if backup_success:
-                    self.write_log("Backed up " + file_name)
+                    self.__gui.write_log("Backed up " + file_name)
                 
                 else:
-                    self.write_log(
+                    self.__gui.write_log(
                         "Backup directory not found. " +
                         "Please check your settings.")
 
                 if paperwork_type == "Cust PW":
                     pdfwriter.create_cust_pw(
-                        self, file, scan_dir, dest_dir, 
+                        self, current_file, scan_dir, dest_dir, 
                         full_job_ref, dest_file_name, dest_duplicate_check)
 
                 elif paperwork_type == "Loading List" or paperwork_type == "POD":
                     pdfwriter.create_loading_list_pod(
-                        self, file, scan_dir, dest_dir, dest_file_name,
-                        dest_duplicate_check)
+                        self, current_file, scan_dir, dest_dir,
+                        dest_file_name, dest_duplicate_check)
                     
-                del self.main_application.file_list[self.main_application.file_index]
-
-                upload_success = pdfwriter.upload_doc(
-                    file, scan_dir, dest_dir,
-                    dest_file_name, dest_duplicate_check)
-
-                if upload_success:
-                    self.write_log(
-                        dest_file_name + " uploaded successfully\n")
-
-                else:
-                    self.write_log(dest_file_name + " upload error.")
-
-                self.get_file(self.main_application.file_index, self.main_application.file_list)
-
         # POD autoprocessing mode
-        elif paperwork_type == "POD" and auto_processing == "on" and manual_submission:
-                self.clear_user_input()
+        elif (paperwork_type == "POD" and auto_processing == "on" 
+                and manual_submission):
+            self.__gui.clear_user_input()
+            
+            full_job_ref = userinputvalidation.create_job_reference(
+                self.__gui,
+                user_input,
+                input_mode
+            )
+
+            backup_file_name, dest_file_name = (
+                userinputvalidation.create_file_names(
+                    self, barcode, input_mode, file_extension))
+
+            # Check if there is a file already existing in the
+            # destination directory with the same name so we know later
+            # that we need to merge the two files.
+            dest_duplicate_check = (
+                userinputvalidation.check_if_duplicate_file(
+                    dest_file_name, self.current_user.dest_directory))
+
+            backup_success = backup.backup_file(
+                current_file, backup_file_name, scan_dir, backup_dir)
+
+            if (backup_success):
+                self.__gui.write_log("Backed up " + file_name)
+            
+            else:
+                self.__gui.write_log(
+                    "Backup directory not found. " +
+                    "Please check your settings.")
+
+            pdfwriter.create_loading_list_pod(
+                self.__gui, current_file, scan_dir, dest_dir,
+                dest_file_name, dest_duplicate_check)
                 
-                full_job_ref, backup_file_name, dest_file_name = (
-                    userinputvalidation.rename_file(
-                        self.main_application, barcode, input_mode, file_extension))
+        del self.file_list[self.file_index]
 
-                # Check if there is a file already existing in the destination
-                # directory with the same name so we know later that we need
-                # to merge the two files.
-                dest_duplicate_check = (
-                    userinputvalidation.check_if_duplicate_file(
-                        dest_file_name, self.current_user.dest_directory))
+        upload_success = pdfwriter.upload_doc(
+            current_file, scan_dir, dest_dir,
+            dest_file_name, dest_duplicate_check)
 
-                backup_success = backup.backup_file(
-                    file, backup_file_name, scan_dir, backup_dir)
+        if upload_success:
+            self.__gui.write_log(
+                dest_file_name + " uploaded successfully\n")
 
-                if (backup_success):
-                    self.gui.write_log("Backed up " + file_name)
-                
-                else:
-                    self.gui.write_log(
-                        "Backup directory not found. " +
-                        "Please check your settings.")
+        else:
+            self.__gui.write_log(dest_file_name + " upload error.")
 
-                pdfwriter.create_loading_list_pod(
-                    self.gui, current_file, scan_dir, dest_dir,
-                    dest_file_name, dest_duplicate_check)
-                    
-                del self.file_list[self.file_index]
-
-                upload_success = pdfwriter.upload_doc(
-                    current_file, scan_dir, dest_dir,
-                    dest_file_name, dest_duplicate_check)
-
-                if upload_success:
-                    self.gui.write_log(
-                        dest_file_name + " uploaded successfully\n")
-
-                else:
-                    self.gui.write_log(dest_file_name + " upload error.")
-
-                self.get_file(
-                    self.file_index,
-                    self.file_list)
+        self.get_file(self.file_index, self.file_list)
 
     def michelin_man(self):
         """A workflow that autoprocesses all the files in the scan
@@ -375,7 +544,7 @@ class MainApplication():
         
         if directories_valid:
             # user input variables
-            pw_type = self.gui.get_current_paperwork_type()
+            pw_type = self.__gui.get_current_paperwork_type()
             multi_page_handling = "Do Not Split"
 
             # directory variables
@@ -394,7 +563,7 @@ class MainApplication():
             for item in os.listdir(scan_dir):
                 if item.lower().endswith(valid_extensions):
                     self.file_list.append(item)
-                    self.gui.write_log("Adding " + item + ".")
+                    self.__gui.write_log("Adding " + item + ".")
 
             # Converts all image files in the list into PDFs and
             # rebuilds a new list for later use.
@@ -402,10 +571,10 @@ class MainApplication():
                 self.file_index = self.file_list.index(item)
                 
                 pdf_file = pdfwriter.image_converter(
-                    self.gui, item, scan_dir, multi_page_handling)
+                    self.__gui, item, scan_dir, multi_page_handling)
                 
                 split_file_list = pdfwriter.document_splitter(
-                    self.gui, pdf_file, scan_dir, "Do Not Split")
+                    self.__gui, pdf_file, scan_dir, "Do Not Split")
 
                 for split_file in reversed(split_file_list):
                     self.file_list.insert(self.file_index, split_file)
@@ -427,7 +596,7 @@ class MainApplication():
                     
                     if len(job_ref) == 9:
                         full_job_ref, backup_file_name, dest_file_name = (
-                            userinputvalidation.rename_file(
+                            userinputvalidation.create_file_names(
                                 job_ref, "Normal", file_extension)
                         )
 
@@ -445,22 +614,22 @@ class MainApplication():
                             item, backup_file_name, scan_dir, backup_dir)
                         
                         if (backup_success):
-                            self.gui.write_log("Backed up " + file_name)
+                            self.__gui.write_log("Backed up " + file_name)
                 
                         else:
-                            self.gui.write_log(
+                            self.__gui.write_log(
                                 "Backup directory not found. " +
                                 "Please check your settings.")
 
                         if pw_type == "Cust PW":
                             pdfwriter.create_cust_pw(
-                                self.gui, item, scan_dir, dest_dir,
+                                self.__gui, item, scan_dir, dest_dir,
                                 full_job_ref, dest_file_name,
                                 dest_duplicate_check)
                             
                         elif pw_type == "Loading List" or pw_type == "POD":
                             pdfwriter.create_loading_list_pod(
-                                self.gui, item, scan_dir, dest_dir,
+                                self.__gui, item, scan_dir, dest_dir,
                                 dest_file_name, dest_duplicate_check)
 
                         upload_success = pdfwriter.upload_doc(
@@ -468,20 +637,20 @@ class MainApplication():
                             dest_file_name, dest_duplicate_check)
                         
                         if upload_success:
-                            self.gui.write_log(
+                            self.__gui.write_log(
                                 dest_file_name + " uploaded successfully\n")
 
                         else:
-                            self.gui.write_log(
+                            self.__gui.write_log(
                                 dest_file_name + " upload error.")
 
-                        self.gui.write_log(
+                        self.__gui.write_log(
                             "Uploaded " + item + " as " + dest_file_name)
                         
                         file_count += 1
                         
                     else:
-                        self.gui.write_log("Ignoring" + item)
+                        self.__gui.write_log("Ignoring" + item)
                         self.file_list.remove(item)
 
             PopupBox(self,
@@ -493,7 +662,7 @@ class MainApplication():
 
         current_file = self.file_list[self.file_index]
         
-        self.gui.clear_user_input()
+        self.__gui.clear_user_input()
 
         self.file_list.remove(current_file)
         self.write_log("Skipping " + current_file)

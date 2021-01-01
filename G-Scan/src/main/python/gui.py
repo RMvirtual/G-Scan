@@ -1,5 +1,6 @@
 import wx
 import filesystem
+import threading
 
 class GUI():
     """GUI for running the main application."""
@@ -7,9 +8,11 @@ class GUI():
     def __init__(self, main_application):
         """Constructor method."""
 
-        self.__app = wx.App(False)
         self.__main_application = main_application
-
+        
+    def run(self):
+        """Starts the GUI application."""
+        self.__app = wx.App(False)
         self.__button_font = wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
 
@@ -17,6 +20,10 @@ class GUI():
             14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
 
         self.__create_widgets()
+        self.write_log("Inner Test")
+
+        print("At end of GUI before main loop")
+
         self.__app.MainLoop()
 
     def __create_widgets(self):
@@ -130,6 +137,11 @@ class GUI():
         )
 
         self.__start_button.SetFont(self.__button_font)
+
+        self.__start_button.Bind(
+            wx.EVT_BUTTON,
+            self.__start_button_click
+        )
 
         # Quick Mode user aid message for displaying a preview of the
         # output that quick mode will calculate based on the current
@@ -295,9 +307,6 @@ class GUI():
             self.__submit_button_click,
             self.__submit_button
         )
-
-        #self.__frame.Bind(wx.EVT_BUTTON, self.button_click,
-         #   self.__submit_button)
 
         # Skip button.
         self.__skip_button = wx.Button(
@@ -476,4 +485,49 @@ class GUI():
         workflow method."""
 
         print("Hello")
+    
+    def __start_button_click(self, event = None):
+        """Defines the behavior to follow when the start button
+        is clicked on, activating the main application's start
+        workflow method."""
 
+        self.__main_application.start()
+
+    def get_current_paperwork_type(self):
+        """Gets the value of the paperwork type variable based on
+        which button has been selected."""
+
+        return "POD"
+    
+    def get_user_input(self):
+        """Gets the value of the user's input."""
+
+        return "GR191000000"
+
+    def get_current_input_mode(self):
+        """Gets the current input mode setting (i.e. Normal or
+        Quick)."""
+
+        return "Normal"
+    
+    def get_autoprocessing_mode(self):
+        """Gets the current autoprocessing mode setting (True or
+        False)"""
+
+        return True
+    
+    def clear_user_input(self):
+        """Clears the user's input from the user input text entry
+        box."""
+
+        return True
+    
+    def get_multi_page_handling_mode(self):
+        """Returns the current setting of multi-page handling."""
+
+        return "Split"
+
+    def write_log(self, text):
+        """Writes a string of text to the console output log."""
+
+        self.__text_console_output_box.write(text)

@@ -11,11 +11,11 @@ class PDFViewer():
         self.pdf_window = webdriver.Chrome()
         self.pdf_window.get("https://www.google.com")
 
-    def show_image(self, master_application, file_name, scan_directory):
+    def show_image(self, file_name, scan_directory):
         """Loads image in Google Chrome."""
 
-        master_application.write_log("Displaying " + file_name)
-        self.pdf_window.get("file:" + scan_directory + "/" + file_name)
+        self.pdf_window.get(
+            "file:" + scan_directory + "/" + file_name)
 
     def close(self):
         """Closes the PDF viewer."""

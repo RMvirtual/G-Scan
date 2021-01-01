@@ -91,7 +91,7 @@ def create_job_reference(master_application, user_input, input_mode):
     return complete_job_reference
 
 def create_backup_file_name(job_reference, paperwork_type, file_extension,
-        directory):
+        backup_directory):
     """Creates the backup file name including the job reference,
     paperwork counter (if applicable), paperwork type and file
     extension.
@@ -138,12 +138,7 @@ def create_destination_file_name(job_reference, paperwork_type,
 
     return file_name
 
-def rename_file(master_application, user_input, input_mode, file_extension):
-    job_reference = create_job_reference(
-        master_application, user_input, input_mode)
-
-    paperwork_type = master_application.gui.get_current_paperwork_type()
-
+def create_file_names(job_reference, paperwork_type, input_mode, file_extension):
     backup_file_name = create_backup_file_name(
         job_reference, paperwork_type, file_extension,
         master_application.current_user.backup_directory)

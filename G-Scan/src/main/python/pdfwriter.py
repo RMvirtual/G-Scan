@@ -136,6 +136,7 @@ def create_loading_list_pod(master_application, file, scan_dir,
             img.close()
 
         final_image = temp_directory + "temp_image.png"
+
         # arrange page into portrait orientation
         with wand_image(filename = temporary_image, resolution = 200) as img_simulator:
             if img_simulator.width > img_simulator.height:
