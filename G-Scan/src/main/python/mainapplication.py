@@ -45,9 +45,9 @@ class MainApplication():
         
         if not directories_valid:
             self.__gui.write_log("\n")
-        
-        # self.calculate_quick_mode_hint_message()
-        
+
+        self.__gui.calculate_quick_mode_hint_text()
+                
         self.__gui.write_log("Awaiting user input.")
 
         self.__gui_semaphore.release()
@@ -676,3 +676,4 @@ class MainApplication():
 
         except:
             exit()
+

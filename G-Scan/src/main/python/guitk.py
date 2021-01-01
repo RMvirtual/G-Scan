@@ -660,11 +660,3 @@ class GUI(Frame):
         self.autoprocessing_mode.set(current_user.autoprocessing)
         self.quick_mode_hint_message()
         self.main_application.validate_user_directories()
-
-    def kill_program(self):
-        try:
-            self.pdf_viewer.close()
-            exit()
-
-        except:
-            exit()
