@@ -20,6 +20,7 @@ import pdfwriter
 import re
 import threading
 from guithread import GUI_Thread
+import time
 
 class MainApplication():
     """A class for the main application of the program to run."""
@@ -32,15 +33,8 @@ class MainApplication():
         self.__gui = GUI(self)
         self.__gui_thread = GUI_Thread(self.__gui)
 
-        print("Created thread ", self.__gui_thread)
-
         self.__gui_thread.start()
         print("Started gui thread")
-
-        # self.__gui = GUI(self)
-        # self.__gui.write_log("Test")
-
-        print("Got here.")
 
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
@@ -50,9 +44,9 @@ class MainApplication():
         if not directories_valid:
             self.__gui.write_log("\n")
         
-        """ self.calculate_quick_mode_hint_message()
-        self.gui.write_log("Awaiting user input.")
-        root.mainloop()"""
+        # self.calculate_quick_mode_hint_message()
+        time.sleep(10)
+        self.__gui.write_log("Awaiting user input.")
             
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and

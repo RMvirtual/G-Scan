@@ -12,6 +12,7 @@ class GUI():
         
     def run(self):
         """Starts the GUI application."""
+
         self.__app = wx.App(False)
         self.__button_font = wx.Font(
             11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
@@ -20,9 +21,6 @@ class GUI():
             14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
 
         self.__create_widgets()
-        self.write_log("Inner Test")
-
-        print("At end of GUI before main loop")
 
         self.__app.MainLoop()
 
