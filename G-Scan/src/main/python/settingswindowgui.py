@@ -70,7 +70,7 @@ class SettingsWindowGUI():
         self.__mode_options_panel = wx.Panel(
             self.__frame,
             size = (790, 100),
-            pos = (10, 110)
+            pos = (10, 120)
         )
 
         self.__mode_options_panel.SetBackgroundColour("GREEN")
@@ -96,7 +96,7 @@ class SettingsWindowGUI():
             self.__text_values_panel,
             label = "User Name:",
             pos = (0, 0),
-            size = (180, 20),
+            size = (200, 20),
             style = wx.BORDER_NONE
         )
 
@@ -123,7 +123,7 @@ class SettingsWindowGUI():
             self.__text_values_panel,
             label = "Scan Directory:",
             pos = (0, 25),
-            size = (180, 20),
+            size = (200, 20),
             style = wx.BORDER_NONE
         )
 
@@ -150,7 +150,7 @@ class SettingsWindowGUI():
             self.__text_values_panel,
             label = "Destination Directory:",
             pos = (0, 50),
-            size = (180, 20),
+            size = (200, 20),
             style = wx.BORDER_NONE
         )
 
@@ -178,7 +178,7 @@ class SettingsWindowGUI():
             self.__text_values_panel,
             label = "Backup Directory:",
             pos = (0, 75),
-            size = (180, 20),
+            size = (200, 20),
             style = wx.BORDER_NONE
         )
 
@@ -206,8 +206,21 @@ class SettingsWindowGUI():
             self.__mode_options_panel,
             label = "Default Paperwork Type:",
             pos = (0, 0),
-            size = (240, 20),
+            size = (200, 20),
             style = wx.BORDER_NONE
         )
 
         self.__paperwork_type_label.SetFont(self.__body_font)
+
+        # Paperwork Type value dropdown box.
+        self.__paperwork_type_dropdown_box = wx.ComboBox(
+            self.__mode_options_panel,
+            value = "Cust PW",
+            size = (120, 25),
+            pos = (200, 0),
+            choices = ["Cust PW", "Loading List", "POD"],
+            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        )
+
+        self.__paperwork_type_dropdown_box.SetFont(self.__button_font)
+        self.__paperwork_type_dropdown_box.SetBackgroundColour("LIGHT GREY")
