@@ -133,12 +133,23 @@ class SettingsWindowGUI():
             self.__text_values_panel,
             label = self.__current_user.get_name(),
             pos = (200, 30),
-            size = (285, 25),
+            size = (625, 25),
             style = wx.BORDER_SIMPLE
         )
 
         self.__scan_directory_value_text_box.SetFont(self.__body_font)
         self.__scan_directory_value_text_box.SetBackgroundColour("LIGHT GREY")
+
+        # Scan Directory file dialog button.
+        self.__scan_directory_file_dialog_button = wx.Button(
+            self.__text_values_panel,
+            label = "...",
+            pos = (826, 30),
+            size = (25, 25)
+        )
+
+        self.__scan_directory_file_dialog_button.SetFont(
+            self.__button_font)
 
     def __create_destination_directory_widgets(self):
         """Creates widgets related to the current specified
@@ -160,13 +171,24 @@ class SettingsWindowGUI():
             self.__text_values_panel,
             label = self.__current_user.get_name(),
             pos = (200, 60),
-            size = (285, 25),
+            size = (625, 25),
             style = wx.BORDER_SIMPLE
         )
 
         self.__destination_directory_value_text_box.SetFont(self.__body_font)
         self.__destination_directory_value_text_box.SetBackgroundColour(
             "LIGHT GREY")
+
+        # Destination Directory file dialog button.
+        self.__destination_directory_file_dialog_button = wx.Button(
+            self.__text_values_panel,
+            label = "...",
+            pos = (826, 60),
+            size = (25, 25)
+        )
+
+        self.__destination_directory_file_dialog_button.SetFont(
+            self.__button_font)
 
     def __create_backup_directory_widgets(self):
         """Creates widgets related to the current specified backup
@@ -188,13 +210,25 @@ class SettingsWindowGUI():
             self.__text_values_panel,
             label = self.__current_user.get_name(),
             pos = (200, 90),
-            size = (285, 25),
+            size = (625, 25),
             style = wx.BORDER_SIMPLE
         )
 
         self.__backup_directory_value_text_box.SetFont(self.__body_font)
         self.__backup_directory_value_text_box.SetBackgroundColour(
             "LIGHT GREY")
+
+        # Backup Directory file dialog button.
+        self.__backup_directory_file_dialog_button = wx.Button(
+            self.__text_values_panel,
+            label = "...",
+            pos = (826, 90),
+            size = (25, 25)
+        )
+
+        self.__backup_directory_file_dialog_button.SetFont(
+            self.__button_font)
+
 
     def __create_paperwork_type_widgets(self):
         """Creates widgets related to the default paperwork type
@@ -324,9 +358,17 @@ class SettingsWindowGUI():
 
         self.__cancel_button.Bind(
             wx.EVT_BUTTON,
-            self.__save_button_click
+            self.__cancel_button_click
         )
 
-    def __save_button_click(self):
+    def __save_button_click(self, event = None):
         """Performs the behaviour required when the save button is
         clicked."""
+
+        self.__app.Destroy()
+
+    def __cancel_button_click(self, event = None):
+        """Performs the behaviour required when the save button is
+        clicked."""
+
+        self.__app.Destroy()
