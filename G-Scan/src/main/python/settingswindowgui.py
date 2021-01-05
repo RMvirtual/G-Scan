@@ -1,7 +1,7 @@
 import wx
 
 class SettingsWindowGUI(wx.Frame):
-    """GUI Frame for viewing and amending the user's settings."""
+    """GUI Frame for viewing and amending the user's gettings."""
 
     def __init__(self, main_application):
         """Constructor method."""
@@ -10,7 +10,7 @@ class SettingsWindowGUI(wx.Frame):
         self.__create_widgets()
    
     def __create_widgets(self):
-        """Creates the widgets required for the settings GUI."""
+        """Creates the widgets required for the gettings GUI."""
         super().__init__(
             None,
             size = (895, 270),
@@ -23,76 +23,90 @@ class SettingsWindowGUI(wx.Frame):
         self.__buttons_panel = ButtonsPanel(self)
         self.Show()
 
-class TextLabel(wx.StaticText):
-    """A class representing a text label (showing a heading of data
-    rather than data itself)."""
+    def get_user_name(self):
+        """Gets the user name."""
 
-    def __init__(self, text, panel, label_position, label_size, font):
-        """Constructor method."""
+        pass
 
-        super().__init__(
-            panel,
-            label = text,
-            pos = label_position,
-            size = label_size,
-            style = wx.BORDER_NONE
-        )
+    def get_scan_directory(self):
+        """Gets the scan directory text field."""
 
-        self.SetFont(font)
+        pass
 
-class TextField(wx.StaticText):
-    """A class representing a text field (showing data rather than a
-    heading)."""
+    def get_destination_directory(self):
+        """Gets the destination directory text field."""
 
-    def __init__(self, text, panel, field_position, field_size, font):
-        """Constructor method."""
+        pass
 
-        super().__init__(
-            panel,
-            label = text,
-            pos = field_position,
-            size = field_size,
-            style = wx.BORDER_SIMPLE
-        )
+    def get_backup_directory(self):
+        """Gets the backup directory text field."""
 
-        self.SetFont(font)
-        self.SetBackgroundColour("LIGHT GREY")
+        pass
 
-class Button(wx.Button):
-    """A class representing a button."""
+    def get_paperwork_type_dropdown_box(self):
+        """Gets the value of the paperwork type dropdown box."""
 
-    def __init__(self, text, panel, button_position, button_size, function):
-        super().__init__(
-            panel,
-            label = text,
-            size = button_size,
-            pos = button_position
-        )
+        pass
 
-        self.SetFont(panel.get_button_font())
-        self.Bind(wx.EVT_BUTTON, function)
+    def get_multi_page_handling_dropdown_box(self):
+        """Gets the value of the multi-page handling dropdown box."""
 
-class DropdownBox(wx.ComboBox):
-    """A class representing a dropdown box with different options."""
+        pass
 
-    def __init__(self, options, panel, box_position, box_size):
-        """Constructor method."""
+    def get_input_mode_dropdown_box(self):
+        """Gets the value of the input mode dropdown box."""
 
-        super().__init__(
-            panel,
-            value = options[0],
-            pos = box_position,
-            size = box_size,
-            choices = options,
-            style = wx.CB_DROPDOWN | wx.CB_READONLY
-        )
+        pass
 
-        self.SetFont(panel.get_button_font())
-        self.SetBackgroundColour(
-            "LIGHT GREY")
+    def get_autoprocessing_checkbox(self):
+        """Gets the boolean status of the autoprocessing checkbox."""
+
+        pass
+
+    def set_user_name(self):
+        """Sets the user name."""
+
+        pass
+
+    def set_scan_directory(self, directory):
+        """Sets the scan directory text field."""
+
+        pass
+
+    def set_destination_directory(self, directory):
+        """Sets the destination directory text field."""
+
+        pass
+
+    def set_backup_directory(self, directory):
+        """Sets the backup directory text field."""
+
+        pass
+
+    def set_paperwork_type_dropdown_box(self, value):
+        """Sets the value of the paperwork type dropdown box."""
+
+        pass
+
+    def set_multi_page_handling_dropdown_box(self, value):
+        """Sets the value of the multi-page handling dropdown box."""
+
+        pass
+
+    def set_input_mode_dropdown_box(self, value):
+        """Sets the value of the input mode dropdown box."""
+
+        pass
+
+    def set_autoprocessing_checkbox(self, value):
+        """Sets the boolean status of the autoprocessing checkbox."""
+
+        pass
+
+
 
 class SettingsWindowPanel(wx.Panel):
-    """A class representing a panel in the settings window."""
+    """A class representing a panel in the gettings window."""
 
     def __init__(self, frame, panel_size, panel_position):
         """Constructor method."""
@@ -133,7 +147,7 @@ class SettingsWindowPanel(wx.Panel):
         return self.__checkbox_font
 
 class TextValuesPanel(SettingsWindowPanel):
-    """A class representing the text values panel in the settings
+    """A class representing the text values panel in the gettings
     window GUI."""
 
     def __init__(self, frame):
@@ -405,3 +419,71 @@ class ButtonsPanel(SettingsWindowPanel):
         clicked."""
 
         wx.CallAfter(self.__frame.Destroy)
+
+class TextLabel(wx.StaticText):
+    """A class representing a text label (showing a heading of data
+    rather than data itself)."""
+
+    def __init__(self, text, panel, label_position, label_size, font):
+        """Constructor method."""
+
+        super().__init__(
+            panel,
+            label = text,
+            pos = label_position,
+            size = label_size,
+            style = wx.BORDER_NONE
+        )
+
+        self.SetFont(font)
+
+class TextField(wx.StaticText):
+    """A class representing a text field (showing data rather than a
+    heading)."""
+
+    def __init__(self, text, panel, field_position, field_size, font):
+        """Constructor method."""
+
+        super().__init__(
+            panel,
+            label = text,
+            pos = field_position,
+            size = field_size,
+            style = wx.BORDER_SIMPLE
+        )
+
+        self.SetFont(font)
+        self.SetBackgroundColour("LIGHT GREY")
+
+class Button(wx.Button):
+    """A class representing a button."""
+
+    def __init__(self, text, panel, button_position, button_size, function):
+        super().__init__(
+            panel,
+            label = text,
+            size = button_size,
+            pos = button_position
+        )
+
+        self.SetFont(panel.get_button_font())
+        self.Bind(wx.EVT_BUTTON, function)
+
+class DropdownBox(wx.ComboBox):
+    """A class representing a dropdown box with different options."""
+
+    def __init__(self, options, panel, box_position, box_size):
+        """Constructor method."""
+
+        super().__init__(
+            panel,
+            value = options[0],
+            pos = box_position,
+            size = box_size,
+            choices = options,
+            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        )
+
+        self.SetFont(panel.get_button_font())
+        self.SetBackgroundColour(
+            "LIGHT GREY")
