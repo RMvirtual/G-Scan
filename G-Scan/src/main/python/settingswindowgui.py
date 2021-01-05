@@ -58,6 +58,25 @@ class TextField(wx.StaticText):
         self.SetFont(font)
         self.SetBackgroundColour("LIGHT GREY")
 
+class DropdownBox(wx.ComboBox):
+    """A class representing a dropdown box with different options."""
+
+    def __init__(self, options, panel, box_position, box_size):
+        """Constructor method."""
+
+        super().__init__(
+            panel,
+            value = options[0],
+            pos = box_position,
+            size = box_size,
+            choices = options,
+            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        )
+
+        self.SetFont(panel.get_button_font())
+        self.SetBackgroundColour(
+            "LIGHT GREY")
+
 class SettingsWindowPanel(wx.Panel):
     """A class representing a panel in the settings window."""
 
@@ -81,15 +100,23 @@ class SettingsWindowPanel(wx.Panel):
         self.__body_font = wx.Font(
             14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
 
+        self.__checkbox_font = wx.Font(
+            9, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
+
     def get_body_font(self):
         """Returns the font for body text."""
 
         return self.__body_font
 
-    def get_buttons_font(self):
+    def get_button_font(self):
         """Returns the font for button text."""
 
         return self.__button_font
+
+    def get_checkbox_font(self):
+        """Returns the font for checkboxes."""
+
+        return self.__checkbox_font
 
 class TextValuesPanel(SettingsWindowPanel):
     """A class representing the text values panel in the settings
@@ -162,38 +189,29 @@ class TextValuesPanel(SettingsWindowPanel):
         )
 
         self.__scan_directory_file_dialog_button.SetFont(
-            self.get_buttons_font())
+            self.get_button_font())
 
     def __create_destination_directory_widgets(self):
         """Creates widgets related to the current specified
         destination directory."""
 
         # Destination Directory label.
-        self.__destination_directory_label = wx.StaticText(
-            self,
-            label = "Destination Directory:",
-            pos = (0, 60),
-            size = (200, 20),
-            style = wx.BORDER_NONE
+        self.__destination_directory_label = TextLabel(
+            text = "Destination Directory:",
+            panel = self,
+            label_position = (0, 60),
+            label_size = (200, 20),
+            font = self.get_body_font()
         )
 
-        self.__destination_directory_label.SetFont(
-            self.get_body_font())
-
-        # Destination Directory value text box.
-        self.__destination_directory_value_text_box = wx.StaticText(
-            self,
-            label = "",
-            pos = (200, 60),
-            size = (625, 25),
-            style = wx.BORDER_SIMPLE
+        # Destination Directory text field.
+        self.__destination_directory_text_field = TextField(
+            text = "",
+            panel = self,
+            field_position = (200, 60),
+            field_size = (625, 25),
+            font = self.get_body_font()
         )
-
-        self.__destination_directory_value_text_box.SetFont(
-            self.get_body_font())
-        
-        self.__destination_directory_value_text_box.SetBackgroundColour(
-            "LIGHT GREY")
 
         # Destination Directory file dialog button.
         self.__destination_directory_file_dialog_button = wx.Button(
@@ -204,38 +222,29 @@ class TextValuesPanel(SettingsWindowPanel):
         )
 
         self.__destination_directory_file_dialog_button.SetFont(
-            self.get_buttons_font())
+            self.get_button_font())
 
     def __create_backup_directory_widgets(self):
         """Creates widgets related to the current specified backup
         directory."""
 
         # Backup Directory label.
-        self.__backup_directory_label = wx.StaticText(
-            self,
-            label = "Backup Directory:",
-            pos = (0, 90),
-            size = (200, 20),
-            style = wx.BORDER_NONE
+        self.__backup_directory_label = TextLabel(
+            text = "Backup Directory:",
+            panel = self,
+            label_position = (0, 90),
+            label_size = (200, 20),
+            font = self.get_body_font()
         )
-
-        self.__backup_directory_label.SetFont(
-            self.get_body_font())
 
         # Backup Directory value text box.
-        self.__backup_directory_value_text_box = wx.StaticText(
-            self,
-            label = "",
-            pos = (200, 90),
-            size = (625, 25),
-            style = wx.BORDER_SIMPLE
+        self.__backup_directory_text_field = TextField(
+            text = "",
+            panel = self,
+            field_position = (200, 90),
+            field_size = (625, 25),
+            font = self.get_body_font()
         )
-
-        self.__backup_directory_value_text_box.SetFont(
-            self.get_body_font())
-        
-        self.__backup_directory_value_text_box.SetBackgroundColour(
-            "LIGHT GREY")
 
         # Backup Directory file dialog button.
         self.__backup_directory_file_dialog_button = wx.Button(
@@ -246,7 +255,7 @@ class TextValuesPanel(SettingsWindowPanel):
         )
 
         self.__backup_directory_file_dialog_button.SetFont(
-            self.get_buttons_font())
+            self.get_button_font())
 
 class ModeOptionsPanel(SettingsWindowPanel):
     """A class representing the mode options panel."""
@@ -278,74 +287,53 @@ class ModeOptionsPanel(SettingsWindowPanel):
         )
 
         # Paperwork Type value dropdown box.
-        self.__paperwork_type_dropdown_box = wx.ComboBox(
-            self,
-            value = "Customer PW",
-            size = (120, 25),
-            pos = (200, 0),
-            choices = ["Customer PW", "Loading List", "POD"],
-            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        self.__paperwork_type_dropdown_box = DropdownBox(
+            options = ["Customer PW", "Loading List", "POD"],
+            panel = self,
+            box_position = (200, 0),
+            box_size = (120, 25)
         )
-
-        self.__paperwork_type_dropdown_box.SetFont(self.get_buttons_font())
-        self.__paperwork_type_dropdown_box.SetBackgroundColour("LIGHT GREY")
 
     def __create_multi_page_handling_widgets(self):
         """Creates widgets related to the default value for
         multi-page handling."""
 
         # Multi-Page Handling label.
-        self.__multi_page_handling_label = wx.StaticText(
-            self,
-            label = "Multi-Page Handling:",
-            pos = (330, 0),
-            size = (165, 20),
-            style = wx.BORDER_NONE
+        self.__multi_page_handling_label = TextLabel(
+            text = "Multi-Page Handling:",
+            panel = self,
+            label_position = (330, 0),
+            label_size = (165, 20),
+            font = self.get_body_font()
         )
-
-        self.__multi_page_handling_label.SetFont(self.get_body_font())
 
         # Multi-Page Handling default value dropdown box.
-        self.__multi_page_handling_dropdown_box = wx.ComboBox(
-            self,
-            value = "Split",
-            pos = (500, 0),
-            size = (120, 25),
-            choices = ["Do Not Split", "Split"],
-            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        self.__multi_page_handling_dropdown_box = DropdownBox(
+            options = ["Do Not Split", "Split"],
+            panel = self,
+            box_position = (500, 0),
+            box_size = (120, 25),
         )
-
-        self.__multi_page_handling_dropdown_box.SetFont(self.get_buttons_font())
-        self.__multi_page_handling_dropdown_box.SetBackgroundColour(
-            "LIGHT GREY")
 
     def __create_input_mode_widgets(self):
         """Creates widgets related to the default user input mode."""
 
         # Input Mode label.
-        self.__input_mode_label = wx.StaticText(
-            self,
-            label = "Input Mode:",
-            pos = (630, 0),
-            size = (80, 20),
-            style = wx.BORDER_NONE
+        self.__input_mode_label = TextLabel(
+            text = "Input Mode:",
+            panel = self,
+            label_position = (630, 0),
+            label_size = (80, 20),
+            font = self.get_body_font()
         )
-
-        self.__input_mode_label.SetFont(self.get_body_font())
 
         # Input Mode default value dropdown box.
-        self.__input_mode_dropdown_box = wx.ComboBox(
-            self,
-            value = "Normal",
-            pos = (735, 0),
-            size = (120, 25),
-            choices = ["Normal", "Quick"],
-            style = wx.CB_DROPDOWN | wx.CB_READONLY
+        self.__input_mode_dropdown_box = DropdownBox(
+            options = ["Normal", "Quick"],
+            panel = self,
+            box_position = (735, 0),
+            box_size = (120, 25)
         )
-
-        self.__input_mode_dropdown_box.SetFont(self.get_buttons_font())
-        self.__input_mode_dropdown_box.SetBackgroundColour(
-            "LIGHT GREY")
 
     def __create_autoprocessing_widgets(self):
         """Creates widgets related to the value of autoprocessing
@@ -359,8 +347,7 @@ class ModeOptionsPanel(SettingsWindowPanel):
             pos = (200, 30)
         )
 
-        self.__autoprocessing_checkbox.SetFont(wx.Font(
-            9, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+        self.__autoprocessing_checkbox.SetFont(self.get_checkbox_font())
 
 class ButtonsPanel(SettingsWindowPanel):
     """A class representing the buttons panel."""
@@ -385,7 +372,7 @@ class ButtonsPanel(SettingsWindowPanel):
             size = (60, 25),
             pos = (200, 0))
 
-        self.__save_button.SetFont(self.get_buttons_font())
+        self.__save_button.SetFont(self.get_button_font())
 
         self.__save_button.Bind(
             wx.EVT_BUTTON,
@@ -399,7 +386,7 @@ class ButtonsPanel(SettingsWindowPanel):
             size = (60, 25),
             pos = (270, 0))
 
-        self.__cancel_button.SetFont(self.get_buttons_font())
+        self.__cancel_button.SetFont(self.get_button_font())
 
         self.__cancel_button.Bind(
             wx.EVT_BUTTON,
