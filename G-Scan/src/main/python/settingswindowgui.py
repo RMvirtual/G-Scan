@@ -58,6 +58,20 @@ class TextField(wx.StaticText):
         self.SetFont(font)
         self.SetBackgroundColour("LIGHT GREY")
 
+class Button(wx.Button):
+    """A class representing a button."""
+
+    def __init__(self, text, panel, button_position, button_size, function):
+        super().__init__(
+            panel,
+            label = text,
+            size = button_size,
+            pos = button_position
+        )
+
+        self.SetFont(panel.get_button_font())
+        self.Bind(wx.EVT_BUTTON, function)
+
 class DropdownBox(wx.ComboBox):
     """A class representing a dropdown box with different options."""
 
@@ -131,7 +145,6 @@ class TextValuesPanel(SettingsWindowPanel):
             panel_position = (10, 10)
         )
 
-        self.__frame = frame
         self.__create_user_name_widgets()
         self.__create_scan_directory_widgets()
         self.__create_destination_directory_widgets()
@@ -267,7 +280,6 @@ class ModeOptionsPanel(SettingsWindowPanel):
             panel_position = (10, 135)
         )
 
-        self.__frame = frame
         self.__create_paperwork_type_widgets()
         self.__create_multi_page_handling_widgets()
         self.__create_input_mode_widgets()
@@ -366,32 +378,21 @@ class ButtonsPanel(SettingsWindowPanel):
         """Creates widgets for the Save and Cancel buttons."""
 
         # Save button.
-        self.__save_button = wx.Button(
-            self,
-            label = "Save",
-            size = (60, 25),
-            pos = (200, 0))
-
-        self.__save_button.SetFont(self.get_button_font())
-
-        self.__save_button.Bind(
-            wx.EVT_BUTTON,
-            self.__save_button_click
+        self.__save_button = Button(
+            text = "Save",
+            panel = self,
+            button_size = (60, 25),
+            button_position = (200, 0),
+            function = self.__save_button_click
         )
 
         # Cancel button.
-        self.__cancel_button = wx.Button(
-            self,
-            label = "Cancel",
-            size = (60, 25),
-            pos = (270, 0))
-
-        self.__cancel_button.SetFont(self.get_button_font())
-
-        self.__cancel_button.Bind(
-            wx.EVT_BUTTON,
-            self.__cancel_button_click
-        )
+        self.__cancel_button = Button(
+            text = "Cancel",
+            panel = self,
+            button_size = (60, 25),
+            button_position = (270, 0),
+            function = self.__cancel_button_click)
 
     def __save_button_click(self, event = None):
         """Performs the behaviour required when the save button is
