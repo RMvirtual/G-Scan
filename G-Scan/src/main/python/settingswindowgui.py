@@ -1,10 +1,17 @@
 import wx
 
-class SettingsWindowGUI():
+class SettingsWindowGUI(wx.Frame):
     """GUI Frame for viewing and amending the user's settings."""
 
     def __init__(self, main_application):
         """Constructor method."""
+        super().__init__(
+            None,
+            size = (895, 270),
+            title = "User Settings" 
+        )
+        
+        self.SetBackgroundColour("WHITE")
         self.__main_application = main_application
         self.__current_user = self.__main_application.get_current_user()
         self.__create_widgets()
@@ -12,18 +19,11 @@ class SettingsWindowGUI():
     def __create_widgets(self):
         """Creates the widgets required for the settings GUI."""
 
-        self.__frame = wx.Frame(
-            None,
-            size = (895, 270),
-            title = "User Settings" 
-        )
-
-        self.__frame.SetBackgroundColour("WHITE")
         self.__set_fonts()        
         self.__create_text_values_panel()
         self.__create_mode_options_panel()
         self.__create_buttons_panel()
-        self.__frame.Show()
+        self.Show()
 
     def __set_fonts(self):
         """Sets the fonts to be used for the widget types."""
@@ -41,7 +41,7 @@ class SettingsWindowGUI():
 
         # Text Values panel for holding the widgets.
         self.__text_values_panel = wx.Panel(
-            self.__frame,
+            self,
             size = (860, 125),
             pos = (10, 10)
         )
@@ -59,7 +59,7 @@ class SettingsWindowGUI():
 
         # Mode Options panel for holding the widgets.
         self.__mode_options_panel = wx.Panel(
-            self.__frame,
+            self,
             size = (860, 55),
             pos = (10, 135)
         )
@@ -73,7 +73,7 @@ class SettingsWindowGUI():
         """Creates a panel for setting the buttons."""
 
         self.__buttons_panel = wx.Panel(
-            self.__frame,
+            self,
             size = (860, 30),
             pos = (10, 195)
         )
@@ -358,10 +358,10 @@ class SettingsWindowGUI():
         """Performs the behaviour required when the save button is
         clicked."""
 
-        wx.CallAfter(self.__frame.Destroy)
+        wx.CallAfter(self.Destroy)
 
     def __cancel_button_click(self, event = None):
         """Performs the behaviour required when the save button is
         clicked."""
 
-        wx.CallAfter(self.__frame.Destroy)
+        wx.CallAfter(self.Destroy)
