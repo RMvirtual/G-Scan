@@ -1,20 +1,14 @@
 import wx
 
 class SettingsWindowGUI():
-    """GUI for viewing and amending the user's settings."""
+    """GUI Frame for viewing and amending the user's settings."""
 
     def __init__(self, main_application):
         """Constructor method."""
-
         self.__main_application = main_application
         self.__current_user = self.__main_application.get_current_user()
         self.__create_widgets()
-        
-    def run(self):
-        """The method to run when this object is passed
-        to a thread."""
-        self.__create_widgets()
-    
+   
     def __create_widgets(self):
         """Creates the widgets required for the settings GUI."""
 
@@ -364,10 +358,10 @@ class SettingsWindowGUI():
         """Performs the behaviour required when the save button is
         clicked."""
 
-        self.__app.Destroy()
+        wx.CallAfter(self.__frame.Destroy)
 
     def __cancel_button_click(self, event = None):
         """Performs the behaviour required when the save button is
         clicked."""
 
-        self.__app.Destroy()
+        wx.CallAfter(self.__frame.Destroy)
