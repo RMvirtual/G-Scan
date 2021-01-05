@@ -416,22 +416,22 @@ class ModeOptionsPanel(SettingsWindowPanel):
 
         self.__autoprocessing_checkbox.SetFont(self.get_checkbox_font())
 
-    def get_paperwork_type(self, paperwork_type):
+    def get_paperwork_type(self):
         """Gets the value of the paperwork type dropdown box."""
 
         self.__paperwork_type_dropdown_box.GetValue()
 
-    def get_multi_page_handling(self, multi_page_handling_option):
+    def get_multi_page_handling(self):
         """Gets the value of the multi-page handling dropdown box."""
 
         self.__multi_page_handling_dropdown_box.GetValue()
 
-    def get_input_mode_dropdown_box(self, input_mode):
+    def get_input_mode_dropdown_box(self):
         """Gets the value of the input mode dropdown box."""
 
         self.__input_mode_dropdown_box.GetValue()
 
-    def get_autoprocessing_checkbox(self, autoprocessing_mode):
+    def get_autoprocessing_checkbox(self):
         """Gets the boolean status of the autoprocessing checkbox."""
 
         self.__autoprocessing_checkbox.GetValue()
@@ -439,24 +439,23 @@ class ModeOptionsPanel(SettingsWindowPanel):
     def set_paperwork_type(self, paperwork_type):
         """Sets the value of the paperwork type dropdown box."""
 
-        self.__paperwork_type_dropdown_box.SetValue()
+        self.__paperwork_type_dropdown_box.SetValue(paperwork_type)
 
     def set_multi_page_handling(self, multi_page_handling_option):
         """Sets the value of the multi-page handling dropdown box."""
 
-        self.__multi_page_handling_dropdown_box.SetValue()
+        self.__multi_page_handling_dropdown_box.SetValue(
+            multi_page_handling_option)
 
     def set_input_mode_dropdown_box(self, input_mode):
         """Sets the value of the input mode dropdown box."""
 
-        self.__input_mode_dropdown_box.SetValue()
+        self.__input_mode_dropdown_box.SetValue(input_mode)
 
     def set_autoprocessing_checkbox(self, autoprocessing_mode):
         """Sets the boolean status of the autoprocessing checkbox."""
 
-        self.__autoprocessing_checkbox.SetValue()
-
-
+        self.__autoprocessing_checkbox.SetValue(autoprocessing_mode)
 
 class ButtonsPanel(SettingsWindowPanel):
     """A class representing the buttons panel."""
