@@ -26,84 +26,85 @@ class SettingsWindowGUI(wx.Frame):
     def get_user_name(self):
         """Gets the user name."""
 
-        pass
+        self.__text_values_panel.get_user_name()
 
     def get_scan_directory(self):
         """Gets the scan directory text field."""
 
-        pass
+        self.__text_values_panel.get_scan_directory()
 
     def get_destination_directory(self):
         """Gets the destination directory text field."""
 
-        pass
+        self.__text_values_panel.get_destination_directory()
 
     def get_backup_directory(self):
         """Gets the backup directory text field."""
 
-        pass
+        self.__text_values_panel.get_backup_directory()
 
-    def get_paperwork_type_dropdown_box(self):
+    def get_paperwork_type(self):
         """Gets the value of the paperwork type dropdown box."""
 
-        pass
+        self.__mode_options_panel.get_paperwork_type()
 
-    def get_multi_page_handling_dropdown_box(self):
+    def get_multi_page_handling(self):
         """Gets the value of the multi-page handling dropdown box."""
 
-        pass
+        self.__mode_options_panel.get_multi_page_handling()
 
-    def get_input_mode_dropdown_box(self):
+    def get_input_mode(self):
         """Gets the value of the input mode dropdown box."""
 
-        pass
+        self.__mode_options_panel.get_input_mode()
 
-    def get_autoprocessing_checkbox(self):
+    def get_autoprocessing_mode(self):
         """Gets the boolean status of the autoprocessing checkbox."""
 
-        pass
+        self.__mode_options_panel.get_autoprocessing_mode()
 
-    def set_user_name(self):
+    def set_user_name(self, user_name):
         """Sets the user name."""
 
-        pass
+        self.__text_values_panel.set_user_name(user_name)
 
     def set_scan_directory(self, directory):
         """Sets the scan directory text field."""
 
-        pass
+        self.__text_values_panel.set_scan_directory(directory)
 
     def set_destination_directory(self, directory):
         """Sets the destination directory text field."""
 
-        pass
+        self.__text_values_panel.set_destination_directory(directory)
 
     def set_backup_directory(self, directory):
         """Sets the backup directory text field."""
 
-        pass
+        self.__text_values_panel.set_backup_directory(directory)
 
-    def set_paperwork_type_dropdown_box(self, value):
+    def set_paperwork_type(self, paperwork_type):
         """Sets the value of the paperwork type dropdown box."""
 
-        pass
+        self.__mode_options_panel.set_paperwork_type(paperwork_type)
 
-    def set_multi_page_handling_dropdown_box(self, value):
+    def set_multi_page_handling(self, multi_page_handling_option):
         """Sets the value of the multi-page handling dropdown box."""
 
-        pass
+        self.__mode_options_panel.set_multi_page_handling(
+            multi_page_handling_option)
 
-    def set_input_mode_dropdown_box(self, value):
+    def set_input_mode_dropdown_box(self, input_mode):
         """Sets the value of the input mode dropdown box."""
 
-        pass
+        self.__mode_options_panel.set_input_mode_dropdown_box(
+            input_mode)
 
-    def set_autoprocessing_checkbox(self, value):
+    def set_autoprocessing_checkbox(self, autoprocessing_mode):
         """Sets the boolean status of the autoprocessing checkbox."""
 
-        pass
-
-
+        self.__mode_options_panel.set_autoprocessing_checkbox(
+            autoprocessing_mode)
 
 class SettingsWindowPanel(wx.Panel):
     """A class representing a panel in the gettings window."""
@@ -177,7 +178,7 @@ class TextValuesPanel(SettingsWindowPanel):
         )
 
         # User Name value label.
-        self.__user_name_text_ctrl = TextField(
+        self.__user_name_field = TextField(
             text = "",
             panel = self,
             field_position = (200, 0),
@@ -199,7 +200,7 @@ class TextValuesPanel(SettingsWindowPanel):
         )
 
         # Scan Directory value text box.
-        self.__scan_directory_value_text_box = TextField(
+        self.__scan_directory_field = TextField(
             text = "",
             panel = self,
             field_position = (200, 30),
@@ -232,7 +233,7 @@ class TextValuesPanel(SettingsWindowPanel):
         )
 
         # Destination Directory text field.
-        self.__destination_directory_text_field = TextField(
+        self.__destination_directory_field = TextField(
             text = "",
             panel = self,
             field_position = (200, 60),
@@ -265,7 +266,7 @@ class TextValuesPanel(SettingsWindowPanel):
         )
 
         # Backup Directory value text box.
-        self.__backup_directory_text_field = TextField(
+        self.__backup_directory_field = TextField(
             text = "",
             panel = self,
             field_position = (200, 90),
@@ -283,6 +284,46 @@ class TextValuesPanel(SettingsWindowPanel):
 
         self.__backup_directory_file_dialog_button.SetFont(
             self.get_button_font())
+
+    def get_user_name(self):
+        """Gets the user name."""
+
+        self.__user_name_field.GetLabel()
+
+    def get_scan_directory(self):
+        """Gets the scan directory text field."""
+
+        self.__scan_directory_field.GetLabel()
+
+    def get_destination_directory(self):
+        """Gets the destination directory text field."""
+
+        self.__destination_directory_field.GetLabel()
+
+    def get_backup_directory(self):
+        """Gets the backup directory text field."""
+
+        self.__backup_directory_field.GetLabel()
+
+    def set_user_name(self, user_name):
+        """Sets the user name."""
+
+        self.__user_name_field.SetLabel(user_name)
+
+    def set_scan_directory(self, directory):
+        """Sets the scan directory text field."""
+
+        self.__scan_directory_field.SetLabel(directory)
+
+    def set_destination_directory(self, directory):
+        """Sets the destination directory text field."""
+
+        self.__destination_directory_field.SetLabel(directory)
+
+    def set_backup_directory(self, directory):
+        """Sets the backup directory text field."""
+
+        self.__backup_directory_field.SetLabel(directory)
 
 class ModeOptionsPanel(SettingsWindowPanel):
     """A class representing the mode options panel."""
@@ -374,6 +415,48 @@ class ModeOptionsPanel(SettingsWindowPanel):
         )
 
         self.__autoprocessing_checkbox.SetFont(self.get_checkbox_font())
+
+    def get_paperwork_type(self, paperwork_type):
+        """Gets the value of the paperwork type dropdown box."""
+
+        self.__paperwork_type_dropdown_box.GetValue()
+
+    def get_multi_page_handling(self, multi_page_handling_option):
+        """Gets the value of the multi-page handling dropdown box."""
+
+        self.__multi_page_handling_dropdown_box.GetValue()
+
+    def get_input_mode_dropdown_box(self, input_mode):
+        """Gets the value of the input mode dropdown box."""
+
+        self.__input_mode_dropdown_box.GetValue()
+
+    def get_autoprocessing_checkbox(self, autoprocessing_mode):
+        """Gets the boolean status of the autoprocessing checkbox."""
+
+        self.__autoprocessing_checkbox.GetValue()
+
+    def set_paperwork_type(self, paperwork_type):
+        """Sets the value of the paperwork type dropdown box."""
+
+        self.__paperwork_type_dropdown_box.SetValue()
+
+    def set_multi_page_handling(self, multi_page_handling_option):
+        """Sets the value of the multi-page handling dropdown box."""
+
+        self.__multi_page_handling_dropdown_box.SetValue()
+
+    def set_input_mode_dropdown_box(self, input_mode):
+        """Sets the value of the input mode dropdown box."""
+
+        self.__input_mode_dropdown_box.SetValue()
+
+    def set_autoprocessing_checkbox(self, autoprocessing_mode):
+        """Sets the boolean status of the autoprocessing checkbox."""
+
+        self.__autoprocessing_checkbox.SetValue()
+
+
 
 class ButtonsPanel(SettingsWindowPanel):
     """A class representing the buttons panel."""
