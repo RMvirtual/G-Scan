@@ -8,13 +8,12 @@ class SettingsWindowGUI():
 
         self.__main_application = main_application
         self.__current_user = self.__main_application.get_current_user()
-
+        self.__create_widgets()
+        
     def run(self):
         """The method to run when this object is passed
         to a thread."""
-        self.__app = wx.App(False)
         self.__create_widgets()
-        self.__app.MainLoop()
     
     def __create_widgets(self):
         """Creates the widgets required for the settings GUI."""

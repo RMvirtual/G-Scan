@@ -690,5 +690,5 @@ class MainApplication():
         """Opens the settings menu."""
 
         self.__settings_menu = SettingsWindowGUI(self)
-        self.__settings_menu_thread = GUI_Thread(self.__settings_menu)
-        self.__settings_menu_thread.start()
+        # self.__settings_menu_thread = GUI_Thread(self.__settings_menu)
+        # self.__settings_menu_thread.start()
