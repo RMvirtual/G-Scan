@@ -1,14 +1,15 @@
 """A module containing functions for reading PDF files."""
 
 from app import filesystem
-import os
-from pdf import pdfwriter
-import PyPDF2
-import re
-from PIL import Image as pil_image
 from gui.popupbox import PopupBox
+from pdf import pdfwriter
+from PIL import Image as pil_image
 from pyzbar.pyzbar import decode
 from wand.image import Image as wand_image
+import PyPDF2
+import os
+import re
+
 
 def read_barcodes(file_name, directory):
     """Reads barcodes on each page of a PDF file and returns them as
