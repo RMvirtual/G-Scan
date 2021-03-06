@@ -2,7 +2,7 @@ import wx
 from app import filesystem
 import threading
 
-class GUI():
+class GUI(wx.Frame):
     """GUI for running the main application."""
 
     def __init__(self, main_application, gui_semaphore):
@@ -27,16 +27,16 @@ class GUI():
     def __create_widgets(self):
         """Creates the widgets required for the GUI."""
 
-        self.__frame = wx.Frame(
+        super().__init__(
             None,
             size = (870, 575),
             title = "G-Scan"
         )
 
-        self.__frame.SetBackgroundColour("WHITE")
+        self.SetBackgroundColour("WHITE")
         self.__create_panels()
 
-        self.__frame.Show()
+        self.Show()
 
     def __set_fonts(self):
         """Sets the fonts to be used for the widget types."""
@@ -65,7 +65,7 @@ class GUI():
         widgets."""
 
         self.__top_panel = wx.Panel(
-            self.__frame,
+            self,
             size = (840, 255),
             pos = (10, 10)
         )
@@ -79,7 +79,7 @@ class GUI():
         panels."""
 
         self.__middle_panel = wx.Panel(
-            self.__frame,
+            self,
             size = (850, 30),
             pos = (10, 265)
         )
@@ -93,7 +93,7 @@ class GUI():
 
         # Bottom panel.
         self.__bottom_panel = wx.Panel(
-            self.__frame,
+            self,
             size = (840, 230),
             pos = (10, 295)
         )
