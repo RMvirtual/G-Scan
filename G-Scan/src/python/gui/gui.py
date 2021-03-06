@@ -64,11 +64,7 @@ class GUI(wx.Frame):
         """Creates the top panel's sub-panels and corresponding
         widgets."""
 
-        self.__top_panel = wx.Panel(
-            self,
-            size = (840, 255),
-            pos = (10, 10)
-        )
+        self.__top_panel = TopPanel(self)
 
         self.__create_file_panel()
         self.__create_user_settings_panel()
@@ -565,3 +561,16 @@ class GUI(wx.Frame):
         box."""
         
         self.__quick_mode_preview_text.SetLabel(text)
+
+
+class TopPanel(wx.Panel):
+    """A class for the top panel of the GUI."""
+
+    def __init__(self, frame):
+        """Creates a new top panel."""
+
+        super().__init__(
+            frame,
+            size = (840, 255),
+            pos = (10, 10)            
+        )
