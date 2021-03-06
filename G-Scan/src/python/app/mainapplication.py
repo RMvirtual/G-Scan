@@ -60,8 +60,7 @@ class MainApplication():
             app.filesystem.get_user_settings_data_path())
        
         try:
-            if current_username in user_settings_data:
-                current_user = user_settings_data[current_username]
+            current_user = user_settings_data[current_username]
     
         # If the user does not exist, creates a new user and adds it to
         # the user settings data file, passing back the user object.
