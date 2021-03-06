@@ -41,11 +41,16 @@ class GUI():
     def __set_fonts(self):
         """Sets the fonts to be used for the widget types."""
 
-        self.__button_font = wx.Font(
-            11, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
+        self.__button_font = self.__create_font(11)
+        self.__body_font = self.__create_font(14)
 
-        self.__body_font = wx.Font(
-            14, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
+    def __create_font(self, font_size):
+        """Creates a calibri font to be used."""
+
+        font = wx.Font(
+            font_size, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
+
+        return font
 
     def __create_panels(self):
         """Creates the main panels for widgets to be instantiated in.
