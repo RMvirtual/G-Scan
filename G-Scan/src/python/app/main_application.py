@@ -1,7 +1,6 @@
 """A module for the main application class."""
 
 from backup import backup
-from date.date import Date
 from datetime import datetime
 from gui.main_menu import MainMenu
 from gui.main_menu_thread import MainMenuThread
@@ -15,6 +14,7 @@ from win32api import GetSystemMetrics
 
 import app.file_system
 import app.user_input_validation
+import date.date
 import os
 import re
 import shelve

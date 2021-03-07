@@ -1,26 +1,27 @@
 import wx
 from app import file_system
+import date.date
 import threading
 
 class MainMenu(wx.Frame):
     """GUI for running the main application."""
 
-    def __init__(self, main_application, gui_semaphore):
+    def __init__(self, main_application, application_semaphore):
         """Constructor method."""
 
         self.__main_application = main_application
-        self.__gui_semaphore = gui_semaphore
+        self.__application_semaphore = application_semaphore
         
     def run(self):
         """Starts the GUI application."""
 
-        self.__gui_semaphore.acquire()
+        self.__application_semaphore.acquire()
 
         self.__app = wx.App(False)
         self.__set_fonts()
         self.__create_widgets()
 
-        self.__gui_semaphore.release()
+        self.__application_semaphore.release()
 
         self.__app.MainLoop()
 
@@ -428,12 +429,18 @@ class MainMenu(wx.Frame):
         self.__quick_mode_radio_button.SetFont(self.__button_font)
 
         # Months dropdown box.
+        month_options = []
+        months = date.date.get_months()
+
+        for month in months:
+            month_options.append(month.get_full_code())
+
         self.__months_dropdown_box = wx.ComboBox(
             self.__user_settings_panel,
             value = "01 - January",
             size = (120, 25),
             pos = (275, 110),
-            choices = ["01 - January", "02 - February", "03 - March"],
+            choices = month_options,
             style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
