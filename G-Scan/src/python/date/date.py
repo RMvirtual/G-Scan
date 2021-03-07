@@ -46,6 +46,17 @@ def get_months():
 
     return MONTHS
 
+def get_months_as_strings():
+    """Returns a list of the months as strings."""
+
+    months_as_strings = []
+    months = get_months()
+
+    for month in months:
+        months_as_strings.append(month.get_full_code())
+
+    return months_as_strings
+
 def get_years():
     """Returns a tuple containing the last year and the
     current year."""

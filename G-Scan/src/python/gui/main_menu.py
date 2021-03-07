@@ -429,11 +429,7 @@ class MainMenu(wx.Frame):
         self.__quick_mode_radio_button.SetFont(self.__button_font)
 
         # Months dropdown box.
-        month_options = []
-        months = date.date.get_months()
-
-        for month in months:
-            month_options.append(month.get_full_code())
+        month_options = date.date.get_months_as_strings()
 
         self.__months_dropdown_box = wx.ComboBox(
             self.__user_settings_panel,
