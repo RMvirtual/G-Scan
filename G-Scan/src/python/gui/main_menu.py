@@ -2,7 +2,7 @@ import wx
 from app import file_system
 import threading
 
-class GUI(wx.Frame):
+class MainMenu(wx.Frame):
     """GUI for running the main application."""
 
     def __init__(self, main_application, gui_semaphore):
