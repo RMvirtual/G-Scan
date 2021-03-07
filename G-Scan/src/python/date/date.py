@@ -26,25 +26,25 @@ class Date(object):
 def get_months():
     """Returns a tuple of the months of the year."""
 
-    JANUARY = Date("01 - January", "01")
-    FEBRUARY = Date("02 - February", "02")
-    MARCH = Date("03 - March", "03")
-    APRIL = Date("04 - April", "04")
-    MAY = Date("05 - May", "05")
-    JUNE = Date("06 - June", "06")
-    JULY = Date("07 - July", "07")
-    AUGUST = Date("08 - August", "08")
-    SEPTEMBER = Date("09 - September", "09")
-    OCTOBER = Date("10 - October", "10")
-    NOVEMBER = Date("11 - November", "11")
-    DECEMBER = Date("12 - December", "12")
+    january = Date("01 - January", "01")
+    february = Date("02 - February", "02")
+    march = Date("03 - March", "03")
+    april = Date("04 - April", "04")
+    may = Date("05 - May", "05")
+    june = Date("06 - June", "06")
+    july = Date("07 - July", "07")
+    august = Date("08 - August", "08")
+    september = Date("09 - September", "09")
+    october = Date("10 - October", "10")
+    november = Date("11 - November", "11")
+    december = Date("12 - December", "12")
 
-    MONTHS = (
-        JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE,
-        JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER
+    months = (
+        january, february, march, april, may, june,
+        july, august, september, october, november, december
     )
 
-    return MONTHS
+    return months
 
 def get_months_as_strings():
     """Returns a list of the months as strings."""
@@ -61,29 +61,42 @@ def get_years():
     """Returns a tuple containing the last year and the
     current year."""
 
-    CURRENT_YEAR = Date(datetime.now().strftime('%Y'),
+    current_year = Date(datetime.now().strftime('%Y'),
         datetime.now().strftime('%y'))
 
-    LAST_YEAR = Date(str(int(datetime.now().strftime('%Y')) - 1),
+    last_year = Date(str(int(datetime.now().strftime('%Y')) - 1),
         str(int(datetime.now().strftime('%y')) - 1))
 
-    YEARS = (CURRENT_YEAR, LAST_YEAR)
+    years = (current_year, last_year)
 
-    return YEARS
+    return years
+
+def get_years_as_strings():
+    """Returns a list of the months as strings."""
+
+    years_as_strings = []
+    years = get_years()
+
+    for year in years:
+        years_as_strings.append(year.get_full_code())
+
+    return years_as_strings
 
 def get_current_month():
-    CURRENT_MONTH = Date(
+    current_month = Date(
         datetime.now().strftime('%m') + " - " + datetime.now().strftime('%B'),
         datetime.now().strftime('%m'))
     
-    return CURRENT_MONTH
+    return current_month
 
 def get_current_year():
-    CURRENT_YEAR = Date(datetime.now().strftime('%Y'),
+    current_year = Date(datetime.now().strftime('%Y'),
         datetime.now().strftime('%y'))
 
-    return CURRENT_YEAR
+    return current_year
 
 def get_last_year():
-    LAST_YEAR = Date(str(int(datetime.now().strftime('%Y')) - 1),
+    last_year = Date(str(int(datetime.now().strftime('%Y')) - 1),
         str(int(datetime.now().strftime('%y')) - 1))
+
+    return last_year

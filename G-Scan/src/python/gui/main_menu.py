@@ -445,12 +445,15 @@ class MainMenu(wx.Frame):
         self.__months_dropdown_box.SetBackgroundColour("LIGHT GREY")
 
         # Years dropdown box.
+        year_options = date.date.get_years_as_strings()
+        current_year = date.date.get_current_year().get_full_code()
+
         self.__years_dropdown_box = wx.ComboBox(
             self.__user_settings_panel,
-            value = "2020",
+            value = current_year,
             size = (120, 25),
             pos = (275, 140),
-            choices = ["2019", "2020"],
+            choices = year_options,
             style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
