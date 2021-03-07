@@ -3,22 +3,22 @@
 from datetime import datetime
 from date.date import Date
 from backup import backup
-from app import userinputvalidation
+from app import user_input_validation
 from win32api import GetSystemMetrics
 from gui.gui import GUI
 import os
-import app.filesystem
+import app.file_system
 from user.user import User
 import shelve
 from gui.popupbox import PopupBox
-from pdf.pdfviewer import PDFViewer
-from pdf import pdfreader
-from pdf import pdfwriter
+from pdf.pdf_viewer import PDFViewer
+from pdf import pdf_reader
+from pdf import pdf_writer
 import re
 import threading
-from gui.guithread import GUI_Thread
+from gui.gui_thread import GUI_Thread
 import time
-from gui.settingswindowgui import SettingsWindowGUI
+from gui.settings_window import SettingsWindow
 
 class MainApplication():
     """A class for the main application of the program to run."""
@@ -57,7 +57,7 @@ class MainApplication():
         # load the user up as the current user and pass it back as a
         # user object.
         user_settings_data = shelve.open(
-            app.filesystem.get_user_settings_data_path())
+            app.file_system.get_user_settings_data_path())
        
         try:
             current_user = user_settings_data[current_username]
@@ -163,7 +163,7 @@ class MainApplication():
         
         file_list = []
 
-        for scan_file in app.filesystem.get_directory_items(scan_directory):
+        for scan_file in app.file_system.get_directory_items(scan_directory):
             if scan_file.lower().endswith(valid_file_extensions):
                 file_list.append(scan_file)
 
@@ -338,10 +338,10 @@ class MainApplication():
         
         input_mode = self.__gui.get_current_input_mode()
         current_file = self.file_list[self.file_index]
-        file_name = filesystem.get_file_name(current_file)
-        file_extension = filesystem.get_file_ext(current_file)
+        file_name = app.file_system.get_file_name(current_file)
+        file_extension = app.file_system.get_file_ext(current_file)
 
-        job_reference = userinputvalidation.create_job_reference(
+        job_reference = user_input_validation.create_job_reference(
             self.__gui,
             barcode_reference,
             "Normal"
@@ -350,9 +350,11 @@ class MainApplication():
         backup_directory = self.current_user.backup_directory
         paperwork_type = self.__gui.get_current_paperwork_type()
 
-        backup_file_name = userinputvalidation.create_backup_file_name(
+        backup_file_name = user_input_validation.create_backup_file_name(
             job_reference, paperwork_type, file_extension, backup_directory)
         
+        scan_directory = self.current_user.scan_directory
+
         backup_success = backup.backup_file(
             current_file, backup_file_name, scan_directory, backup_directory)
 
@@ -366,7 +368,7 @@ class MainApplication():
             
             return
 
-        dest_file_name = userinputvalidation.create_destination_file_name(
+        dest_file_name = user_input_validation.create_destination_file_name(
             job_reference, paperwork_type, file_extension)
 
         dest_directory = self.current_user.destination_directory
@@ -375,7 +377,7 @@ class MainApplication():
         # destination directory with the same name so we know later
         # that we need to merge the two files.
         dest_duplicate_check = (
-            userinputvalidation.check_if_duplicate_file(
+            user_input_validation.check_if_duplicate_file(
                 dest_file_name, dest_directory))
 
         scan_directory = self.current_user.scan_directory
@@ -437,7 +439,7 @@ class MainApplication():
                 and auto_processing == "off"
                 or auto_processing == "on" and manual_submission):
             # Check user has inputted correct amount of digits.
-            user_input_check = userinputvalidation.check_user_input_length(
+            user_input_check = user_input_validation.check_user_input_length(
                 user_input, input_mode)
 
             if not user_input_check[0]:
@@ -448,20 +450,20 @@ class MainApplication():
             else:
                 self.__gui.clear_user_input()
                 
-                full_job_ref = userinputvalidation.create_job_reference(
+                full_job_ref = user_input_validation.create_job_reference(
                     self.__gui,
                     user_input,
                     input_mode
                 )
 
                 backup_file_name, dest_file_name = (
-                    userinputvalidation.create_file_names(
+                    user_input_validation.create_file_names(
                         self, user_input, input_mode, file_extension))
 
                 # Check if there is a file already existing in the destination
                 # directory with the same name so we know later that we need
                 # to merge the two files.
-                dest_duplicate_check = userinputvalidation.check_if_duplicate_file(
+                dest_duplicate_check = user_input_validation.check_if_duplicate_file(
                     dest_file_name, current_user.dest_directory)
 
                 backup_success = backup.backup_file(
@@ -490,14 +492,14 @@ class MainApplication():
                 and manual_submission):
             self.__gui.clear_user_input()
             
-            full_job_ref = userinputvalidation.create_job_reference(
+            full_job_ref = user_input_validation.create_job_reference(
                 self.__gui,
                 user_input,
                 input_mode
             )
 
             backup_file_name, dest_file_name = (
-                userinputvalidation.create_file_names(
+                user_input_validation.create_file_names(
                     self, barcode, input_mode, file_extension))
 
             # Check if there is a file already existing in the
@@ -518,7 +520,7 @@ class MainApplication():
                     "Backup directory not found. " +
                     "Please check your settings.")
 
-            pdfwriter.create_loading_list_pod(
+            pdf_writer.create_loading_list_pod(
                 self.__gui, current_file, scan_dir, dest_dir,
                 dest_file_name, dest_duplicate_check)
                 
@@ -686,4 +688,4 @@ class MainApplication():
     def open_settings_menu(self):
         """Opens the settings menu."""
 
-        self.__settings_menu = SettingsWindowGUI(self)
+        self.__settings_menu = SettingsWindow(self)

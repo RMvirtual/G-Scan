@@ -1,5 +1,5 @@
 import wx
-from app import filesystem
+from app import file_system
 import threading
 
 class GUI(wx.Frame):
@@ -168,7 +168,7 @@ class GUI(wx.Frame):
 
         # Michelin Man button.
         michelin_man_logo_path = (
-            filesystem.get_resources_directory() + "images\\michelin_logo.jpg")
+            file_system.get_resources_directory() + "images\\michelin_logo.jpg")
 
         michelin_man_logo = wx.Image(
             michelin_man_logo_path, wx.BITMAP_TYPE_ANY).Scale(20, 20)
@@ -214,7 +214,7 @@ class GUI(wx.Frame):
         """Creates the logo in the file panel."""
 
         gscan_logo_path = (
-            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
+            file_system.get_resources_directory() + "images\\g-scan_logo.png")
 
         logo_image_bitmap = wx.Bitmap(wx.Image(
             gscan_logo_path, wx.BITMAP_TYPE_ANY))

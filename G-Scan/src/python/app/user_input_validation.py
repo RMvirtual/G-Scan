@@ -1,4 +1,4 @@
-from app import filesystem
+from app import file_system
 import os
 import re
 from gui.popupbox import PopupBox
@@ -102,8 +102,8 @@ def create_backup_file_name(job_reference, paperwork_type, file_extension,
     file_name = (
         "GR" + job_reference + "_" + paperwork_type + file_extension)
 
-    is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
-        file_name, directory)
+    is_file_name_duplicate = check_if_duplicate_file(
+        file_name, backup_directory)
     
     page_counter = 1
 
@@ -111,8 +111,8 @@ def create_backup_file_name(job_reference, paperwork_type, file_extension,
         file_name = ("GR" + job_reference + "_" + paperwork_type + "_"
             + str(page_counter).zfill(3) + file_extension)
         
-        is_file_name_duplicate = userinputvalidation.check_if_duplicate_file(
-            file_name, directory)
+        is_file_name_duplicate = check_if_duplicate_file(
+            file_name, backup_directory)
         
         page_counter += 1
     
@@ -137,13 +137,16 @@ def create_destination_file_name(job_reference, paperwork_type,
 
     return file_name
 
-def create_file_names(job_reference, paperwork_type, input_mode, file_extension):
+def create_file_names(job_reference, paperwork_type, input_mode,
+        file_extension, backup_directory):
+    """Creates the file names required for processing."""
+
     backup_file_name = create_backup_file_name(
-        job_reference, paperwork_type, file_extension,
-        master_application.current_user.backup_directory)
-            
+        job_reference, paperwork_type,
+        file_extension, backup_directory
+    )
+
     dest_file_name = create_destination_file_name(
         job_reference, paperwork_type, ".pdf")
 
     return job_reference, backup_file_name, dest_file_name
-

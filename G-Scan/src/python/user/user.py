@@ -1,4 +1,4 @@
-from app import filesystem
+from app import file_system
 
 class User(object):
     """ A user with a couple of values to store """
@@ -16,7 +16,7 @@ class User(object):
         return self.name
 
     def overwrite_user(self, new_user):
-        user_settings_data = filesystem.get_user_settings_data()
+        user_settings_data = file_system.get_user_settings_data()
         user_settings_data[self.name] = new_user
         user_settings_data.sync()
 
@@ -33,7 +33,7 @@ class User(object):
         checks = []
 
         for directory in directories_to_check:
-            checks.append(filesystem.check_path_is_directory(directory))
+            checks.append(file_system.check_path_is_directory(directory))
 
         valid_directory_checks = {
             "Scan": checks[0],

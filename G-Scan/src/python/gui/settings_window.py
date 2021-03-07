@@ -1,6 +1,6 @@
 import wx
 
-class SettingsWindowGUI(wx.Frame):
+class SettingsWindow(wx.Frame):
     """GUI Frame for viewing and amending the user's gettings."""
 
     def __init__(self, main_application):

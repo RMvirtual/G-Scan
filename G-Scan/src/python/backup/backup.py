@@ -1,4 +1,4 @@
-from app import filesystem
+from app import file_system
 from datetime import datetime
 import os
 import shutil
@@ -26,7 +26,7 @@ def __backup_file(file_name, backup_file_name, scan_directory,
     backup_success = False
 
     backup_directory_is_valid = (
-        filesystem.check_path_is_directory(backup_directory))
+        file_system.check_path_is_directory(backup_directory))
 
     if backup_directory_is_valid:
         backup_success = __copy_file(
@@ -68,7 +68,9 @@ def start_housekeeping(backup_dir):
     to the wrong folder, deleting potentially important files on a
     server directory."""
 
-    if filesystem.check_path_is_directory(backup_dir):
+    backup_directory_exists = file_system.check_path_is_directory(backup_dir)
+
+    if backup_directory_exists:
         __backup_housekeeping(backup_dir)
 
 def __backup_housekeeping(backup_dir):
