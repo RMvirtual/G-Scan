@@ -1,24 +1,25 @@
 """A module for the main application class."""
 
-from datetime import datetime
-from date.date import Date
 from backup import backup
-from app import user_input_validation
-from win32api import GetSystemMetrics
+from date.date import Date
+from datetime import datetime
 from gui.main_menu import MainMenu
-import os
-import app.file_system
-from user.user import User
-import shelve
+from gui.main_menu_thread import MainMenuThread
 from gui.popupbox import PopupBox
+from gui.settings_window import SettingsWindow
 from pdf.pdf_viewer import PDFViewer
 from pdf import pdf_reader
 from pdf import pdf_writer
+from user.user import User
+from win32api import GetSystemMetrics
+
+import app.file_system
+import app.user_input_validation
+import os
 import re
+import shelve
 import threading
-from gui.main_menu_thread import MainMenuThread
 import time
-from gui.settings_window import SettingsWindow
 
 class MainApplication():
     """A class for the main application of the program to run."""
