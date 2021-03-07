@@ -430,10 +430,11 @@ class MainMenu(wx.Frame):
 
         # Months dropdown box.
         month_options = date.date.get_months_as_strings()
+        current_month = date.date.get_current_month().get_full_code()
 
         self.__months_dropdown_box = wx.ComboBox(
             self.__user_settings_panel,
-            value = "01 - January",
+            value = current_month,
             size = (120, 25),
             pos = (275, 110),
             choices = month_options,
