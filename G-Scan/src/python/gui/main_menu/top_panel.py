@@ -1,8 +1,9 @@
 import app.file_system as filesystem
 import date.date as date
 import wx
+from gui.main_menu.panel import Panel
 
-class TopPanel(wx.Panel):
+class TopPanel(Panel):
     """A class for the top panel of the main menu GUI."""
 
     def __init__(self, frame):
@@ -11,26 +12,10 @@ class TopPanel(wx.Panel):
         super().__init__(
             frame,
             size = (840, 255),
-            pos = (10, 10)
+            position = (10, 10)
         )
 
-        self.__frame = frame
-        self.__set_fonts()
         self.__create_widgets()
-
-    def __set_fonts(self):
-        """Sets the fonts to be used for the widget types."""
-
-        self.__button_font = self.__create_font(11)
-        self.__body_font = self.__create_font(14)
-
-    def __create_font(self, font_size):
-        """Creates a calibri font to be used."""
-
-        font = wx.Font(
-            font_size, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
-
-        return font
 
     def __create_widgets(self):
         """Creates the top-panel's sub-panels and underlying widgets.
@@ -82,7 +67,7 @@ class TopPanel(wx.Panel):
             style = wx.BORDER_NONE
         )
 
-        self.__file_name_label.SetFont(self.__body_font)
+        self.__file_name_label.SetFont(self.get_body_font())
 
         # File name value label.
         self.__file_name_text_ctrl = wx.StaticText(
@@ -93,7 +78,7 @@ class TopPanel(wx.Panel):
             style = wx.BORDER_SIMPLE
         )
 
-        self.__file_name_text_ctrl.SetFont(self.__body_font)
+        self.__file_name_text_ctrl.SetFont(self.get_body_font())
         self.__file_name_text_ctrl.SetBackgroundColour("LIGHT GREY")
 
         # File extension label.
@@ -105,7 +90,7 @@ class TopPanel(wx.Panel):
             style = wx.BORDER_NONE
         )
 
-        self.__file_extension_label.SetFont(self.__body_font)
+        self.__file_extension_label.SetFont(self.get_body_font())
         
         # File extension value label.
         self.__file_extension_value_label = wx.StaticText(
@@ -116,7 +101,7 @@ class TopPanel(wx.Panel):
             style = wx.BORDER_SIMPLE
         )
 
-        self.__file_extension_value_label.SetFont(self.__body_font)
+        self.__file_extension_value_label.SetFont(self.get_body_font())
         self.__file_extension_value_label.SetBackgroundColour("LIGHT GREY")
 
     def __create_user_input_widgets(self):
@@ -131,7 +116,7 @@ class TopPanel(wx.Panel):
             style = wx.BORDER_NONE
         )
 
-        self.__input_instruction_label.SetFont(self.__body_font)
+        self.__input_instruction_label.SetFont(self.get_body_font())
 
         # User input entry box.
         self.__user_input_entry_box = wx.TextCtrl(
@@ -142,7 +127,7 @@ class TopPanel(wx.Panel):
             style = wx.BORDER_SIMPLE
         )
 
-        self.__user_input_entry_box.SetFont(self.__body_font)
+        self.__user_input_entry_box.SetFont(self.get_body_font())
         self.__user_input_entry_box.SetBackgroundColour("LIGHT GREY")
         self.__user_input_entry_box.SetMaxLength(11)
 
@@ -153,7 +138,7 @@ class TopPanel(wx.Panel):
             size = (60, 25),
             pos = (140, 225))
 
-        self.__submit_button.SetFont(self.__button_font)
+        self.__submit_button.SetFont(self.get_button_font())
 
         self.__submit_button.Bind(
             wx.EVT_BUTTON,
@@ -168,7 +153,7 @@ class TopPanel(wx.Panel):
             size = (60, 25),
             pos = (208, 225))
 
-        self.__skip_button.SetFont(self.__button_font)
+        self.__skip_button.SetFont(self.get_button_font())
 
         # Split Document button.
         self.__split_document_button = wx.Button(
@@ -178,7 +163,7 @@ class TopPanel(wx.Panel):
             pos = (270, 225)
         )
 
-        self.__split_document_button.SetFont(self.__button_font)
+        self.__split_document_button.SetFont(self.get_button_font())
 
     def __create_user_settings_panel(self):
         """Creates the user settings panel in the top right of the
@@ -206,7 +191,7 @@ class TopPanel(wx.Panel):
             pos = (0, 0)
         )
 
-        self.__paperwork_type_label.SetFont(self.__body_font)
+        self.__paperwork_type_label.SetFont(self.get_body_font())
 
         # "Customer Paperwork" paperwork type radio button.
         self.__customer_paperwork_radio_button = wx.RadioButton(
@@ -217,7 +202,7 @@ class TopPanel(wx.Panel):
             style = wx.RB_GROUP
         )
 
-        self.__customer_paperwork_radio_button.SetFont(self.__button_font)
+        self.__customer_paperwork_radio_button.SetFont(self.get_button_font())
 
         # "Loading List" paperwork type radio button.
         self.__loading_list_radio_button = wx.RadioButton(
@@ -227,7 +212,7 @@ class TopPanel(wx.Panel):
             pos = (160, 25),
         )
 
-        self.__loading_list_radio_button.SetFont(self.__button_font)
+        self.__loading_list_radio_button.SetFont(self.get_button_font())
 
         # "POD" paperwork type radio button.
         self.__pod_radio_button = wx.RadioButton(
@@ -237,7 +222,7 @@ class TopPanel(wx.Panel):
             pos = (265, 25)
         )
 
-        self.__pod_radio_button.SetFont(self.__button_font)
+        self.__pod_radio_button.SetFont(self.get_button_font())
 
         # Autoprocessing checkbox.
         self.__autoprocessing_checkbox = wx.CheckBox(
@@ -262,7 +247,7 @@ class TopPanel(wx.Panel):
             pos = (0, 85)
         )
 
-        self.__input_mode_label.SetFont(self.__body_font)
+        self.__input_mode_label.SetFont(self.get_body_font())
 
         # Normal Mode radio button.
         self.__normal_mode_radio_button = wx.RadioButton(
@@ -273,7 +258,7 @@ class TopPanel(wx.Panel):
             style = wx.RB_GROUP
         )
 
-        self.__normal_mode_radio_button.SetFont(self.__button_font)
+        self.__normal_mode_radio_button.SetFont(self.get_button_font())
 
         # Quick Mode radio button.
         self.__quick_mode_radio_button = wx.RadioButton(
@@ -283,7 +268,7 @@ class TopPanel(wx.Panel):
             pos = (160, 110),
         )
 
-        self.__quick_mode_radio_button.SetFont(self.__button_font)
+        self.__quick_mode_radio_button.SetFont(self.get_button_font())
 
         # Months dropdown box.
         month_options = date.get_months_as_strings()
@@ -298,7 +283,7 @@ class TopPanel(wx.Panel):
             style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
-        self.__months_dropdown_box.SetFont(self.__button_font)
+        self.__months_dropdown_box.SetFont(self.get_button_font())
         self.__months_dropdown_box.SetBackgroundColour("LIGHT GREY")
 
         # Years dropdown box.
@@ -314,7 +299,7 @@ class TopPanel(wx.Panel):
             style = wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
-        self.__years_dropdown_box.SetFont(self.__button_font)
+        self.__years_dropdown_box.SetFont(self.get_button_font())
         self.__years_dropdown_box.SetBackgroundColour("LIGHT GREY")
 
     def __create_multi_page_handling_widgets(self):
@@ -329,7 +314,7 @@ class TopPanel(wx.Panel):
             pos = (0, 175)
         )
 
-        self.__multi_page_handling_label.SetFont(self.__body_font)
+        self.__multi_page_handling_label.SetFont(self.get_body_font())
 
         # Split radio button.
         self.__split_radio_button = wx.RadioButton(
@@ -340,7 +325,7 @@ class TopPanel(wx.Panel):
             style = wx.RB_GROUP
         )
 
-        self.__split_radio_button.SetFont(self.__button_font)
+        self.__split_radio_button.SetFont(self.get_button_font())
 
         # Do Not Split radio button.
         self.__do_not_split_radio_button = wx.RadioButton(
@@ -350,7 +335,7 @@ class TopPanel(wx.Panel):
             pos = (160, 200)
         )
 
-        self.__do_not_split_radio_button.SetFont(self.__button_font)
+        self.__do_not_split_radio_button.SetFont(self.get_button_font())
 
     def __submit_button_click(self, event = None):
         """Defines the behaviour to follow when the submit button
