@@ -1,7 +1,8 @@
 import wx
+from gui.main_menu.panel import Panel
 from app import file_system
 
-class MiddlePanel(wx.Panel):
+class MiddlePanel(Panel):
     """Middle panel for the main menu GUI."""
 
     def __init__(self, frame):
@@ -9,28 +10,12 @@ class MiddlePanel(wx.Panel):
 
         super().__init__(
             frame,
-            size = (850, 30),
-            pos = (10, 265)
+            size=(850, 30),
+            position=(10, 265)
         )
 
-        self.__frame = frame
-        self.__set_fonts()
         self.__create_toolbar_widgets()
         
-    def __set_fonts(self):
-        """Sets the fonts to be used for the widget types."""
-
-        self.__button_font = self.__create_font(11)
-        self.__body_font = self.__create_font(14)
-
-    def __create_font(self, font_size):
-        """Creates a calibri font to be used."""
-
-        font = wx.Font(
-            font_size, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
-
-        return font
-
     def __create_toolbar_widgets(self):
         """Creates widgets related to the middle toolbar."""
 
@@ -42,7 +27,7 @@ class MiddlePanel(wx.Panel):
             pos = (0, 0)
         )
 
-        self.__start_button.SetFont(self.__button_font)
+        self.__start_button.SetFont(self.get_button_font())
 
         self.__start_button.Bind(
             wx.EVT_BUTTON,
@@ -86,7 +71,7 @@ class MiddlePanel(wx.Panel):
             pos = (710, 0)
         )
 
-        self.__settings_button.SetFont(self.__button_font)
+        self.__settings_button.SetFont(self.get_button_font())
 
         self.__settings_button.Bind(
             wx.EVT_BUTTON,
@@ -101,7 +86,7 @@ class MiddlePanel(wx.Panel):
             pos = (775, 0)
         )
 
-        self.__exit_button.SetFont(self.__button_font)
+        self.__exit_button.SetFont(self.get_button_font())
 
         self.__exit_button.Bind(
             wx.EVT_BUTTON,

@@ -30,3 +30,13 @@ class Panel(wx.Panel):
             font_size, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
 
         return font
+
+    def get_button_font(self):
+        """Returns the font required for most buttons."""
+
+        return self.__button_font
+
+    def get_body_font(self):
+        """Returns the font required for most body text size items."""
+
+        return self.__body_font

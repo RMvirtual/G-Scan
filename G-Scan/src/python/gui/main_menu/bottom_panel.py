@@ -9,10 +9,10 @@ class BottomPanel(Panel):
 
         super().__init__(
             frame,
-            size = (840, 230),
-            position = (10, 295)
+            size=(840, 230),
+            position=(10, 295)
         )
-
+        
         self.__create_text_console()
 
     def __create_text_console(self):
