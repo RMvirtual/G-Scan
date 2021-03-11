@@ -248,14 +248,14 @@ class MainApplication():
         # If file is an image format rather than PDF, convert it to
         # PDF.
         if not current_file.lower().endswith(".pdf"):    
-            pdf_file = pdfwriter.image_converter(
+            pdf_file = pdf_writer.image_converter(
                 self, current_file, scan_directory, multi_page_handling)
 
         # If the multi page handling setting is set to split multiple
         # pages of paperwork apart, split it and return them as an
         # array of new pdf files.
         if multi_page_handling:
-            split_files = pdfwriter.document_splitter(
+            split_files = pdf_writer.document_splitter(
                 self, pdf_file, scan_directory, multi_page_handling)
 
             del self.file_list[self.file_index]
@@ -295,11 +295,11 @@ class MainApplication():
         valid_image_extensions = (".jpeg", ".jpg", ".png")
 
         if file_extension.lower() == ".pdf":
-            barcode_ref_list = pdfreader.read_barcodes(
+            barcode_ref_list = pdf_reader.read_barcodes(
                 current_file, scan_directory)
 
         elif file_extension.lower() in valid_image_extensions:
-            barcode_ref_list = pdfreader.image_barcode_reader(
+            barcode_ref_list = pdf_reader.image_barcode_reader(
                 current_file, scan_directory)
 
         # If no GR reference obtained, get the file using the PDF
@@ -313,7 +313,7 @@ class MainApplication():
         elif len(barcode_ref_list) > 1:
             self.__main_menu.write_log("Too many conflicting barcodes?")
             
-            split_file_list = pdfwriter.document_splitter(
+            split_file_list = pdf_writer.document_splitter(
                 self, current_file, scan_directory, "Split")
             
             if split_file_list:
@@ -342,7 +342,7 @@ class MainApplication():
         file_name = app.file_system.get_file_name(current_file)
         file_extension = app.file_system.get_file_ext(current_file)
 
-        job_reference = user_input_validation.create_job_reference(
+        job_reference = app.user_input_validation.create_job_reference(
             self.__main_menu,
             barcode_reference,
             "Normal"
@@ -351,7 +351,7 @@ class MainApplication():
         backup_directory = self.current_user.backup_directory
         paperwork_type = self.__main_menu.get_current_paperwork_type()
 
-        backup_file_name = user_input_validation.create_backup_file_name(
+        backup_file_name = app.user_input_validation.create_backup_file_name(
             job_reference, paperwork_type, file_extension, backup_directory)
         
         scan_directory = self.current_user.scan_directory
@@ -369,7 +369,7 @@ class MainApplication():
             
             return
 
-        dest_file_name = user_input_validation.create_destination_file_name(
+        dest_file_name = app.user_input_validation.create_destination_file_name(
             job_reference, paperwork_type, file_extension)
 
         dest_directory = self.current_user.destination_directory
@@ -378,16 +378,16 @@ class MainApplication():
         # destination directory with the same name so we know later
         # that we need to merge the two files.
         dest_duplicate_check = (
-            user_input_validation.check_if_duplicate_file(
+            app.user_input_validation.check_if_duplicate_file(
                 dest_file_name, dest_directory))
 
         scan_directory = self.current_user.scan_directory
 
-        pdfwriter.create_loading_list_pod(
+        pdf_writer.create_loading_list_pod(
             self.__main_menu, current_file, scan_directory, dest_directory,
             dest_file_name, dest_duplicate_check)
 
-        upload_success = pdfwriter.upload_doc(
+        upload_success = pdf_writer.upload_doc(
             current_file, scan_directory, dest_directory,
             dest_file_name, dest_duplicate_check)
 
@@ -440,7 +440,7 @@ class MainApplication():
                 and auto_processing == "off"
                 or auto_processing == "on" and manual_submission):
             # Check user has inputted correct amount of digits.
-            user_input_check = user_input_validation.check_user_input_length(
+            user_input_check = app.user_input_validation.check_user_input_length(
                 user_input, input_mode)
 
             if not user_input_check[0]:
@@ -451,20 +451,20 @@ class MainApplication():
             else:
                 self.__main_menu.clear_user_input()
                 
-                full_job_ref = user_input_validation.create_job_reference(
+                full_job_ref = app.user_input_validation.create_job_reference(
                     self.__main_menu,
                     user_input,
                     input_mode
                 )
 
                 backup_file_name, dest_file_name = (
-                    user_input_validation.create_file_names(
+                    app.user_input_validation.create_file_names(
                         self, user_input, input_mode, file_extension))
 
                 # Check if there is a file already existing in the destination
                 # directory with the same name so we know later that we need
                 # to merge the two files.
-                dest_duplicate_check = user_input_validation.check_if_duplicate_file(
+                dest_duplicate_check = app.user_input_validation.check_if_duplicate_file(
                     dest_file_name, current_user.dest_directory)
 
                 backup_success = backup.backup_file(
@@ -479,12 +479,12 @@ class MainApplication():
                         "Please check your settings.")
 
                 if paperwork_type == "Cust PW":
-                    pdfwriter.create_cust_pw(
+                    pdf_writer.create_cust_pw(
                         self, current_file, scan_dir, dest_dir, 
                         full_job_ref, dest_file_name, dest_duplicate_check)
 
                 elif paperwork_type == "Loading List" or paperwork_type == "POD":
-                    pdfwriter.create_loading_list_pod(
+                    pdf_writer.create_loading_list_pod(
                         self, current_file, scan_dir, dest_dir,
                         dest_file_name, dest_duplicate_check)
                     
@@ -493,21 +493,21 @@ class MainApplication():
                 and manual_submission):
             self.__main_menu.clear_user_input()
             
-            full_job_ref = user_input_validation.create_job_reference(
+            full_job_ref = app.user_input_validation.create_job_reference(
                 self.__main_menu,
                 user_input,
                 input_mode
             )
 
             backup_file_name, dest_file_name = (
-                user_input_validation.create_file_names(
+                app.user_input_validation.create_file_names(
                     self, barcode, input_mode, file_extension))
 
             # Check if there is a file already existing in the
             # destination directory with the same name so we know later
             # that we need to merge the two files.
             dest_duplicate_check = (
-                userinputvalidation.check_if_duplicate_file(
+                app.user_input_validation.check_if_duplicate_file(
                     dest_file_name, self.current_user.dest_directory))
 
             backup_success = backup.backup_file(
@@ -527,7 +527,7 @@ class MainApplication():
                 
         del self.file_list[self.file_index]
 
-        upload_success = pdfwriter.upload_doc(
+        upload_success = pdf_writer.upload_doc(
             current_file, scan_dir, dest_dir,
             dest_file_name, dest_duplicate_check)
 
@@ -577,10 +577,10 @@ class MainApplication():
             for item in self.file_list:
                 self.file_index = self.file_list.index(item)
                 
-                pdf_file = pdfwriter.image_converter(
+                pdf_file = pdf_writer.image_converter(
                     self.__main_menu, item, scan_dir, multi_page_handling)
                 
-                split_file_list = pdfwriter.document_splitter(
+                split_file_list = pdf_writer.document_splitter(
                     self.__main_menu, pdf_file, scan_dir, "Do Not Split")
 
                 for split_file in reversed(split_file_list):
@@ -603,7 +603,7 @@ class MainApplication():
                     
                     if len(job_ref) == 9:
                         full_job_ref, backup_file_name, dest_file_name = (
-                            userinputvalidation.create_file_names(
+                            app.user_input_validation.create_file_names(
                                 job_ref, "Normal", file_extension)
                         )
 
@@ -612,7 +612,7 @@ class MainApplication():
                         # so we know later that we need to merge the
                         # two files.
                         dest_duplicate_check = (
-                            userinputvalidation.check_if_duplicate_file(
+                            app.user_input_validation.check_if_duplicate_file(
                                 dest_file_name,
                                 self.current_user.dest_directory)
                         )
@@ -629,17 +629,17 @@ class MainApplication():
                                 "Please check your settings.")
 
                         if pw_type == "Cust PW":
-                            pdfwriter.create_cust_pw(
+                            pdf_writer.create_cust_pw(
                                 self.__main_menu, item, scan_dir, dest_dir,
                                 full_job_ref, dest_file_name,
                                 dest_duplicate_check)
                             
                         elif pw_type == "Loading List" or pw_type == "POD":
-                            pdfwriter.create_loading_list_pod(
+                            pdf_writer.create_loading_list_pod(
                                 self.__main_menu, item, scan_dir, dest_dir,
                                 dest_file_name, dest_duplicate_check)
 
-                        upload_success = pdfwriter.upload_doc(
+                        upload_success = pdf_writer.upload_doc(
                             item, scan_dir, dest_dir,
                             dest_file_name, dest_duplicate_check)
                         

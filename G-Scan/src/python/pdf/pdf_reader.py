@@ -10,7 +10,6 @@ import PyPDF2
 import os
 import re
 
-
 def read_barcodes(file_name, directory):
     """Reads barcodes on each page of a PDF file and returns them as
     a list."""
@@ -26,7 +25,7 @@ def read_barcodes(file_name, directory):
             temp_file_writer = PyPDF2.PdfFileWriter()
             temp_file_writer.addPage(page_object)
             
-            temp_directory = filesystem.get_temp_directory()
+            temp_directory = file_system.get_temp_directory()
             temp_file_path = temp_directory + "temp.pdf"
 
             with open(temp_file_path, "wb") as temp_file:

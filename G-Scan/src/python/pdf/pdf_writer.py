@@ -120,7 +120,7 @@ def create_loading_list_pod(master_application, file, scan_dir,
 
     file_name, file_extension = os.path.splitext(file)
 
-    temp_directory = filesystem.get_temp_directory()
+    temp_directory = file_system.get_temp_directory()
 
     # PDF files should be fine for a straight move
     if file_extension.lower() == ".pdf":
@@ -318,7 +318,7 @@ def upload_doc(file, scan_dir, dest_dir,
     """If duplicate file already exists in the destination directory,
     merge the pages together."""
 
-    temp_directory = filesystem.get_temp_directory()
+    temp_directory = file_system.get_temp_directory()
 
     if dest_duplicate_check:
         temp_file_writer = PyPDF2.PdfFileWriter()
