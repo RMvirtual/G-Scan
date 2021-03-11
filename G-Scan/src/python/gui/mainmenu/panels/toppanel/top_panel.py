@@ -1,7 +1,7 @@
 import app.file_system as filesystem
 import date.date as date
 import wx
-from gui.main_menu.panel import Panel
+from gui.mainmenu.panels.panel import Panel
 
 class TopPanel(Panel):
     """A class for the top panel of the main menu GUI."""

@@ -1,9 +1,9 @@
 import wx
 from app import file_system
 import date.date
-from gui.main_menu.bottom_panel import BottomPanel
-from gui.main_menu.top_panel import TopPanel
-from gui.main_menu.middle_panel import MiddlePanel
+from gui.mainmenu.panels.bottompanel.bottom_panel import BottomPanel
+from gui.mainmenu.panels.middlepanel.middle_panel import MiddlePanel
+from gui.mainmenu.panels.toppanel.top_panel import TopPanel
 import threading
 
 class MainMenu(wx.Frame):

@@ -1,5 +1,5 @@
 import wx
-from gui.main_menu.panel import Panel
+from gui.mainmenu.panels.panel import Panel
 from app import file_system
 
 class MiddlePanel(Panel):
