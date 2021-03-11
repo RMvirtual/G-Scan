@@ -1,6 +1,7 @@
 import wx
 from app import file_system
 import date.date
+from gui.main_menu.bottom_panel import BottomPanel
 from gui.main_menu.top_panel import TopPanel
 from gui.main_menu.middle_panel import MiddlePanel
 import threading
@@ -61,29 +62,7 @@ class MainMenu(wx.Frame):
 
         self.__top_panel = TopPanel(self)
         self.__middle_panel = MiddlePanel(self)
-        self.__create_bottom_panel()
-
-    def __create_bottom_panel(self):
-        """Creates the bottom panel of GUI which contains the text
-        console for communicating messages and feedback to the
-        user."""
-
-        # Bottom panel.
-        self.__bottom_panel = wx.Panel(
-            self,
-            size = (840, 230),
-            pos = (10, 295)
-        )
-
-        # Text console display.
-        self.__text_console_output_box = wx.TextCtrl(
-            self.__bottom_panel,
-            size = (835, 230),
-            pos = (0, 0),
-            style = wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE
-        )
-
-        self.__text_console_output_box.SetBackgroundColour("LIGHT GREY")
+        self.__bottom_panel = BottomPanel(self)
     
     def get_current_paperwork_type(self):
         """Gets the value of the paperwork type variable based on
@@ -122,7 +101,7 @@ class MainMenu(wx.Frame):
     def write_log(self, text):
         """Writes a string of text to the console output log."""
 
-        self.__text_console_output_box.write(text)
+        self.__bottom_panel.write_log(text)
 
     def set_quick_mode_hint_text(self, text):
         """Overwrites the text found in the quick mode hint text

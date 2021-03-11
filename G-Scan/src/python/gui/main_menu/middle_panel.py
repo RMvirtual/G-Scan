@@ -5,7 +5,7 @@ class MiddlePanel(wx.Panel):
     """Middle panel for the main menu GUI."""
 
     def __init__(self, frame):
-        """Creates a new middle panel."""
+        """Creates a new middle panel for the main menu GUI."""
 
         super().__init__(
             frame,
