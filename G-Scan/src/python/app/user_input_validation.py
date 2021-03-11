@@ -38,9 +38,9 @@ def check_user_input_length(user_input, input_mode):
 def check_if_duplicate_file(file_name, directory_path):
     """Checks if a file already exists in a certain directory."""
 
-    if filesystem.check_path_exists(directory_path + "/" + file_name):
+    if file_system.check_path_exists(directory_path + "/" + file_name):
         return True
-                        
+ 
     return False
 
 def calculate_base_job_reference(month, year):
@@ -50,9 +50,9 @@ def calculate_base_job_reference(month, year):
     
     Takes Date objects as the year and month parameters so it can
     use their short attributes."""
-        
-    year_prefix = re.sub("[^0-9]", "", str(year.short))
-    month_prefix = re.sub("[^0-9]", "", str(month.short))
+
+    year_prefix = re.sub("[^0-9]", "", str(year.get_short_code()))
+    month_prefix = re.sub("[^0-9]", "", str(month.get_short_code()))
 
     # Create the year + month job reference digits prefix,
     # add 5 zeroes to the template ref that will be overwritten

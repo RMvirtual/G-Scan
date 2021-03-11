@@ -8,7 +8,7 @@ class SettingsWindow(wx.Frame):
         self.__main_application = main_application
         self.__current_user = self.__main_application.get_current_user()
         self.__create_widgets()
-   
+
     def __create_widgets(self):
         """Creates the widgets required for the gettings GUI."""
         super().__init__(
