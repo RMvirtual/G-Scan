@@ -2,7 +2,7 @@
 
 from backup import backup
 from datetime import datetime
-from gui.main_menu import MainMenu
+from gui.main_menu.main_menu import MainMenu
 from gui.main_menu_thread import MainMenuThread
 from gui.popupbox import PopupBox
 from gui.settings_window import SettingsWindow
