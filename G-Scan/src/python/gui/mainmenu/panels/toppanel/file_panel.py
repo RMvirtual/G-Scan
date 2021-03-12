@@ -1,6 +1,7 @@
 from app import file_system as filesystem
 import wx
 from gui.mainmenu.panels.panel import Panel
+from gui.widgets.textboxes.text_entry_box import TextEntryBox
 
 class FilePanel(Panel):
     """A class modelling the file panel window found in the top panel
@@ -100,7 +101,7 @@ class FilePanel(Panel):
             (285, 25), (0, 195)
         )
 
-        self.__user_input_entry_box = self.TextEntryBox(
+        self.__user_input_entry_box = TextEntryBox(
             self, wx.EmptyString, (140, 25), (0, 225))
 
         self.__submit_button = self.Button(
@@ -146,24 +147,6 @@ class FilePanel(Panel):
                 callbackFunction,
                 self
             )
-
-    class TextEntryBox(wx.TextCtrl):
-        """A class for a text entry box."""
-
-        def __init__(self, panel, text, size, position):
-            """Creates a new text entry box."""
-
-            super().__init__(
-                panel,
-                value = text,
-                size = size,
-                pos = position,
-                style = wx.BORDER_SIMPLE
-            )
-
-            self.SetFont(panel.get_body_font())
-            self.SetBackgroundColour("LIGHT GREY")
-            self.SetMaxLength(11)
 
     class TextLabel(wx.StaticText):
         """A class for a text label box for instructions etc."""
