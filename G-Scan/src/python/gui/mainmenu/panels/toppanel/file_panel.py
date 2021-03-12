@@ -1,7 +1,7 @@
 from app import file_system as filesystem
 import wx
 from gui.mainmenu.panels.panel import Panel
-from gui.widgets.textboxes.text_entry_box import TextEntryBox
+from gui.widgets.text_boxes import TextEntryBox, TextLabel
 
 class FilePanel(Panel):
     """A class modelling the file panel window found in the top panel
@@ -96,7 +96,7 @@ class FilePanel(Panel):
     def __create_user_input_widgets(self):
         """Creates widgets related to user input."""
 
-        self.__input_instruction_label = self.TextLabel(
+        self.__input_instruction_label = TextLabel(
             self, "Please enter the job reference (excluding \"GR\")",
             (285, 25), (0, 195)
         )
@@ -147,19 +147,3 @@ class FilePanel(Panel):
                 callbackFunction,
                 self
             )
-
-    class TextLabel(wx.StaticText):
-        """A class for a text label box for instructions etc."""
-
-        def __init__(self, panel, text, size, position):
-            """Creates a new text label box."""
-
-            super().__init__(
-                panel,
-                label = text,
-                pos = position,
-                size = size,
-                style = wx.BORDER_NONE
-            )
-
-            self.SetFont(panel.get_body_font())
