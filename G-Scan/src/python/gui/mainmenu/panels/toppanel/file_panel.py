@@ -95,41 +95,22 @@ class FilePanel(Panel):
     def __create_user_input_widgets(self):
         """Creates widgets related to user input."""
 
-        # Input instruction label.
-        self.__input_instruction_label = wx.StaticText(
-            self,
-            label = "Please enter the job reference (excluding \"GR\")",
-            pos = (0, 195),
-            size = (285, 25),
-            style = wx.BORDER_NONE
+        self.__input_instruction_label = self.TextLabel(
+            self, "Please enter the job reference (excluding \"GR\")",
+            (285, 25), (0, 195)
         )
 
-        self.__input_instruction_label.SetFont(self.get_body_font())
+        self.__user_input_entry_box = self.TextEntryBox(
+            self, wx.EmptyString, (140, 25), (0, 225))
 
-        # User input entry box.
-        self.__user_input_entry_box = wx.TextCtrl(
-            self,
-            value = wx.EmptyString,
-            pos = (0, 225),
-            size = (140, 25),
-            style = wx.BORDER_SIMPLE
-        )
-
-        self.__user_input_entry_box.SetFont(self.get_body_font())
-        self.__user_input_entry_box.SetBackgroundColour("LIGHT GREY")
-        self.__user_input_entry_box.SetMaxLength(11)
-
-        # Submit button.
         self.__submit_button = self.Button(
             self, "Submit", (60, 25), (140, 225))
 
         self.__submit_button.bindFunctionToClick(self.__submit_button_click)
 
-        # Skip button.
         self.__skip_button = self.Button(
             self, "Skip", (60, 25), (208, 225))
 
-        # Split Document button.
         self.__split_document_button = self.Button(
             self, "Split Document", (120, 25), (270, 225))
 
@@ -165,3 +146,37 @@ class FilePanel(Panel):
                 callbackFunction,
                 self
             )
+
+    class TextEntryBox(wx.TextCtrl):
+        """A class for a text entry box."""
+
+        def __init__(self, panel, text, size, position):
+            """Creates a new text entry box."""
+
+            super().__init__(
+                panel,
+                value = text,
+                size = size,
+                pos = position,
+                style = wx.BORDER_SIMPLE
+            )
+
+            self.SetFont(panel.get_body_font())
+            self.SetBackgroundColour("LIGHT GREY")
+            self.SetMaxLength(11)
+
+    class TextLabel(wx.StaticText):
+        """A class for a text label box for instructions etc."""
+
+        def __init__(self, panel, text, size, position):
+            """Creates a new text label box."""
+
+            super().__init__(
+                panel,
+                label = text,
+                pos = position,
+                size = size,
+                style = wx.BORDER_NONE
+            )
+
+            self.SetFont(panel.get_body_font())
