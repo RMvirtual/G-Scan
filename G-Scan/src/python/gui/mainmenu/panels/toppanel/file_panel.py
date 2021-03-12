@@ -120,38 +120,18 @@ class FilePanel(Panel):
         self.__user_input_entry_box.SetMaxLength(11)
 
         # Submit button.
-        self.__submit_button = wx.Button(
-            self,
-            label = "Submit",
-            size = (60, 25),
-            pos = (140, 225))
+        self.__submit_button = self.Button(
+            self, "Submit", (60, 25), (140, 225))
 
-        self.__submit_button.SetFont(self.get_button_font())
-
-        self.__submit_button.Bind(
-            wx.EVT_BUTTON,
-            self.__submit_button_click,
-            self.__submit_button
-        )
+        self.__submit_button.bindFunctionToClick(self.__submit_button_click)
 
         # Skip button.
-        self.__skip_button = wx.Button(
-            self,
-            label = "Skip",
-            size = (60, 25),
-            pos = (208, 225))
-
-        self.__skip_button.SetFont(self.get_button_font())
+        self.__skip_button = self.Button(
+            self, "Skip", (60, 25), (208, 225))
 
         # Split Document button.
-        self.__split_document_button = wx.Button(
-            self,
-            label = "Split Document",
-            size = (120, 25),
-            pos = (270, 225)
-        )
-
-        self.__split_document_button.SetFont(self.get_button_font())
+        self.__split_document_button = self.Button(
+            self, "Split Document", (120, 25), (270, 225))
 
     def __submit_button_click(self, event = None):
         """Defines the behaviour to follow when the submit button
@@ -159,3 +139,29 @@ class FilePanel(Panel):
         workflow method."""
 
         print("Hello")
+
+    class Button(wx.Button):
+        """A class for a button."""
+
+        def __init__(self, panel, text, size, position):
+            """Creates a new button."""
+
+            super().__init__(
+                panel,
+                label = text,
+                size = size,
+                pos = position
+            )
+
+            self.SetFont(panel.get_button_font())
+
+        def bindFunctionToClick(self, callbackFunction):
+            """Assigns a callback function to run when the button is
+            clicked.
+            """
+
+            self.Bind(
+                wx.EVT_BUTTON,
+                callbackFunction,
+                self
+            )
