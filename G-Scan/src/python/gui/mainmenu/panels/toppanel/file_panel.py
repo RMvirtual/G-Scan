@@ -3,6 +3,7 @@ import wx
 from gui.widgets.buttons import Button
 from gui.widgets.panel import Panel
 from gui.widgets.text import TextEntryBox, TextLabel
+from gui.widgets.images import Image
 
 class FilePanel(Panel):
     """A class modelling the file panel window found in the top panel
@@ -34,15 +35,8 @@ class FilePanel(Panel):
 
         gscan_logo_path = (
             filesystem.get_resources_directory() + "images\\g-scan_logo.png")
-
-        logo_image_bitmap = wx.Bitmap(wx.Image(
-            gscan_logo_path, wx.BITMAP_TYPE_ANY))
         
-        self.__logo_image = wx.StaticBitmap(
-            self,
-            wx.ID_ANY,
-            logo_image_bitmap
-        )
+        self.__logo_image = Image(self, gscan_logo_path)
 
     def __create_file_detail_widgets(self):
         """Creates widgets related to displaying details about the
