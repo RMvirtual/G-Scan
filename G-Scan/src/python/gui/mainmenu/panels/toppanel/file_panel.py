@@ -1,7 +1,8 @@
 from app import file_system as filesystem
 import wx
-from gui.mainmenu.panels.panel import Panel
-from gui.widgets.text_boxes import TextEntryBox, TextLabel
+from gui.widgets.buttons import Button
+from gui.widgets.panel import Panel
+from gui.widgets.text import TextEntryBox, TextLabel
 
 class FilePanel(Panel):
     """A class modelling the file panel window found in the top panel
@@ -47,51 +48,17 @@ class FilePanel(Panel):
         """Creates widgets related to displaying details about the
         current file being processed."""
 
-        # File name label.
-        self.__file_name_label = wx.StaticText(
-            self,
-            label = "File Name:",
-            pos = (0, 130),
-            size = (70, 20),
-            style = wx.BORDER_NONE
-        )
+        self.__file_name_label = TextLabel(
+            self, "File Name:", (70, 20), (0, 130))
 
-        self.__file_name_label.SetFont(self.get_body_font())
+        self.__file_name_text_box = TextEntryBox(
+            self, "I AM A FILE NAME", (285, 25), (100, 130))
 
-        # File name value label.
-        self.__file_name_text_ctrl = wx.StaticText(
-            self,
-            label = "I AM A FILE NAME",
-            pos = (100, 130),
-            size = (285, 25),
-            style = wx.BORDER_SIMPLE
-        )
+        self.__file_extension_label = TextLabel(
+            self, "File Type:", (70, 20), (0, 160))
 
-        self.__file_name_text_ctrl.SetFont(self.get_body_font())
-        self.__file_name_text_ctrl.SetBackgroundColour("LIGHT GREY")
-
-        # File extension label.
-        self.__file_extension_label = wx.StaticText(
-            self,
-            label = "File Type:",
-            pos = (0, 160),
-            size = (70, 20),
-            style = wx.BORDER_NONE
-        )
-
-        self.__file_extension_label.SetFont(self.get_body_font())
-        
-        # File extension value label.
-        self.__file_extension_value_label = wx.StaticText(
-            self,
-            label = ".ext",
-            pos = (100, 160),
-            size = (285, 25),
-            style = wx.BORDER_SIMPLE
-        )
-
-        self.__file_extension_value_label.SetFont(self.get_body_font())
-        self.__file_extension_value_label.SetBackgroundColour("LIGHT GREY")
+        self.__file_extension_text_box = TextEntryBox(
+            self, ".ext", (285, 25), (100, 160))
 
     def __create_user_input_widgets(self):
         """Creates widgets related to user input."""
@@ -104,15 +71,15 @@ class FilePanel(Panel):
         self.__user_input_entry_box = TextEntryBox(
             self, wx.EmptyString, (140, 25), (0, 225))
 
-        self.__submit_button = self.Button(
+        self.__submit_button = Button(
             self, "Submit", (60, 25), (140, 225))
 
         self.__submit_button.bindFunctionToClick(self.__submit_button_click)
 
-        self.__skip_button = self.Button(
+        self.__skip_button = Button(
             self, "Skip", (60, 25), (208, 225))
 
-        self.__split_document_button = self.Button(
+        self.__split_document_button = Button(
             self, "Split Document", (120, 25), (270, 225))
 
     def __submit_button_click(self, event = None):
@@ -122,28 +89,3 @@ class FilePanel(Panel):
 
         print("Hello")
 
-    class Button(wx.Button):
-        """A class for a button."""
-
-        def __init__(self, panel, text, size, position):
-            """Creates a new button."""
-
-            super().__init__(
-                panel,
-                label = text,
-                size = size,
-                pos = position
-            )
-
-            self.SetFont(panel.get_button_font())
-
-        def bindFunctionToClick(self, callbackFunction):
-            """Assigns a callback function to run when the button is
-            clicked.
-            """
-
-            self.Bind(
-                wx.EVT_BUTTON,
-                callbackFunction,
-                self
-            )

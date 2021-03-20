@@ -1,6 +1,8 @@
 import wx
-from gui.mainmenu.panels.panel import Panel
+from gui.widgets.panel import Panel
+from gui.widgets.buttons import Button
 from app import file_system
+from gui.widgets.text import TextLabel
 
 class MiddlePanel(Panel):
     """Middle panel for the main menu GUI."""
@@ -19,35 +21,18 @@ class MiddlePanel(Panel):
     def __create_toolbar_widgets(self):
         """Creates widgets related to the middle toolbar."""
 
-        # Start button.
-        self.__start_button = wx.Button(
-            self,
-            label = "Start",
-            size = (60, 25),
-            pos = (0, 0)
-        )
-
-        self.__start_button.SetFont(self.get_button_font())
-
-        self.__start_button.Bind(
-            wx.EVT_BUTTON,
-            self.__start_button_click
-        )
+        self.__start_button = Button(self, "Start", (60, 25), (0, 0))
+        self.__start_button.bindFunctionToClick(self.__start_button_click)
 
         # Quick Mode user aid message for displaying a preview of the
         # output that quick mode will calculate based on the current
         # user settings and what they have entered so far in the user
         # input entry box.
-        self.__quick_mode_preview_text = wx.StaticText(
-            self,
-            label = "",
-            size = (180, 14),
-            pos = (155, 3),
-            style = wx.ALIGN_RIGHT
-        )
+        self.__quick_mode_preview_text = TextLabel(
+            self, "", (180, 14), (155, 3))
 
-        self.__quick_mode_preview_text.SetFont(wx.Font(
-            12, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri"))
+        self.__quick_mode_preview_text.SetFont(
+            self.__quick_mode_preview_text.getCalibriFont(12))
 
         # Michelin Man button.
         michelin_man_logo_path = (
@@ -63,35 +48,13 @@ class MiddlePanel(Panel):
             pos = (680, 0)
         )
 
-        # Settings button.
-        self.__settings_button = wx.Button(
-            self,
-            label = "Settings",
-            size = (60, 25),
-            pos = (710, 0)
-        )
+        self.__settings_button = Button(self, "Settings", (60, 25), (710, 0))
+        self.__settings_button.bindFunctionToClick(
+            self.__settings_button_click)
 
-        self.__settings_button.SetFont(self.get_button_font())
-
-        self.__settings_button.Bind(
-            wx.EVT_BUTTON,
-            self.__settings_button_click
-        )
-
-        # Exit button.
-        self.__exit_button = wx.Button(
-            self,
-            label = "Exit",
-            size = (60, 25),
-            pos = (775, 0)
-        )
-
-        self.__exit_button.SetFont(self.get_button_font())
-
-        self.__exit_button.Bind(
-            wx.EVT_BUTTON,
-            self.__exit_button_click
-        )
+        self.__exit_button = Button(self, "Exit", (60, 25), (775, 0))
+        self.__exit_button.bindFunctionToClick(
+            self.__exit_button_click)
 
     def __start_button_click(self, event = None):
         """Defines the behavior to follow when the start button

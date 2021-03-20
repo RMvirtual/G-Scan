@@ -1,5 +1,5 @@
-import wx
-from gui.mainmenu.panels.panel import Panel
+from gui.widgets.panel import Panel
+from gui.widgets.text import TextConsole
 
 class BottomPanel(Panel):
     """Bottom panel for the main menu GUI."""
@@ -18,14 +18,7 @@ class BottomPanel(Panel):
     def __create_text_console(self):
         """Creates a text console display output box."""
 
-        self.__text_console_output_box = wx.TextCtrl(
-            self,
-            size = (835, 230),
-            pos = (0, 0),
-            style = wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE
-        )
-
-        self.__text_console_output_box.SetBackgroundColour("LIGHT GREY")
+        self.__text_console_output_box = TextConsole(self, (835, 230), (0, 0))
 
     def write_log(self, text):
         """Writes a string of text to the console output log."""

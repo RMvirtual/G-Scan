@@ -1,4 +1,4 @@
-from gui.mainmenu.panels.panel import Panel
+from gui.widgets.panel import Panel
 from gui.mainmenu.panels.toppanel.file_panel import FilePanel
 from gui.mainmenu.panels.toppanel.user_settings_panel import UserSettingsPanel
 
