@@ -1,9 +1,10 @@
+from wx.core import Font
 from gui.widgets.panel import Panel
-from gui.widgets.widget import Widget
+from gui.widgets.fonts import *
 
 import wx
 
-class DropdownBox(wx.ComboBox, Widget):
+class DropdownBox(wx.ComboBox):
     """A class for a dropdown box."""
 
     def __init__(self, panel: Panel, starting_value: str, size: tuple,
@@ -19,7 +20,5 @@ class DropdownBox(wx.ComboBox, Widget):
             style=wx.CB_DROPDOWN | wx.CB_READONLY
         )
 
-        super(wx.ComboBox, self).__init__()
-
-        self.SetFont(self.getCalibriFont(9))
+        self.SetFont(getCalibriFont(9))
         self.SetBackgroundColour("LIGHT GREY")

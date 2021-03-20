@@ -1,9 +1,9 @@
 from gui.widgets.panel import Panel
-from gui.widgets.widget import Widget
+from gui.widgets import fonts
 
 import wx
 
-class CheckBox(wx.CheckBox, Widget):
+class CheckBox(wx.CheckBox):
     """A class for a checkbox."""
 
     def __init__(self, panel: Panel, text: str, size: tuple, position: tuple):
@@ -16,6 +16,4 @@ class CheckBox(wx.CheckBox, Widget):
             pos = position
         )
 
-        super(wx.CheckBox, self).__init__()
-
-        self.SetFont(self.getCalibriFont(9))
+        self.SetFont(fonts.getCalibriFont(9))

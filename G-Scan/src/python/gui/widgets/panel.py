@@ -1,8 +1,6 @@
 import wx
 
-from gui.widgets.widget import Widget
-
-class Panel(wx.Panel, Widget):
+class Panel(wx.Panel):
     """A basic GUI panel (to be extended further into more concrete
     panels).
     """

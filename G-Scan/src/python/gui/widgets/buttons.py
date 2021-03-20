@@ -1,9 +1,9 @@
 from gui.widgets.panel import Panel
-from gui.widgets.widget import Widget
+from gui.widgets import fonts
 
 import wx
 
-class Button(wx.Button, Widget):
+class Button(wx.Button):
     """A class for a button."""
 
     def __init__(self, panel: Panel, text: str, size: tuple, position: tuple):
@@ -16,7 +16,7 @@ class Button(wx.Button, Widget):
             pos = position
         )
 
-        self.SetFont(self.getCalibriFont(11))
+        self.SetFont(fonts.getCalibriFont(11))
 
     def bindFunctionToClick(self, callbackFunction) -> None:
         """Assigns a callback function to run when the button is

@@ -1,8 +1,8 @@
-from gui.widgets.widget import Widget
+from gui.widgets import fonts
 
 import wx
 
-class TextEntryBox(wx.TextCtrl, Widget):
+class TextEntryBox(wx.TextCtrl):
     """A class for a text entry box."""
 
     def __init__(self, panel, text, size, position):
@@ -16,11 +16,11 @@ class TextEntryBox(wx.TextCtrl, Widget):
             style=wx.BORDER_SIMPLE
         )
 
-        self.SetFont(self.getCalibriFont(14))
+        self.SetFont(fonts.getCalibriFont(14))
         self.SetBackgroundColour("LIGHT GREY")
         self.SetMaxLength(11)
 
-class TextLabel(wx.StaticText, Widget):
+class TextLabel(wx.StaticText):
     """A class for a text label box for instructions etc."""
 
     def __init__(self, panel, text, size, position):
@@ -34,7 +34,7 @@ class TextLabel(wx.StaticText, Widget):
             style=wx.BORDER_NONE
         )
 
-        self.SetFont(self.getCalibriFont(14))
+        self.SetFont(fonts.getCalibriFont(14))
 
 class TextConsole(TextEntryBox):
     """A class for a text console."""

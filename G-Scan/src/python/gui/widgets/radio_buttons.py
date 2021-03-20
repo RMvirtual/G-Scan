@@ -1,9 +1,9 @@
-from gui.widgets.widget import Widget
+from gui.widgets import fonts
 from gui.widgets.panel import Panel
 
 import wx
 
-class RadioButtonMaster(Widget, wx.RadioButton):
+class RadioButtonMaster(wx.RadioButton):
     """A class for a radio button that represents the start of a new
     group of connected radio buttons.
     """
@@ -12,9 +12,7 @@ class RadioButtonMaster(Widget, wx.RadioButton):
             position: tuple) -> None:
         """Creates a new Master Radio Button."""
 
-        super().__init__()
-
-        super(Widget, self).__init__(
+        super().__init__(
             panel,
             label=text,
             size=size,
@@ -22,9 +20,9 @@ class RadioButtonMaster(Widget, wx.RadioButton):
             style=wx.RB_GROUP
         )
 
-        self.SetFont(self.getCalibriFont(11))
+        self.SetFont(fonts.getCalibriFont(11))
 
-class RadioButtonSubject(Widget, wx.RadioButton):
+class RadioButtonSubject(wx.RadioButton):
     """A class for a radio button that represents the start of a new
     group of connected radio buttons.
     """
@@ -33,13 +31,11 @@ class RadioButtonSubject(Widget, wx.RadioButton):
             position: tuple) -> None:
         """Creates a new Master Radio Button."""
 
-        super().__init__()
-
-        super(Widget, self).__init__(
+        super().__init__(
             panel,
             label=text,
             size=size,
             pos=position,
         )
 
-        self.SetFont(self.getCalibriFont(11))
+        self.SetFont(fonts.getCalibriFont(11))

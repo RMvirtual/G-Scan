@@ -1,5 +1,6 @@
 import wx
 from gui.widgets.panel import Panel
+from gui.widgets import fonts
 from gui.widgets.buttons import Button
 from app import file_system
 from gui.widgets.text import TextLabel
@@ -31,8 +32,7 @@ class MiddlePanel(Panel):
         self.__quick_mode_preview_text = TextLabel(
             self, "", (180, 14), (155, 3))
 
-        self.__quick_mode_preview_text.SetFont(
-            self.__quick_mode_preview_text.getCalibriFont(12))
+        self.__quick_mode_preview_text.SetFont(fonts.getCalibriFont(12))
 
         # Michelin Man button.
         michelin_man_logo_path = (
