@@ -1,5 +1,4 @@
 from app import file_system as filesystem
-import wx
 from gui.widgets.buttons import Button
 from gui.widgets.panel import Panel
 from gui.widgets.text import TextEntryBox, TextLabel
@@ -63,7 +62,7 @@ class FilePanel(Panel):
         )
 
         self.__user_input_entry_box = TextEntryBox(
-            self, wx.EmptyString, (140, 25), (0, 225))
+            self, "", (140, 25), (0, 225))
 
         self.__submit_button = Button(
             self, "Submit", (60, 25), (140, 225))

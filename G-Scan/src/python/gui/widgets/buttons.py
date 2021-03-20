@@ -1,5 +1,6 @@
 from gui.widgets.panel import Panel
 from gui.widgets import fonts
+from gui.widgets.widgetattributes import WidgetAttributes
 
 import wx
 
@@ -28,3 +29,16 @@ class Button(wx.Button):
             callbackFunction,
             self
         )
+
+    @staticmethod
+    def fromAttributes(attributes:WidgetAttributes):
+        """Creates a new button."""
+
+        new_button = Button(
+            attributes.parent_widget, attributes.text, attributes.size,
+            attributes.position)
+
+        if attributes.callback_function:
+            new_button.bindFunctionToClick(attributes.callback_function)
+
+        return new_button

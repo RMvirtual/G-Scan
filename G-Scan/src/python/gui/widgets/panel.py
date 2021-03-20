@@ -5,7 +5,7 @@ class Panel(wx.Panel):
     panels).
     """
 
-    def __init__(self, frame: wx.Frame, size: tuple, position: tuple) -> None:
+    def __init__(self, frame:wx.Frame, size:tuple, position:tuple) -> None:
         """Creates a new panel and attaches it to a frame."""
 
         super().__init__(

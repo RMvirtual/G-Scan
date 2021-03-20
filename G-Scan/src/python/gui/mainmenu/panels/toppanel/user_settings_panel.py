@@ -36,6 +36,14 @@ class UserSettingsPanel(Panel):
         self.__paperwork_type_heading = TextLabel(
             self, "Paperwork Type", (60, 25), (0, 0))
 
+        self.__create_paperwork_type_radio_buttons()
+
+        self.__autoprocessing_checkbox = CheckBox(
+            self, "Autoprocess", (85, 25), (320, 25))
+
+    def __create_paperwork_type_radio_buttons(self):
+        """Creates the paperwork type radio buttons."""
+
         self.__customer_paperwork_radio_button = RadioButtonMaster(
             self, "Customer Paperwork", (160, 25), (0, 25))
 
@@ -44,10 +52,7 @@ class UserSettingsPanel(Panel):
 
         self.__pod_radio_button = RadioButtonSubject(
             self, "POD", (45, 25), (265, 25))
-
-        self.__autoprocessing_checkbox = CheckBox(
-            self, "Autoprocess", (85, 25), (320, 25))
-
+    
     def __create_input_mode_widgets(self):
         """Creates the widgets for setting the input mode in the
         GUI."""
@@ -55,17 +60,30 @@ class UserSettingsPanel(Panel):
         self.__input_mode_label = TextLabel(
             self, "Input Mode", (60, 25), (0, 85))
 
+        self.__create_input_mode_radio_buttons()
+        self.__create_month_options_dropdown_box()
+        self.__create_year_options_dropdown_box()
+
+    def __create_input_mode_radio_buttons(self):
+        """Creates the input mode radio buttons."""
+
         self.__normal_mode_radio_button = RadioButtonMaster(
             self, "Normal Mode", (120, 25), (0, 110))
 
         self.__quick_mode_radio_button = RadioButtonSubject(
             self, "Quick Mode", (90, 25), (160, 110))
 
+    def __create_month_options_dropdown_box(self):
+        """Creates the month options dropdown box for quick mode."""
+
         month_options = date.get_months_as_strings()
         current_month = date.get_current_month().get_full_code()
 
         self.__months_dropdown_box = DropdownBox(
             self, current_month, (120, 25), (275, 110), month_options)
+
+    def __create_year_options_dropdown_box(self):
+        """Creates the year options dropdown box for quick mode."""
 
         year_options = date.get_years_as_strings()
         current_year = date.get_current_year().get_full_code()
@@ -79,6 +97,12 @@ class UserSettingsPanel(Panel):
 
         self.__multi_page_handling_label = TextLabel(
             self, "Multi-Page Handling", (160, 25), (0, 175))
+
+        self.__create_multi_page_handling_radio_buttons()
+
+    def __create_multi_page_handling_radio_buttons(self):
+        """Creates the multi-page handling radio buttons responsible
+        for determining whether to split multi-page PDF files."""
 
         self.__split_radio_button = RadioButtonMaster(
             self, "Split Documents", (120, 25), (0, 200))

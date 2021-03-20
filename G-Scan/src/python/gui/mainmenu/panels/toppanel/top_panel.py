@@ -8,16 +8,12 @@ class TopPanel(Panel):
     def __init__(self, frame):
         """Creates a new top panel."""
 
-        super().__init__(
-            frame,
-            size = (840, 255),
-            position = (10, 10)
-        )
-
+        super().__init__(frame, (840, 255), (10, 10))
         self.__create_widgets()
 
     def __create_widgets(self):
-        """Creates the top-panel's sub-panels and underlying widgets.
+        """Creates the top-panel's sub-panels and underlying 
+        widgets.
         """
 
         self.__file_panel = FilePanel(self)

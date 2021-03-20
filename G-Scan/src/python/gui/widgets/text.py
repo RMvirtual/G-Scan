@@ -2,6 +2,8 @@ from gui.widgets import fonts
 
 import wx
 
+from gui.widgets.widgetattributes import WidgetAttributes
+
 class TextEntryBox(wx.TextCtrl):
     """A class for a text entry box."""
 
@@ -35,6 +37,15 @@ class TextLabel(wx.StaticText):
         )
 
         self.SetFont(fonts.getCalibriFont(14))
+
+    @staticmethod
+    def from_attributes(attributes:WidgetAttributes):
+        """Creates a new text label box from attributes."""
+
+        return TextLabel(
+            attributes.parent_widget, attributes.text,
+            attributes.size, attributes.size
+        )
 
 class TextConsole(TextEntryBox):
     """A class for a text console."""

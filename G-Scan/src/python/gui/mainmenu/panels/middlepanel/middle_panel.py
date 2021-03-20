@@ -4,6 +4,7 @@ from gui.widgets import fonts
 from gui.widgets.buttons import Button
 from app import file_system
 from gui.widgets.text import TextLabel
+from gui.widgets.widgetattributes import WidgetAttributes
 
 class MiddlePanel(Panel):
     """Middle panel for the main menu GUI."""
@@ -22,21 +23,59 @@ class MiddlePanel(Panel):
     def __create_toolbar_widgets(self):
         """Creates widgets related to the middle toolbar."""
 
-        self.__start_button = Button(self, "Start", (60, 25), (0, 0))
-        self.__start_button.bindFunctionToClick(self.__start_button_click)
+        self.__create_start_button()
+        self.__create_quick_mode_preview_text()
+        self.__create_michelin_man_button()
+        self.__create_settings_button()
+        self.__create_exit_button()
 
-        # Quick Mode user aid message for displaying a preview of the
-        # output that quick mode will calculate based on the current
-        # user settings and what they have entered so far in the user
-        # input entry box.
-        self.__quick_mode_preview_text = TextLabel(
-            self, "", (180, 14), (155, 3))
+    def __create_start_button(self) -> None:
+        """Creates the start button."""
 
+        attributes = self.__create_start_button_attributes()
+        self.__start_button = Button.fromAttributes(attributes)
+
+    def __create_start_button_attributes(self) -> WidgetAttributes:
+        """Creates the attributes data required for the start button."""
+
+        attributes = WidgetAttributes()
+
+        attributes.parent_widget = self
+        attributes.text = "Start"
+        attributes.size = (60, 25)
+        attributes.position = (0, 0)
+        attributes.callback_function = self.__start_button_click
+
+        return attributes
+
+    def __create_quick_mode_preview_text(self) -> None:
+        """Creates the quick mode preview text widget."""
+
+        attributes = self.__create_quick_mode_preview_text_attributes()
+        self.__quick_mode_preview_text = TextLabel.from_attributes(attributes)
         self.__quick_mode_preview_text.SetFont(fonts.getCalibriFont(12))
 
-        # Michelin Man button.
+    def __create_quick_mode_preview_text_attributes(self) -> WidgetAttributes:
+        """Creates the attribute data required for the quick mode
+        preview text.
+        """
+
+        attributes = WidgetAttributes()
+
+        attributes.parent_widget = self
+        attributes.text = ""
+        attributes.size = (180, 14)
+        attributes.position = (155, 3)
+
+        return attributes 
+
+    def __create_michelin_man_button(self):
+        """Creates the michelin man button."""
+
         michelin_man_logo_path = (
-            file_system.get_resources_directory() + "images\\michelin_logo.jpg")
+            file_system.get_resources_directory()
+            + "images\\michelin_logo.jpg"
+        )
 
         michelin_man_logo = wx.Image(
             michelin_man_logo_path, wx.BITMAP_TYPE_ANY).Scale(20, 20)
@@ -48,13 +87,47 @@ class MiddlePanel(Panel):
             pos = (680, 0)
         )
 
-        self.__settings_button = Button(self, "Settings", (60, 25), (710, 0))
-        self.__settings_button.bindFunctionToClick(
-            self.__settings_button_click)
+    def __create_settings_button(self) -> None:
+        """Creates the settings button."""
 
-        self.__exit_button = Button(self, "Exit", (60, 25), (775, 0))
-        self.__exit_button.bindFunctionToClick(
-            self.__exit_button_click)
+        attributes = self.__create_settings_button_attributes()
+        self.__settings_button = Button.fromAttributes(attributes)
+
+    def __create_settings_button_attributes(self) -> WidgetAttributes:
+        """Creates the attributes for instantiating the settings
+        button.
+        """
+
+        attributes = WidgetAttributes()
+
+        attributes.parent_widget = self
+        attributes.text = "Settings"
+        attributes.size = (60, 25)
+        attributes.position = (710, 0)
+        attributes.callback_function = self.__settings_button_click
+
+        return attributes
+
+    def __create_exit_button(self) -> None:
+        """Creates the exit button."""
+
+        attributes = self.__create_exit_button_attributes()
+        self.__exit_button = Button.fromAttributes(attributes)
+
+    def __create_exit_button_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required to instantiate the exit
+        button.
+        """
+
+        attributes = WidgetAttributes()
+
+        attributes.parent_widget = self
+        attributes.text = "Exit"
+        attributes.size = (60, 25)
+        attributes.position = (775, 0)
+        attributes.callback_function = self.__exit_button_click
+
+        return attributes
 
     def __start_button_click(self, event = None):
         """Defines the behavior to follow when the start button
