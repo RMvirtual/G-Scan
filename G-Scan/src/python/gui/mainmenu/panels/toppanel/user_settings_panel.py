@@ -44,15 +44,76 @@ class UserSettingsPanel(Panel):
     def __create_paperwork_type_radio_buttons(self):
         """Creates the paperwork type radio buttons."""
 
-        self.__customer_paperwork_radio_button = RadioButtonMaster(
-            self, "Customer Paperwork", (160, 25), (0, 25))
+        self.__create_customer_paperwork_radio_button()
+        self.__create_loading_list_radio_button()
+        self.__create_pod_radio_button()
+ 
+    def __create_customer_paperwork_radio_button(self):
+        """Creates the customer paperwork radio button."""
 
-        self.__loading_list_radio_button = RadioButtonSubject(
-            self, "Loading List", (90, 25), (160, 25))
+        attributes = (
+            self.__create_customer_paperwork_radio_button_attributes())
 
-        self.__pod_radio_button = RadioButtonSubject(
-            self, "POD", (45, 25), (265, 25))
-    
+        self.__customer_paperwork_radio_button = (
+            RadioButtonMaster.from_attributes(attributes))
+
+    def __create_customer_paperwork_radio_button_attributes(self):
+        """Creates the attributes required to create the customer
+        paperwork radio button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Customer Paperwork"
+        attributes.size = (160, 25)
+        attributes.position = (0, 25)
+
+        return attributes
+
+    def __create_loading_list_radio_button(self):
+        """Creates the loading list radio button."""
+
+        attributes = (
+            self.__create_loading_list_radio_button_attributes())
+
+        self.__loading_list_radio_button = (
+            RadioButtonSubject.from_attributes(attributes))
+
+    def __create_loading_list_radio_button_attributes(self):
+        """Creates the attributes required to create the POD radio
+        button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Loading List"
+        attributes.size = (90, 25)
+        attributes.position = (160, 25)
+
+        return attributes
+
+    def __create_pod_radio_button(self):
+        """Creates the customer paperwork radio button."""
+
+        attributes = (
+            self.__create_pod_radio_button_attributes())
+
+        self.__pod_radio_button = (
+            RadioButtonSubject.from_attributes(attributes))
+
+    def __create_pod_radio_button_attributes(self):
+        """Creates the attributes required to create the POD radio
+        button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "POD"
+        attributes.size = (45, 25)
+        attributes.position = (265, 25)
+
+        return attributes
+
     def __create_input_mode_widgets(self):
         """Creates the widgets for setting the input mode in the
         GUI."""

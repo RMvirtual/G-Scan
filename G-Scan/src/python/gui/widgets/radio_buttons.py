@@ -22,6 +22,17 @@ class RadioButtonMaster(wx.RadioButton):
 
         self.SetFont(fonts.getCalibriFont(11))
 
+    @staticmethod
+    def from_attributes(attributes):
+        """Creates a new master radio button."""
+
+        new_radio_button = RadioButtonMaster(
+            attributes.parent_widget, attributes.text,
+            attributes.size, attributes.position
+        )
+
+        return new_radio_button
+
 class RadioButtonSubject(wx.RadioButton):
     """A class for a radio button that represents the start of a new
     group of connected radio buttons.
@@ -39,3 +50,14 @@ class RadioButtonSubject(wx.RadioButton):
         )
 
         self.SetFont(fonts.getCalibriFont(11))
+
+    @staticmethod
+    def from_attributes(attributes):
+        """Creates a new master radio button."""
+
+        new_radio_button = RadioButtonSubject(
+            attributes.parent_widget, attributes.text,
+            attributes.size, attributes.position
+        )
+
+        return new_radio_button
