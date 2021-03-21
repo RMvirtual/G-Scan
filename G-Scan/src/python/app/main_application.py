@@ -33,27 +33,18 @@ class MainApplication():
         self.__main_menu = MainMenu(self)
         self.__main_menu_thread = MainMenuThread(self.__main_menu)
         self.__main_menu_thread.start()
-        print("Thread started.")
 
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
         with self.__lock:
-            print("Lock acquired in main_application.")
             directories_valid = self.validate_user_directories()
             
-            print("Even here.")
-
             if not directories_valid:
                 self.__main_menu.write_log("\n")
 
             self.calculate_quick_mode_hint_message()
             self.__main_menu.write_log("Awaiting user input.")
-        
-        print("Lock in main application released.")
-
-    def start_main_loop(self):
-        self.__app.MainLoop()
 
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and

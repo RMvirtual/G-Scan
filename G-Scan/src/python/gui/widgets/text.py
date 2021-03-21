@@ -22,6 +22,15 @@ class TextEntryBox(wx.TextCtrl):
         self.SetBackgroundColour("LIGHT GREY")
         self.SetMaxLength(11)
 
+    @staticmethod
+    def from_attributes(attributes:WidgetAttributes):
+        """Creates a new text label box from attributes."""
+
+        return TextEntryBox(
+            attributes.parent_widget, attributes.text,
+            attributes.size, attributes.position
+        )
+
 class TextLabel(wx.StaticText):
     """A class for a text label box for instructions etc."""
 
@@ -44,7 +53,7 @@ class TextLabel(wx.StaticText):
 
         return TextLabel(
             attributes.parent_widget, attributes.text,
-            attributes.size, attributes.size
+            attributes.size, attributes.position
         )
 
 class TextConsole(TextEntryBox):

@@ -18,7 +18,8 @@ class BottomPanel(Panel):
     def __create_text_console(self):
         """Creates a text console display output box."""
 
-        self.__text_console_output_box = TextConsole(self, (835, 230), (0, 0))
+        self.__text_console_output_box = TextConsole(
+            self, (835, 230), (0, 0))
 
     def write_log(self, text):
         """Writes a string of text to the console output log."""

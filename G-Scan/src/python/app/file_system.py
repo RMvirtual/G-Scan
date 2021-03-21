@@ -36,7 +36,6 @@ def get_root_directory_path():
     and subfolders reside in."""
 
     current_path = get_current_path()
-    print("Current path: " + current_path)
 
     directory_structure = current_path.split("\\")
     directory_path = ""
@@ -83,8 +82,6 @@ def get_data_directory():
 def get_user_settings_data_path():
     """Returns the user settings .dat file containing all the
     user settings regarding directories and workspace defaults."""
-
-    print("Returning " + get_data_directory() + "user_settings")
 
     return get_data_directory() + "user_settings"
 

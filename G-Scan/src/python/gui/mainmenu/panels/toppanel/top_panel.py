@@ -8,10 +8,7 @@ class TopPanel(Panel):
     def __init__(self, frame):
         """Creates a new top panel."""
 
-        print("Gets here in top panel")
         super().__init__(frame, (840, 255), (10, 10))
-
-        print("Gets past superclass constructor in top panel.")
         self.__create_widgets()
 
     def __create_widgets(self):

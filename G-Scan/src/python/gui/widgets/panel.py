@@ -10,19 +10,11 @@ class Panel(wx.Panel):
     def __init__(self, frame, size:tuple, position:tuple) -> None:
         """Creates a new panel and attaches it to a frame."""
 
-        print("Gets here in Panel?")
-
-        print(frame)
-        print(size)
-        print(position)
-
         super().__init__(
             frame,
             size = size,
             pos = position 
         )
-
-        print("Doesn't get past here though.")
 
         self.__frame = frame
 

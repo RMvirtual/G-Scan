@@ -18,14 +18,11 @@ class MainMenu(Frame):
         """Starts the GUI application."""
         
         with self.__application_lock:
-            print("Main menu lock acquired.")
             self.__app = wx.App(False)
 
             super().__init__((870, 575), "G-Scan")
             self.__create_widgets()
-
-        print("Main menu lock released.")
-        
+       
         self.__app.MainLoop()
 
     def __create_widgets(self):
@@ -40,13 +37,8 @@ class MainMenu(Frame):
         """
 
         self.__top_panel = TopPanel(self)
-        print("Top panel success")
-
         self.__middle_panel = MiddlePanel(self)
-        print("Middle panel success")
-
         self.__bottom_panel = BottomPanel(self)
-        print("Bottom panel success?")
 
     def get_current_paperwork_type(self):
         """Gets the value of the paperwork type variable based on

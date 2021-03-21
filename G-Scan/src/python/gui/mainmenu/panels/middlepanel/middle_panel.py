@@ -33,7 +33,7 @@ class MiddlePanel(Panel):
         """Creates the start button."""
 
         attributes = self.__create_start_button_attributes()
-        self.__start_button = Button.fromAttributes(attributes)
+        self.__start_button = Button.from_attributes(attributes)
 
     def __create_start_button_attributes(self) -> WidgetAttributes:
         """Creates the attributes data required for the start button."""
@@ -89,7 +89,7 @@ class MiddlePanel(Panel):
         """Creates the settings button."""
 
         attributes = self.__create_settings_button_attributes()
-        self.__settings_button = Button.fromAttributes(attributes)
+        self.__settings_button = Button.from_attributes(attributes)
 
     def __create_settings_button_attributes(self) -> WidgetAttributes:
         """Creates the attributes for instantiating the settings
@@ -109,7 +109,7 @@ class MiddlePanel(Panel):
         """Creates the exit button."""
 
         attributes = self.__create_exit_button_attributes()
-        self.__exit_button = Button.fromAttributes(attributes)
+        self.__exit_button = Button.from_attributes(attributes)
 
     def __create_exit_button_attributes(self) -> WidgetAttributes:
         """Creates the attributes required to instantiate the exit

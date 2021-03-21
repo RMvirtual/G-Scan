@@ -19,7 +19,7 @@ class Button(wx.Button):
 
         self.SetFont(fonts.getCalibriFont(11))
 
-    def bindFunctionToClick(self, callbackFunction) -> None:
+    def bind_function_to_click(self, callbackFunction) -> None:
         """Assigns a callback function to run when the button is
         clicked.
         """
@@ -31,14 +31,15 @@ class Button(wx.Button):
         )
 
     @staticmethod
-    def fromAttributes(attributes:WidgetAttributes):
+    def from_attributes(attributes:WidgetAttributes):
         """Creates a new button."""
 
         new_button = Button(
-            attributes.parent_widget, attributes.text, attributes.size,
-            attributes.position)
+            attributes.parent_widget, attributes.text,
+            attributes.size, attributes.position
+        )
 
         if attributes.callback_function:
-            new_button.bindFunctionToClick(attributes.callback_function)
+            new_button.bind_function_to_click(attributes.callback_function)
 
         return new_button
