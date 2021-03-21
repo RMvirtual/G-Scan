@@ -36,17 +36,18 @@ def get_root_directory_path():
     and subfolders reside in."""
 
     current_path = get_current_path()
+    print("Current path: " + current_path)
 
     directory_structure = current_path.split("\\")
     directory_path = ""
 
     for folder in directory_structure:
-        directory_path += folder + "\\"
-
         if folder == "G-Scan":
             break
+        
+        directory_path += folder + "\\"
     
-    return directory_path
+    return directory_path + "G-Scan\\"
 
 def get_base_name(path):
     """Returns the full file name (including the extension) of a
@@ -83,6 +84,8 @@ def get_user_settings_data_path():
     """Returns the user settings .dat file containing all the
     user settings regarding directories and workspace defaults."""
 
+    print("Returning " + get_data_directory() + "user_settings")
+
     return get_data_directory() + "user_settings"
 
 def get_user_settings_data():
@@ -96,7 +99,7 @@ def get_resources_directory():
     """Returns the path of the resources folder that resides in
     the src\main directory of the program directory."""
 
-    return get_root_directory_path() + "\\resources\\"
+    return get_root_directory_path() + "resources\\"
 
 def get_temp_directory():
     """Returns the path of the temp directory that resides in the

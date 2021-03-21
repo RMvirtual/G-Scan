@@ -27,27 +27,34 @@ class MainApplication():
     def __init__(self):
         """Constructor method."""
 
+        self.__lock = threading.Lock()
         self.current_user = self.get_user_settings()
 
-        self.__main_menu_semaphore = threading.Semaphore()
-        self.__main_menu = MainMenu(self, self.__main_menu_semaphore)
+        self.__main_menu = MainMenu(self)
         self.__main_menu_thread = MainMenuThread(self.__main_menu)
         self.__main_menu_thread.start()
+        print("Thread started.")
 
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
-        self.__main_menu_semaphore.acquire() 
-        directories_valid = self.validate_user_directories()
+        with self.__lock:
+            print("Lock acquired in main_application.")
+            directories_valid = self.validate_user_directories()
             
-        if not directories_valid:
-            self.__main_menu.write_log("\n")
+            print("Even here.")
 
-        self.calculate_quick_mode_hint_message()
-        self.__main_menu.write_log("Awaiting user input.")
+            if not directories_valid:
+                self.__main_menu.write_log("\n")
+
+            self.calculate_quick_mode_hint_message()
+            self.__main_menu.write_log("Awaiting user input.")
         
-        self.__main_menu_semaphore.release()
-            
+        print("Lock in main application released.")
+
+    def start_main_loop(self):
+        self.__app.MainLoop()
+
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and
         workspace settings."""
@@ -690,3 +697,10 @@ class MainApplication():
         """Opens the settings menu."""
 
         self.__settings_menu = SettingsWindow(self)
+
+    def get_lock(self):
+        """Gets the semaphore associated with this application's
+        thread.
+        """
+
+        return self.__lock

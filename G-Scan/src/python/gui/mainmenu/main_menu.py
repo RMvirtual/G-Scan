@@ -1,69 +1,53 @@
-import wx
-from app import file_system
-import date.date
+from gui.widgets.frame import Frame
 from gui.mainmenu.panels.bottompanel.bottom_panel import BottomPanel
 from gui.mainmenu.panels.middlepanel.middle_panel import MiddlePanel
 from gui.mainmenu.panels.toppanel.top_panel import TopPanel
-import threading
 
-class MainMenu(wx.Frame):
+import wx
+
+class MainMenu(Frame):
     """GUI for running the main application."""
 
-    def __init__(self, main_application, application_semaphore):
+    def __init__(self, main_application):
         """Constructor method."""
 
         self.__main_application = main_application
-        self.__application_semaphore = application_semaphore
-        
+        self.__application_lock = main_application.get_lock()
+
     def run(self):
         """Starts the GUI application."""
+        
+        with self.__application_lock:
+            print("Main menu lock acquired.")
+            self.__app = wx.App(False)
 
-        self.__application_semaphore.acquire()
+            super().__init__((870, 575), "G-Scan")
+            self.__create_widgets()
 
-        self.__app = wx.App(False)
-        self.__set_fonts()
-        self.__create_widgets()
-
-        self.__application_semaphore.release()
-
+        print("Main menu lock released.")
+        
         self.__app.MainLoop()
 
     def __create_widgets(self):
         """Creates the widgets required for the GUI."""
 
-        super().__init__(
-            None,
-            size = (870, 575),
-            title = "G-Scan"
-        )
-
-        self.SetBackgroundColour("WHITE")
         self.__create_panels()
-
         self.Show()
-
-    def __set_fonts(self):
-        """Sets the fonts to be used for the widget types."""
-
-        self.__button_font = self.__create_font(11)
-        self.__body_font = self.__create_font(14)
-
-    def __create_font(self, font_size):
-        """Creates a calibri font to be used."""
-
-        font = wx.Font(
-            font_size, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u"calibri")
-
-        return font
 
     def __create_panels(self):
         """Creates the main panels for widgets to be instantiated in.
-        For use with the __create_widgets() method."""
+        For use with the __create_widgets() method.
+        """
 
         self.__top_panel = TopPanel(self)
+        print("Top panel success")
+
         self.__middle_panel = MiddlePanel(self)
+        print("Middle panel success")
+
         self.__bottom_panel = BottomPanel(self)
-    
+        print("Bottom panel success?")
+
     def get_current_paperwork_type(self):
         """Gets the value of the paperwork type variable based on
         which button has been selected."""
@@ -108,3 +92,10 @@ class MainMenu(wx.Frame):
         box."""
         
         self.__middle_panel.set_quick_mode_hint_text(text)
+
+    def get_main_application(self):
+        """Gets the main application responsible for running the main
+        menu.
+        """
+
+        return self.__main_application

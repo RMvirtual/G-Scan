@@ -1,3 +1,5 @@
+from gui.widgets.widgetattributes import WidgetAttributes
+
 import wx
 
 class Panel(wx.Panel):
@@ -5,13 +7,40 @@ class Panel(wx.Panel):
     panels).
     """
 
-    def __init__(self, frame:wx.Frame, size:tuple, position:tuple) -> None:
+    def __init__(self, frame, size:tuple, position:tuple) -> None:
         """Creates a new panel and attaches it to a frame."""
+
+        print("Gets here in Panel?")
+
+        print(frame)
+        print(size)
+        print(position)
 
         super().__init__(
             frame,
             size = size,
-            pos = position
+            pos = position 
         )
 
+        print("Doesn't get past here though.")
+
         self.__frame = frame
+
+    def create_empty_attributes(self) -> WidgetAttributes:
+        """Creates an empty widget attributes data structure with only
+        this panel assigned as the parent widget."""
+
+        attributes = WidgetAttributes()
+        attributes.parent_widget = self
+
+        return attributes
+
+    def get_main_application(self):
+        """Gets the main application associated with the frame
+        containing this object.
+        """
+
+        return self.__frame.get_main_application()
+
+    def get_frame(self):
+        return self.__frame

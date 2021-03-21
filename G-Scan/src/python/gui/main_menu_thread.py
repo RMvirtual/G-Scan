@@ -1,5 +1,4 @@
 import threading
-from gui.mainmenu.main_menu import MainMenu
 
 class MainMenuThread(threading.Thread):
     """A class for trying to get the GUI class working as a separate

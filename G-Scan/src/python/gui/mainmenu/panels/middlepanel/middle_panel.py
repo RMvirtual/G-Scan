@@ -38,9 +38,8 @@ class MiddlePanel(Panel):
     def __create_start_button_attributes(self) -> WidgetAttributes:
         """Creates the attributes data required for the start button."""
 
-        attributes = WidgetAttributes()
-
-        attributes.parent_widget = self
+        attributes = self.create_empty_attributes()
+        
         attributes.text = "Start"
         attributes.size = (60, 25)
         attributes.position = (0, 0)
@@ -60,9 +59,8 @@ class MiddlePanel(Panel):
         preview text.
         """
 
-        attributes = WidgetAttributes()
+        attributes = self.create_empty_attributes()
 
-        attributes.parent_widget = self
         attributes.text = ""
         attributes.size = (180, 14)
         attributes.position = (155, 3)
@@ -98,9 +96,8 @@ class MiddlePanel(Panel):
         button.
         """
 
-        attributes = WidgetAttributes()
+        attributes = self.create_empty_attributes()
 
-        attributes.parent_widget = self
         attributes.text = "Settings"
         attributes.size = (60, 25)
         attributes.position = (710, 0)
@@ -119,9 +116,8 @@ class MiddlePanel(Panel):
         button.
         """
 
-        attributes = WidgetAttributes()
+        attributes = self.create_empty_attributes()
 
-        attributes.parent_widget = self
         attributes.text = "Exit"
         attributes.size = (60, 25)
         attributes.position = (775, 0)
@@ -142,7 +138,8 @@ class MiddlePanel(Panel):
         is clicked on, activating the main application's exit
         workflow method."""
 
-        # self.__main_application.exit()
+        self.get_main_application().exit()
+        
         print("Exit button clicked.")
 
     def __settings_button_click(self, event = None):
