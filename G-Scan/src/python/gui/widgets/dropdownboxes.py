@@ -22,3 +22,14 @@ class DropdownBox(wx.ComboBox):
 
         self.SetFont(getCalibriFont(9))
         self.SetBackgroundColour("LIGHT GREY")
+
+    @staticmethod
+    def from_attributes(attributes):
+        """Creates a new dropdown box."""
+
+        new_dropdown_box = DropdownBox(
+            attributes.parent_widget, attributes.text,
+            attributes.size, attributes.position, attributes.options
+        )
+
+        return new_dropdown_box

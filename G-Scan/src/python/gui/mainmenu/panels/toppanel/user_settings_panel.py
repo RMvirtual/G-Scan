@@ -5,6 +5,7 @@ from gui.widgets.dropdownboxes import DropdownBox
 from gui.widgets.panel import Panel
 from gui.widgets.radio_buttons import RadioButtonMaster, RadioButtonSubject
 from gui.widgets.text import TextLabel
+from gui.widgets.widgetattributes import WidgetAttributes
 
 class UserSettingsPanel(Panel):
     """A class modelling the user settings panel window found in the
@@ -36,6 +37,46 @@ class UserSettingsPanel(Panel):
         self.__create_paperwork_type_heading()
         self.__create_paperwork_type_radio_buttons()
         self.__create_autoprocessing_checkbox()
+
+    def __create_input_mode_widgets(self):
+        """Creates the widgets for setting the input mode in the
+        GUI."""
+
+        self.__create_input_mode_label()
+        self.__create_input_mode_radio_buttons()
+        self.__create_date_options_dropdown_boxes()
+
+    def __create_multi_page_handling_widgets(self):
+        """Creates the widgets responsible for setting multi-page
+        handling's behaviour in the program."""
+
+        self.__multi_page_handling_label = TextLabel(
+            self, "Multi-Page Handling", (160, 25), (0, 175))
+
+        self.__create_multi_page_handling_radio_buttons()
+
+    def __create_multi_page_handling_radio_buttons(self):
+        """Creates the multi-page handling radio buttons responsible
+        for determining whether to split multi-page PDF files."""
+
+        self.__split_radio_button = RadioButtonMaster(
+            self, "Split Documents", (120, 25), (0, 200))
+
+        self.__do_not_split_radio_button = RadioButtonSubject(
+            self, "Do Not Split Documents", (90, 25), (160, 200))
+
+    def __create_input_mode_radio_buttons(self):
+        """Creates the input mode radio buttons."""
+
+        self.__create_normal_mode_radio_button()
+        self.__create_quick_mode_radio_button()
+
+    def __create_date_options_dropdown_boxes(self):
+        """Creates the dropdown boxes responsible for quick mode
+        date autocompletion."""
+
+        self.__create_month_options_dropdown_box()
+        self.__create_year_options_dropdown_box()
 
     def __create_paperwork_type_heading(self):
         """Creates the paperwork type heading."""
@@ -148,59 +189,108 @@ class UserSettingsPanel(Panel):
 
         return attributes
 
-    def __create_input_mode_widgets(self):
-        """Creates the widgets for setting the input mode in the
-        GUI."""
+    def __create_input_mode_label(self):
+        """Creates the input mode label."""
 
-        self.__input_mode_label = TextLabel(
-            self, "Input Mode", (60, 25), (0, 85))
+        attributes = self.__create_input_mode_label_attributes()
+        self.__input_mode_label = TextLabel.from_attributes(attributes)
 
-        self.__create_input_mode_radio_buttons()
-        self.__create_month_options_dropdown_box()
-        self.__create_year_options_dropdown_box()
+    def __create_input_mode_label_attributes(self):
+        """Creates the attributes required to instantiate the input mode
+        label.
+        """
 
-    def __create_input_mode_radio_buttons(self):
-        """Creates the input mode radio buttons."""
+        attributes = self.create_empty_attributes()
 
-        self.__normal_mode_radio_button = RadioButtonMaster(
-            self, "Normal Mode", (120, 25), (0, 110))
+        attributes.text = "Input Mode"
+        attributes.size = (60, 25)
+        attributes.position = (0, 85)
 
-        self.__quick_mode_radio_button = RadioButtonSubject(
-            self, "Quick Mode", (90, 25), (160, 110))
+        return attributes
+
+    def __create_normal_mode_radio_button(self):
+        """Creates the normal mode radio button."""
+
+        attributes = self.__create_normal_mode_radio_button_attributes()
+
+        self.__normal_mode_radio_button = (
+            RadioButtonMaster.from_attributes(attributes))
+
+    def __create_normal_mode_radio_button_attributes(self):
+        """Creates the attributes required to create the normal mode
+        radio button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Normal Mode"
+        attributes.size = (120, 25)
+        attributes.position = (0, 110)
+
+        return attributes
+    
+    def __create_quick_mode_radio_button(self):
+        """Creates the quick mode radio button."""
+
+        attributes = (
+            self.__create_quick_mode_radio_button_attributes())
+
+        self.__quick_mode_radio_button = (
+            RadioButtonSubject.from_attributes(attributes))
+
+    def __create_quick_mode_radio_button_attributes(self):
+        """Creates the attributes required to create the quick mode
+        radio button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Quick Mode"
+        attributes.size = (90, 25)
+        attributes.position = (160, 110)
+
+        return attributes
 
     def __create_month_options_dropdown_box(self):
         """Creates the month options dropdown box for quick mode."""
 
+        attributes = self.__create_month_options_dropdown_box_attributes()
+        self.__months_dropdown_box = DropdownBox.from_attributes(attributes)
+
+    def __create_month_options_dropdown_box_attributes(self):
+        """Creates the attributes required to instantiate the month
+        options dropdown box."""
+
         month_options = date.get_months_as_strings()
         current_month = date.get_current_month().get_full_code()
 
-        self.__months_dropdown_box = DropdownBox(
-            self, current_month, (120, 25), (275, 110), month_options)
+        attributes = self.create_empty_attributes()
+
+        attributes.text = current_month
+        attributes.size = (120, 25)
+        attributes.position = (275, 110)
+        attributes.options = month_options
+
+        return attributes
 
     def __create_year_options_dropdown_box(self):
         """Creates the year options dropdown box for quick mode."""
 
+        attributes = self.__create_year_options_dropdown_box_attributes()
+        self.__years_dropdown_box = DropdownBox.from_attributes(attributes)
+
+    def __create_year_options_dropdown_box_attributes(self):
+        """Creates the attributes required to instantiate the year
+        options dropdown box."""
+
         year_options = date.get_years_as_strings()
         current_year = date.get_current_year().get_full_code()
 
-        self.__years_dropdown_box = DropdownBox(
-            self, current_year, (120, 25), (275, 140), year_options)
+        attributes = self.create_empty_attributes()
 
-    def __create_multi_page_handling_widgets(self):
-        """Creates the widgets responsible for setting multi-page
-        handling's behaviour in the program."""
+        attributes.text = current_year
+        attributes.size = (120, 25)
+        attributes.position = (275, 140)
+        attributes.options = year_options
 
-        self.__multi_page_handling_label = TextLabel(
-            self, "Multi-Page Handling", (160, 25), (0, 175))
-
-        self.__create_multi_page_handling_radio_buttons()
-
-    def __create_multi_page_handling_radio_buttons(self):
-        """Creates the multi-page handling radio buttons responsible
-        for determining whether to split multi-page PDF files."""
-
-        self.__split_radio_button = RadioButtonMaster(
-            self, "Split Documents", (120, 25), (0, 200))
-
-        self.__do_not_split_radio_button = RadioButtonSubject(
-            self, "Do Not Split Documents", (90, 25), (160, 200))
+        return attributes

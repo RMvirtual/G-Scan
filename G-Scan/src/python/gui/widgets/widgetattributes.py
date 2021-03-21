@@ -9,5 +9,6 @@ class WidgetAttributes():
         self.text = None
         self.size = None,
         self.position = None
+        self.options = None
         self.callback_function = None
 
