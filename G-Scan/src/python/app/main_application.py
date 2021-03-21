@@ -46,6 +46,12 @@ class MainApplication():
             self.calculate_quick_mode_hint_message()
             self.__main_menu.write_log("Awaiting user input.")
 
+        self.__main_menu.set_submit_button_function(self.submit_click)
+
+    def submit_click(self, event = None):
+        print("Submit button clicked a lot.")
+
+
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and
         workspace settings."""

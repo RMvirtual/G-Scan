@@ -91,3 +91,10 @@ class MainMenu(Frame):
         """
 
         return self.__main_application
+
+    def set_submit_button_function(self, callback_function) -> None:
+        """Assigns a function to be run when the submit button is
+        clicked.
+        """
+
+        self.__top_panel.set_submit_button_function(callback_function)

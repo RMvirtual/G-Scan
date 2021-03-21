@@ -30,14 +30,6 @@ class FilePanel(Panel):
         self.__create_file_detail_widgets()
         self.__create_user_input_widgets()
 
-    def __create_logo_widget(self):
-        """Creates the logo in the file panel."""
-
-        gscan_logo_path = (
-            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
-        
-        self.__logo_image = Image(self, gscan_logo_path)
-
     def __create_file_detail_widgets(self) -> None:
         """Creates widgets related to displaying details about the
         current file being processed."""
@@ -55,6 +47,14 @@ class FilePanel(Panel):
         self.__create_submit_button()
         self.__create_skip_button()
         self.__create_split_document_button()
+
+    def __create_logo_widget(self):
+        """Creates the logo in the file panel."""
+
+        gscan_logo_path = (
+            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
+        
+        self.__logo_image = Image(self, gscan_logo_path)
 
     def __create_file_name_label(self):
         """Creates the file name label."""
@@ -177,8 +177,6 @@ class FilePanel(Panel):
         attributes = self.__create_submit_button_attributes()
         self.__submit_button = Button.from_attributes(attributes)
 
-        print("Submit button created.")
-
     def __create_submit_button_attributes(self) -> WidgetAttributes:
         """Creates the attributes required to instantiate the submit
         button.
@@ -189,7 +187,7 @@ class FilePanel(Panel):
         attributes.text = "Submit"
         attributes.size = (60, 25)
         attributes.position = (140, 225)
-        attributes.callback_function = self.__submit_button_click
+        # attributes.callback_function = self.__submit_button_click
 
         return attributes
 
@@ -209,7 +207,6 @@ class FilePanel(Panel):
         attributes.text = "Skip"
         attributes.size = (60, 25)
         attributes.position = (208, 225)
-        attributes.callback_function = self.__submit_button_click
 
         return attributes
 
@@ -229,7 +226,6 @@ class FilePanel(Panel):
         attributes.text = "Split Document"
         attributes.size = (120, 25)
         attributes.position = (270, 225)
-        attributes.callback_function = self.__submit_button_click
 
         return attributes
 
@@ -239,3 +235,11 @@ class FilePanel(Panel):
         workflow method."""
 
         print("Hello")
+
+    def set_submit_button_function(self, callback_function) -> None:
+        """Assigns a function to be run when the submit button is
+        clicked.
+        """
+
+        self.__submit_button.bind_function_to_click(callback_function)
+    

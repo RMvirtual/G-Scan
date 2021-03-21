@@ -18,3 +18,10 @@ class TopPanel(Panel):
 
         self.__file_panel = FilePanel(self)
         self.__user_settings_panel = UserSettingsPanel(self)
+
+    def set_submit_button_function(self, callback_function) -> None:
+        """Assigns a function to be run when the submit button is
+        clicked.
+        """
+
+        self.__file_panel.set_submit_button_function(callback_function)
