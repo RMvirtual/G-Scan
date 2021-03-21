@@ -76,7 +76,7 @@ class MainApplication():
         print("Split Document button clicked.")
 
     def exit_button_click(self, event = None):
-        print("Exit button clicked.")
+        self.exit()
 
     def start_button_click(self, event = None):
         print("Start button clicked.")

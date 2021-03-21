@@ -353,3 +353,19 @@ class UserSettingsPanel(Panel):
         attributes.position = (160, 200)
 
         return attributes
+
+    def get_paperwork_type(self):
+        """Gets the current selection for paperwork type."""
+
+        print(self.__customer_paperwork_radio_button.GetValue())
+
+
+    def get_input_mode(self):
+        """Gets the current selection for input mode."""
+
+        pass
+
+    def get_multi_page_handling(self):
+        """Gets the current selection for multi-page handling."""
+
+        pass    

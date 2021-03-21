@@ -40,3 +40,18 @@ class TopPanel(Panel):
 
         self.__file_panel.set_split_document_button_function(
             callback_function)
+
+    def get_paperwork_type(self):
+        """Gets the current selection for paperwork type."""
+
+        return self.__user_settings_panel.get_paperwork_type()
+
+    def get_input_mode(self):
+        """Gets the current selection for input mode."""
+
+        return self.__user_settings_panel.get_input_mode()
+
+    def get_multi_page_handling(self):
+        """Gets the current selection for multi-page handling."""
+
+        return self.__user_settings_panel.get_multi_page_handling()
