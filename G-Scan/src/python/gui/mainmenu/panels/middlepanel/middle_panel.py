@@ -1,7 +1,7 @@
 import wx
 from gui.widgets.panel import Panel
 from gui.widgets import fonts
-from gui.widgets.buttons import Button
+from gui.widgets.buttons import Button, ImageButton
 from app import file_system
 from gui.widgets.text import TextLabel
 from gui.widgets.widgetattributes import WidgetAttributes
@@ -43,7 +43,6 @@ class MiddlePanel(Panel):
         attributes.text = "Start"
         attributes.size = (60, 25)
         attributes.position = (0, 0)
-        attributes.callback_function = self.__start_button_click
 
         return attributes
 
@@ -70,20 +69,27 @@ class MiddlePanel(Panel):
     def __create_michelin_man_button(self):
         """Creates the michelin man button."""
 
+        attributes = self.__create_michelin_man_button_attributes()
+        self.__michelin_man_button = ImageButton.from_attributes(attributes)
+
+    def __create_michelin_man_button_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required for instantiating the
+        Michelin Man button.
+        """
+
         michelin_man_logo_path = (
             file_system.get_resources_directory()
             + "images\\michelin_logo.jpg"
         )
 
-        michelin_man_logo = wx.Image(
-            michelin_man_logo_path, wx.BITMAP_TYPE_ANY).Scale(20, 20)
-        
-        self.__michelin_man_button = wx.BitmapButton(
-            self,
-            bitmap = michelin_man_logo.ConvertToBitmap(),
-            size = (25, 25),
-            pos = (680, 0)
-        )
+        attributes = self.create_empty_attributes()
+
+        attributes.image_path = michelin_man_logo_path
+        attributes.scaling_factor = (20, 20)
+        attributes.size = (25, 25)
+        attributes.position = (680, 0)
+
+        return attributes
 
     def __create_settings_button(self) -> None:
         """Creates the settings button."""
@@ -101,7 +107,6 @@ class MiddlePanel(Panel):
         attributes.text = "Settings"
         attributes.size = (60, 25)
         attributes.position = (710, 0)
-        attributes.callback_function = self.__settings_button_click
 
         return attributes
 
@@ -121,34 +126,8 @@ class MiddlePanel(Panel):
         attributes.text = "Exit"
         attributes.size = (60, 25)
         attributes.position = (775, 0)
-        attributes.callback_function = self.__exit_button_click
 
         return attributes
-
-    def __start_button_click(self, event = None):
-        """Defines the behavior to follow when the start button
-        is clicked on, activating the main application's start
-        workflow method."""
-
-        # self.__main_application.start()
-        print("Start button clicked.")
-
-    def __exit_button_click(self, event = None):
-        """Defines the behaviour to follow when the exit button
-        is clicked on, activating the main application's exit
-        workflow method."""
-
-        self.get_main_application().exit()
-        
-        print("Exit button clicked.")
-
-    def __settings_button_click(self, event = None):
-        """Defines the behaviour to follow when the exit button
-        is clicked on, activating the main application's exit
-        workflow method."""
-        
-        print("Settings button clicked.")
-        # self.__main_application.open_settings_menu()
 
     def set_quick_mode_hint_text(self, text):
         """Overwrites the text found in the quick mode hint text
@@ -178,4 +157,4 @@ class MiddlePanel(Panel):
         """Sets the function to be run when the michelin man button is
         clicked."""
 
-        # self.__michelin_man_button.bind_function_to_click(callback_function)
+        self.__michelin_man_button.bind_function_to_click(callback_function)

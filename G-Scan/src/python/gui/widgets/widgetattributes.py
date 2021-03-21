@@ -11,4 +11,5 @@ class WidgetAttributes():
         self.position = None
         self.options = None
         self.callback_function = None
-
+        self.image_path = None
+        self.scaling_factor = None
