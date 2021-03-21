@@ -57,14 +57,36 @@ class MainApplication():
         self.__main_menu.set_split_document_button_function(
             self.split_document_button_click)
 
+        self.__main_menu.set_start_button_function(self.start_button_click)
+        self.__main_menu.set_exit_button_function(self.exit_button_click)
+        
+        self.__main_menu.set_settings_button_function(
+            self.settings_button_click)
+
+        self.__main_menu.set_michelin_man_button_function(
+            self.michelin_man_button_click)
+
     def submit_click(self, event = None):
-        print("Submit button clicked a lot.")
+        print("Submit button clicked.")
 
     def skip_button_click(self, event = None):
         print("Skip button clicked.")
 
     def split_document_button_click(self, event = None):
         print("Split Document button clicked.")
+
+    def exit_button_click(self, event = None):
+        print("Exit button clicked.")
+
+    def start_button_click(self, event = None):
+        print("Start button clicked.")
+
+    def settings_button_click(self, event = None):
+        print("Settings button clicked.")
+
+    def michelin_man_button_click(self, event = None):
+        print("Michelin Man button clicked.")
+
 
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and

@@ -155,3 +155,27 @@ class MiddlePanel(Panel):
         box."""
         
         self.__quick_mode_preview_text.SetLabel(text)
+
+    def set_start_button_function(self, callback_function):
+        """Sets the function to be run when the start button is
+        clicked."""
+
+        self.__start_button.bind_function_to_click(callback_function)
+
+    def set_exit_button_function(self, callback_function):
+        """Sets the function to be run when the exit button is
+        clicked."""
+
+        self.__exit_button.bind_function_to_click(callback_function)
+
+    def set_settings_button_function(self, callback_function):
+        """Sets the function to be run when the settings button is
+        clicked."""
+
+        self.__settings_button.bind_function_to_click(callback_function)
+
+    def set_michelin_man_button_function(self, callback_function):
+        """Sets the function to be run when the michelin man button is
+        clicked."""
+
+        # self.__michelin_man_button.bind_function_to_click(callback_function)
