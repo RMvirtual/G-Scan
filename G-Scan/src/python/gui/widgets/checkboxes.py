@@ -17,3 +17,14 @@ class CheckBox(wx.CheckBox):
         )
 
         self.SetFont(fonts.getCalibriFont(9))
+
+    @staticmethod
+    def from_attributes(attributes):
+        """Creates a new checkbox."""
+
+        new_checkbox = CheckBox(
+            attributes.parent_widget, attributes.text,
+            attributes.size, attributes.position
+        )
+
+        return new_checkbox

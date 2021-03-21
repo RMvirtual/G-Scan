@@ -33,13 +33,28 @@ class UserSettingsPanel(Panel):
         """Creates the widgets related to the paperwork type settings
         in the GUI."""
 
-        self.__paperwork_type_heading = TextLabel(
-            self, "Paperwork Type", (60, 25), (0, 0))
-
+        self.__create_paperwork_type_heading()
         self.__create_paperwork_type_radio_buttons()
+        self.__create_autoprocessing_checkbox()
 
-        self.__autoprocessing_checkbox = CheckBox(
-            self, "Autoprocess", (85, 25), (320, 25))
+    def __create_paperwork_type_heading(self):
+        """Creates the paperwork type heading."""
+
+        attributes = self.__create_paperwork_type_heading_attributes()
+        self.__paperwork_type_heading = TextLabel.from_attributes(attributes)
+
+    def __create_paperwork_type_heading_attributes(self):
+        """Creates the attributes required to instantiate the paperwork
+        type heading.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Paperwork Type"
+        attributes.size = (60, 25)
+        attributes.position = (0, 0)
+
+        return attributes
 
     def __create_paperwork_type_radio_buttons(self):
         """Creates the paperwork type radio buttons."""
@@ -111,6 +126,25 @@ class UserSettingsPanel(Panel):
         attributes.text = "POD"
         attributes.size = (45, 25)
         attributes.position = (265, 25)
+
+        return attributes
+
+    def __create_autoprocessing_checkbox(self):
+        """Creates the autoprocessing checkbox."""
+
+        attributes = self.__create_autoprocessing_checkbox_attributes()
+        self.__autoprocessing_checkbox = CheckBox.from_attributes(attributes)
+
+    def __create_autoprocessing_checkbox_attributes(self):
+        """Creates the attributes required to create the autoprocessing
+        checkbox.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Autoprocess"
+        attributes.size = (85, 25)
+        attributes.position = (320, 25)
 
         return attributes
 
