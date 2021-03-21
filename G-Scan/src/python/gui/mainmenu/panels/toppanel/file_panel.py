@@ -229,13 +229,6 @@ class FilePanel(Panel):
 
         return attributes
 
-    def __submit_button_click(self, event = None):
-        """Defines the behaviour to follow when the submit button
-        is clicked, activating the main application's submit
-        workflow method."""
-
-        print("Hello")
-
     def set_submit_button_function(self, callback_function) -> None:
         """Assigns a function to be run when the submit button is
         clicked.
@@ -243,3 +236,16 @@ class FilePanel(Panel):
 
         self.__submit_button.bind_function_to_click(callback_function)
     
+    def set_skip_button_function(self, callback_function) -> None:
+        """Assigns a function to be run when the skip button is
+        clicked.
+        """
+
+        self.__skip_button.bind_function_to_click(callback_function)
+
+    def set_split_document_button_function(self, callback_function) -> None:
+        """Assigns a function to be run when the split document button
+        is clicked.
+        """
+
+        self.__split_document_button.bind_function_to_click(callback_function)

@@ -46,11 +46,25 @@ class MainApplication():
             self.calculate_quick_mode_hint_message()
             self.__main_menu.write_log("Awaiting user input.")
 
+        self.__assign_main_menu_button_functions()
+
+    def __assign_main_menu_button_functions(self):
+        """Assigns functions to the main menu's buttons."""
+
         self.__main_menu.set_submit_button_function(self.submit_click)
+        self.__main_menu.set_skip_button_function(self.skip_button_click)
+        
+        self.__main_menu.set_split_document_button_function(
+            self.split_document_button_click)
 
     def submit_click(self, event = None):
         print("Submit button clicked a lot.")
 
+    def skip_button_click(self, event = None):
+        print("Skip button clicked.")
+
+    def split_document_button_click(self, event = None):
+        print("Split Document button clicked.")
 
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and

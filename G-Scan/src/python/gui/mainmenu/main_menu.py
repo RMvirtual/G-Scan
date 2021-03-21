@@ -98,3 +98,17 @@ class MainMenu(Frame):
         """
 
         self.__top_panel.set_submit_button_function(callback_function)
+
+    def set_skip_button_function(self, callback_function) -> None:
+        """Assigns a function to be run when the skip button is
+        clicked.
+        """
+
+        self.__top_panel.set_skip_button_function(callback_function)
+
+    def set_split_document_button_function(self, callback_function) -> None:
+        """Assigns a function to be run when the split document button
+        is clicked.
+        """
+
+        self.__top_panel.set_split_document_button_function(callback_function)
