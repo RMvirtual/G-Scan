@@ -17,8 +17,8 @@ class UserSettingsPanel(Panel):
 
         super().__init__(
             top_panel,
-            size = (420, 255),
-            position = (425, 0)
+            size=(420, 255),
+            position=(425, 0)
         )
 
         self.__create_widgets()
@@ -50,20 +50,22 @@ class UserSettingsPanel(Panel):
         """Creates the widgets responsible for setting multi-page
         handling's behaviour in the program."""
 
-        self.__multi_page_handling_label = TextLabel(
-            self, "Multi-Page Handling", (160, 25), (0, 175))
-
+        self.__create_multi_page_handling_label()
         self.__create_multi_page_handling_radio_buttons()
+
+    def __create_paperwork_type_radio_buttons(self):
+        """Creates the paperwork type radio buttons."""
+
+        self.__create_customer_paperwork_radio_button()
+        self.__create_loading_list_radio_button()
+        self.__create_pod_radio_button()
 
     def __create_multi_page_handling_radio_buttons(self):
         """Creates the multi-page handling radio buttons responsible
         for determining whether to split multi-page PDF files."""
 
-        self.__split_radio_button = RadioButtonMaster(
-            self, "Split Documents", (120, 25), (0, 200))
-
-        self.__do_not_split_radio_button = RadioButtonSubject(
-            self, "Do Not Split Documents", (90, 25), (160, 200))
+        self.__create_split_documents_radio_button()
+        self.__create_do_not_split_documents_radio_button()
 
     def __create_input_mode_radio_buttons(self):
         """Creates the input mode radio buttons."""
@@ -96,13 +98,6 @@ class UserSettingsPanel(Panel):
         attributes.position = (0, 0)
 
         return attributes
-
-    def __create_paperwork_type_radio_buttons(self):
-        """Creates the paperwork type radio buttons."""
-
-        self.__create_customer_paperwork_radio_button()
-        self.__create_loading_list_radio_button()
-        self.__create_pod_radio_button()
  
     def __create_customer_paperwork_radio_button(self):
         """Creates the customer paperwork radio button."""
@@ -292,5 +287,69 @@ class UserSettingsPanel(Panel):
         attributes.size = (120, 25)
         attributes.position = (275, 140)
         attributes.options = year_options
+
+        return attributes
+
+    def __create_multi_page_handling_label(self):
+        """Creates the multi-page handling label."""
+
+        attributes = self.__create_multi_page_handling_label_attributes()
+        
+        self.__multi_page_handling_label = (
+            TextLabel.from_attributes(attributes))
+
+    def __create_multi_page_handling_label_attributes(self):
+        """Creates the attributes required to instantiate the
+        multi-page handling label.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Multi-Page Handling"
+        attributes.size = (160, 25)
+        attributes.position = (0, 175)
+
+        return attributes
+
+    def __create_split_documents_radio_button(self):
+        """Creates the split document option radio button."""
+
+        attributes = self.__create_split_documents_radio_button_attributes()
+
+        self.__split_documents_radio_button = (
+            RadioButtonMaster.from_attributes(attributes))
+
+    def __create_split_documents_radio_button_attributes(self):
+        """Creates the attributes required to create the split document
+        option radio button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Split Documents"
+        attributes.size = (120, 25)
+        attributes.position = (0, 200)
+
+        return attributes
+
+    def __create_do_not_split_documents_radio_button(self):
+        """Creates the split document option radio button."""
+
+        attributes = (
+            self.__create_do_not_split_documents_radio_button_attributes())
+
+        self.__do_not_split_documents_radio_button = (
+            RadioButtonSubject.from_attributes(attributes))
+
+    def __create_do_not_split_documents_radio_button_attributes(self):
+        """Creates the attributes required to create the split document
+        option radio button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Do Not Split Documents"
+        attributes.size = (90, 25)
+        attributes.position = (160, 200)
 
         return attributes
