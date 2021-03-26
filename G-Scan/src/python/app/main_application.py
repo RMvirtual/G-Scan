@@ -5,7 +5,7 @@ from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
 from gui.main_menu_thread import MainMenuThread
 from gui.popupbox import PopupBox
-from gui.settings_window import SettingsWindow
+from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
 from pdf import pdf_reader
 from pdf import pdf_writer
@@ -84,9 +84,10 @@ class MainApplication():
     def settings_button_click(self, event = None):
         print("Settings button clicked.")
 
+        self.__settings_menu = SettingsMenu(self)
+
     def michelin_man_button_click(self, event = None):
         print("Michelin Man button clicked.")
-
 
     def get_user_settings(self):
         """Opens the user settings file for the user's directory and
