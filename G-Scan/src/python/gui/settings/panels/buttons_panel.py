@@ -2,6 +2,7 @@ import wx
 
 from gui.widgets.panel import Panel
 from gui.widgets.buttons import Button
+from gui.widgets.widgetattributes import WidgetAttributes
 
 class ButtonsPanel(Panel):
     """A class representing the buttons panel."""
@@ -16,25 +17,66 @@ class ButtonsPanel(Panel):
     def __create_buttons(self):
         """Creates widgets for the Save and Cancel buttons."""
 
-        # Save button.
-        self.__save_button = Button(
-            self, "Save", (60, 25), (200, 0))
-        
-        self.__save_button.bind_function_to_click(self.__save_button_click)
+        self.__create_save_button()
+        self.__create_cancel_button()
 
-        # Cancel button.
-        self.__cancel_button = Button(
-            self, "Cancel", (60, 25), (270, 0))
-            
-        self.__cancel_button.bind_function_to_click(self.__cancel_button_click)
+    def __create_save_button(self) -> None:
+        """Creates the save button."""
 
-    def __save_button_click(self, event = None):
+        attributes = self.__create_save_button_attributes()
+        self.__save_button = Button.from_attributes(attributes)
+        self.set_save_button_function(self.__save_button_click)
+
+    def __create_save_button_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required to instantiate the save
+        button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Save"
+        attributes.size = (60, 25)
+        attributes.position = (200, 0)
+
+        return attributes
+
+    def set_save_button_function(self, callback_function):
+        """Sets the function to be called when the save button is clicked."""
+
+        self.__save_button.bind_function_to_click(callback_function)
+
+    def __create_cancel_button(self) -> None:
+        """Creates the cancel button."""
+
+        attributes = self.__create_cancel_button_attributes()
+        self.__cancel_button = Button.from_attributes(attributes)
+        self.set_cancel_button_function(self.__cancel_button_click)
+
+    def __create_cancel_button_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required to instantiate the cancel
+        button.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Cancel"
+        attributes.size = (60, 25)
+        attributes.position = (270, 0)
+
+        return attributes
+
+    def set_cancel_button_function(self, callback_function):
+        """Sets the function to be called when the cancel button is clicked."""
+
+        self.__cancel_button.bind_function_to_click(callback_function)
+
+    def __cancel_button_click(self, event = None):
         """Performs the behaviour required when the save button is
         clicked."""
 
         wx.CallAfter(self.__frame.Destroy)
 
-    def __cancel_button_click(self, event = None):
+    def __save_button_click(self, event = None):
         """Performs the behaviour required when the save button is
         clicked."""
 

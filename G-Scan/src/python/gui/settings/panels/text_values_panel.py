@@ -1,5 +1,3 @@
-import wx
-
 from gui.widgets.panel import Panel
 from gui.widgets.text import TextLabel, TextEntryBox
 from gui.widgets.buttons import Button
