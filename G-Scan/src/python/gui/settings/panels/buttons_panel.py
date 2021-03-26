@@ -25,7 +25,6 @@ class ButtonsPanel(Panel):
 
         attributes = self.__create_save_button_attributes()
         self.__save_button = Button.from_attributes(attributes)
-        self.set_save_button_function(self.__save_button_click)
 
     def __create_save_button_attributes(self) -> WidgetAttributes:
         """Creates the attributes required to instantiate the save
@@ -50,7 +49,6 @@ class ButtonsPanel(Panel):
 
         attributes = self.__create_cancel_button_attributes()
         self.__cancel_button = Button.from_attributes(attributes)
-        self.set_cancel_button_function(self.__cancel_button_click)
 
     def __create_cancel_button_attributes(self) -> WidgetAttributes:
         """Creates the attributes required to instantiate the cancel
@@ -69,15 +67,3 @@ class ButtonsPanel(Panel):
         """Sets the function to be called when the cancel button is clicked."""
 
         self.__cancel_button.bind_function_to_click(callback_function)
-
-    def __cancel_button_click(self, event = None):
-        """Performs the behaviour required when the save button is
-        clicked."""
-
-        wx.CallAfter(self.__frame.Destroy)
-
-    def __save_button_click(self, event = None):
-        """Performs the behaviour required when the save button is
-        clicked."""
-
-        wx.CallAfter(self.__frame.Destroy)

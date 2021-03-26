@@ -12,19 +12,24 @@ class SettingsMenu(Frame):
         """Creates a new settings menu."""
 
         self.__main_application = main_application
-        self.__current_user = self.__main_application.get_current_user()
         self.__create_widgets()
 
-    def __create_widgets(self):
-        """Creates the widgets required for the gettings GUI."""
+    def run(self):
+        """Starts the GUI application in a new thread."""
         
+        self.__app.MainLoop()
+
+    def __create_widgets(self):
+        """Creates the widgects required for the gettings GUI."""
+
+        self.__app = wx.App()
         super().__init__((895, 270), "User Settings")
         
         self.SetBackgroundColour("WHITE")
         self.__text_values_panel = TextValuesPanel(self)
         self.__mode_options_panel = ModeOptionsPanel(self)
         self.__buttons_panel = ButtonsPanel(self)
-        
+
         self.Show()
 
     def get_user_name(self):
@@ -109,3 +114,18 @@ class SettingsMenu(Frame):
 
         self.__mode_options_panel.set_autoprocessing_checkbox(
             autoprocessing_mode)
+    
+    def set_save_button_function(self, callback_function):
+        """Sets the save button function."""
+
+        self.__buttons_panel.set_save_button_function(callback_function)
+
+    def set_cancel_button_function(self, callback_function):
+        """Sets the cancel button function."""
+
+        self.__buttons_panel.set_cancel_button_function(callback_function)
+
+    def close(self, event = None):
+        """Closes the settings menu."""
+
+        self.Close()

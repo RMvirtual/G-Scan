@@ -48,6 +48,23 @@ class MainApplication():
 
         self.__assign_main_menu_button_functions()
 
+    def __create_settings_menu(self):
+        """Creates and launches the user settings menu."""
+
+        self.__settings_menu = SettingsMenu(self)
+        self.__assign_settings_menu_button_functions()
+        self.__settings_menu_thread = GuiThread(self.__settings_menu)
+        self.__settings_menu_thread.start()
+
+    def __assign_settings_menu_button_functions(self):
+        """Assigns functions to the settings menu's buttons."""
+
+        self.__settings_menu.set_save_button_function(self.__close_settings_menu)
+        self.__settings_menu.set_cancel_button_function(self.__settings_menu.close)
+
+    def __close_settings_menu(self):
+        self.__settings_menu.close()
+
     def __assign_main_menu_button_functions(self):
         """Assigns functions to the main menu's buttons."""
 
@@ -84,7 +101,7 @@ class MainApplication():
     def settings_button_click(self, event = None):
         print("Settings button clicked.")
 
-        self.__settings_menu = SettingsMenu(self)
+        self.__create_settings_menu()
 
     def michelin_man_button_click(self, event = None):
         print("Michelin Man button clicked.")
