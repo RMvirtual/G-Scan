@@ -1,5 +1,6 @@
 from gui.widgets.panel import Panel
 from gui.widgets import fonts
+from gui.widgets.widgetattributes import WidgetAttributes
 
 import wx
 

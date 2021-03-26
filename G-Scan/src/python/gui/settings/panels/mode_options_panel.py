@@ -1,9 +1,8 @@
-import wx
-
 from gui.widgets.panel import Panel
 from gui.widgets.text import TextLabel
 from gui.widgets.dropdownboxes import DropdownBox
 from gui.widgets.checkboxes import CheckBox
+from gui.widgets.widgetattributes import WidgetAttributes
 
 class ModeOptionsPanel(Panel):
     """A class representing the mode options panel."""
@@ -14,56 +13,174 @@ class ModeOptionsPanel(Panel):
         self.__create_paperwork_type_widgets()
         self.__create_multi_page_handling_widgets()
         self.__create_input_mode_widgets()
-        self.__create_autoprocessing_widgets()
+        self.__create_autoprocessing_checkbox()
 
-    def __create_paperwork_type_widgets(self):
+    def __create_paperwork_type_widgets(self) -> None:
         """Creates widgets related to the default paperwork type
         value."""
 
-        # Paperwork Type label.
-        self.__paperwork_type_label = TextLabel(
-            self, "Default Paperwork Type:", (200, 20), (0, 0))
+        self.__create_paperwork_type_label()
+        self.__create_paperwork_type_dropdown_box()
 
-        # Paperwork Type value dropdown box.
-        self.__paperwork_type_dropdown_box = DropdownBox(
-            self, "lol", (120, 25), (200, 0),
-            ["Customer PW", "Loading List", "POD"]
-        )
-
-    def __create_multi_page_handling_widgets(self):
+    def __create_multi_page_handling_widgets(self) -> None:
         """Creates widgets related to the default value for
         multi-page handling."""
 
-        # Multi-Page Handling label.
-        self.__multi_page_handling_label = TextLabel(
-            self, "Multi-Page Handling:", (165, 20), (330, 0))
+        self.__create_multi_page_handling_label()
+        self.__create_multi_page_handling_dropdown_box()
 
-        # Multi-Page Handling default value dropdown box.
-        self.__multi_page_handling_dropdown_box = DropdownBox(
-            self, "lol", (120, 25), (500, 0),
-            options = ["Do Not Split", "Split"]
-        )
-
-    def __create_input_mode_widgets(self):
+    def __create_input_mode_widgets(self) -> None:
         """Creates widgets related to the default user input mode."""
 
-        # Input Mode label.
-        self.__input_mode_label = TextLabel(
-            self, "Input Mode:", (80, 20), (630, 0))
+        self.__create_input_mode_label()
+        self.__create_input_mode_dropdown_box()
 
-        # Input Mode default value dropdown box.
-        self.__input_mode_dropdown_box = DropdownBox(
-            self, "lol", (120, 25), (735, 0),
-            options = ["Normal", "Quick"]
-        )
+    def __create_paperwork_type_dropdown_box(self) -> None:
+        """Creates the paperwork type dropdown box."""
 
-    def __create_autoprocessing_widgets(self):
-        """Creates widgets related to the value of autoprocessing
-        mode."""
+        attributes = self.__create_paperwork_type_dropdown_box_attributes()
+        
+        self.__paperwork_type_dropdown_box = (
+            DropdownBox.from_attributes(attributes))
 
-        # Autoprocessing checkbox.
-        self.__autoprocessing_checkbox = CheckBox(
-            self, "POD Autoprocessing", (160, 25), (200, 30))
+    def __create_paperwork_type_dropdown_box_attributes(self) \
+            -> WidgetAttributes:
+        """Creates the attributes required to instantiate the paperwork
+        type dropdown box."""
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "lol"
+        attributes.options = ["Customer PW", "Loading List", "POD"]
+        attributes.size = (120, 25)
+        attributes.position = (200, 0)
+
+        return attributes
+
+    def __create_paperwork_type_label(self) -> None:
+        """Creates the paperwork type label."""
+
+        attributes = self.__create_paperwork_type_label_attributes()
+        self.__paperwork_type_label = TextLabel.from_attributes(attributes)
+
+    def __create_paperwork_type_label_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required to instantiate the paperwork
+        type label.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Default Paperwork Type:"
+        attributes.size = (200, 20)
+        attributes.position = (0, 0)
+
+        return attributes
+
+    def __create_multi_page_handling_label(self) -> None:
+        """Creates the multi-page handling label."""
+
+        attributes = self.__create_multi_page_handling_label_attributes()
+        
+        self.__multi_page_handling_label = (
+            TextLabel.from_attributes(attributes))
+
+    def __create_multi_page_handling_label_attributes(self) \
+            -> WidgetAttributes:
+        """Creates the attributes required to instantiate the
+        multi-page handling label.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Multi-Page Handling:"
+        attributes.size = (165, 20)
+        attributes.position = (330, 0)
+
+        return attributes
+
+    def __create_multi_page_handling_dropdown_box(self) -> None:
+        """Creates the multi-page handling dropdown box."""
+
+        attributes = (
+            self.__create_multi_page_handling_dropdown_box_attributes())
+        
+        self.__multi_page_handling_dropdown_box = (
+            DropdownBox.from_attributes(attributes))
+
+    def __create_multi_page_handling_dropdown_box_attributes(self) \
+            -> WidgetAttributes:
+        """Creates the attributes required to instantiate the
+        multi-page handling dropdown box.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "lol"
+        attributes.options = ["Do Not Split", "Split"]
+        attributes.size = (120, 25)
+        attributes.position = (500, 0)
+
+        return attributes
+
+    def __create_input_mode_label(self) -> None:
+        """Creates the input mode label."""
+
+        attributes = self.__create_input_mode_label_attributes()
+        self.__input_mode_label = TextLabel.from_attributes(attributes)
+
+    def __create_input_mode_label_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required to instantiate the
+        input mode label.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "Input Mode"
+        attributes.size = (80, 20)
+        attributes.position = (630, 0)
+
+        return attributes
+
+    def __create_input_mode_dropdown_box(self) -> None:
+        """Creates the input mode dropdown box."""
+
+        attributes = self.__create_input_mode_dropdown_box_attributes()
+        
+        self.__input_mode_dropdown_box = (
+            DropdownBox.from_attributes(attributes))
+
+    def __create_input_mode_dropdown_box_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required to instantiate the
+        input mode dropdown box.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "lol"
+        attributes.options = ["Normal", "Quick"]
+        attributes.size = (120, 25)
+        attributes.position = (735, 0)
+
+        return attributes
+
+    def __create_autoprocessing_checkbox(self) -> None:
+        """Creates the autoprocessing checkbox."""
+
+        attributes = self.__create_autoprocessing_checkbox_attributes()
+        self.__autoprocessing_checkbox = CheckBox.from_attributes(attributes)
+
+    def __create_autoprocessing_checkbox_attributes(self) -> WidgetAttributes:
+        """Creates the attributes required to instantiate the
+        input mode dropdown box.
+        """
+
+        attributes = self.create_empty_attributes()
+
+        attributes.text = "POD Autoprocessing"
+        attributes.size = (160, 25)
+        attributes.position = (200, 0)
+
+        return attributes
 
     def get_paperwork_type(self):
         """Gets the value of the paperwork type dropdown box."""
