@@ -7,7 +7,7 @@ from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
 import pdf.pdf_reader
 from pdf import pdf_writer
-from user.user import User
+from user import User
 from win32api import GetSystemMetrics
 
 import app.file_system
@@ -26,7 +26,7 @@ class MainApplication():
         """Constructor method."""
 
         self.__lock = threading.Lock()
-        self.current_user = self.get_user_settings()
+        self.__current_user = self.get_user_settings()
 
         self.__main_menu = MainMenu(self)
         self.__main_menu_thread = GuiThread(self.__main_menu)
@@ -59,16 +59,16 @@ class MainApplication():
     def __load_settings_menu_values(self):
         """Does stuff and things."""
 
-        self.__settings_menu.set_user_name("RyanM")
+        self.__settings_menu.set_user_name(self.__current_user.get_name())
 
-        self.__settings_menu.set_scan_directory("Scans")
-        self.__settings_menu.set_destination_directory("Destination")
-        self.__settings_menu.set_backup_directory("Backup")
+        self.__settings_menu.set_scan_directory(self.__current_user.get_scan_directory())
+        self.__settings_menu.set_destination_directory(self.__current_user.get_destination_directory())
+        self.__settings_menu.set_backup_directory(self.__current_user.get_backup_directory())
 
-        self.__settings_menu.set_input_mode_dropdown_box("Quick")
-        self.__settings_menu.set_multi_page_handling("Do not split")
-        self.__settings_menu.set_autoprocessing_checkbox(False)
-        self.__settings_menu.set_paperwork_type("POD")
+        self.__settings_menu.set_input_mode_dropdown_box(self.__current_user.get_input_mode())
+        self.__settings_menu.set_multi_page_handling(self.__current_user.get_multi_page_handling())
+        self.__settings_menu.set_paperwork_type(self.__current_user.get_paperwork_type())
+        self.__settings_menu.set_autoprocessing_checkbox(self.__current_user.get_autoprocessing_mode())
 
     def __assign_settings_menu_button_functions(self):
         """Assigns functions to the settings menu's buttons."""
@@ -134,13 +134,16 @@ class MainApplication():
        
         try:
             current_user = user_settings_data[current_username]
-    
+            print("Retrieved " + current_user.get_name())
+
         # If the user does not exist, creates a new user and adds it to
         # the user settings data file, passing back the user object.
         except Exception:
             current_user = User(current_username)
             user_settings_data[current_username] = current_user
             user_settings_data.sync()
+
+            print("Created user: ", current_user.get_name())
             
         user_settings_data.close()
 
@@ -149,7 +152,7 @@ class MainApplication():
     def get_current_user(self):
         """Returns the current user of the program as a User object."""
 
-        return self.current_user
+        return self.__current_user
 
     def validate_user_directories(self) -> bool:
         """Checks whether all the working directories of a user are
@@ -157,7 +160,7 @@ class MainApplication():
         returns an overall Boolean at the end on whether all
         directories are valid or not."""
 
-        directory_checks = self.current_user.validate_directories_check()
+        directory_checks = self.__current_user.validate_directories_check()
         all_directories_valid = True
 
         for directory in directory_checks:
@@ -229,7 +232,7 @@ class MainApplication():
         """Gets a list of all files in the current user's scan folder
         that have a valid extension for the program to handle."""
 
-        scan_directory = self.current_user.scan_directory
+        scan_directory = self.__current_user.scan_directory
 
         valid_file_extensions = (
             ".pdf", ".tif", ".tiff", ".tiff", ".jpeg", ".jpg", ".png")
@@ -312,7 +315,7 @@ class MainApplication():
 
     def get_file_with_pdf_viewer(self):
         # Directories
-        scan_directory = self.current_user.scan_directory
+        scan_directory = self.__current_user.scan_directory
         multi_page_handling = self.__main_menu.get_multi_page_handling_mode()
 
         current_file = self.file_list[self.file_index]
@@ -356,7 +359,7 @@ class MainApplication():
         submitting it immediately if a valid barcode is found with
         no other conflicting conditions."""
 
-        scan_directory = self.current_user.scan_directory
+        scan_directory = self.__current_user.scan_directory
         multi_page_handling = self.__main_menu.get_multi_page_handling_mode()
         barcode_ref_list = []
 
@@ -420,13 +423,13 @@ class MainApplication():
             "Normal"
         )
 
-        backup_directory = self.current_user.backup_directory
+        backup_directory = self.__current_user.backup_directory
         paperwork_type = self.__main_menu.get_current_paperwork_type()
 
         backup_file_name = app.user_input_validation.create_backup_file_name(
             job_reference, paperwork_type, file_extension, backup_directory)
         
-        scan_directory = self.current_user.scan_directory
+        scan_directory = self.__current_user.scan_directory
 
         backup_success = backup.backup_file(
             current_file, backup_file_name, scan_directory, backup_directory)
@@ -444,7 +447,7 @@ class MainApplication():
         dest_file_name = app.user_input_validation.create_destination_file_name(
             job_reference, paperwork_type, file_extension)
 
-        dest_directory = self.current_user.destination_directory
+        dest_directory = self.__current_user.destination_directory
 
         # Check if there is a file already existing in the
         # destination directory with the same name so we know later
@@ -453,7 +456,7 @@ class MainApplication():
             app.user_input_validation.check_if_duplicate_file(
                 dest_file_name, dest_directory))
 
-        scan_directory = self.current_user.scan_directory
+        scan_directory = self.__current_user.scan_directory
 
         pdf_writer.create_loading_list_pod(
             self.__main_menu, current_file, scan_directory, dest_directory,
@@ -580,7 +583,7 @@ class MainApplication():
             # that we need to merge the two files.
             dest_duplicate_check = (
                 app.user_input_validation.check_if_duplicate_file(
-                    dest_file_name, self.current_user.dest_directory))
+                    dest_file_name, self.__current_user.dest_directory))
 
             backup_success = backup.backup_file(
                 current_file, backup_file_name, scan_dir, backup_dir)
@@ -686,7 +689,7 @@ class MainApplication():
                         dest_duplicate_check = (
                             app.user_input_validation.check_if_duplicate_file(
                                 dest_file_name,
-                                self.current_user.dest_directory)
+                                self.__current_user.dest_directory)
                         )
 
                         backup_success = backup.backup_file(

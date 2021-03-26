@@ -8,9 +8,13 @@ class TextValuesPanel(Panel):
     window GUI."""
 
     def __init__(self, frame):
-        """Constructor method."""
+        """Creates a new text values panel."""
 
         super().__init__(frame, (860, 125), (10, 10))
+        self.__create_all_widgets()
+
+    def __create_all_widgets(self):
+        """Creates all the widgets in the current panel."""
 
         self.__create_user_name_widgets()
         self.__create_scan_directory_widgets()
