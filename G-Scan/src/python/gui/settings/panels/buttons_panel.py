@@ -1,5 +1,3 @@
-import wx
-
 from gui.widgets.panel import Panel
 from gui.widgets.buttons import Button
 from gui.widgets.widgetattributes import WidgetAttributes
@@ -11,7 +9,6 @@ class ButtonsPanel(Panel):
         super().__init__(
             frame, (860, 30), (10, 195))
 
-        self.__frame = frame
         self.__create_buttons()
 
     def __create_buttons(self):
@@ -39,11 +36,6 @@ class ButtonsPanel(Panel):
 
         return attributes
 
-    def set_save_button_function(self, callback_function):
-        """Sets the function to be called when the save button is clicked."""
-
-        self.__save_button.bind_function_to_click(callback_function)
-
     def __create_cancel_button(self) -> None:
         """Creates the cancel button."""
 
@@ -62,6 +54,11 @@ class ButtonsPanel(Panel):
         attributes.position = (270, 0)
 
         return attributes
+
+    def set_save_button_function(self, callback_function):
+        """Sets the function to be called when the save button is clicked."""
+
+        self.__save_button.bind_function_to_click(callback_function)
 
     def set_cancel_button_function(self, callback_function):
         """Sets the function to be called when the cancel button is clicked."""

@@ -166,4 +166,3 @@ class MainMenu(Frame):
         """Gets the current selection for multi-page handling."""
 
         return self.__top_panel.get_multi_page_handling()
-

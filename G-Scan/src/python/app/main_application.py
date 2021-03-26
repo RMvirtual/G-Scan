@@ -1,5 +1,3 @@
-"""A module for the main application class."""
-
 from backup import backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
@@ -56,13 +54,29 @@ class MainApplication():
         self.__settings_menu_thread = GuiThread(self.__settings_menu)
         self.__settings_menu_thread.start()
 
+        self.__load_settings_menu_values()
+
+    def __load_settings_menu_values(self):
+        """Does stuff and things."""
+
+        self.__settings_menu.set_user_name("RyanM")
+
+        self.__settings_menu.set_scan_directory("Scans")
+        self.__settings_menu.set_destination_directory("Destination")
+        self.__settings_menu.set_backup_directory("Backup")
+
+        self.__settings_menu.set_input_mode_dropdown_box("Quick")
+        self.__settings_menu.set_multi_page_handling("Do not split")
+        self.__settings_menu.set_autoprocessing_checkbox(False)
+        self.__settings_menu.set_paperwork_type("POD")
+
     def __assign_settings_menu_button_functions(self):
         """Assigns functions to the settings menu's buttons."""
 
         self.__settings_menu.set_save_button_function(self.__close_settings_menu)
-        self.__settings_menu.set_cancel_button_function(self.__settings_menu.close)
+        self.__settings_menu.set_cancel_button_function(self.__close_settings_menu)
 
-    def __close_settings_menu(self):
+    def __close_settings_menu(self, event = None):
         self.__settings_menu.close()
 
     def __assign_main_menu_button_functions(self):
@@ -743,11 +757,6 @@ class MainApplication():
 
         except:
             exit()
-
-    def open_settings_menu(self):
-        """Opens the settings menu."""
-
-        self.__settings_menu = SettingsWindow(self)
 
     def get_lock(self):
         """Gets the semaphore associated with this application's
