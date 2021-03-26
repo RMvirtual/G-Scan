@@ -24,6 +24,7 @@ class SettingsMenu(Frame):
         self.__text_values_panel = TextValuesPanel(self)
         self.__mode_options_panel = ModeOptionsPanel(self)
         self.__buttons_panel = ButtonsPanel(self)
+        
         self.Show()
 
     def get_user_name(self):

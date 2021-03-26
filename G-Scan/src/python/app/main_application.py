@@ -3,11 +3,11 @@
 from backup import backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
-from gui.main_menu_thread import MainMenuThread
+from gui.thread import GuiThread
 from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
-from pdf import pdf_reader
+import pdf.pdf_reader
 from pdf import pdf_writer
 from user.user import User
 from win32api import GetSystemMetrics
@@ -31,7 +31,7 @@ class MainApplication():
         self.current_user = self.get_user_settings()
 
         self.__main_menu = MainMenu(self)
-        self.__main_menu_thread = MainMenuThread(self.__main_menu)
+        self.__main_menu_thread = GuiThread(self.__main_menu)
         self.__main_menu_thread.start()
 
         x_axis = str(int(GetSystemMetrics(0) / 4))
