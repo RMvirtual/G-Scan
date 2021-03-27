@@ -20,7 +20,7 @@ class TextEntryBox(wx.TextCtrl):
 
         self.SetFont(fonts.getCalibriFont(14))
         self.SetBackgroundColour("LIGHT GREY")
-        self.SetMaxLength(11)
+        # self.SetMaxLength(11)
 
     @staticmethod
     def from_attributes(attributes:WidgetAttributes):
@@ -56,13 +56,34 @@ class TextLabel(wx.StaticText):
             attributes.size, attributes.position
         )
 
-class TextConsole(TextEntryBox):
+class TextConsole(wx.TextCtrl):
     """A class for a text console."""
 
     def __init__(self, panel, size, position):
-        super().__init__(panel, "", size, position)
+        super().__init__(
+            panel,
+            value="",
+            size=size,
+            pos=position,
+            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE
+        )
 
-        self.SetWindowStyle(
-            wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE)
+        self.SetFont(fonts.getCalibriFont(14))
+        self.SetBackgroundColour("LIGHT GREY")
 
         self.SetEditable(False)
+
+    @staticmethod
+    def from_attributes(attributes:WidgetAttributes):
+        """Creates a new text label box from attributes."""
+
+        return TextConsole(
+            attributes.parent_widget,
+            attributes.size, attributes.position
+        )
+
+
+    def write(self, text: str):
+        """Writes to the console."""
+
+        self.WriteText(text)

@@ -1,4 +1,4 @@
-from backup import backup
+import app.backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
 from gui.thread import GuiThread
@@ -6,12 +6,12 @@ from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
 import pdf.pdf_reader
-from pdf import pdf_writer
+import pdf.pdf_writer
 from user import User
 from win32api import GetSystemMetrics
 
-import app.file_system
-import app.user_input_validation
+import app.file_system as file_system
+import app.user_input_validation as user_input_validation
 import date.date
 import os
 import re
@@ -42,7 +42,7 @@ class MainApplication():
                 self.__main_menu.write_log("\n")
 
             self.calculate_quick_mode_hint_message()
-            self.__main_menu.write_log("Awaiting user input.")
+            self.__main_menu.write_log("\n\nAwaiting user input.")
 
         self.__assign_main_menu_button_functions()
 
@@ -70,10 +70,27 @@ class MainApplication():
         self.__settings_menu.set_paperwork_type(self.__current_user.get_paperwork_type())
         self.__settings_menu.set_autoprocessing_checkbox(self.__current_user.get_autoprocessing_mode())
 
+    def __save_settings_menu_values(self, event = None):
+        """Saves the current settings menu values to the current user's
+        state.
+        """
+
+        self.__current_user.set_scan_directory(self.__settings_menu.get_scan_directory())
+        self.__current_user.set_destination_directory(self.__settings_menu.get_destination_directory())
+        self.__current_user.set_backup_directory(self.__settings_menu.get_backup_directory())
+        self.__current_user.set_paperwork_type(self.__settings_menu.get_paperwork_type())
+        self.__current_user.set_multi_page_handling(self.__settings_menu.get_multi_page_handling())
+        self.__current_user.set_input_mode(self.__settings_menu.get_input_mode())
+        self.__current_user.set_auto_processing_mode(self.__settings_menu.get_autoprocessing_mode())
+
+        self.__current_user.sync()
+
+        self.__close_settings_menu()
+
     def __assign_settings_menu_button_functions(self):
         """Assigns functions to the settings menu's buttons."""
 
-        self.__settings_menu.set_save_button_function(self.__close_settings_menu)
+        self.__settings_menu.set_save_button_function(self.__save_settings_menu_values)
         self.__settings_menu.set_cancel_button_function(self.__close_settings_menu)
 
     def __close_settings_menu(self, event = None):
@@ -135,10 +152,12 @@ class MainApplication():
         try:
             current_user = user_settings_data[current_username]
             print("Retrieved " + current_user.get_name())
+            print("Scan directory: ", current_user.get_scan_directory())
 
         # If the user does not exist, creates a new user and adds it to
         # the user settings data file, passing back the user object.
-        except Exception:
+        except Exception as exception:
+            print(exception)
             current_user = User(current_username)
             user_settings_data[current_username] = current_user
             user_settings_data.sync()
@@ -171,7 +190,7 @@ class MainApplication():
                 
                 self.__main_menu.write_log(
                     directory + " folder is invalid. Please check the " +
-                    "folder exists and update it within your settings.")
+                    "folder exists and update it within your settings.\n")
         
         return all_directories_valid
 

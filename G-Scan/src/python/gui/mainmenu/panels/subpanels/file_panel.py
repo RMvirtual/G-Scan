@@ -1,4 +1,4 @@
-from app import file_system as filesystem
+import app.file_system as filesystem
 from gui.widgets.buttons import Button
 from gui.widgets.panel import Panel
 from gui.widgets.text import TextEntryBox, TextLabel

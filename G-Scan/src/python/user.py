@@ -1,4 +1,4 @@
-from app import file_system
+import app.file_system as file_system
 
 class User(object):
     """A user of the application. Contains their default settings and
@@ -12,14 +12,14 @@ class User(object):
         self.__backup_directory = ""
         self.__scan_directory = ""
         self.__destination_directory = ""
-        self.__paperwork_type = "Cust PW"
+        self.__paperwork_type = "Customer PW"
         self.__multi_page_handling = "Split"
         self.__input_mode = "Normal"
         self.__autoprocessing = True
 
-    def overwrite_user(self, new_user) -> None:
+    def sync(self) -> None:
         user_settings_data = file_system.get_user_settings_data()
-        user_settings_data[self.__name] = new_user
+        user_settings_data[self.__name] = self
         user_settings_data.sync()
 
         user_settings_data.close()
@@ -102,3 +102,39 @@ class User(object):
         """
 
         return self.__autoprocessing
+
+    def set_scan_directory(self, path: str) -> None:
+        """Sets the user's default scan directory."""
+
+        self.__scan_directory = path
+
+    def set_destination_directory(self, path: str) -> None:
+        """Sets the user's default destination directory."""
+
+        self.__destination_directory = path
+
+    def set_backup_directory(self, path: str) -> None:
+        """Sets the user's default backup directory."""
+
+        self.__backup_directory = path
+
+    def set_paperwork_type(self, paperwork_type: str) -> None:
+        """Sets the user's default paperwork type."""
+
+        self.__paperwork_type = paperwork_type
+
+    def set_multi_page_handling(self, multi_page_handling: str) -> None:
+        """Sets the user's default multi-page handling setting."""
+
+        self.__multi_page_handling = multi_page_handling
+
+    def set_input_mode(self, input_mode: str) -> None:
+        """Sets the user's default input mode."""
+
+        self.__input_mode = input_mode
+
+    def set_auto_processing_mode(self, autoprocessing_mode: bool) -> None:
+        """Sets the user's default value for autoprocessing mode."""
+
+        self.__autoprocessing = autoprocessing_mode
+

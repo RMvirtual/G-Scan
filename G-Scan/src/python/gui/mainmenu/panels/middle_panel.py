@@ -1,10 +1,9 @@
-import wx
 from gui.widgets.panel import Panel
-from gui.widgets import fonts
 from gui.widgets.buttons import Button, ImageButton
-from app import file_system
 from gui.widgets.text import TextLabel
 from gui.widgets.widgetattributes import WidgetAttributes
+import app.file_system as file_system
+import gui.widgets.fonts as fonts
 
 class MiddlePanel(Panel):
     """Middle panel for the main menu GUI."""

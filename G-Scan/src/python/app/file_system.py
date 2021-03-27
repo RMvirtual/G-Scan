@@ -1,8 +1,9 @@
+"""A module for performing file system functions such as retrieving
+commonly used directories etc.
+"""
+
 import os
 import shelve
-
-# A static module for performing file system functions such as
-# retrieving commonly used directories etc.
 
 def get_item_directory(path):
     """Gets the directory of a path."""

@@ -1,4 +1,4 @@
-from app import file_system
+import app.file_system as file_system
 import os
 import re
 from gui.popupbox import PopupBox

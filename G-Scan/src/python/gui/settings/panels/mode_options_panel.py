@@ -192,12 +192,12 @@ class ModeOptionsPanel(Panel):
 
         self.__multi_page_handling_dropdown_box.GetValue()
 
-    def get_input_mode_dropdown_box(self):
+    def get_input_mode(self):
         """Gets the value of the input mode dropdown box."""
 
         self.__input_mode_dropdown_box.GetValue()
 
-    def get_autoprocessing_checkbox(self):
+    def get_autoprocessing_mode(self):
         """Gets the boolean status of the autoprocessing checkbox."""
 
         self.__autoprocessing_checkbox.GetValue()
