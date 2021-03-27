@@ -35,42 +35,42 @@ class SettingsMenu(Frame):
     def get_user_name(self):
         """Gets the user name."""
 
-        self.__text_values_panel.get_user_name()
+        return self.__text_values_panel.get_user_name()
 
     def get_scan_directory(self):
         """Gets the scan directory text field."""
 
-        self.__text_values_panel.get_scan_directory()
+        return self.__text_values_panel.get_scan_directory()
 
     def get_destination_directory(self):
         """Gets the destination directory text field."""
 
-        self.__text_values_panel.get_destination_directory()
+        return self.__text_values_panel.get_destination_directory()
 
     def get_backup_directory(self):
         """Gets the backup directory text field."""
 
-        self.__text_values_panel.get_backup_directory()
+        return self.__text_values_panel.get_backup_directory()
 
     def get_paperwork_type(self):
         """Gets the value of the paperwork type dropdown box."""
 
-        self.__mode_options_panel.get_paperwork_type()
+        return self.__mode_options_panel.get_paperwork_type()
 
     def get_multi_page_handling(self):
         """Gets the value of the multi-page handling dropdown box."""
 
-        self.__mode_options_panel.get_multi_page_handling()
+        return self.__mode_options_panel.get_multi_page_handling()
 
     def get_input_mode(self):
         """Gets the value of the input mode dropdown box."""
 
-        self.__mode_options_panel.get_input_mode()
+        return self.__mode_options_panel.get_input_mode()
 
     def get_autoprocessing_mode(self):
         """Gets the boolean status of the autoprocessing checkbox."""
 
-        self.__mode_options_panel.get_autoprocessing_mode()
+        return self.__mode_options_panel.get_autoprocessing_mode()
 
     def set_user_name(self, user_name):
         """Sets the user name."""

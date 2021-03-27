@@ -281,39 +281,39 @@ class TextValuesPanel(Panel):
     def get_user_name(self):
         """Gets the user name."""
 
-        self.__user_name_entry_box.GetLabel()
+        self.__user_name_entry_box.get_value()
 
     def get_scan_directory(self):
         """Gets the scan directory text field."""
 
-        self.__scan_directory_entry_box.GetLabel()
+        return self.__scan_directory_entry_box.GetValue()
 
     def get_destination_directory(self):
         """Gets the destination directory text field."""
 
-        self.__destination_directory_entry_box.GetLabel()
+        return self.__destination_directory_entry_box.get_value()
 
     def get_backup_directory(self):
         """Gets the backup directory text field."""
 
-        self.__backup_directory_entry_box.GetLabel()
+        return self.__backup_directory_entry_box.get_value()
 
     def set_user_name(self, user_name):
         """Sets the user name."""
 
-        self.__user_name_entry_box.SetLabel(user_name)
+        self.__user_name_entry_box.SetValue(user_name)
 
     def set_scan_directory(self, directory):
         """Sets the scan directory text field."""
 
-        self.__scan_directory_entry_box.SetLabel(directory)
+        self.__scan_directory_entry_box.SetValue(directory)
 
     def set_destination_directory(self, directory):
         """Sets the destination directory text field."""
 
-        self.__destination_directory_entry_box.SetLabel(directory)
+        self.__destination_directory_entry_box.SetValue(directory)
 
     def set_backup_directory(self, directory):
         """Sets the backup directory text field."""
 
-        self.__backup_directory_entry_box.SetLabel(directory)
+        self.__backup_directory_entry_box.SetValue(directory)

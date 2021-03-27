@@ -42,7 +42,7 @@ class MainApplication():
                 self.__main_menu.write_log("\n")
 
             self.calculate_quick_mode_hint_message()
-            self.__main_menu.write_log("\n\nAwaiting user input.")
+            self.__main_menu.write_log("Awaiting user input.")
 
         self.__assign_main_menu_button_functions()
 
@@ -74,6 +74,10 @@ class MainApplication():
         """Saves the current settings menu values to the current user's
         state.
         """
+        print(
+            "Saving ", self.__settings_menu.get_scan_directory(),
+            "to user ", self.__current_user.get_name()
+        )
 
         self.__current_user.set_scan_directory(self.__settings_menu.get_scan_directory())
         self.__current_user.set_destination_directory(self.__settings_menu.get_destination_directory())

@@ -31,6 +31,11 @@ class TextEntryBox(wx.TextCtrl):
             attributes.size, attributes.position
         )
 
+    def get_value(self):
+        """Returns the value found in the current entry box."""
+        
+        return self.GetValue()
+
 class TextLabel(wx.StaticText):
     """A class for a text label box for instructions etc."""
 
@@ -81,7 +86,6 @@ class TextConsole(wx.TextCtrl):
             attributes.parent_widget,
             attributes.size, attributes.position
         )
-
 
     def write(self, text: str):
         """Writes to the console."""
