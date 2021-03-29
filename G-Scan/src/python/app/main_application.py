@@ -1,6 +1,7 @@
 from wx.core import ID_CANCEL
 import app.backup
 from datetime import datetime
+from app.root_gui_application import RootGuiApplication
 from gui.mainmenu.main_menu import MainMenu
 from gui.thread import GuiThread
 from gui.popupbox import PopupBox
@@ -98,9 +99,19 @@ class MainApplication():
     def __assign_settings_menu_button_functions(self):
         """Assigns functions to the settings menu's buttons."""
 
-        self.__settings_menu.set_save_button_function(self.__save_settings_menu_values)
-        self.__settings_menu.set_cancel_button_function(self.__close_settings_menu)
-        self.__settings_menu.set_browse_scan_directory_button_function(self.browse_scan_directory_path)
+        menu = self.__settings_menu
+
+        menu.set_save_button_function(self.__save_settings_menu_values)
+        menu.set_cancel_button_function(self.__close_settings_menu)
+        
+        menu.set_browse_scan_directory_button_function(
+            self.browse_scan_directory_path)
+        
+        menu.set_browse_destination_directory_button_function(
+            self.browse_destination_directory_path)
+        
+        menu.set_browse_backup_directory_button_function(
+            self.browse_backup_directory_path)
 
     def get_path_from_folder_browser(self) -> str:
         """Launches a folder browser."""
@@ -116,11 +127,25 @@ class MainApplication():
 
         return path
 
-    def browse_scan_directory_path(self, event = None):
+    def browse_path_and_use_with_function(self, callback_function):
+        """Launches a directory dialog window to get a path and then
+        feeds it as the only parameter into a function.
+        """
+
         path = self.get_path_from_folder_browser()
-        
-        if path:
-            self.__settings_menu.set_scan_directory(path)
+        callback_function(path)
+
+    def browse_scan_directory_path(self, event = None):
+        self.browse_path_and_use_with_function(
+            self.__settings_menu.set_scan_directory)
+
+    def browse_destination_directory_path(self, event = None):
+        self.browse_path_and_use_with_function(
+            self.__settings_menu.set_destination_directory)
+
+    def browse_backup_directory_path(self, event = None):
+        self.browse_path_and_use_with_function(
+            self.__settings_menu.set_backup_directory)
 
     def __close_settings_menu(self, event = None):
         self.__settings_menu.close()
@@ -804,10 +829,17 @@ class MainApplication():
 
         try:
             self.pdf_viewer.close()
-            exit()
+            # exit()
 
         except:
-            exit()
+            if self.__main_menu.is_running():
+                self.__main_menu.close()
+
+            if hasattr(self, "__settings_menu"):
+                print("Closing settings menu.")
+                self.__settings_menu.close()
+
+            # exit()
 
     def get_lock(self):
         """Gets the semaphore associated with this application's

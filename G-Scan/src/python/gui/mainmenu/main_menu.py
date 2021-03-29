@@ -36,10 +36,19 @@ class MainMenu(Frame):
         with self.__application_lock:
             method()
 
+    def close(self):
+        """Closes the app."""
+
+        self.__app.ExitMainLoop()
+        self.__app.Destroy()
+
+    def is_running(self):
+        return self.__app.IsActive()
+
     def __create_widgets(self):
         """Creates the widgets required for the GUI."""
 
-        self.__app = wx.App(False)
+        self.__app = wx.App()
         
         super().__init__((870, 575), "G-Scan")
         self.__create_panels()

@@ -32,6 +32,15 @@ class SettingsMenu(Frame):
 
         self.Show()
 
+    def close(self):
+        """Closes the app."""
+
+        self.__app.ExitMainLoop()
+        self.__app.Destroy()
+
+    def is_running(self):
+        return self.__app.IsActive()
+
     def get_user_name(self):
         """Gets the user name."""
 
@@ -80,17 +89,20 @@ class SettingsMenu(Frame):
     def set_scan_directory(self, directory: str):
         """Sets the scan directory text field."""
 
-        self.__text_values_panel.set_scan_directory(directory)
+        if directory:
+            self.__text_values_panel.set_scan_directory(directory)
 
     def set_destination_directory(self, directory):
         """Sets the destination directory text field."""
 
-        self.__text_values_panel.set_destination_directory(directory)
+        if directory:
+            self.__text_values_panel.set_destination_directory(directory)
 
     def set_backup_directory(self, directory):
         """Sets the backup directory text field."""
 
-        self.__text_values_panel.set_backup_directory(directory)
+        if directory:
+            self.__text_values_panel.set_backup_directory(directory)
 
     def set_paperwork_type(self, paperwork_type):
         """Sets the value of the paperwork type dropdown box."""
