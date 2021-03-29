@@ -77,7 +77,7 @@ class SettingsMenu(Frame):
 
         self.__text_values_panel.set_user_name(user_name)
 
-    def set_scan_directory(self, directory):
+    def set_scan_directory(self, directory: str):
         """Sets the scan directory text field."""
 
         self.__text_values_panel.set_scan_directory(directory)
