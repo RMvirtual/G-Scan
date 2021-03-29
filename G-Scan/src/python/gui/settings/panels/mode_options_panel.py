@@ -185,22 +185,22 @@ class ModeOptionsPanel(Panel):
     def get_paperwork_type(self):
         """Gets the value of the paperwork type dropdown box."""
 
-        self.__paperwork_type_dropdown_box.GetValue()
+        return self.__paperwork_type_dropdown_box.GetValue()
 
     def get_multi_page_handling(self):
         """Gets the value of the multi-page handling dropdown box."""
 
-        self.__multi_page_handling_dropdown_box.GetValue()
+        return self.__multi_page_handling_dropdown_box.GetValue()
 
     def get_input_mode(self):
         """Gets the value of the input mode dropdown box."""
 
-        self.__input_mode_dropdown_box.GetValue()
+        return self.__input_mode_dropdown_box.GetValue()
 
     def get_autoprocessing_mode(self):
         """Gets the boolean status of the autoprocessing checkbox."""
 
-        self.__autoprocessing_checkbox.GetValue()
+        return self.__autoprocessing_checkbox.GetValue()
 
     def set_paperwork_type(self, paperwork_type):
         """Sets the value of the paperwork type dropdown box."""

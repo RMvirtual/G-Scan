@@ -118,8 +118,9 @@ class MainApplication():
 
         path = ""
 
-        with wx.DirDialog(None, "Locate a file", style=wx.DD_DEFAULT_STYLE) \
-                as file_dialog:
+        with wx.DirDialog(
+                None, "Select a directory", style=wx.DD_DEFAULT_STYLE
+                ) as file_dialog:
             if file_dialog.ShowModal() == wx.ID_CANCEL:
                 return None
 
