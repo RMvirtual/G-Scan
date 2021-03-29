@@ -8,7 +8,7 @@ class ModeOptionsPanel(Panel):
     """A class representing the mode options panel."""
 
     def __init__(self, frame):
-        super().__init__(frame, (860, 30), (10, 135))
+        super().__init__(frame, (860, 50), (10, 135))
 
         self.__create_paperwork_type_widgets()
         self.__create_multi_page_handling_widgets()
@@ -178,7 +178,7 @@ class ModeOptionsPanel(Panel):
 
         attributes.text = "POD Autoprocessing"
         attributes.size = (160, 25)
-        attributes.position = (200, 0)
+        attributes.position = (200, 23)
 
         return attributes
 
