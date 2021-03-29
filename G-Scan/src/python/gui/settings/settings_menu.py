@@ -125,6 +125,30 @@ class SettingsMenu(Frame):
 
         self.__buttons_panel.set_cancel_button_function(callback_function)
 
+    def set_browse_backup_directory_button_function(self, callback_function):
+        """Sets the function called when the browse button is clicked
+        on the backup directory."""
+
+        self.__text_values_panel.set_browse_backup_directory_button_function(
+            callback_function)
+
+    def set_browse_scan_directory_button_function(self, callback_function):
+        """Sets the function called when the browse button is clicked
+        on the scan directory."""
+
+        self.__text_values_panel.set_browse_scan_directory_button_function(
+            callback_function)
+
+    def set_browse_destination_directory_button_function(self,
+            callback_function):
+        """Sets the function called when the browse button is clicked
+        on the destination directory."""
+
+        subpanel = self.__text_values_panel
+
+        subpanel.set_browse_destination_directory_button_function(
+            callback_function)
+
     def close(self, event = None):
         """Closes the settings menu."""
 

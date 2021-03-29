@@ -33,7 +33,7 @@ class TextValuesPanel(Panel):
 
         self.__create_scan_directory_label()
         self.__create_scan_directory_entry_box()
-        self.__create_scan_directory_file_dialog_button()
+        self.__create_browse_scan_directory_button()
 
     def __create_destination_directory_widgets(self):
         """Creates widgets related to the current specified
@@ -41,7 +41,7 @@ class TextValuesPanel(Panel):
 
         self.__create_destination_directory_label()
         self.__create_destination_directory_entry_box()
-        self.__create_destination_directory_file_dialog_button()
+        self.__create_browse_destination_directory_button()
 
     def __create_backup_directory_widgets(self):
         """Creates widgets related to the current specified backup
@@ -49,7 +49,7 @@ class TextValuesPanel(Panel):
 
         self.__create_backup_directory_label()
         self.__create_backup_directory_entry_box()
-        self.__create_backup_directory_file_dialog_button()
+        self.__create_browse_backup_directory_button()
 
     def __create_user_name_label(self) -> None:
         """Creates the user name label."""
@@ -129,16 +129,16 @@ class TextValuesPanel(Panel):
 
         return attributes
 
-    def __create_scan_directory_file_dialog_button(self) -> None:
+    def __create_browse_scan_directory_button(self) -> None:
         """Creates the scan directory file dialog button."""
 
         attributes = (
-            self.__create_scan_directory_file_dialog_button_attributes())
+            self.__create_browse_scan_directory_button_attributes())
         
-        self.__scan_directory_file_dialog_button = (
+        self.__browse_scan_directory_button = (
             Button.from_attributes(attributes))
 
-    def __create_scan_directory_file_dialog_button_attributes(self) \
+    def __create_browse_scan_directory_button_attributes(self) \
             -> WidgetAttributes:
         """Creates the attributes required to instantiate the scan
         directory file dialog button.
@@ -192,16 +192,16 @@ class TextValuesPanel(Panel):
 
         return attributes
 
-    def __create_destination_directory_file_dialog_button(self) -> None:
+    def __create_browse_destination_directory_button(self) -> None:
         """Creates the destination directory file dialog button."""
 
         attributes = (
-            self.__create_destination_directory_file_dialog_button_attributes())
+            self.__create_browse_destination_directory_button_attributes())
         
-        self.__destination_directory_file_dialog_button = (
+        self.__browse_destination_directory_button = (
             Button.from_attributes(attributes))
 
-    def __create_destination_directory_file_dialog_button_attributes(self) \
+    def __create_browse_destination_directory_button_attributes(self) \
             -> WidgetAttributes:
         """Creates the attributes required to instantiate the
         destination directory file dialog button.
@@ -255,16 +255,16 @@ class TextValuesPanel(Panel):
 
         return attributes
 
-    def __create_backup_directory_file_dialog_button(self) -> None:
-        """Creates the backup directory file dialog button."""
+    def __create_browse_backup_directory_button(self) -> None:
+        """Creates the browse backup directory button."""
 
         attributes = (
-            self.__create_backup_directory_file_dialog_button_attributes())
+            self.__create_browse_backup_directory_button_attributes())
         
-        self.__backup_directory_file_dialog_button = (
+        self.__browse_backup_directory_button = (
             Button.from_attributes(attributes))
 
-    def __create_backup_directory_file_dialog_button_attributes(self) \
+    def __create_browse_backup_directory_button_attributes(self) \
             -> WidgetAttributes:
         """Creates the attributes required to instantiate the backup
         directory file dialog button.
@@ -317,3 +317,25 @@ class TextValuesPanel(Panel):
         """Sets the backup directory text field."""
 
         self.__backup_directory_entry_box.SetValue(directory)
+
+    def set_browse_backup_directory_button_function(self, callback_function):
+        """Sets the function called when the browse button is clicked
+        on the backup directory."""
+
+        self.__browse_backup_directory_button.bind_function_to_click(
+            callback_function)
+
+    def set_browse_scan_directory_button_function(self, callback_function):
+        """Sets the function called when the browse button is clicked
+        on the scan directory."""
+
+        self.__browse_scan_directory_button.bind_function_to_click(
+            callback_function)
+
+    def set_browse_destination_directory_button_function(self,
+            callback_function):
+        """Sets the function called when the browse button is clicked
+        on the destination directory."""
+
+        self.__browse_destination_directory_button.bind_function_to_click(
+            callback_function)

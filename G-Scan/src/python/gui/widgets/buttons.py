@@ -19,16 +19,12 @@ class Button(wx.Button):
 
         self.SetFont(fonts.getCalibriFont(11))
 
-    def bind_function_to_click(self, callbackFunction) -> None:
+    def bind_function_to_click(self, callback_function) -> None:
         """Assigns a callback function to run when the button is
         clicked.
         """
 
-        self.Bind(
-            wx.EVT_BUTTON,
-            callbackFunction,
-            self
-        )
+        self.Bind(wx.EVT_BUTTON, callback_function, self)
 
     @staticmethod
     def from_attributes(attributes:WidgetAttributes):
@@ -62,12 +58,12 @@ class ImageButton(wx.BitmapButton):
             pos = position
         )
 
-    def bind_function_to_click(self, callbackFunction) -> None:
+    def bind_function_to_click(self, callback_function) -> None:
         """Assigns a callback function to run when the button is
         clicked.
         """
 
-        self.Bind(wx.EVT_BUTTON, callbackFunction, self)
+        self.Bind(wx.EVT_BUTTON, callback_function, self)
 
     @staticmethod
     def from_attributes(attributes:WidgetAttributes):
