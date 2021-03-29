@@ -34,6 +34,8 @@ class MainApplication():
         self.__main_menu_thread = GuiThread(self.__main_menu)
         self.__main_menu_thread.start()
 
+        print("Gets here.")
+
         x_axis = str(int(GetSystemMetrics(0) / 4))
         y_axis = str(int(GetSystemMetrics(1) / 4))
 
@@ -108,20 +110,17 @@ class MainApplication():
         with wx.DirDialog(None, "Locate a file", style=wx.DD_DEFAULT_STYLE) \
                 as file_dialog:
             if file_dialog.ShowModal() == wx.ID_CANCEL:
-                return ""
+                return None
 
             path = file_dialog.GetPath()
-
-            file_dialog.Close()
 
         return path
 
     def browse_scan_directory_path(self, event = None):
         path = self.get_path_from_folder_browser()
-        print("Path is " + path)
-
-        self.__settings_menu.set_scan_directory(path)
         
+        if path:
+            self.__settings_menu.set_scan_directory(path)
 
     def __close_settings_menu(self, event = None):
         self.__settings_menu.close()
