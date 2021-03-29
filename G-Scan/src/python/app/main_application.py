@@ -98,20 +98,37 @@ class MainApplication():
         """Saves the current settings menu values to the current user's
         state.
         """
-        print(
-            "Saving ", self.__settings_menu.get_scan_directory(),
-            "to user ", self.__current_user.get_name()
-        )
+ 
+        class UserValues():
+            """A data structure for fields retrieved from the settings
+            menu's current values to be stored against the current
+            user's defaults.
+            """
 
-        self.__current_user.set_scan_directory(self.__settings_menu.get_scan_directory())
-        self.__current_user.set_destination_directory(self.__settings_menu.get_destination_directory())
-        self.__current_user.set_backup_directory(self.__settings_menu.get_backup_directory())
-        self.__current_user.set_paperwork_type(self.__settings_menu.get_paperwork_type())
-        self.__current_user.set_multi_page_handling(self.__settings_menu.get_multi_page_handling())
-        self.__current_user.set_input_mode(self.__settings_menu.get_input_mode())
-        self.__current_user.set_auto_processing_mode(self.__settings_menu.get_autoprocessing_mode())
+            def __init__(self, menu: SettingsMenu):
+                """Creates a new data structure containing user values
+                obtained from the settings menu."""
 
-        self.__current_user.sync()
+                self.scan_directory = menu.get_scan_directory()
+                self.destination_directory = menu.get_destination_directory()
+                self.backup_directory = menu.get_backup_directory()
+                self.paperwork_type = menu.get_paperwork_type()
+                self.multi_page_handling = menu.get_multi_page_handling()
+                self.input_mode = menu.get_input_mode()
+                self.autoprocessing_mode = menu.get_autoprocessing_mode()
+
+        user = self.__current_user
+        values = UserValues(self.__settings_menu)
+
+        user.set_scan_directory(values.scan_directory)
+        user.set_destination_directory(values.destination_directory)
+        user.set_backup_directory(values.backup_directory)
+        user.set_paperwork_type(values.paperwork_type)
+        user.set_multi_page_handling(values.multi_page_handling)
+        user.set_input_mode(values.input_mode)
+        user.set_auto_processing_mode(values.autoprocessing_mode)
+
+        user.sync()
 
         self.__close_settings_menu()
 
