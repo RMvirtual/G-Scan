@@ -1,4 +1,3 @@
-from wx.core import ID_CANCEL
 import app.backup
 from datetime import datetime
 from app.root_gui_application import RootGuiApplication
@@ -64,27 +63,16 @@ class MainApplication():
     def __load_settings_menu_values(self):
         """Does stuff and things."""
 
-        class SettingsMenuValues():
-            """A data structure for fields taken from a user's default
-            settings to be loaded into the settings menu.
-            """
-            def __init__(self, user: User):
-                """Creates a new data structure for holding settings
-                menu values.
-                """
-                 
-                self.user_name = user.get_name()
-                self.scan_directory = user.get_scan_directory()
-                self.destination_directory = user.get_destination_directory()
-                self.backup_directory = user.get_backup_directory()
-                self.paperwork_type = user.get_paperwork_type()
-                self.input_mode = user.get_input_mode()
-                self.multi_page_handling = user.get_multi_page_handling()
-                self.autoprocessing = user.get_autoprocessing_mode()
+        values = self.get_default_settings_from_user()
+        self.__set_settings_menu_values_from_values(values)
+
+    def __set_settings_menu_values_from_values(self, values):
+        """Sets the settings menu fields based on values data
+        structure.
+        """
 
         menu = self.__settings_menu
-        values = SettingsMenuValues(self.__current_user)
-        
+
         menu.set_user_name(values.user_name)
         menu.set_scan_directory(values.scan_directory)
         menu.set_destination_directory(values.destination_directory)
@@ -92,34 +80,41 @@ class MainApplication():
         menu.set_paperwork_type(values.paperwork_type)
         menu.set_input_mode_dropdown_box(values.input_mode)
         menu.set_multi_page_handling(values.multi_page_handling)
-        menu.set_autoprocessing_checkbox(values.autoprocessing)
+        menu.set_autoprocessing_checkbox(values.autoprocessing_mode)
+
+    def get_default_settings_from_user(self):
+        """Returns the default values from the current user."""
+
+        user = self.__current_user
+        values = MainApplication.UserValues.from_user(user)
+
+        return values
+
+    def get_default_settings_from_settings_menu(self):
+        """Returns the current values from the settings menu."""
+
+        menu = self.__settings_menu
+        values = MainApplication.UserValues.from_settings_menu(menu)
+
+        return values
+
 
     def __save_settings_menu_values(self, event = None):
         """Saves the current settings menu values to the current user's
         state.
         """
  
-        class UserValues():
-            """A data structure for fields retrieved from the settings
-            menu's current values to be stored against the current
-            user's defaults.
-            """
+        values = self.get_default_settings_from_settings_menu()
+        self.__set_user_defaults_from_values(values)
+        self.__close_settings_menu()
 
-            def __init__(self, menu: SettingsMenu):
-                """Creates a new data structure containing user values
-                obtained from the settings menu."""
-
-                self.scan_directory = menu.get_scan_directory()
-                self.destination_directory = menu.get_destination_directory()
-                self.backup_directory = menu.get_backup_directory()
-                self.paperwork_type = menu.get_paperwork_type()
-                self.multi_page_handling = menu.get_multi_page_handling()
-                self.input_mode = menu.get_input_mode()
-                self.autoprocessing_mode = menu.get_autoprocessing_mode()
+    def __set_user_defaults_from_values(self, values):
+        """Sets the user's default settings from a user values data
+        structure.
+        """
 
         user = self.__current_user
-        values = UserValues(self.__settings_menu)
-
+        
         user.set_scan_directory(values.scan_directory)
         user.set_destination_directory(values.destination_directory)
         user.set_backup_directory(values.backup_directory)
@@ -129,8 +124,6 @@ class MainApplication():
         user.set_auto_processing_mode(values.autoprocessing_mode)
 
         user.sync()
-
-        self.__close_settings_menu()
 
     def __assign_settings_menu_button_functions(self):
         """Assigns functions to the settings menu's buttons."""
@@ -881,3 +874,55 @@ class MainApplication():
         """
 
         return self.__lock
+
+    class UserValues():
+        """A data structure containing fields relevant to a user's
+        default values. Can be created either from a User or from the
+        values in a Settings Window.
+        """
+
+        def __init__(self):
+            """Creates a new data structure containing user values
+            obtained from the settings menu."""
+
+            self.user_name = ""
+            self.scan_directory = ""
+            self.destination_directory = ""
+            self.backup_directory = ""
+            self.paperwork_type = ""
+            self.multi_page_handling = ""
+            self.input_mode = ""
+            self.autoprocessing_mode = False
+
+        @staticmethod
+        def from_user(user: User):
+            """Creates a set of values from a user object."""
+
+            values = MainApplication.UserValues()
+
+            values.user_name = user.get_name()
+            values.scan_directory = user.get_scan_directory()
+            values.destination_directory = user.get_destination_directory()
+            values.backup_directory = user.get_backup_directory()
+            values.paperwork_type = user.get_paperwork_type()
+            values.input_mode = user.get_input_mode()
+            values.multi_page_handling = user.get_multi_page_handling()
+            values.autoprocessing_mode = user.get_autoprocessing_mode()
+
+            return values
+
+        @staticmethod
+        def from_settings_menu(menu: SettingsMenu):
+            """Creates a set of values from a settings menu object."""
+
+            values = MainApplication.UserValues()
+
+            values.scan_directory = menu.get_scan_directory()
+            values.destination_directory = menu.get_destination_directory()
+            values.backup_directory = menu.get_backup_directory()
+            values.paperwork_type = menu.get_paperwork_type()
+            values.input_mode = menu.get_input_mode()
+            values.multi_page_handling = menu.get_multi_page_handling()
+            values.autoprocessing_mode = menu.get_autoprocessing_mode()
+
+            return values
