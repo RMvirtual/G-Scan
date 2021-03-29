@@ -64,16 +64,35 @@ class MainApplication():
     def __load_settings_menu_values(self):
         """Does stuff and things."""
 
-        self.__settings_menu.set_user_name(self.__current_user.get_name())
+        class SettingsMenuValues():
+            """A data structure for fields taken from a user's default
+            settings to be loaded into the settings menu.
+            """
+            def __init__(self, user: User):
+                """Creates a new data structure for holding settings
+                menu values.
+                """
+                 
+                self.user_name = user.get_name()
+                self.scan_directory = user.get_scan_directory()
+                self.destination_directory = user.get_destination_directory()
+                self.backup_directory = user.get_backup_directory()
+                self.paperwork_type = user.get_paperwork_type()
+                self.input_mode = user.get_input_mode()
+                self.multi_page_handling = user.get_multi_page_handling()
+                self.autoprocessing = user.get_autoprocessing_mode()
 
-        self.__settings_menu.set_scan_directory(self.__current_user.get_scan_directory())
-        self.__settings_menu.set_destination_directory(self.__current_user.get_destination_directory())
-        self.__settings_menu.set_backup_directory(self.__current_user.get_backup_directory())
-
-        self.__settings_menu.set_input_mode_dropdown_box(self.__current_user.get_input_mode())
-        self.__settings_menu.set_multi_page_handling(self.__current_user.get_multi_page_handling())
-        self.__settings_menu.set_paperwork_type(self.__current_user.get_paperwork_type())
-        self.__settings_menu.set_autoprocessing_checkbox(self.__current_user.get_autoprocessing_mode())
+        menu = self.__settings_menu
+        values = SettingsMenuValues(self.__current_user)
+        
+        menu.set_user_name(values.user_name)
+        menu.set_scan_directory(values.scan_directory)
+        menu.set_destination_directory(values.destination_directory)
+        menu.set_backup_directory(values.backup_directory)
+        menu.set_paperwork_type(values.paperwork_type)
+        menu.set_input_mode_dropdown_box(values.input_mode)
+        menu.set_multi_page_handling(values.multi_page_handling)
+        menu.set_autoprocessing_checkbox(values.autoprocessing)
 
     def __save_settings_menu_values(self, event = None):
         """Saves the current settings menu values to the current user's
@@ -830,17 +849,14 @@ class MainApplication():
 
         try:
             self.pdf_viewer.close()
-            # exit()
 
         except:
-            if self.__main_menu.is_running():
-                self.__main_menu.close()
-
             if hasattr(self, "__settings_menu"):
                 print("Closing settings menu.")
                 self.__settings_menu.close()
-
-            # exit()
+            
+            if self.__main_menu.is_running():
+                self.__main_menu.close()
 
     def get_lock(self):
         """Gets the semaphore associated with this application's
