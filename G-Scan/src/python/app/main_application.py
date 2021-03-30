@@ -54,10 +54,11 @@ class MainApplication():
         """Creates and launches the user settings menu."""
 
         self.__settings_menu_thread = SettingsMenuThread(self)
-        self.__settings_menu_thread.start()
+        thread = self.__settings_menu_thread
+        thread.start()
 
-        while not self.__settings_menu_thread.is_setup_complete():
-            print("Waiting")
+        event = thread.is_setup_complete()
+        event.wait()
 
         self.__settings_menu = self.__settings_menu_thread.get_settings_menu()
         self.__assign_settings_menu_button_functions()

@@ -30,14 +30,14 @@ class SettingsMenuThread(threading.Thread):
 
         threading.Thread.__init__(self)
         self.__main_application = main_application
+        self.__setup_complete = threading.Event()
 
     def run(self):
         """The process to run when the thread is started."""
 
-        self.__setup_complete = False
         self.__app = wx.App()
         self.__gui = SettingsMenu(self.__main_application)
-        self.__setup_complete = True
+        self.__setup_complete.set()
         self.__app.MainLoop()
 
     def close(self):
