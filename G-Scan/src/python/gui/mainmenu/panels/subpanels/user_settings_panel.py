@@ -374,7 +374,18 @@ class UserSettingsPanel(Panel):
     def get_input_mode(self):
         """Gets the current selection for input mode."""
 
-        pass
+        paperwork_buttons = (
+            self.__normal_mode_radio_button,
+            self.__quick_mode_radio_button
+        )
+
+        for button in paperwork_buttons:
+            is_selected = button.GetValue()
+            
+            if is_selected:
+                return button.GetLabel()
+        
+        return None
 
     def get_multi_page_handling(self):
         """Gets the current selection for multi-page handling."""
@@ -392,6 +403,22 @@ class UserSettingsPanel(Panel):
 
         for button in paperwork_buttons:
             is_selected = button.GetLabel() == paperwork_type
+            
+            if is_selected:
+                button.SetValue(True)
+        
+        return None
+
+    def set_input_mode(self, input_mode: str):
+        """Sets the current selection for paperwork type."""
+
+        input_mode_buttons = (
+            self.__normal_mode_radio_button,
+            self.__quick_mode_radio_button
+        )
+
+        for button in input_mode_buttons:
+            is_selected = button.GetLabel() == input_mode + " Mode"
             
             if is_selected:
                 button.SetValue(True)

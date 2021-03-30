@@ -146,5 +146,7 @@ class MainMenu(Frame):
         return self.__top_panel.get_multi_page_handling()
 
     def set_paperwork_type(self, paperwork_type: str):
-
         self.__top_panel.set_paperwork_type(paperwork_type)
+
+    def set_input_mode(self, input_mode: str):
+        self.__top_panel.set_input_mode(input_mode)
