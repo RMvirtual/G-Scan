@@ -138,3 +138,39 @@ class User(object):
 
         self.__autoprocessing = autoprocessing_mode
 
+class UserDefaults():
+    """A data structure containing fields relevant to a user's
+    default values. Can be created either from a User or from the
+    values in a Settings Window.
+    """
+
+    def __init__(self):
+        """Creates a new data structure containing user values
+        obtained from the settings menu."""
+
+        self.user_name = ""
+        self.scan_directory = ""
+        self.destination_directory = ""
+        self.backup_directory = ""
+        self.paperwork_type = ""
+        self.multi_page_handling = ""
+        self.input_mode = ""
+        self.autoprocessing_mode = False
+
+    @staticmethod
+    def from_user(user: User) -> "UserDefaults":
+        """Creates a set of values from a user object."""
+
+        values = UserDefaults()
+
+        values.user_name = user.get_name()
+        values.scan_directory = user.get_scan_directory()
+        values.destination_directory = user.get_destination_directory()
+        values.backup_directory = user.get_backup_directory()
+        values.paperwork_type = user.get_paperwork_type()
+        values.input_mode = user.get_input_mode()
+        values.multi_page_handling = user.get_multi_page_handling()
+        values.autoprocessing_mode = user.get_autoprocessing_mode()
+
+        return values
+    

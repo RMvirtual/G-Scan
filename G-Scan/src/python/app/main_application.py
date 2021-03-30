@@ -6,7 +6,7 @@ from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
 import pdf.pdf_reader
 import pdf.pdf_writer
-from user import User
+from user import User, UserDefaults
 import wx
 
 import app.file_system as file_system
@@ -203,7 +203,7 @@ class Controller():
         values = self.get_default_settings_from_user()
         self.__set_settings_menu_values_from_values(values)
 
-    def __set_settings_menu_values_from_values(self, values):
+    def __set_settings_menu_values_from_values(self, values: UserDefaults):
         """Sets the settings menu fields based on values data
         structure.
         """
@@ -219,19 +219,11 @@ class Controller():
         menu.set_multi_page_handling(values.multi_page_handling)
         menu.set_autoprocessing_checkbox(values.autoprocessing_mode)
 
-    def get_default_settings_from_user(self) -> "UserDefaults":
+    def get_default_settings_from_user(self) -> UserDefaults:
         """Returns the default values from the current user."""
 
         user = self.__current_user
         values = UserDefaults.from_user(user)
-
-        return values
-
-    def get_default_settings_from_settings_menu(self) -> "UserDefaults":
-        """Returns the current values from the settings menu."""
-
-        menu = self.__settings_menu
-        values = UserDefaults.from_settings_menu(menu)
 
         return values
 
@@ -240,11 +232,11 @@ class Controller():
         state.
         """
  
-        values = self.get_default_settings_from_settings_menu()
+        values = self.get_user_defaults_from_settings_menu()
         self.__set_user_defaults_from_values(values)
         self.__close_settings_menu()
 
-    def __set_user_defaults_from_values(self, values):
+    def __set_user_defaults_from_values(self, values: UserDefaults):
         """Sets the user's default settings from a user values data
         structure.
         """
@@ -844,57 +836,11 @@ class Controller():
         
         self.get_file(file_index, file_list)
 
-class MainApplication():
-    """A class for the main application of the program to run."""
-
-    def __init__(self):
-        """Constructor method."""
-
-        self.__app = wx.App()
-        self.__controller = Controller()
-        self.__app.MainLoop()
-
-class UserDefaults():
-    """A data structure containing fields relevant to a user's
-    default values. Can be created either from a User or from the
-    values in a Settings Window.
-    """
-
-    def __init__(self):
-        """Creates a new data structure containing user values
-        obtained from the settings menu."""
-
-        self.user_name = ""
-        self.scan_directory = ""
-        self.destination_directory = ""
-        self.backup_directory = ""
-        self.paperwork_type = ""
-        self.multi_page_handling = ""
-        self.input_mode = ""
-        self.autoprocessing_mode = False
-
-    @staticmethod
-    def from_user(user: User) -> "UserDefaults":
-        """Creates a set of values from a user object."""
-
-        values = UserDefaults()
-
-        values.user_name = user.get_name()
-        values.scan_directory = user.get_scan_directory()
-        values.destination_directory = user.get_destination_directory()
-        values.backup_directory = user.get_backup_directory()
-        values.paperwork_type = user.get_paperwork_type()
-        values.input_mode = user.get_input_mode()
-        values.multi_page_handling = user.get_multi_page_handling()
-        values.autoprocessing_mode = user.get_autoprocessing_mode()
-
-        return values
-
-    @staticmethod
-    def from_settings_menu(menu: SettingsMenu) -> "UserDefaults":
+    def get_user_defaults_from_settings_menu(self) -> UserDefaults:
         """Creates a set of values from a settings menu object."""
 
         values = UserDefaults()
+        menu = self.__settings_menu
 
         values.scan_directory = menu.get_scan_directory()
         values.destination_directory = menu.get_destination_directory()
@@ -905,3 +851,13 @@ class UserDefaults():
         values.autoprocessing_mode = menu.get_autoprocessing_mode()
 
         return values
+
+class MainApplication():
+    """A class for the main application of the program to run."""
+
+    def __init__(self):
+        """Constructor method."""
+
+        self.__app = wx.App()
+        self.__controller = Controller()
+        self.__app.MainLoop()
