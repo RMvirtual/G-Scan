@@ -1,7 +1,7 @@
 from gui.widgets.panel import Panel
 from gui.widgets.buttons import Button, ImageButton
 from gui.widgets.text import TextLabel
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
 import app.file_system as file_system
 import gui.widgets.fonts as fonts
 
@@ -34,7 +34,7 @@ class MiddlePanel(Panel):
         attributes = self.__create_start_button_attributes()
         self.__start_button = Button.from_attributes(attributes)
 
-    def __create_start_button_attributes(self) -> WidgetAttributes:
+    def __create_start_button_attributes(self) -> Attributes:
         """Creates the attributes data required for the start button."""
 
         attributes = self.create_empty_attributes()
@@ -52,7 +52,7 @@ class MiddlePanel(Panel):
         self.__quick_mode_preview_text = TextLabel.from_attributes(attributes)
         self.__quick_mode_preview_text.SetFont(fonts.getCalibriFont(12))
 
-    def __create_quick_mode_preview_text_attributes(self) -> WidgetAttributes:
+    def __create_quick_mode_preview_text_attributes(self) -> Attributes:
         """Creates the attribute data required for the quick mode
         preview text.
         """
@@ -71,7 +71,7 @@ class MiddlePanel(Panel):
         attributes = self.__create_michelin_man_button_attributes()
         self.__michelin_man_button = ImageButton.from_attributes(attributes)
 
-    def __create_michelin_man_button_attributes(self) -> WidgetAttributes:
+    def __create_michelin_man_button_attributes(self) -> Attributes:
         """Creates the attributes required for instantiating the
         Michelin Man button.
         """
@@ -96,7 +96,7 @@ class MiddlePanel(Panel):
         attributes = self.__create_settings_button_attributes()
         self.__settings_button = Button.from_attributes(attributes)
 
-    def __create_settings_button_attributes(self) -> WidgetAttributes:
+    def __create_settings_button_attributes(self) -> Attributes:
         """Creates the attributes for instantiating the settings
         button.
         """
@@ -115,7 +115,7 @@ class MiddlePanel(Panel):
         attributes = self.__create_exit_button_attributes()
         self.__exit_button = Button.from_attributes(attributes)
 
-    def __create_exit_button_attributes(self) -> WidgetAttributes:
+    def __create_exit_button_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the exit
         button.
         """

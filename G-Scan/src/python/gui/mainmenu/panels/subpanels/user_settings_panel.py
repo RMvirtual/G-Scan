@@ -1,4 +1,3 @@
-from re import split
 import date.date as date
 
 from gui.widgets.checkboxes import CheckBox
@@ -6,7 +5,7 @@ from gui.widgets.dropdownboxes import DropdownBox
 from gui.widgets.panel import Panel
 from gui.widgets.radio_buttons import RadioButtonMaster, RadioButtonSubject
 from gui.widgets.text import TextLabel
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
 
 class UserSettingsPanel(Panel):
     """A class modelling the user settings panel window found in the
@@ -60,6 +59,7 @@ class UserSettingsPanel(Panel):
         self.__create_customer_paperwork_radio_button()
         self.__create_loading_list_radio_button()
         self.__create_pod_radio_button()
+        self.__create_paperwork_type_dictionary()
 
     def __create_multi_page_handling_radio_buttons(self):
         """Creates the multi-page handling radio buttons responsible
@@ -81,13 +81,25 @@ class UserSettingsPanel(Panel):
         self.__create_month_options_dropdown_box()
         self.__create_year_options_dropdown_box()
 
+    def __create_paperwork_type_dictionary(self):
+        """Creates a dictionary of possible values to look up the
+        paperwork type buttons by."""
+
+        self.__paperwork_buttons = {
+            "Customer Paperwork": self.__customer_paperwork_radio_button,
+            "Cust PW": self.__customer_paperwork_radio_button,
+            "Customer PW": self.__customer_paperwork_radio_button,
+            "Loading List": self.__loading_list_radio_button,
+            "POD": self.__pod_radio_button
+        }
+
     def __create_paperwork_type_heading(self):
         """Creates the paperwork type heading."""
 
         attributes = self.__create_paperwork_type_heading_attributes()
         self.__paperwork_type_heading = TextLabel.from_attributes(attributes)
 
-    def __create_paperwork_type_heading_attributes(self):
+    def __create_paperwork_type_heading_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the paperwork
         type heading.
         """
@@ -109,7 +121,8 @@ class UserSettingsPanel(Panel):
         self.__customer_paperwork_radio_button = (
             RadioButtonMaster.from_attributes(attributes))
 
-    def __create_customer_paperwork_radio_button_attributes(self):
+    def __create_customer_paperwork_radio_button_attributes(self) \
+            -> Attributes:
         """Creates the attributes required to create the customer
         paperwork radio button.
         """
@@ -131,7 +144,7 @@ class UserSettingsPanel(Panel):
         self.__loading_list_radio_button = (
             RadioButtonSubject.from_attributes(attributes))
 
-    def __create_loading_list_radio_button_attributes(self):
+    def __create_loading_list_radio_button_attributes(self) -> Attributes:
         """Creates the attributes required to create the POD radio
         button.
         """
@@ -153,7 +166,7 @@ class UserSettingsPanel(Panel):
         self.__pod_radio_button = (
             RadioButtonSubject.from_attributes(attributes))
 
-    def __create_pod_radio_button_attributes(self):
+    def __create_pod_radio_button_attributes(self) -> Attributes:
         """Creates the attributes required to create the POD radio
         button.
         """
@@ -172,7 +185,7 @@ class UserSettingsPanel(Panel):
         attributes = self.__create_autoprocessing_checkbox_attributes()
         self.__autoprocessing_checkbox = CheckBox.from_attributes(attributes)
 
-    def __create_autoprocessing_checkbox_attributes(self):
+    def __create_autoprocessing_checkbox_attributes(self) -> Attributes:
         """Creates the attributes required to create the autoprocessing
         checkbox.
         """
@@ -191,7 +204,7 @@ class UserSettingsPanel(Panel):
         attributes = self.__create_input_mode_label_attributes()
         self.__input_mode_label = TextLabel.from_attributes(attributes)
 
-    def __create_input_mode_label_attributes(self):
+    def __create_input_mode_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the input mode
         label.
         """
@@ -212,7 +225,7 @@ class UserSettingsPanel(Panel):
         self.__normal_mode_radio_button = (
             RadioButtonMaster.from_attributes(attributes))
 
-    def __create_normal_mode_radio_button_attributes(self):
+    def __create_normal_mode_radio_button_attributes(self) -> Attributes:
         """Creates the attributes required to create the normal mode
         radio button.
         """
@@ -234,7 +247,7 @@ class UserSettingsPanel(Panel):
         self.__quick_mode_radio_button = (
             RadioButtonSubject.from_attributes(attributes))
 
-    def __create_quick_mode_radio_button_attributes(self):
+    def __create_quick_mode_radio_button_attributes(self) -> Attributes:
         """Creates the attributes required to create the quick mode
         radio button.
         """
@@ -253,7 +266,7 @@ class UserSettingsPanel(Panel):
         attributes = self.__create_month_options_dropdown_box_attributes()
         self.__months_dropdown_box = DropdownBox.from_attributes(attributes)
 
-    def __create_month_options_dropdown_box_attributes(self):
+    def __create_month_options_dropdown_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the month
         options dropdown box."""
 
@@ -275,7 +288,7 @@ class UserSettingsPanel(Panel):
         attributes = self.__create_year_options_dropdown_box_attributes()
         self.__years_dropdown_box = DropdownBox.from_attributes(attributes)
 
-    def __create_year_options_dropdown_box_attributes(self):
+    def __create_year_options_dropdown_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the year
         options dropdown box."""
 
@@ -299,7 +312,7 @@ class UserSettingsPanel(Panel):
         self.__multi_page_handling_label = (
             TextLabel.from_attributes(attributes))
 
-    def __create_multi_page_handling_label_attributes(self):
+    def __create_multi_page_handling_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the
         multi-page handling label.
         """
@@ -320,7 +333,7 @@ class UserSettingsPanel(Panel):
         self.__split_documents_radio_button = (
             RadioButtonMaster.from_attributes(attributes))
 
-    def __create_split_documents_radio_button_attributes(self):
+    def __create_split_documents_radio_button_attributes(self) -> Attributes:
         """Creates the attributes required to create the split document
         option radio button.
         """
@@ -342,7 +355,8 @@ class UserSettingsPanel(Panel):
         self.__do_not_split_documents_radio_button = (
             RadioButtonSubject.from_attributes(attributes))
 
-    def __create_do_not_split_documents_radio_button_attributes(self):
+    def __create_do_not_split_documents_radio_button_attributes(self) \
+            -> Attributes:
         """Creates the attributes required to create the split document
         option radio button.
         """
@@ -358,13 +372,9 @@ class UserSettingsPanel(Panel):
     def get_paperwork_type(self):
         """Gets the current selection for paperwork type."""
 
-        paperwork_buttons = (
-            self.__customer_paperwork_radio_button,
-            self.__loading_list_radio_button,
-            self.__pod_radio_button
-        )
-
-        for button in paperwork_buttons:
+        buttons = self.__paperwork_buttons.values
+        
+        for button in buttons:
             is_selected = button.GetValue()
             
             if is_selected:
@@ -412,20 +422,10 @@ class UserSettingsPanel(Panel):
     def set_paperwork_type(self, paperwork_type: str):
         """Sets the current selection for paperwork type."""
 
-        paperwork_buttons = (
-            self.__customer_paperwork_radio_button,
-            self.__loading_list_radio_button,
-            self.__pod_radio_button
-        )
-
-        for button in paperwork_buttons:
-            is_selected = button.GetLabel() == paperwork_type
-            
-            if is_selected:
-                button.SetValue(True)
+        print(paperwork_type)
+        button = self.__paperwork_buttons.get(paperwork_type)
+        button.SetValue(True)
         
-        return None
-
     def set_multi_page_handling(self, multi_page_handling: str):
         """Sets the current selection for multi-page handling."""
 

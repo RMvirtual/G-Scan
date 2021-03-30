@@ -3,7 +3,7 @@ from gui.widgets.buttons import Button
 from gui.widgets.panel import Panel
 from gui.widgets.text import TextEntryBox, TextLabel
 from gui.widgets.images import Image
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
 
 class FilePanel(Panel):
     """A class modelling the file panel window found in the top panel
@@ -177,7 +177,7 @@ class FilePanel(Panel):
         attributes = self.__create_submit_button_attributes()
         self.__submit_button = Button.from_attributes(attributes)
 
-    def __create_submit_button_attributes(self) -> WidgetAttributes:
+    def __create_submit_button_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the submit
         button.
         """
@@ -197,7 +197,7 @@ class FilePanel(Panel):
         attributes = self.__create_skip_button_attributes()
         self.__skip_button = Button.from_attributes(attributes)
 
-    def __create_skip_button_attributes(self) -> WidgetAttributes:
+    def __create_skip_button_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the skip
         button.
         """
@@ -216,7 +216,7 @@ class FilePanel(Panel):
         attributes = self.__create_split_document_button_attributes()
         self.__split_document_button = Button.from_attributes(attributes)
 
-    def __create_split_document_button_attributes(self) -> WidgetAttributes:
+    def __create_split_document_button_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the split
         document button.
         """

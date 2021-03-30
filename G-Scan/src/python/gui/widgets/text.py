@@ -1,10 +1,9 @@
-from gui.widgets import fonts
+import gui.widgets.fonts as fonts
+from gui.widgets.widget import Attributes
+from wx import BORDER_NONE, BORDER_SIMPLE, TE_MULTILINE, TE_READONLY, \
+    TextCtrl, StaticText
 
-import wx
-
-from gui.widgets.widgetattributes import WidgetAttributes
-
-class TextEntryBox(wx.TextCtrl):
+class TextEntryBox(TextCtrl):
     """A class for a text entry box."""
 
     def __init__(self, panel, text, size, position):
@@ -15,7 +14,7 @@ class TextEntryBox(wx.TextCtrl):
             value=text,
             size=size,
             pos=position,
-            style=wx.BORDER_SIMPLE
+            style=BORDER_SIMPLE
         )
 
         self.SetFont(fonts.getCalibriFont(14))
@@ -23,7 +22,7 @@ class TextEntryBox(wx.TextCtrl):
         # self.SetMaxLength(11)
 
     @staticmethod
-    def from_attributes(attributes:WidgetAttributes):
+    def from_attributes(attributes: Attributes):
         """Creates a new text label box from attributes."""
 
         return TextEntryBox(
@@ -36,7 +35,7 @@ class TextEntryBox(wx.TextCtrl):
         
         return self.GetValue()
 
-class TextLabel(wx.StaticText):
+class TextLabel(StaticText):
     """A class for a text label box for instructions etc."""
 
     def __init__(self, panel, text, size, position):
@@ -47,13 +46,13 @@ class TextLabel(wx.StaticText):
             label=text,
             pos=position,
             size=size,
-            style=wx.BORDER_NONE
+            style=BORDER_NONE
         )
 
         self.SetFont(fonts.getCalibriFont(14))
 
     @staticmethod
-    def from_attributes(attributes:WidgetAttributes):
+    def from_attributes(attributes: Attributes):
         """Creates a new text label box from attributes."""
 
         return TextLabel(
@@ -61,7 +60,7 @@ class TextLabel(wx.StaticText):
             attributes.size, attributes.position
         )
 
-class TextConsole(wx.TextCtrl):
+class TextConsole(TextCtrl):
     """A class for a text console."""
 
     def __init__(self, panel, size, position):
@@ -70,7 +69,7 @@ class TextConsole(wx.TextCtrl):
             value="",
             size=size,
             pos=position,
-            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.BORDER_SIMPLE
+            style=TE_MULTILINE | TE_READONLY | BORDER_SIMPLE
         )
 
         self.SetFont(fonts.getCalibriFont(14))
@@ -79,7 +78,7 @@ class TextConsole(wx.TextCtrl):
         self.SetEditable(False)
 
     @staticmethod
-    def from_attributes(attributes:WidgetAttributes):
+    def from_attributes(attributes: Attributes):
         """Creates a new text label box from attributes."""
 
         return TextConsole(

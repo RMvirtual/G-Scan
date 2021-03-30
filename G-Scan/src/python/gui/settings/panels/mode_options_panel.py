@@ -2,7 +2,7 @@ from gui.widgets.panel import Panel
 from gui.widgets.text import TextLabel
 from gui.widgets.dropdownboxes import DropdownBox
 from gui.widgets.checkboxes import CheckBox
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
 
 class ModeOptionsPanel(Panel):
     """A class representing the mode options panel."""
@@ -43,8 +43,7 @@ class ModeOptionsPanel(Panel):
         self.__paperwork_type_dropdown_box = (
             DropdownBox.from_attributes(attributes))
 
-    def __create_paperwork_type_dropdown_box_attributes(self) \
-            -> WidgetAttributes:
+    def __create_paperwork_type_dropdown_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the paperwork
         type dropdown box."""
 
@@ -63,7 +62,7 @@ class ModeOptionsPanel(Panel):
         attributes = self.__create_paperwork_type_label_attributes()
         self.__paperwork_type_label = TextLabel.from_attributes(attributes)
 
-    def __create_paperwork_type_label_attributes(self) -> WidgetAttributes:
+    def __create_paperwork_type_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the paperwork
         type label.
         """
@@ -84,8 +83,7 @@ class ModeOptionsPanel(Panel):
         self.__multi_page_handling_label = (
             TextLabel.from_attributes(attributes))
 
-    def __create_multi_page_handling_label_attributes(self) \
-            -> WidgetAttributes:
+    def __create_multi_page_handling_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the
         multi-page handling label.
         """
@@ -108,7 +106,7 @@ class ModeOptionsPanel(Panel):
             DropdownBox.from_attributes(attributes))
 
     def __create_multi_page_handling_dropdown_box_attributes(self) \
-            -> WidgetAttributes:
+            -> Attributes:
         """Creates the attributes required to instantiate the
         multi-page handling dropdown box.
         """
@@ -128,7 +126,7 @@ class ModeOptionsPanel(Panel):
         attributes = self.__create_input_mode_label_attributes()
         self.__input_mode_label = TextLabel.from_attributes(attributes)
 
-    def __create_input_mode_label_attributes(self) -> WidgetAttributes:
+    def __create_input_mode_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the
         input mode label.
         """
@@ -149,7 +147,7 @@ class ModeOptionsPanel(Panel):
         self.__input_mode_dropdown_box = (
             DropdownBox.from_attributes(attributes))
 
-    def __create_input_mode_dropdown_box_attributes(self) -> WidgetAttributes:
+    def __create_input_mode_dropdown_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the
         input mode dropdown box.
         """
@@ -169,7 +167,7 @@ class ModeOptionsPanel(Panel):
         attributes = self.__create_autoprocessing_checkbox_attributes()
         self.__autoprocessing_checkbox = CheckBox.from_attributes(attributes)
 
-    def __create_autoprocessing_checkbox_attributes(self) -> WidgetAttributes:
+    def __create_autoprocessing_checkbox_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the
         input mode dropdown box.
         """

@@ -1,10 +1,10 @@
+import gui.widgets.fonts as fonts
 from gui.widgets.panel import Panel
-from gui.widgets import fonts
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
+from wx import BitmapButton, Button as wxButton, EVT_BUTTON, Image, \
+    BITMAP_TYPE_ANY
 
-import wx
-
-class Button(wx.Button):
+class Button(wxButton):
     """A class for a button."""
 
     def __init__(self, panel: Panel, text: str, size: tuple, position: tuple):
@@ -24,10 +24,10 @@ class Button(wx.Button):
         clicked.
         """
 
-        self.Bind(wx.EVT_BUTTON, callback_function, self)
+        self.Bind(EVT_BUTTON, callback_function, self)
 
     @staticmethod
-    def from_attributes(attributes:WidgetAttributes):
+    def from_attributes(attributes: Attributes):
         """Creates a new button."""
 
         new_button = Button(
@@ -40,7 +40,7 @@ class Button(wx.Button):
 
         return new_button
 
-class ImageButton(wx.BitmapButton):
+class ImageButton(BitmapButton):
     """A class for a button containing an image icon rather than text.
     """
 
@@ -63,10 +63,10 @@ class ImageButton(wx.BitmapButton):
         clicked.
         """
 
-        self.Bind(wx.EVT_BUTTON, callback_function, self)
+        self.Bind(EVT_BUTTON, callback_function, self)
 
     @staticmethod
-    def from_attributes(attributes:WidgetAttributes):
+    def from_attributes(attributes: Attributes):
         """Creates a new image button."""
 
         new_button = ImageButton(
@@ -83,8 +83,8 @@ class ImageButton(wx.BitmapButton):
             scaling_factor: tuple):
         """Converts a path to an image into a bitmap image."""
 
-        image = wx.Image(
-            image_path, wx.BITMAP_TYPE_ANY).Scale(
+        image = Image(
+            image_path, BITMAP_TYPE_ANY).Scale(
                 scaling_factor[0], scaling_factor[1])
 
         bitmap_image = image.ConvertToBitmap()

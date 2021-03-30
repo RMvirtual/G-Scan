@@ -1,6 +1,6 @@
-import wx
+from wx import Frame as wxFrame
 
-class Frame(wx.Frame):
+class Frame(wxFrame):
     """A class for a frame window."""
 
     def __init__(self, size, title):

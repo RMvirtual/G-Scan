@@ -1,6 +1,6 @@
 from gui.widgets.panel import Panel
 from gui.widgets.buttons import Button
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
 
 class ButtonsPanel(Panel):
     """A class representing the buttons panel."""
@@ -23,7 +23,7 @@ class ButtonsPanel(Panel):
         attributes = self.__create_save_button_attributes()
         self.__save_button = Button.from_attributes(attributes)
 
-    def __create_save_button_attributes(self) -> WidgetAttributes:
+    def __create_save_button_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the save
         button.
         """
@@ -42,7 +42,7 @@ class ButtonsPanel(Panel):
         attributes = self.__create_cancel_button_attributes()
         self.__cancel_button = Button.from_attributes(attributes)
 
-    def __create_cancel_button_attributes(self) -> WidgetAttributes:
+    def __create_cancel_button_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the cancel
         button.
         """

@@ -1,9 +1,8 @@
-from gui.widgets import fonts
+import gui.widgets.fonts as fonts
 from gui.widgets.panel import Panel
+from wx import RadioButton, RB_GROUP
 
-import wx
-
-class RadioButtonMaster(wx.RadioButton):
+class RadioButtonMaster(RadioButton):
     """A class for a radio button that represents the start of a new
     group of connected radio buttons.
     """
@@ -17,7 +16,7 @@ class RadioButtonMaster(wx.RadioButton):
             label=text,
             size=size,
             pos=position,
-            style=wx.RB_GROUP
+            style=RB_GROUP
         )
 
         self.SetFont(fonts.getCalibriFont(11))
@@ -33,7 +32,7 @@ class RadioButtonMaster(wx.RadioButton):
 
         return new_radio_button
 
-class RadioButtonSubject(wx.RadioButton):
+class RadioButtonSubject(RadioButton):
     """A class for a radio button that represents the start of a new
     group of connected radio buttons.
     """

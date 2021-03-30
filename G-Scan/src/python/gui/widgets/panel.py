@@ -1,8 +1,7 @@
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
+from wx import Panel as wxPanel
 
-import wx
-
-class Panel(wx.Panel):
+class Panel(wxPanel):
     """A basic GUI panel (to be extended further into more concrete
     panels).
     """
@@ -18,11 +17,11 @@ class Panel(wx.Panel):
 
         self.__frame = frame
 
-    def create_empty_attributes(self) -> WidgetAttributes:
+    def create_empty_attributes(self) -> Attributes:
         """Creates an empty widget attributes data structure with only
         this panel assigned as the parent widget."""
 
-        attributes = WidgetAttributes()
+        attributes = Attributes()
         attributes.parent_widget = self
 
         return attributes

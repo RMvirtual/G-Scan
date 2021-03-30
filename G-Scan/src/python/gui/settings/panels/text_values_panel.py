@@ -1,7 +1,7 @@
 from gui.widgets.panel import Panel
 from gui.widgets.text import TextLabel, TextEntryBox
 from gui.widgets.buttons import Button
-from gui.widgets.widgetattributes import WidgetAttributes
+from gui.widgets.widget import Attributes
 
 class TextValuesPanel(Panel):
     """A class representing the text values panel in the gettings
@@ -57,7 +57,7 @@ class TextValuesPanel(Panel):
         attributes = self.__create_user_name_label_attributes()
         self.__user_name_label = TextLabel.from_attributes(attributes)
 
-    def __create_user_name_label_attributes(self) -> WidgetAttributes:
+    def __create_user_name_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the user
         name label.
         """
@@ -76,7 +76,7 @@ class TextValuesPanel(Panel):
         attributes = self.__create_user_name_entry_box_attributes()
         self.__user_name_entry_box = TextEntryBox.from_attributes(attributes)
 
-    def __create_user_name_entry_box_attributes(self) -> WidgetAttributes:
+    def __create_user_name_entry_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the user
         name entry box.
         """
@@ -95,7 +95,7 @@ class TextValuesPanel(Panel):
         attributes = self.__create_scan_directory_label_attributes()
         self.__scan_directory_label = TextLabel.from_attributes(attributes)
 
-    def __create_scan_directory_label_attributes(self) -> WidgetAttributes:
+    def __create_scan_directory_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the scan
         directory label.
         """
@@ -116,7 +116,7 @@ class TextValuesPanel(Panel):
         self.__scan_directory_entry_box = (
             TextEntryBox.from_attributes(attributes))
 
-    def __create_scan_directory_entry_box_attributes(self) -> WidgetAttributes:
+    def __create_scan_directory_entry_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the scan
         directory entry box.
         """
@@ -138,8 +138,7 @@ class TextValuesPanel(Panel):
         self.__browse_scan_directory_button = (
             Button.from_attributes(attributes))
 
-    def __create_browse_scan_directory_button_attributes(self) \
-            -> WidgetAttributes:
+    def __create_browse_scan_directory_button_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the scan
         directory file dialog button.
         """
@@ -158,7 +157,7 @@ class TextValuesPanel(Panel):
         attributes = self.__create_destination_directory_label_attributes()
         self.__destination_directory_label = TextLabel.from_attributes(attributes)
 
-    def __create_destination_directory_label_attributes(self) -> WidgetAttributes:
+    def __create_destination_directory_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the
         destination directory label.
         """
@@ -179,7 +178,7 @@ class TextValuesPanel(Panel):
 
         self.__destination_directory_entry_box = TextEntryBox.from_attributes(attributes)
 
-    def __create_destination_directory_entry_box_attributes(self) -> WidgetAttributes:
+    def __create_destination_directory_entry_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the
         destination directory entry box.
         """
@@ -202,7 +201,7 @@ class TextValuesPanel(Panel):
             Button.from_attributes(attributes))
 
     def __create_browse_destination_directory_button_attributes(self) \
-            -> WidgetAttributes:
+            -> Attributes:
         """Creates the attributes required to instantiate the
         destination directory file dialog button.
         """
@@ -221,7 +220,7 @@ class TextValuesPanel(Panel):
         attributes = self.__create_backup_directory_label_attributes()
         self.__backup_directory_label = TextLabel.from_attributes(attributes)
 
-    def __create_backup_directory_label_attributes(self) -> WidgetAttributes:
+    def __create_backup_directory_label_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the backup
         directory label.
         """
@@ -242,7 +241,7 @@ class TextValuesPanel(Panel):
         self.__backup_directory_entry_box = (
             TextEntryBox.from_attributes(attributes))
 
-    def __create_backup_directory_entry_box_attributes(self) -> WidgetAttributes:
+    def __create_backup_directory_entry_box_attributes(self) -> Attributes:
         """Creates the attributes required to instantiate the backup
         directory entry box.
         """
@@ -265,7 +264,7 @@ class TextValuesPanel(Panel):
             Button.from_attributes(attributes))
 
     def __create_browse_backup_directory_button_attributes(self) \
-            -> WidgetAttributes:
+            -> Attributes:
         """Creates the attributes required to instantiate the backup
         directory file dialog button.
         """

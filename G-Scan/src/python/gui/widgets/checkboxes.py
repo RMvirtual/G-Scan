@@ -1,10 +1,9 @@
 from gui.widgets.panel import Panel
-from gui.widgets import fonts
-from gui.widgets.widgetattributes import WidgetAttributes
+import gui.widgets.fonts as fonts
+from gui.widgets.widget import Attributes
+from wx import CheckBox as wxCheckBox
 
-import wx
-
-class CheckBox(wx.CheckBox):
+class CheckBox(wxCheckBox):
     """A class for a checkbox."""
 
     def __init__(self, panel: Panel, text: str, size: tuple, position: tuple):
@@ -20,7 +19,7 @@ class CheckBox(wx.CheckBox):
         self.SetFont(fonts.getCalibriFont(9))
 
     @staticmethod
-    def from_attributes(attributes):
+    def from_attributes(attributes: Attributes):
         """Creates a new checkbox."""
 
         new_checkbox = CheckBox(

@@ -249,6 +249,7 @@ class Controller():
  
         values = self.get_user_defaults_from_settings_menu()
         self.__set_user_defaults_from_values(values)
+        self.__set_main_menu_values_from_user_defaults(values)
         self.__close_settings_menu()
 
     def __set_user_defaults_from_values(self, values: UserDefaults):
