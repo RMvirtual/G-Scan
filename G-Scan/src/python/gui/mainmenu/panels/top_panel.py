@@ -57,8 +57,11 @@ class TopPanel(Panel):
         return self.__user_settings_panel.get_multi_page_handling()
 
     def set_paperwork_type(self, paperwork_type: str):
-
         self.__user_settings_panel.set_paperwork_type(paperwork_type)
+
+    def set_multi_page_handling(self, multi_page_handling: str):
+        self.__user_settings_panel.set_multi_page_handling(
+            multi_page_handling)
 
     def set_input_mode(self, input_mode: str):
         self.__user_settings_panel.set_input_mode(input_mode)

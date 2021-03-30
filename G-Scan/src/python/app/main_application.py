@@ -230,9 +230,8 @@ class Controller():
         menu = self.__main_menu
 
         menu.set_paperwork_type(defaults.paperwork_type)
-        print(defaults.input_mode)
         menu.set_input_mode(defaults.input_mode)
-        # menu.set_multi_page_handling(defaults.multi_page_handling)
+        menu.set_multi_page_handling(defaults.multi_page_handling)
         # menu.set_autoprocessing_mode(defaults.autoprocessing_mode)
 
     def get_default_settings_from_user(self) -> UserDefaults:

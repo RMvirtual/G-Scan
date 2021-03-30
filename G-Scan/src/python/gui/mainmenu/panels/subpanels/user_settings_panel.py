@@ -1,3 +1,4 @@
+from re import split
 import date.date as date
 
 from gui.widgets.checkboxes import CheckBox
@@ -390,7 +391,18 @@ class UserSettingsPanel(Panel):
     def get_multi_page_handling(self):
         """Gets the current selection for multi-page handling."""
 
-        pass
+        paperwork_buttons = (
+            self.__split_documents_radio_button,
+            self.__do_not_split_documents_radio_button
+        )
+
+        for button in paperwork_buttons:
+            is_selected = button.GetValue()
+            
+            if is_selected:
+                return button.GetLabel()
+        
+        return None
 
     def set_paperwork_type(self, paperwork_type: str):
         """Sets the current selection for paperwork type."""
@@ -409,8 +421,28 @@ class UserSettingsPanel(Panel):
         
         return None
 
+    def set_multi_page_handling(self, multi_page_handling: str):
+        """Sets the current selection for multi-page handling."""
+
+        input_mode_buttons = (
+            self.__split_documents_radio_button,
+            self.__do_not_split_documents_radio_button
+        )
+
+        multi_page_handling += " Documents"
+
+        for button in input_mode_buttons:
+            is_selected = button.GetLabel() == multi_page_handling
+
+            print(button.GetLabel())
+            
+            if is_selected:
+                button.SetValue(True)
+        
+        return None
+
     def set_input_mode(self, input_mode: str):
-        """Sets the current selection for paperwork type."""
+        """Sets the current selection for input mode."""
 
         input_mode_buttons = (
             self.__normal_mode_radio_button,
