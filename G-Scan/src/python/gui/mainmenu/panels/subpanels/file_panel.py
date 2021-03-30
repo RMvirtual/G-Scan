@@ -167,7 +167,7 @@ class FilePanel(Panel):
 
         attributes.text = ""
         attributes.size = (140, 25)
-        attributes.position = (0, 300)
+        attributes.position = (0, 225)
 
         return attributes
 
@@ -186,7 +186,7 @@ class FilePanel(Panel):
 
         attributes.text = "Submit"
         attributes.size = (60, 25)
-        attributes.position = (140, 225)
+        attributes.position = (141, 225)
         # attributes.callback_function = self.__submit_button_click
 
         return attributes

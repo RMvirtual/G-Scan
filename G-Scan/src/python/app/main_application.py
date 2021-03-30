@@ -1,9 +1,7 @@
 from wx.core import Sleep
 import app.backup
 from datetime import datetime
-from app.root_gui_application import RootGuiApplication
 from gui.mainmenu.main_menu import MainMenu
-from gui.thread import GuiThread, SettingsMenuThread
 from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
@@ -12,7 +10,6 @@ import pdf.pdf_writer
 from user import User
 from win32api import GetSystemMetrics
 import wx
-from app.root_gui_application import RootGuiApplication
 
 import app.file_system as file_system
 import app.user_input_validation as user_input_validation
