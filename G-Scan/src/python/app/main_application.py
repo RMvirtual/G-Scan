@@ -63,6 +63,8 @@ class Controller():
         self.calculate_quick_mode_hint_message()
         self.__main_menu.write_log("Awaiting user input.")
         self.__assign_main_menu_button_functions()
+        user_defaults = self.get_default_settings_from_user()
+        self.__set_main_menu_values_from_user_defaults(user_defaults)
 
     def __create_main_menu(self):
         """Creates the main menu."""
@@ -203,21 +205,35 @@ class Controller():
         values = self.get_default_settings_from_user()
         self.__set_settings_menu_values_from_values(values)
 
-    def __set_settings_menu_values_from_values(self, values: UserDefaults):
+    def __set_settings_menu_values_from_values(self, defaults: UserDefaults):
         """Sets the settings menu fields based on values data
         structure.
         """
 
         menu = self.__settings_menu
 
-        menu.set_user_name(values.user_name)
-        menu.set_scan_directory(values.scan_directory)
-        menu.set_destination_directory(values.destination_directory)
-        menu.set_backup_directory(values.backup_directory)
-        menu.set_paperwork_type(values.paperwork_type)
-        menu.set_input_mode_dropdown_box(values.input_mode)
-        menu.set_multi_page_handling(values.multi_page_handling)
-        menu.set_autoprocessing_checkbox(values.autoprocessing_mode)
+        menu.set_user_name(defaults.user_name)
+        menu.set_scan_directory(defaults.scan_directory)
+        menu.set_destination_directory(defaults.destination_directory)
+        menu.set_backup_directory(defaults.backup_directory)
+        menu.set_paperwork_type(defaults.paperwork_type)
+        menu.set_input_mode_dropdown_box(defaults.input_mode)
+        menu.set_multi_page_handling(defaults.multi_page_handling)
+        menu.set_autoprocessing_checkbox(defaults.autoprocessing_mode)
+
+    def __set_main_menu_values_from_user_defaults(self,
+            defaults: UserDefaults):
+        """Sets the main menu's default options from a User Defaults
+        data structure.
+        """
+
+        menu = self.__main_menu
+
+        menu.set_paperwork_type(defaults.paperwork_type)
+        # menu.set_input_mode(defaults.input_mode)
+        # menu.set_multi_page_handling(defaults.multi_page_handling)
+        # menu.set_autoprocessing_mode(defaults.autoprocessing_mode)
+        
 
     def get_default_settings_from_user(self) -> UserDefaults:
         """Returns the default values from the current user."""
