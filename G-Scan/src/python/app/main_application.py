@@ -1,3 +1,4 @@
+from wx.core import Sleep
 import app.backup
 from datetime import datetime
 from app.root_gui_application import RootGuiApplication
@@ -11,6 +12,7 @@ import pdf.pdf_writer
 from user import User
 from win32api import GetSystemMetrics
 import wx
+from app.root_gui_application import RootGuiApplication
 
 import app.file_system as file_system
 import app.user_input_validation as user_input_validation
@@ -21,46 +23,186 @@ import shelve
 import threading
 import time
 
-class MainApplication():
-    """A class for the main application of the program to run."""
+class Model():
+    """A class for the model."""
+
+    def get_user_settings(self):
+        """Opens the user settings file for the user's directory and
+        workspace settings."""
+
+        current_username = os.getlogin()
+
+        # If the user already exists in the user settings data file,
+        # load the user up as the current user and pass it back as a
+        # user object.
+        user_settings_data = shelve.open(
+            app.file_system.get_user_settings_data_path())
+       
+        try:
+            current_user = user_settings_data[current_username]
+            print("Retrieved " + current_user.get_name())
+            print("Scan directory: ", current_user.get_scan_directory())
+
+        # If the user does not exist, creates a new user and adds it to
+        # the user settings data file, passing back the user object.
+        except Exception as exception:
+            print(exception)
+            current_user = User(current_username)
+            user_settings_data[current_username] = current_user
+            user_settings_data.sync()
+
+            print("Created user: ", current_user.get_name())
+            
+        user_settings_data.close()
+
+        return current_user
+
+class Controller():
+    """A class for the main controller."""
 
     def __init__(self):
-        """Constructor method."""
+        self.__model = Model()
+        self.__current_user = self.__model.get_user_settings()
+        self.__create_main_menu()
+        directories_valid = self.validate_user_directories()
 
-        self.__lock = threading.Lock()
-        self.__current_user = self.get_user_settings()
+        if not directories_valid:
+            self.__main_menu.write_log("\n")
 
-        self.__main_menu = MainMenu(self)
-        self.__main_menu_thread = GuiThread(self.__main_menu)
-        self.__main_menu_thread.start()
-
-        print("Gets here.")
-
-        x_axis = str(int(GetSystemMetrics(0) / 4))
-        y_axis = str(int(GetSystemMetrics(1) / 4))
-
-        with self.__lock:
-            directories_valid = self.validate_user_directories()
-            
-            if not directories_valid:
-                self.__main_menu.write_log("\n")
-
-            self.calculate_quick_mode_hint_message()
-            self.__main_menu.write_log("Awaiting user input.")
-
+        self.calculate_quick_mode_hint_message()
+        self.__main_menu.write_log("Awaiting user input.")
         self.__assign_main_menu_button_functions()
+
+    def __create_main_menu(self):
+        """Creates the main menu."""
+
+        self.__main_menu = MainMenu()
+        self.__assign_main_menu_button_functions()
+
+    def __assign_main_menu_button_functions(self):
+        """Assigns functions to the main menu's buttons."""
+
+        self.__main_menu.set_submit_button_function(self.submit_click)
+        self.__main_menu.set_skip_button_function(self.skip_button_click)
+        
+        self.__main_menu.set_split_document_button_function(
+            self.split_document_button_click)
+
+        self.__main_menu.set_start_button_function(self.start_button_click)
+        self.__main_menu.set_exit_button_function(self.exit_button_click)
+        
+        self.__main_menu.set_settings_button_function(
+            self.settings_button_click)
+
+        self.__main_menu.set_michelin_man_button_function(
+            self.michelin_man_button_click)
+
+    def submit_click(self, event = None):
+        print("Submit button clicked.")
+
+    def skip_button_click(self, event = None):
+        print("Skip button clicked.")
+
+    def split_document_button_click(self, event = None):
+        print("Split Document button clicked.")
+
+    def exit_button_click(self, event = None):
+        self.exit()
+
+    def start_button_click(self, event = None):
+        print("Start button clicked.")
+
+    def settings_button_click(self, event = None):
+        print("Settings button clicked.")
+
+        self.__create_settings_menu()
+
+    def michelin_man_button_click(self, event = None):
+        print("Michelin Man button clicked.")
+
+    def exit(self):
+        """Exits the program."""
+
+        exit()
+
+    def validate_user_directories(self) -> bool:
+        """Checks whether all the working directories of a user are
+        valid and accessible. Prints to the GUI's log if not and
+        returns an overall Boolean at the end on whether all
+        directories are valid or not."""
+
+        directory_checks = self.__current_user.validate_directories_check()
+        all_directories_valid = True
+
+        for directory in directory_checks:
+            is_directory_valid = directory_checks[directory]
+            
+            if not is_directory_valid:
+                all_directories_valid = False
+                
+                self.__main_menu.write_log(
+                    directory + " folder is invalid. Please check the " +
+                    "folder exists and update it within your settings.\n")
+        
+        return all_directories_valid
+
+    def calculate_quick_mode_hint_message(self):
+        """Calculates the message to be displayed in the GUI's quick
+        mode hint box."""
+
+        # Saving status strings for later.
+        possible_status_strings = (
+            "Quick Mode Preview: GR190506111",
+            "Too many digits",
+            "Not enough digits",
+            "Should not contain letters/symbols"
+        )
+
+        input_mode = self.__main_menu.get_current_input_mode()
+
+        # If input mode is set to normal, set the hint box to be an
+        # empty string.
+        if input_mode == "Normal":
+            self.__main_menu.set_quick_mode_hint_text("")
+
+        # If input mode is set to quick, get the year and month
+        # dropdown box variables and make a template ref.
+        elif input_mode == "Quick":
+            working_year = self.__main_menu.get_current_year_choice()
+            years = date.get_years()
+
+            year_prefix = (
+                [year.get_short_code() for year in years
+                    if year.get_full_code() == working_year]
+            )
+
+            #year_prefix = working_year.get_short_code()
+
+            # year_prefix = re.sub("[^0-9]", "",
+            #    str([year.short for year in YEARS if year.full == working_year]))
+
+            working_month = self.__main_menu.get_current_month_choice()
+            months = date.get_months()
+            #month_prefix = working_month.get_short_code()
+
+            month_prefix = (
+                [month.get_short_code() for month in months
+                    if month.get_full_code() == working_month]
+            )
+
+            #month_prefix = re.sub("[^0-9]", "",
+            #    str([month.short for month in MONTHS if month.full == working_month]))
+
+            template_ref = "GR" + year_prefix[0] + month_prefix[0] + "0"
+            hint_message = "Current GR Number: " + template_ref
+
+            # delete anything already in the hint box, and replace it with the new message
+            self.__main_menu.set_quick_mode_hint_text(hint_message)
 
     def __create_settings_menu(self):
         """Creates and launches the user settings menu."""
 
-        self.__settings_menu_thread = SettingsMenuThread(self)
-        thread = self.__settings_menu_thread
-        thread.start()
-
-        event = thread.is_setup_complete()
-        event.wait()
-
-        self.__settings_menu = self.__settings_menu_thread.get_settings_menu()
+        self.__settings_menu = SettingsMenu()
         self.__assign_settings_menu_button_functions()
         self.__load_settings_menu_values()
 
@@ -101,7 +243,6 @@ class MainApplication():
         values = MainApplication.UserValues.from_settings_menu(menu)
 
         return values
-
 
     def __save_settings_menu_values(self, event = None):
         """Saves the current settings menu values to the current user's
@@ -184,156 +325,10 @@ class MainApplication():
     def __close_settings_menu(self, event = None):
         self.__settings_menu.close()
 
-    def __assign_main_menu_button_functions(self):
-        """Assigns functions to the main menu's buttons."""
-
-        self.__main_menu.set_submit_button_function(self.submit_click)
-        self.__main_menu.set_skip_button_function(self.skip_button_click)
-        
-        self.__main_menu.set_split_document_button_function(
-            self.split_document_button_click)
-
-        self.__main_menu.set_start_button_function(self.start_button_click)
-        self.__main_menu.set_exit_button_function(self.exit_button_click)
-        
-        self.__main_menu.set_settings_button_function(
-            self.settings_button_click)
-
-        self.__main_menu.set_michelin_man_button_function(
-            self.michelin_man_button_click)
-
-    def submit_click(self, event = None):
-        print("Submit button clicked.")
-
-    def skip_button_click(self, event = None):
-        print("Skip button clicked.")
-
-    def split_document_button_click(self, event = None):
-        print("Split Document button clicked.")
-
-    def exit_button_click(self, event = None):
-        self.exit()
-
-    def start_button_click(self, event = None):
-        print("Start button clicked.")
-
-    def settings_button_click(self, event = None):
-        print("Settings button clicked.")
-
-        self.__create_settings_menu()
-
-    def michelin_man_button_click(self, event = None):
-        print("Michelin Man button clicked.")
-
-    def get_user_settings(self):
-        """Opens the user settings file for the user's directory and
-        workspace settings."""
-
-        current_username = os.getlogin()
-
-        # If the user already exists in the user settings data file,
-        # load the user up as the current user and pass it back as a
-        # user object.
-        user_settings_data = shelve.open(
-            app.file_system.get_user_settings_data_path())
-       
-        try:
-            current_user = user_settings_data[current_username]
-            print("Retrieved " + current_user.get_name())
-            print("Scan directory: ", current_user.get_scan_directory())
-
-        # If the user does not exist, creates a new user and adds it to
-        # the user settings data file, passing back the user object.
-        except Exception as exception:
-            print(exception)
-            current_user = User(current_username)
-            user_settings_data[current_username] = current_user
-            user_settings_data.sync()
-
-            print("Created user: ", current_user.get_name())
-            
-        user_settings_data.close()
-
-        return current_user
-
     def get_current_user(self):
         """Returns the current user of the program as a User object."""
 
         return self.__current_user
-
-    def validate_user_directories(self) -> bool:
-        """Checks whether all the working directories of a user are
-        valid and accessible. Prints to the GUI's log if not and
-        returns an overall Boolean at the end on whether all
-        directories are valid or not."""
-
-        directory_checks = self.__current_user.validate_directories_check()
-        all_directories_valid = True
-
-        for directory in directory_checks:
-            is_directory_valid = directory_checks[directory]
-            
-            if not is_directory_valid:
-                all_directories_valid = False
-                
-                self.__main_menu.write_log(
-                    directory + " folder is invalid. Please check the " +
-                    "folder exists and update it within your settings.\n")
-        
-        return all_directories_valid
-
-    def calculate_quick_mode_hint_message(self):
-        """Calculates the message to be displayed in the GUI's quick
-        mode hint box."""
-
-        # Saving status strings for later.
-        possible_status_strings = (
-            "Quick Mode Preview: GR190506111",
-            "Too many digits",
-            "Not enough digits",
-            "Should not contain letters/symbols"
-        )
-
-        input_mode = self.__main_menu.get_current_input_mode()
-
-        # If input mode is set to normal, set the hint box to be an
-        # empty string.
-        if input_mode == "Normal":
-            self.__main_menu.set_quick_mode_hint_text("")
-
-        # If input mode is set to quick, get the year and month
-        # dropdown box variables and make a template ref.
-        elif input_mode == "Quick":
-            working_year = self.__main_menu.get_current_year_choice()
-            years = date.get_years()
-
-            year_prefix = (
-                [year.get_short_code() for year in years
-                    if year.get_full_code() == working_year]
-            )
-
-            #year_prefix = working_year.get_short_code()
-
-            # year_prefix = re.sub("[^0-9]", "",
-            #    str([year.short for year in YEARS if year.full == working_year]))
-
-            working_month = self.__main_menu.get_current_month_choice()
-            months = date.get_months()
-            #month_prefix = working_month.get_short_code()
-
-            month_prefix = (
-                [month.get_short_code() for month in months
-                    if month.get_full_code() == working_month]
-            )
-
-            #month_prefix = re.sub("[^0-9]", "",
-            #    str([month.short for month in MONTHS if month.full == working_month]))
-
-            template_ref = "GR" + year_prefix[0] + month_prefix[0] + "0"
-            hint_message = "Current GR Number: " + template_ref
-
-            # delete anything already in the hint box, and replace it with the new message
-            self.__main_menu.set_quick_mode_hint_text(hint_message)
 
     def get_files_in_scan_folder(self):
         """Gets a list of all files in the current user's scan folder
@@ -858,26 +853,16 @@ class MainApplication():
         
         self.get_file(file_index, file_list)
 
-    def exit(self):
-        """Exits the program."""
 
-        try:
-            self.pdf_viewer.close()
+class MainApplication():
+    """A class for the main application of the program to run."""
 
-        except:
-            if hasattr(self, "__settings_menu"):
-                print("Closing settings menu.")
-                self.__settings_menu.close()
-            
-            if self.__main_menu.is_running():
-                self.__main_menu.close()
+    def __init__(self):
+        """Constructor method."""
 
-    def get_lock(self):
-        """Gets the semaphore associated with this application's
-        thread.
-        """
-
-        return self.__lock
+        self.__app = wx.App()
+        self.__controller = Controller()
+        self.__app.MainLoop()
 
     class UserValues():
         """A data structure containing fields relevant to a user's

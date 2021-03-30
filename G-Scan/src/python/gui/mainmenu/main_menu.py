@@ -3,53 +3,22 @@ from gui.mainmenu.panels.top_panel import TopPanel
 from gui.mainmenu.panels.middle_panel import MiddlePanel
 from gui.mainmenu.panels.bottom_panel import BottomPanel
 
-import wx
-
 class MainMenu(Frame):
     """GUI for running the main application."""
 
-    def __init__(self, main_application):
+    def __init__(self):
         """Constructor method."""
 
-        self.__main_application = main_application
-        self.__application_lock = None
-
-        if hasattr(main_application, "get_lock"):
-            self.__application_lock = main_application.get_lock()
-
-    def run(self):
-        """Starts the GUI application in a new thread."""
-        
-        if self.__application_lock:
-            self.__run_method_with_application_lock(self.__create_widgets)
-
-        else:
-            self.__create_widgets()
-
-        self.__app.MainLoop()
-
-    def __run_method_with_application_lock(self, method):
-        """Runs a method within the scope of acquiring the parent
-        application's lock and then releasing it.
-        """
-
-        with self.__application_lock:
-            method()
+        self.__create_widgets()
 
     def close(self):
         """Closes the app."""
 
-        self.__app.ExitMainLoop()
-        self.__app.Destroy()
-
-    def is_running(self):
-        return self.__app.IsActive()
+        self.Close()
 
     def __create_widgets(self):
         """Creates the widgets required for the GUI."""
-
-        self.__app = wx.App()
-        
+       
         super().__init__((870, 575), "G-Scan")
         self.__create_panels()
         

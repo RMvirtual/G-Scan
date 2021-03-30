@@ -8,10 +8,9 @@ import wx
 class SettingsMenu(Frame):
     """GUI menu for viewing and amending the user's settings."""
 
-    def __init__(self, main_application):
+    def __init__(self):
         """Creates a new settings menu."""
 
-        self.__main_application = main_application
         self.__create_widgets()
 
     def __create_widgets(self):
@@ -25,15 +24,6 @@ class SettingsMenu(Frame):
         self.__buttons_panel = ButtonsPanel(self)
 
         self.Show()
-
-    def close(self):
-        """Closes the app."""
-
-        self.__app.ExitMainLoop()
-        self.__app.Destroy()
-
-    def is_running(self):
-        return self.__app.IsActive()
 
     def get_user_name(self):
         """Gets the user name."""
