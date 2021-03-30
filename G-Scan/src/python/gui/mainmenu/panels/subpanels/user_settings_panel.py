@@ -372,6 +372,22 @@ class UserSettingsPanel(Panel):
         
         return None
 
+    def get_multi_page_handling(self):
+        """Gets the current selection for multi-page handling."""
+
+        paperwork_buttons = (
+            self.__split_documents_radio_button,
+            self.__do_not_split_documents_radio_button
+        )
+
+        for button in paperwork_buttons:
+            is_selected = button.GetValue()
+            
+            if is_selected:
+                return button.GetLabel()
+        
+        return None
+
     def get_input_mode(self):
         """Gets the current selection for input mode."""
 
@@ -388,21 +404,10 @@ class UserSettingsPanel(Panel):
         
         return None
 
-    def get_multi_page_handling(self):
-        """Gets the current selection for multi-page handling."""
+    def get_autoprocessing_mode(self):
+        """Gets the current setting for autoprocessing."""
 
-        paperwork_buttons = (
-            self.__split_documents_radio_button,
-            self.__do_not_split_documents_radio_button
-        )
-
-        for button in paperwork_buttons:
-            is_selected = button.GetValue()
-            
-            if is_selected:
-                return button.GetLabel()
-        
-        return None
+        return self.__autoprocessing_checkbox.GetValue()
 
     def set_paperwork_type(self, paperwork_type: str):
         """Sets the current selection for paperwork type."""
@@ -456,3 +461,8 @@ class UserSettingsPanel(Panel):
                 button.SetValue(True)
         
         return None
+
+    def set_autoprocessing_mode(self, autoprocessing: bool):
+        """Sets the current value for the autoprocessing checkbox."""
+
+        self.__autoprocessing_checkbox.SetValue(autoprocessing)
