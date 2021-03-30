@@ -14,15 +14,9 @@ class SettingsMenu(Frame):
         self.__main_application = main_application
         self.__create_widgets()
 
-    def run(self):
-        """Starts the GUI application in a new thread."""
-        
-        self.__app.MainLoop()
-
     def __create_widgets(self):
         """Creates the widgects required for the gettings GUI."""
 
-        self.__app = wx.App()
         super().__init__((895, 270), "User Settings")
         
         self.SetBackgroundColour("WHITE")

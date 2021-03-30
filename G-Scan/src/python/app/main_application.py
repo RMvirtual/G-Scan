@@ -2,7 +2,7 @@ import app.backup
 from datetime import datetime
 from app.root_gui_application import RootGuiApplication
 from gui.mainmenu.main_menu import MainMenu
-from gui.thread import GuiThread
+from gui.thread import GuiThread, SettingsMenuThread
 from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
@@ -53,11 +53,14 @@ class MainApplication():
     def __create_settings_menu(self):
         """Creates and launches the user settings menu."""
 
-        self.__settings_menu = SettingsMenu(self)
-        self.__assign_settings_menu_button_functions()
-        self.__settings_menu_thread = GuiThread(self.__settings_menu)
+        self.__settings_menu_thread = SettingsMenuThread(self)
         self.__settings_menu_thread.start()
 
+        while not self.__settings_menu_thread.is_setup_complete():
+            print("Waiting")
+
+        self.__settings_menu = self.__settings_menu_thread.get_settings_menu()
+        self.__assign_settings_menu_button_functions()
         self.__load_settings_menu_values()
 
     def __load_settings_menu_values(self):
