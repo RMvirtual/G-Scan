@@ -1,4 +1,3 @@
-from wx.core import Sleep
 import app.backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
@@ -8,7 +7,6 @@ from pdf.pdf_viewer import PDFViewer
 import pdf.pdf_reader
 import pdf.pdf_writer
 from user import User
-from win32api import GetSystemMetrics
 import wx
 
 import app.file_system as file_system
@@ -17,8 +15,6 @@ import date.date
 import os
 import re
 import shelve
-import threading
-import time
 
 class Model():
     """A class for the model."""
@@ -37,8 +33,6 @@ class Model():
        
         try:
             current_user = user_settings_data[current_username]
-            print("Retrieved " + current_user.get_name())
-            print("Scan directory: ", current_user.get_scan_directory())
 
         # If the user does not exist, creates a new user and adds it to
         # the user settings data file, passing back the user object.
@@ -225,19 +219,19 @@ class Controller():
         menu.set_multi_page_handling(values.multi_page_handling)
         menu.set_autoprocessing_checkbox(values.autoprocessing_mode)
 
-    def get_default_settings_from_user(self):
+    def get_default_settings_from_user(self) -> "UserDefaults":
         """Returns the default values from the current user."""
 
         user = self.__current_user
-        values = MainApplication.UserValues.from_user(user)
+        values = UserDefaults.from_user(user)
 
         return values
 
-    def get_default_settings_from_settings_menu(self):
+    def get_default_settings_from_settings_menu(self) -> "UserDefaults":
         """Returns the current values from the settings menu."""
 
         menu = self.__settings_menu
-        values = MainApplication.UserValues.from_settings_menu(menu)
+        values = UserDefaults.from_settings_menu(menu)
 
         return values
 
@@ -850,7 +844,6 @@ class Controller():
         
         self.get_file(file_index, file_list)
 
-
 class MainApplication():
     """A class for the main application of the program to run."""
 
@@ -861,54 +854,54 @@ class MainApplication():
         self.__controller = Controller()
         self.__app.MainLoop()
 
-    class UserValues():
-        """A data structure containing fields relevant to a user's
-        default values. Can be created either from a User or from the
-        values in a Settings Window.
-        """
+class UserDefaults():
+    """A data structure containing fields relevant to a user's
+    default values. Can be created either from a User or from the
+    values in a Settings Window.
+    """
 
-        def __init__(self):
-            """Creates a new data structure containing user values
-            obtained from the settings menu."""
+    def __init__(self):
+        """Creates a new data structure containing user values
+        obtained from the settings menu."""
 
-            self.user_name = ""
-            self.scan_directory = ""
-            self.destination_directory = ""
-            self.backup_directory = ""
-            self.paperwork_type = ""
-            self.multi_page_handling = ""
-            self.input_mode = ""
-            self.autoprocessing_mode = False
+        self.user_name = ""
+        self.scan_directory = ""
+        self.destination_directory = ""
+        self.backup_directory = ""
+        self.paperwork_type = ""
+        self.multi_page_handling = ""
+        self.input_mode = ""
+        self.autoprocessing_mode = False
 
-        @staticmethod
-        def from_user(user: User):
-            """Creates a set of values from a user object."""
+    @staticmethod
+    def from_user(user: User) -> "UserDefaults":
+        """Creates a set of values from a user object."""
 
-            values = MainApplication.UserValues()
+        values = UserDefaults()
 
-            values.user_name = user.get_name()
-            values.scan_directory = user.get_scan_directory()
-            values.destination_directory = user.get_destination_directory()
-            values.backup_directory = user.get_backup_directory()
-            values.paperwork_type = user.get_paperwork_type()
-            values.input_mode = user.get_input_mode()
-            values.multi_page_handling = user.get_multi_page_handling()
-            values.autoprocessing_mode = user.get_autoprocessing_mode()
+        values.user_name = user.get_name()
+        values.scan_directory = user.get_scan_directory()
+        values.destination_directory = user.get_destination_directory()
+        values.backup_directory = user.get_backup_directory()
+        values.paperwork_type = user.get_paperwork_type()
+        values.input_mode = user.get_input_mode()
+        values.multi_page_handling = user.get_multi_page_handling()
+        values.autoprocessing_mode = user.get_autoprocessing_mode()
 
-            return values
+        return values
 
-        @staticmethod
-        def from_settings_menu(menu: SettingsMenu):
-            """Creates a set of values from a settings menu object."""
+    @staticmethod
+    def from_settings_menu(menu: SettingsMenu) -> "UserDefaults":
+        """Creates a set of values from a settings menu object."""
 
-            values = MainApplication.UserValues()
+        values = UserDefaults()
 
-            values.scan_directory = menu.get_scan_directory()
-            values.destination_directory = menu.get_destination_directory()
-            values.backup_directory = menu.get_backup_directory()
-            values.paperwork_type = menu.get_paperwork_type()
-            values.input_mode = menu.get_input_mode()
-            values.multi_page_handling = menu.get_multi_page_handling()
-            values.autoprocessing_mode = menu.get_autoprocessing_mode()
+        values.scan_directory = menu.get_scan_directory()
+        values.destination_directory = menu.get_destination_directory()
+        values.backup_directory = menu.get_backup_directory()
+        values.paperwork_type = menu.get_paperwork_type()
+        values.input_mode = menu.get_input_mode()
+        values.multi_page_handling = menu.get_multi_page_handling()
+        values.autoprocessing_mode = menu.get_autoprocessing_mode()
 
-            return values
+        return values
