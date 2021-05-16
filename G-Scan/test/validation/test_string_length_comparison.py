@@ -3,8 +3,8 @@ import sys
 import os
 from pathlib import Path
 
-path = Path(os.getcwd()).parent.parent
-sys.path.append(str(path) + "\\src")
+main_src_path = str(Path(os.getcwd()).parent) + "\\src"
+sys.path.append(main_src_path)
 
 import app.validation.string_length_comparison as slc
 
