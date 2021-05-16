@@ -10,8 +10,10 @@ from user import User, UserDefaults
 import wx
 
 import app.file_system as file_system
-import app.user_input_validation as user_input_validation
+import app.validation.job_references as job_ref
+import app.validation.string_manipulation as string_manipulate
 import date
+from date import Date
 import os
 import re
 import shelve
@@ -48,6 +50,37 @@ class Model():
 
         return current_user
 
+    def check_user_input_length(user_input: str, input_mode: str) -> bool:
+        """Checks the length of the user's input (removing any alphabetic
+        characters) to ensure it will create a valid job reference number."""
+
+        user_input = string_manipulate.remove_alphabetical_characters(user_input)
+        
+        if input_mode == "Normal":
+            return job_ref.check_full_number_input_length(user_input)
+
+        elif input_mode == "Quick":
+            return job_ref.check_quick_mode_input_length(user_input)
+
+    def check_quick_mode_input_length(self, user_input: str, date: Date):
+        """Checks the user input when quick mode is active is valid."""
+
+        return job_ref.check_quick_mode_input_length(user_input, date)
+
+    def calculate_quick_mode_hint_message(self, date: Date):
+        """Calculates the message to be displayed in the GUI's quick
+        mode hint box."""
+
+        possible_status_strings = (
+            "Quick Mode Preview: GR190506111",
+            "Too many digits",
+            "Not enough digits",
+            "Should not contain letters/symbols"
+        )
+
+        base_job_number = job_ref.calculate_base_job_number(date)
+        hint_message = "Current GR Number: " + base_job_number
+
 class Controller():
     """A class for the main controller."""
 
@@ -75,20 +108,18 @@ class Controller():
     def __assign_main_menu_button_functions(self):
         """Assigns functions to the main menu's buttons."""
 
-        self.__main_menu.set_submit_button_function(self.submit_click)
-        self.__main_menu.set_skip_button_function(self.skip_button_click)
-        
-        self.__main_menu.set_split_document_button_function(
+        menu = self.__main_menu
+
+        menu.set_submit_button_function(self.submit_click)
+        menu.set_skip_button_function(self.skip_button_click)
+
+        menu.set_split_document_button_function(
             self.split_document_button_click)
 
-        self.__main_menu.set_start_button_function(self.start_button_click)
-        self.__main_menu.set_exit_button_function(self.exit_button_click)
-        
-        self.__main_menu.set_settings_button_function(
-            self.settings_button_click)
-
-        self.__main_menu.set_michelin_man_button_function(
-            self.michelin_man_button_click)
+        menu.set_start_button_function(self.start_button_click)
+        menu.set_exit_button_function(self.exit_button_click)
+        menu.set_settings_button_function(self.settings_button_click)
+        menu.set_michelin_man_button_function(self.michelin_man_button_click)
 
     def submit_click(self, event = None):
         print("Submit button clicked.")
@@ -153,44 +184,19 @@ class Controller():
 
         input_mode = self.__main_menu.get_current_input_mode()
 
-        # If input mode is set to normal, set the hint box to be an
-        # empty string.
         if input_mode == "Normal":
-            self.__main_menu.set_quick_mode_hint_text("")
+            hint_message = ""
 
-        # If input mode is set to quick, get the year and month
-        # dropdown box variables and make a template ref.
-        elif input_mode == "Quick":
-            working_year = self.__main_menu.get_current_year_choice()
-            years = date.get_years()
+        else:
+            month = self.__main_menu.get_months_dropdown_box_value()
+            year = self.__main_menu.get_years_dropdown_box_value()
 
-            year_prefix = (
-                [year.get_short_code() for year in years
-                    if year.get_full_code() == working_year]
-            )
+            date_selection = date.get_date_from_month_name_number(month, year)
+            
+            hint_message = self.__model.calculate_quick_mode_hint_message(
+                date_selection)
 
-            #year_prefix = working_year.get_short_code()
-
-            # year_prefix = re.sub("[^0-9]", "",
-            #    str([year.short for year in YEARS if year.full == working_year]))
-
-            working_month = self.__main_menu.get_current_month_choice()
-            months = date.get_months()
-            #month_prefix = working_month.get_short_code()
-
-            month_prefix = (
-                [month.get_short_code() for month in months
-                    if month.get_full_code() == working_month]
-            )
-
-            #month_prefix = re.sub("[^0-9]", "",
-            #    str([month.short for month in MONTHS if month.full == working_month]))
-
-            template_ref = "GR" + year_prefix[0] + month_prefix[0] + "0"
-            hint_message = "Current GR Number: " + template_ref
-
-            # delete anything already in the hint box, and replace it with the new message
-            self.__main_menu.set_quick_mode_hint_text(hint_message)
+        self.__main_menu.set_quick_mode_hint_text(hint_message)
 
     def __create_settings_menu(self):
         """Creates and launches the user settings menu."""

@@ -3,7 +3,7 @@ import sys
 import os
 from pathlib import Path
 
-main_src_path = str(Path(os.getcwd()).parent) + "\\src"
+main_src_path = str(Path(os.getcwd()).parent.parent.parent) + "\\src"
 sys.path.append(main_src_path)
 
 import app.validation.string_length_comparison as slc
@@ -110,6 +110,7 @@ class TestStringLengthComparison(unittest.TestCase):
         true_tests = [
             slc.is_between_range("190100100", 0, 9),
             slc.is_between_range("19010010", 4, 9),
+            slc.is_between_range("1234", 4, 9),
             slc.is_between_range("LOLOLOLOLOL", 5, 11)
         ]
 

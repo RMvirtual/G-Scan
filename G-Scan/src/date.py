@@ -9,6 +9,13 @@ class Date(object):
         self.__month_name = month_name
         self.__year = year
 
+    @staticmethod
+    def from_month_number_and_year(month_number, year):
+        month_name = get_month_name_from_month_number(month_number)
+        new_date = Date(month_number, month_name, year)
+
+        return new_date
+
     def get_month_number(self) -> int:
         """Returns the month number."""
 
@@ -69,6 +76,18 @@ def get_months(year: int):
         month_number += 1
 
     return months
+
+def get_month_name_from_month_number(month_number: int) -> str:
+
+    months = {}
+    month_names = get_months_as_strings()
+
+    for month_number in range(1, 12):
+        months[month_number] = month_names[month_number - 1]
+
+    month_name = months[month_number]
+
+    return month_name
 
 def get_months_as_strings():
     """Returns a list of the months as strings."""
@@ -155,3 +174,28 @@ def get_month_names_and_numbers() -> list:
         month_names_and_numbers.append(month_string)
     
     return month_names_and_numbers
+
+def get_month_names_and_numbers_as_dictionary() -> dict:
+    """Returns a dictionary of the month numbers as keys and their
+    longform string representation of "month_name - month_number" as
+    values."""
+
+    months_dictionary = {}
+    month_and_name_strings = get_month_names_and_numbers()
+    month_number = 1
+
+    for month_and_name in month_and_name_strings:
+        months_dictionary[month_and_name] = month_number
+        month_number += 1
+
+    return months_dictionary
+
+def get_date_from_month_name_number(month_name_and_number: str, year) -> Date:
+    """Creates a Date object using the full "month_name - number"
+    string representation and year to create it."""
+
+    month_names_and_numbers = get_month_names_and_numbers_as_dictionary()
+    month_number = month_names_and_numbers[month_name_and_number]
+
+    Date.from_month_number_and_year(month_number, year)
+    

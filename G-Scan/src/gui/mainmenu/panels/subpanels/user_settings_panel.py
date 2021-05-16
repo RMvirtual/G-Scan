@@ -463,7 +463,17 @@ class UserSettingsPanel(Panel):
         
         return None
 
-    def set_autoprocessing_mode(self, autoprocessing: bool):
+    def set_autoprocessing_mode(self, autoprocessing: bool) -> None:
         """Sets the current value for the autoprocessing checkbox."""
 
         self.__autoprocessing_checkbox.SetValue(autoprocessing)
+
+    def get_months_dropdown_box_value(self) -> str:
+        """Gets the month dropdown box value."""
+
+        return self.__months_dropdown_box.GetValue()
+
+    def get_years_dropdown_box_value(self) -> str:
+        """Gets the year dropdown box value."""
+
+        return self.__years_dropdown_box.GetValue()

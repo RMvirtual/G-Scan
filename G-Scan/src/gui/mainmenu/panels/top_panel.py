@@ -73,3 +73,13 @@ class TopPanel(Panel):
 
     def set_autoprocessing_mode(self, autoprocessing: bool):
         self.__user_settings_panel.set_autoprocessing_mode(autoprocessing)
+
+    def get_months_dropdown_box_value(self) -> str:
+        """Gets the month dropdown box value."""
+
+        return self.__user_settings_panel.get_months_dropdown_box_value()
+
+    def get_years_dropdown_box_value(self) -> str:
+        """Gets the year dropdown box value."""
+
+        return self.__user_settings_panel.get_years_dropdown_box_value()
