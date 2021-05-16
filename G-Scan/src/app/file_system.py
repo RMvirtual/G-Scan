@@ -117,3 +117,9 @@ def check_path_exists(path):
     exists or not."""
 
     return os.path.exists(path)
+
+def check_if_file_exists(file_name, directory_path):
+    """Checks if a file already exists in a certain directory."""
+
+    return check_path_exists(directory_path + "\\" + file_name)
+ 

@@ -11,7 +11,7 @@ import wx
 
 import app.file_system as file_system
 import app.user_input_validation as user_input_validation
-import date.date
+import date
 import os
 import re
 import shelve

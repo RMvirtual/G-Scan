@@ -1,4 +1,4 @@
-import date.date as date
+import date
 
 from gui.widgets.checkboxes import CheckBox
 from gui.widgets.dropdownboxes import DropdownBox
@@ -270,12 +270,13 @@ class UserSettingsPanel(Panel):
         """Creates the attributes required to instantiate the month
         options dropdown box."""
 
-        month_options = date.get_months_as_strings()
-        current_month = date.get_current_month().get_full_code()
+        month_options = date.get_month_names_and_numbers()
+        current_month = date.get_current_month()
+        start_option = current_month.get_month_name_and_number_string()
 
         attributes = self.create_empty_attributes()
 
-        attributes.text = current_month
+        attributes.text = start_option
         attributes.size = (120, 25)
         attributes.position = (275, 110)
         attributes.options = month_options
@@ -293,7 +294,7 @@ class UserSettingsPanel(Panel):
         options dropdown box."""
 
         year_options = date.get_years_as_strings()
-        current_year = date.get_current_year().get_full_code()
+        current_year = str(date.get_current_year())
 
         attributes = self.create_empty_attributes()
 
