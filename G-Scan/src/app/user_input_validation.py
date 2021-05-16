@@ -4,6 +4,7 @@ import re
 from gui.popupbox import PopupBox
 import app.validation.string_formatting as string_format
 import app.validation.string_length_comparison as slc
+import user
 
 """Module for validating the users input within G-Scan."""
 
@@ -19,50 +20,44 @@ def check_user_input_length(user_input: str, input_mode: str) -> bool:
     user_input = string_format.remove_alphabetical_characters(user_input)
     
     if input_mode == "Normal":
-        is_nine_characters_long = slc.is_string_length_equal_to(user_input, 9)
-
-        if is_nine_characters_long:
-            return (True, "")
-
-        else:
-            return (False, "Too many/few digits for a GR number.")
+        return check_normal_mode_input_length(user_input)
 
     elif input_mode == "Quick":
-        is_less_than_equal_to_nine_chars = (
-            slc.is_string_length_less_than_equal_to(user_input, 9))
+        return check_quick_mode_input_length(user_input)
 
-        is_greater_than_equal_to_four_chars = (
-            slc.is_string_length_greater_than_equal_to(user_input, 4))
+def check_normal_mode_input_length(user_input: str) -> tuple:
+    """Checks the string's length under normal mode conditions (i.e.
+    string is 9 digits long.)"""
 
-        is_within_range = (
-            is_less_than_equal_to_nine_chars
-            and is_greater_than_equal_to_four_chars
-        )
+    is_nine_chars_long = slc.is_equal_to(user_input, 9)
+    message = ""
 
-        if is_within_range:
-            return (True, "")
+    if not is_nine_chars_long:
+        message = "Too many/few digits for a GR number."
 
-        else:
-            is_greater_than_nine_chars = slc.is_string_length_greater_than(
-                user_input, 9)
+    return (is_nine_chars_long, message)
 
-            is_less_than_four_chars = slc.is_string_length_less_than(
-                user_input, 4)
+def check_quick_mode_input_length(user_input: str) -> tuple:
+    """Checks the string's length under quick mode conditions (i.e.
+    the string is between 4 and 9 digits long)."""
 
+    is_within_range = slc.is_between_range(user_input, 4, 9)
+    message = ""
 
-            if is_greater_than_nine_chars:
-                return (False, "Too many digits for a GR number.")
+    if not is_within_range:
+        is_greater_than_nine_chars = slc.is_greater_than(
+            user_input, 9)
 
-            elif is_less_than_four_chars:
-                return (False, "Not enough digits for a GR number.")
+        is_less_than_four_chars = slc.is_less_than(
+            user_input, 4)
 
-def is_string_length_nine(string_to_check: str) -> bool:
-    length = len(string_to_check)
+        if is_greater_than_nine_chars:
+            message = "Too many digits for a GR number."
 
-    if length == 9:
-        return True
+        elif is_less_than_four_chars:
+            message = "Not enough digits for a GR number."
 
-    return False
+    return (is_within_range, message)
 
 def check_if_duplicate_file(file_name, directory_path):
     """Checks if a file already exists in a certain directory."""

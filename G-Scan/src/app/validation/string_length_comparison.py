@@ -31,7 +31,7 @@ def check_string_length_against_comparison_operator(string: str,
 
     return is_operation_true
 
-def is_string_length_equal_to(string: str, length_to_compare: int) -> bool:
+def is_equal_to(string: str, length_to_compare: int) -> bool:
     """Returns whether a string's length is equal to a specific
     amount."""
 
@@ -40,7 +40,7 @@ def is_string_length_equal_to(string: str, length_to_compare: int) -> bool:
 
     return is_equal
 
-def is_string_length_less_than(string: str, length_to_compare: int) -> bool:
+def is_less_than(string: str, length_to_compare: int) -> bool:
     """Returns whether a string's length is less than a specific
     amount.""" 
 
@@ -49,7 +49,7 @@ def is_string_length_less_than(string: str, length_to_compare: int) -> bool:
 
     return is_less_than
 
-def is_string_length_less_than_equal_to(string: str,
+def is_less_than_equal_to(string: str,
         length_to_compare: int) -> bool:
     """Returns whether a string's length is less than or equal to a
     specific amount."""
@@ -59,7 +59,7 @@ def is_string_length_less_than_equal_to(string: str,
     
     return is_less_than_equal_to
 
-def is_string_length_greater_than(string: str, length_to_compare: int) \
+def is_greater_than(string: str, length_to_compare: int) \
         -> bool:
     """Returns whether a string's length is greater than a specific
     amount."""
@@ -69,7 +69,7 @@ def is_string_length_greater_than(string: str, length_to_compare: int) \
 
     return is_greater_than
 
-def is_string_length_greater_than_equal_to(string: str,
+def is_greater_than_equal_to(string: str,
         length_to_compare: int) -> bool:
     """Returns whether a string's length is greater than or equal to a
     specific amount."""
@@ -80,3 +80,14 @@ def is_string_length_greater_than_equal_to(string: str,
     )
 
     return is_greater_than_equal_to
+
+def is_between_range(string: str, minimum_length: int,
+        maximimum_length: int) -> bool:
+    """Returns whether a string's length is within a range."""
+
+    is_within_minimum = is_greater_than_equal_to(string, minimum_length)
+    is_within_maximum = is_less_than_equal_to(string, maximimum_length)
+
+    is_within_range = is_within_minimum and is_within_maximum
+    
+    return is_within_range
