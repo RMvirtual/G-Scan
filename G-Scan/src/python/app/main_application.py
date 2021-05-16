@@ -1,4 +1,4 @@
-import app.backup
+import app.backup as backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
 from gui.popupbox import PopupBox
@@ -29,7 +29,7 @@ class Model():
         # load the user up as the current user and pass it back as a
         # user object.
         user_settings_data = shelve.open(
-            app.file_system.get_user_settings_data_path())
+            file_system.get_user_settings_data_path())
        
         try:
             current_user = user_settings_data[current_username]

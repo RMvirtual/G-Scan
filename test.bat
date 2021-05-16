@@ -2,7 +2,7 @@
 cls
 @echo off
 cd G-Scan\test\
-python gui_tests.py
+python tests.py -v
 
 cd ..\..
 @echo on
