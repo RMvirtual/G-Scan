@@ -102,12 +102,21 @@ class Controller():
     def handle_user_input_box_events(self, event = None):
         """Handles user interaction with the user input box."""
 
-        print("In here.")
+        print("Quick_mode status: " + self.__main_menu.get_current_input_mode())
+
+        quick_mode_is_active = self.is_quick_mode_active()
+
+        if quick_mode_is_active:
+            print("I'm actually gonna do stuff.")
+
+    def is_quick_mode_active(self) -> bool:
+        """Predicate method for whether the user is currently in quick
+        mode."""
 
         input_mode = self.__main_menu.get_current_input_mode()
+        is_quick_mode_active = True if input_mode == "Quick" else False
 
-        if event == wxEVT_TEXT and input_mode == "Quick":
-            print("Seeing changes here.")
+        return is_quick_mode_active
 
     def submit_click(self, event = None):
         print("Submit button clicked.")
