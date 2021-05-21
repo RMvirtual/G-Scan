@@ -92,11 +92,11 @@ def get_month_name_from_month_number(month_number: int) -> str:
 def get_months_as_strings():
     """Returns a list of the months as strings."""
 
-    months = get_months()
+    months = get_months(get_current_year())
     months_as_strings = []
 
     for month in months:
-        months_as_strings.append(month.get_full_code())
+        months_as_strings.append(month.get_month_name())
 
     return months_as_strings
 
@@ -197,5 +197,5 @@ def get_date_from_month_name_number(month_name_and_number: str, year) -> Date:
     month_names_and_numbers = get_month_names_and_numbers_as_dictionary()
     month_number = month_names_and_numbers[month_name_and_number]
 
-    Date.from_month_number_and_year(month_number, year)
+    return Date.from_month_number_and_year(month_number, year)
     

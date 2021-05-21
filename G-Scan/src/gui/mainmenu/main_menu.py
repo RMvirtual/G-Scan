@@ -43,13 +43,7 @@ class MainMenu(Frame):
         """Gets the value of the user's input."""
 
         return "GR191000000"
-
-    def get_current_input_mode(self):
-        """Gets the current input mode setting (i.e. Normal or
-        Quick)."""
-
-        return "Normal"
-    
+   
     def get_autoprocessing_mode(self):
         """Gets the current autoprocessing mode setting (True or
         False)"""

@@ -60,6 +60,8 @@ class Model():
         base_job_number = job_ref.calculate_base_job_number(date)
         hint_message = "Current GR Number: " + base_job_number
 
+        return hint_message
+
 class Controller():
     """A class for the main controller."""
 
@@ -102,7 +104,7 @@ class Controller():
     def handle_user_input_box_events(self, event = None):
         """Handles user interaction with the user input box."""
 
-        print("Quick_mode status: " + self.__main_menu.get_current_input_mode())
+        print("Quick_mode status: " + self.__main_menu.get_input_mode())
 
         quick_mode_is_active = self.is_quick_mode_active()
 
@@ -113,7 +115,7 @@ class Controller():
         """Predicate method for whether the user is currently in quick
         mode."""
 
-        input_mode = self.__main_menu.get_current_input_mode()
+        input_mode = self.__main_menu.get_input_mode()
         is_quick_mode_active = True if input_mode == "Quick" else False
 
         return is_quick_mode_active
@@ -175,7 +177,7 @@ class Controller():
             "Should not contain letters/symbols"
         )
 
-        input_mode = self.__main_menu.get_current_input_mode()
+        input_mode = self.__main_menu.get_input_mode()
 
         if input_mode == "Normal":
             hint_message = ""
@@ -184,8 +186,13 @@ class Controller():
             month = self.__main_menu.get_months_dropdown_box_value()
             year = self.__main_menu.get_years_dropdown_box_value()
 
+            print(month)
+            print(year)
+
             date_selection = date.get_date_from_month_name_number(month, year)
             
+            print(date_selection.get_month_name(), date_selection.get_year())
+
             hint_message = self.__model.calculate_quick_mode_hint_message(
                 date_selection)
 
@@ -528,7 +535,7 @@ class Controller():
         """Submits a file based on the job reference that has been 
         read from a barcode."""
         
-        input_mode = self.__main_menu.get_current_input_mode()
+        input_mode = self.__main_menu.get_input_mode()
         current_file = self.file_list[self.file_index]
         file_name = app.file_system.get_file_name(current_file)
         file_extension = app.file_system.get_file_ext(current_file)
@@ -610,7 +617,7 @@ class Controller():
 
         # User input variables.
         user_input = self.__main_menu.get_user_input()
-        input_mode = self.__main_menu.get_current_input_mode()
+        input_mode = self.__main_menu.get_input_mode()
         paperwork_type = self.__main_menu.get_current_paperwork_type()
         auto_processing = self.__main_menu.get_autoprocessing_mode()
 

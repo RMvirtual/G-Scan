@@ -1,3 +1,4 @@
+from wx.core import wxEVT_RADIOBUTTON
 import gui.widgets.fonts as fonts
 from gui.widgets.panel import Panel
 from wx import RadioButton, RB_GROUP
@@ -32,6 +33,9 @@ class RadioButtonMaster(RadioButton):
 
         return new_radio_button
 
+    def bind_event_handler(self, event_handler):
+        self.Bind(wxEVT_RADIOBUTTON, event_handler)
+
 class RadioButtonSubject(RadioButton):
     """A class for a radio button that represents the start of a new
     group of connected radio buttons.
@@ -60,3 +64,6 @@ class RadioButtonSubject(RadioButton):
         )
 
         return new_radio_button
+
+    def bind_event_handler(self, event_handler):
+        self.Bind(wxEVT_RADIOBUTTON, event_handler)
