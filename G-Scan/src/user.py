@@ -1,4 +1,39 @@
 import app.file_system as file_system
+import os
+import shelve
+
+def get_user_settings():
+    """Opens the user settings file for the user's directory and
+    workspace settings."""
+
+    user_settings_data = get_user_settings_data_connection()
+    current_username = os.getlogin()
+
+    try:
+        user = user_settings_data[current_username]
+
+    except Exception as exception:
+        user = create_new_user(current_username, user_settings_data)
+
+    user_settings_data.close()
+
+    return user
+
+def get_user_settings_data_connection():
+    user_settings_path = file_system.get_user_settings_data_path() 
+    user_settings_data = shelve.open(user_settings_path)
+
+    return user_settings_data
+
+def create_new_user(user_name, user_settings_data):
+    new_user = User(user_name)
+
+    user_settings_data[user_name] = new_user
+    user_settings_data.sync()
+
+    print("Created user: ", new_user.get_name())
+
+    return new_user
 
 class User(object):
     """A user of the application. Contains their default settings and

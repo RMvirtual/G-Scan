@@ -17,6 +17,7 @@ from date import Date
 import os
 import re
 import shelve
+import user
 
 class Model():
     """A class for the model."""
@@ -25,30 +26,7 @@ class Model():
         """Opens the user settings file for the user's directory and
         workspace settings."""
 
-        current_username = os.getlogin()
-
-        # If the user already exists in the user settings data file,
-        # load the user up as the current user and pass it back as a
-        # user object.
-        user_settings_data = shelve.open(
-            file_system.get_user_settings_data_path())
-       
-        try:
-            current_user = user_settings_data[current_username]
-
-        # If the user does not exist, creates a new user and adds it to
-        # the user settings data file, passing back the user object.
-        except Exception as exception:
-            print(exception)
-            current_user = User(current_username)
-            user_settings_data[current_username] = current_user
-            user_settings_data.sync()
-
-            print("Created user: ", current_user.get_name())
-            
-        user_settings_data.close()
-
-        return current_user
+        return user.get_user_settings()
 
     def check_user_input_length(user_input: str, input_mode: str) -> bool:
         """Checks the length of the user's input (removing any alphabetic
@@ -86,18 +64,15 @@ class Controller():
 
     def __init__(self):
         self.__model = Model()
-        self.__current_user = self.__model.get_user_settings()
+        self.__user = self.__model.get_user_settings()
         self.__create_main_menu()
-        directories_valid = self.validate_user_directories()
-
-        if not directories_valid:
-            self.__main_menu.write_log("\n")
-
+        self.validate_user_directories()
         self.calculate_quick_mode_hint_message()
-        self.__main_menu.write_log("Awaiting user input.")
         self.__assign_main_menu_button_functions()
         user_defaults = self.get_default_settings_from_user()
         self.__set_main_menu_values_from_user_defaults(user_defaults)
+
+        self.__main_menu.write_log("Awaiting user input.")
 
     def __create_main_menu(self):
         """Creates the main menu."""
@@ -112,10 +87,10 @@ class Controller():
 
         menu.set_submit_button_function(self.submit_click)
         menu.set_skip_button_function(self.skip_button_click)
-
+         
         menu.set_split_document_button_function(
             self.split_document_button_click)
-
+        
         menu.set_start_button_function(self.start_button_click)
         menu.set_exit_button_function(self.exit_button_click)
         menu.set_settings_button_function(self.settings_button_click)
@@ -149,26 +124,22 @@ class Controller():
 
         exit()
 
-    def validate_user_directories(self) -> bool:
-        """Checks whether all the working directories of a user are
-        valid and accessible. Prints to the GUI's log if not and
-        returns an overall Boolean at the end on whether all
-        directories are valid or not."""
-
-        directory_checks = self.__current_user.validate_directories_check()
-        all_directories_valid = True
+    def validate_user_directories(self) -> None:
+        directory_checks = self.__user.validate_directories_check()
+        has_invalid_directories = False
 
         for directory in directory_checks:
             is_directory_valid = directory_checks[directory]
             
             if not is_directory_valid:
-                all_directories_valid = False
+                has_invalid_directories = True
                 
                 self.__main_menu.write_log(
                     directory + " folder is invalid. Please check the " +
                     "folder exists and update it within your settings.\n")
-        
-        return all_directories_valid
+
+        if has_invalid_directories:
+            self.__main_menu.write_log("\n")
 
     def calculate_quick_mode_hint_message(self):
         """Calculates the message to be displayed in the GUI's quick
@@ -243,7 +214,7 @@ class Controller():
     def get_default_settings_from_user(self) -> UserDefaults:
         """Returns the default values from the current user."""
 
-        user = self.__current_user
+        user = self.__user
         values = UserDefaults.from_user(user)
 
         return values
@@ -263,7 +234,7 @@ class Controller():
         structure.
         """
 
-        user = self.__current_user
+        user = self.__user
         
         user.set_scan_directory(values.scan_directory)
         user.set_destination_directory(values.destination_directory)
@@ -274,6 +245,22 @@ class Controller():
         user.set_auto_processing_mode(values.autoprocessing_mode)
 
         user.sync()
+
+    def get_user_defaults_from_settings_menu(self) -> UserDefaults:
+        """Creates a set of values from a settings menu object."""
+
+        values = UserDefaults()
+        menu = self.__settings_menu
+
+        values.scan_directory = menu.get_scan_directory()
+        values.destination_directory = menu.get_destination_directory()
+        values.backup_directory = menu.get_backup_directory()
+        values.paperwork_type = menu.get_paperwork_type()
+        values.input_mode = menu.get_input_mode()
+        values.multi_page_handling = menu.get_multi_page_handling()
+        values.autoprocessing_mode = menu.get_autoprocessing_mode()
+
+        return values
 
     def __assign_settings_menu_button_functions(self):
         """Assigns functions to the settings menu's buttons."""
@@ -333,13 +320,13 @@ class Controller():
     def get_current_user(self):
         """Returns the current user of the program as a User object."""
 
-        return self.__current_user
+        return self.__user
 
     def get_files_in_scan_folder(self):
         """Gets a list of all files in the current user's scan folder
         that have a valid extension for the program to handle."""
 
-        scan_directory = self.__current_user.scan_directory
+        scan_directory = self.__user.scan_directory
 
         valid_file_extensions = (
             ".pdf", ".tif", ".tiff", ".tiff", ".jpeg", ".jpg", ".png")
@@ -422,7 +409,7 @@ class Controller():
 
     def get_file_with_pdf_viewer(self):
         # Directories
-        scan_directory = self.__current_user.scan_directory
+        scan_directory = self.__user.scan_directory
         multi_page_handling = self.__main_menu.get_multi_page_handling_mode()
 
         current_file = self.file_list[self.file_index]
@@ -466,7 +453,7 @@ class Controller():
         submitting it immediately if a valid barcode is found with
         no other conflicting conditions."""
 
-        scan_directory = self.__current_user.scan_directory
+        scan_directory = self.__user.scan_directory
         multi_page_handling = self.__main_menu.get_multi_page_handling_mode()
         barcode_ref_list = []
 
@@ -530,13 +517,13 @@ class Controller():
             "Normal"
         )
 
-        backup_directory = self.__current_user.backup_directory
+        backup_directory = self.__user.backup_directory
         paperwork_type = self.__main_menu.get_current_paperwork_type()
 
         backup_file_name = app.user_input_validation.create_backup_file_name(
             job_reference, paperwork_type, file_extension, backup_directory)
         
-        scan_directory = self.__current_user.scan_directory
+        scan_directory = self.__user.scan_directory
 
         backup_success = backup.backup_file(
             current_file, backup_file_name, scan_directory, backup_directory)
@@ -554,7 +541,7 @@ class Controller():
         dest_file_name = app.user_input_validation.create_destination_file_name(
             job_reference, paperwork_type, file_extension)
 
-        dest_directory = self.__current_user.destination_directory
+        dest_directory = self.__user.destination_directory
 
         # Check if there is a file already existing in the
         # destination directory with the same name so we know later
@@ -563,7 +550,7 @@ class Controller():
             app.user_input_validation.check_if_duplicate_file(
                 dest_file_name, dest_directory))
 
-        scan_directory = self.__current_user.scan_directory
+        scan_directory = self.__user.scan_directory
 
         pdf_writer.create_loading_list_pod(
             self.__main_menu, current_file, scan_directory, dest_directory,
@@ -690,7 +677,7 @@ class Controller():
             # that we need to merge the two files.
             dest_duplicate_check = (
                 app.user_input_validation.check_if_duplicate_file(
-                    dest_file_name, self.__current_user.dest_directory))
+                    dest_file_name, self.__user.dest_directory))
 
             backup_success = backup.backup_file(
                 current_file, backup_file_name, scan_dir, backup_dir)
@@ -796,7 +783,7 @@ class Controller():
                         dest_duplicate_check = (
                             app.user_input_validation.check_if_duplicate_file(
                                 dest_file_name,
-                                self.__current_user.dest_directory)
+                                self.__user.dest_directory)
                         )
 
                         backup_success = backup.backup_file(
@@ -857,22 +844,6 @@ class Controller():
         self.write_log("Skipping " + current_file)
         
         self.get_file(file_index, file_list)
-
-    def get_user_defaults_from_settings_menu(self) -> UserDefaults:
-        """Creates a set of values from a settings menu object."""
-
-        values = UserDefaults()
-        menu = self.__settings_menu
-
-        values.scan_directory = menu.get_scan_directory()
-        values.destination_directory = menu.get_destination_directory()
-        values.backup_directory = menu.get_backup_directory()
-        values.paperwork_type = menu.get_paperwork_type()
-        values.input_mode = menu.get_input_mode()
-        values.multi_page_handling = menu.get_multi_page_handling()
-        values.autoprocessing_mode = menu.get_autoprocessing_mode()
-
-        return values
 
 class MainApplication():
     """A class for the main application of the program to run."""

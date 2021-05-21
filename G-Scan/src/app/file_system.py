@@ -112,14 +112,29 @@ def check_path_is_directory(path):
 
     return os.path.isdir(path)
 
-def check_path_exists(path):
+def check_path_exists(path) -> bool:
     """Returns a boolean value describing whether the path provided
     exists or not."""
 
+    print("Printing " + path)
+
     return os.path.exists(path)
 
-def check_if_file_exists(file_name, directory_path):
+def check_if_file_exists(file_name, directory_path) -> bool:
     """Checks if a file already exists in a certain directory."""
 
     return check_path_exists(directory_path + "\\" + file_name)
- 
+
+def get_number_of_files_containing_substring(substring, directory_path) \
+        -> int:
+    """Returns the number of files in a directory where the file name contains
+    at least in part a matching substring."""
+    
+    directory_items = get_directory_items(directory_path)
+    count = 0
+
+    for item in directory_items:
+        if substring in item:
+            count += 1
+
+    return count

@@ -39,6 +39,15 @@ class TestJobReferences(unittest.TestCase):
 
         self.assertTrue(job_reference == correct_reference, correct_reference)
 
+    def test_create_job_reference(self):
+        correct_reference = "GR190100200"
+
+        input_values = ["GR190100200", "190100200"]
+
+        for value in input_values:
+            job_reference = job_ref.create_job_reference(value)
+            self.assertTrue(job_reference == correct_reference)
+
     def test_create_gr_number(self):
         job_number = "190105255"
         correct_job_number = "GR190105255"
