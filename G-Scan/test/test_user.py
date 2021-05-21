@@ -24,4 +24,3 @@ class TestUser(unittest.TestCase):
         new_user = user.create_new_user("Ryan", user_settings_data)
 
         self.assertTrue(new_user.get_name() == "Ryan")
-

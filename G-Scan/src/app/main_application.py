@@ -1,3 +1,4 @@
+from wx.core import wxEVT_ACTIVATE, wxEVT_TEXT
 import app.backup as backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
@@ -95,6 +96,18 @@ class Controller():
         menu.set_exit_button_function(self.exit_button_click)
         menu.set_settings_button_function(self.settings_button_click)
         menu.set_michelin_man_button_function(self.michelin_man_button_click)
+        menu.bind_event_handler_to_user_input_box(
+            self.handle_user_input_box_events)
+
+    def handle_user_input_box_events(self, event = None):
+        """Handles user interaction with the user input box."""
+
+        print("In here.")
+
+        input_mode = self.__main_menu.get_current_input_mode()
+
+        if event == wxEVT_TEXT and input_mode == "Quick":
+            print("Seeing changes here.")
 
     def submit_click(self, event = None):
         print("Submit button clicked.")

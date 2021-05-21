@@ -1,3 +1,4 @@
+from wx.core import EVT_TEXT
 import app.file_system as filesystem
 from gui.widgets.buttons import Button
 from gui.widgets.panel import Panel
@@ -43,7 +44,7 @@ class FilePanel(Panel):
         """Creates widgets related to user input."""
 
         self.__create_input_instruction_label()
-        self.__create_user_input_entry_box()
+        self.__create_user_input_box()
         self.__create_submit_button()
         self.__create_skip_button()
         self.__create_split_document_button()
@@ -152,15 +153,15 @@ class FilePanel(Panel):
 
         return attributes
 
-    def __create_user_input_entry_box(self):
+    def __create_user_input_box(self):
         """Creates the user input entry box."""
 
-        attributes = self.__create_user_input_entry_box_attributes()
+        attributes = self.__create_user_input_box_attributes()
         self.__user_input_entry_box = TextEntryBox.from_attributes(attributes)
 
-    def __create_user_input_entry_box_attributes(self):
-        """Creates the attributes required to instantiate the input
-        instruction label.
+    def __create_user_input_box_attributes(self):
+        """Creates the attributes required to instantiate the user
+        input box.
         """
 
         attributes = self.create_empty_attributes()
@@ -249,3 +250,13 @@ class FilePanel(Panel):
         """
 
         self.__split_document_button.bind_function_to_click(callback_function)
+
+    def get_user_input_box_value(self) -> str:
+        """Gets the value currently in the text box."""
+
+        return self.__user_input_entry_box.get_value()
+
+    def bind_event_handler_to_user_input_box(self, event_handler) -> None:
+        """Adds something to something."""
+
+        self.__user_input_entry_box.Bind(EVT_TEXT, event_handler)

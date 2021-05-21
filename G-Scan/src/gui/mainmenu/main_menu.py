@@ -169,3 +169,6 @@ class MainMenu(Frame):
         """Gets the year dropdown box value."""
 
         return self.__top_panel.get_years_dropdown_box_value()
+
+    def bind_event_handler_to_user_input_box(self, event_handler) -> None:
+        self.__top_panel.bind_event_handler_to_user_input_box(event_handler)

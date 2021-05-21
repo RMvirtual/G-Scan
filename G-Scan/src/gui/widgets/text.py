@@ -30,10 +30,15 @@ class TextEntryBox(TextCtrl):
             attributes.size, attributes.position
         )
 
-    def get_value(self):
-        """Returns the value found in the current entry box."""
+    def get_value(self) -> str:
+        """Returns the value found in the text box."""
         
         return self.GetValue()
+
+    def clear_value(self) -> None:
+        """Clears the text in the text box."""
+
+        self.Clear()
 
 class TextLabel(StaticText):
     """A class for a text label box for instructions etc."""
