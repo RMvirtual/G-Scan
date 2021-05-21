@@ -98,18 +98,14 @@ class Controller():
         menu.set_exit_button_function(self.exit_button_click)
         menu.set_settings_button_function(self.settings_button_click)
         menu.set_michelin_man_button_function(self.michelin_man_button_click)
+        
         menu.bind_event_handler_to_user_input_box(
             self.handle_user_input_box_events)
 
     def handle_user_input_box_events(self, event = None):
         """Handles user interaction with the user input box."""
 
-        print("Quick_mode status: " + self.__main_menu.get_input_mode())
-
-        quick_mode_is_active = self.is_quick_mode_active()
-
-        if quick_mode_is_active:
-            print("I'm actually gonna do stuff.")
+        self.calculate_quick_mode_hint_message()
 
     def is_quick_mode_active(self) -> bool:
         """Predicate method for whether the user is currently in quick
@@ -179,24 +175,26 @@ class Controller():
 
         input_mode = self.__main_menu.get_input_mode()
 
-        if input_mode == "Normal":
+        if input_mode == "Normal Mode":
+            print("In normal mode.")
             hint_message = ""
 
         else:
-            month = self.__main_menu.get_months_dropdown_box_value()
-            year = self.__main_menu.get_years_dropdown_box_value()
-
-            print(month)
-            print(year)
-
-            date_selection = date.get_date_from_month_name_number(month, year)
+            print("In other mode.")
+            date_selection = self.get_date_from_dropdown_boxes()
             
-            print(date_selection.get_month_name(), date_selection.get_year())
-
             hint_message = self.__model.calculate_quick_mode_hint_message(
                 date_selection)
 
         self.__main_menu.set_quick_mode_hint_text(hint_message)
+
+    def get_date_from_dropdown_boxes(self) -> Date:
+        month = self.__main_menu.get_months_dropdown_box_value()
+        year = self.__main_menu.get_years_dropdown_box_value()
+
+        date_selection = date.get_date_from_month_name_number(month, year)
+
+        return date_selection
 
     def __create_settings_menu(self):
         """Creates and launches the user settings menu."""
