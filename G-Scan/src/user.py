@@ -6,7 +6,7 @@ def get_user_settings():
     """Opens the user settings file for the user's directory and
     workspace settings."""
 
-    user_settings_data = get_user_settings_data_connection()
+    user_settings_data = get_user_settings_file_connection()
     current_username = os.getlogin()
 
     try:
@@ -19,7 +19,12 @@ def get_user_settings():
 
     return user
 
-def get_user_settings_data_connection():
+def get_current_user_name():
+    user_name = os.getlogin()
+
+    return user_name
+
+def get_user_settings_file_connection():
     user_settings_path = file_system.get_user_settings_data_path() 
     user_settings_data = shelve.open(user_settings_path)
 

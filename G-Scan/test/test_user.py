@@ -18,5 +18,10 @@ class TestUser(unittest.TestCase):
         print(current_user.get_name())
 
         self.assertTrue(current_user.get_name() == "rmvir")
+    
+    def test_create_new_user(self):
+        user_settings_data = user.get_user_settings_file_connection()
+        new_user = user.create_new_user("Ryan", user_settings_data)
 
-        
+        self.assertTrue(new_user.get_name() == "Ryan")
+
