@@ -75,6 +75,8 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         output.write(output_stream)
         output_stream.close()
 
+        return dest_dir + "\\result.pdf"
+
     # document generation for image files (excluding TIF as these will always be pre-processed into PDFs by the document splitter function)
     elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
         with pil_image.open(scan_dir + "/" + file) as img:
@@ -115,6 +117,8 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         output_stream = open(temp_dir + "/" + "result.pdf", "wb")
         output.write(output_stream)
         output_stream.close()
+
+        return (temp_dir + "/result.pdf")
 
 def create_loading_list_pod(master_application, file, scan_dir,
         dest_dir, dest_file_name, dest_duplicate_check):

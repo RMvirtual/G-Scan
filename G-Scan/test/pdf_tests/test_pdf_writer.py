@@ -4,13 +4,14 @@ import os
 from pathlib import Path
 import shutil
 
-from pdf.pdf_writer import create_cust_pw
+from wand.image import Image
 
 main_src_path = Path.cwd().parent.joinpath("src")
 sys.path.append(main_src_path)
 
 import app.file_system as file_system
 import app.validation.file_naming as file_naming
+from pdf.pdf_writer import create_cust_pw
 
 class TestPDFWriter(unittest.TestCase):
     """A class for testing the PDF writer module."""
@@ -50,16 +51,27 @@ class TestPDFWriter(unittest.TestCase):
 
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
-        create_cust_pw(
+        result_file = create_cust_pw(
             master_application, str(scan), str(scan_dir), str(dest_dir), job_ref,
             dest_file_name, False
         )
+
+        correct_pdf = file_system.get_test_directory().joinpath(
+            "resources", "correct_files", "p1testfile1withbarcode.pdf")
+
+        correct_image = Image(filename=str(correct_pdf), resolution=150)
+
+        print("Result file " + result_file)
+
+        with Image(filename=result_file, resolution=150) as expected:
+            difference = correct_image.compare(expected, metric="root_mean_square")
+            self.assertLess(difference[1], 0.01)
 
     def setup_customer_paperwork(self) -> dict:
         current_directory = file_system.get_current_directory()
         
         original_page = file_system.get_test_directory().joinpath(
-            "resources", "pdf", "p1testfile1.pdf")
+            "resources", "correct_files", "p1testfile1.pdf")
         
         scans_directory = file_system.get_test_directory().joinpath(
             "resources", "scans")
