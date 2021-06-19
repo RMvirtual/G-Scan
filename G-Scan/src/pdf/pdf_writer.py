@@ -17,7 +17,7 @@ from wand.image import Image as wand_image
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
-def extract_portrait_png_from_pdf(pdf_path, output_path):
+def convert_single_page_pdf_to_png(pdf_path, output_path):
     with wand_image(filename = pdf_path, resolution = 300) as image:
         rotate_image_to_portrait(image)
         image.save(filename = output_path)
@@ -76,7 +76,7 @@ def convert_pdf_to_customer_paperwork(file_path: str,
         pdf_contents.write(output_stream)
         output_stream.close()
 
-        return destination_directory + "\\result.pdf"
+    return destination_directory + "\\result.pdf"
 
 def extract_page_from_pdf_reader(pdf_reader: PyPDF2.PdfFileReader,
         page_number: int, output_path: str):
@@ -103,31 +103,44 @@ def convert_pdf_stream_to_customer_paperwork_file_writer_object(
     number_of_pages = pdf_reader.getNumPages()
 
     for page_number in range(number_of_pages):
-        extract_page_from_pdf_reader(
-            pdf_reader, page_number, temp_directory + "/temp.pdf")
-        
         working_pdf_path = temp_directory + "/temp.pdf"
+
+        extract_page_from_pdf_reader(
+            pdf_reader, page_number, working_pdf_path)
         
-        extract_portrait_png_from_pdf(
-            working_pdf_path, temp_directory + "/temp_image.png")
+        paperwork_image_path = temp_directory + "/temp_image.png"
+        convert_single_page_pdf_to_png(working_pdf_path, paperwork_image_path)
 
-        packet = io.BytesIO()
+        packet = create_customer_paperwork_bytes_packet(
+            job_reference, paperwork_image_path)
 
-        temp_image = temp_directory + "/temp_image.png"
-        
-        page = create_blank_a4_page(packet)
-        draw_barcode_on_page(page, job_reference)
-        draw_job_reference_on_page(page, job_reference)
-        draw_paperwork_type_on_page(page, "Customer Paperwork")
-        draw_customer_paperwork_on_page(page, temp_image)
-        page.save()
-
-        packet.seek(0)
-        new_pdf = PyPDF2.PdfFileReader(packet)
-
-        output.addPage(new_pdf.getPage(0))
+        new_pdf_page = PyPDF2.PdfFileReader(packet).getPage(0)
+        output.addPage(new_pdf_page)
 
     return output
+
+def create_customer_paperwork_bytes_packet(job_reference,
+        paperwork_image_path):
+    packet = io.BytesIO()
+
+    write_customer_paperwork_page_to_packet(
+        packet, job_reference, paperwork_image_path)
+        
+    packet.seek(0)
+
+    return packet
+
+
+def write_customer_paperwork_page_to_packet(packet: io.BytesIO,
+        job_reference: str, paperwork_image: str) -> canvas.Canvas:
+
+    page = create_blank_a4_page(packet)
+    draw_barcode_on_page(page, job_reference)
+    draw_job_reference_on_page(page, job_reference)
+    draw_paperwork_type_on_page(page, "Customer Paperwork")
+    draw_customer_paperwork_on_page(page, paperwork_image)
+    page.save()
+
 
 def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
