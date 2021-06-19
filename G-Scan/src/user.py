@@ -26,7 +26,7 @@ def get_current_user_name():
 
 def get_user_settings_file_connection():
     user_settings_path = file_system.get_user_settings_data_path() 
-    user_settings_data = shelve.open(user_settings_path)
+    user_settings_data = shelve.open(str(user_settings_path))
 
     return user_settings_data
 

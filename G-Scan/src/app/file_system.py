@@ -4,6 +4,7 @@ commonly used directories etc.
 
 import os
 import shelve
+from pathlib import Path
 
 def get_item_directory(path):
     """Gets the directory of a path."""
@@ -22,32 +23,34 @@ def delete_file(path):
 
     os.remove(path)
 
-def get_current_path():
+def get_current_directory():
     """Gets the full current working path the file using this
     method resides in."""
 
-    return os.getcwd()
+    return Path.cwd().resolve()
 
 def get_directory_items(path):
     """Returns a list of folders and files in a directory."""
+
     return os.listdir(path)
 
-def get_root_directory_path():
+def get_root_directory():
     """Gets the directory path of the G-Scan folder that all the files
     and subfolders reside in."""
 
-    current_path = get_current_path()
-
-    directory_structure = current_path.split("\\")
+    current_directory = get_current_directory()
     directory_path = ""
 
-    for folder in directory_structure:
+    for folder in current_directory.parts:
         if folder == "G-Scan":
             break
         
         directory_path += folder + "\\"
     
-    return directory_path + "G-Scan\\"
+    if directory_path == "":
+        return None
+
+    return Path(directory_path + "G-Scan\\").resolve()
 
 def get_base_name(path):
     """Returns the full file name (including the extension) of a
@@ -78,13 +81,13 @@ def get_data_directory():
     main directory of the program. Contains things such as the
     user's settings etc."""
 
-    return get_root_directory_path() + "data\\"
+    return get_root_directory().joinpath("data")
 
 def get_user_settings_data_path():
     """Returns the user settings .dat file containing all the
     user settings regarding directories and workspace defaults."""
 
-    return get_data_directory() + "user_settings"
+    return get_data_directory().joinpath("user_settings")
 
 def get_user_settings_data():
     """Returns an open shelf file of the user settings .data file
@@ -97,15 +100,20 @@ def get_resources_directory():
     """Returns the path of the resources folder that resides in
     the src\main directory of the program directory."""
 
-    return get_root_directory_path() + "resources\\"
+    return get_root_directory().joinpath("resources")
 
 def get_temp_directory():
     """Returns the path of the temp directory that resides in the
     main directory. Used for file manipulation (pdf appending and
     copied etc)."""
 
-    return get_root_directory_path() + "temp\\"
+    return get_root_directory().joinpath("temp")
 
+def get_test_directory() -> Path:
+    """Returns a Path object of the test directory."""
+
+    return get_root_directory().joinpath("test")
+    
 def check_path_is_directory(path):
     """Returns a boolean value describing whether the path provided
     is a directory or not."""
