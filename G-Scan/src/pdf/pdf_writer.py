@@ -38,6 +38,36 @@ def draw_barcode_on_page(page_to_draw_on, job_reference):
     
     barcode.drawOn(page_to_draw_on, 135*mm, 280*mm)
 
+def create_blank_a4_page(packet: io.BytesIO) -> canvas.Canvas:
+    page = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
+    page.setFillColorRGB(0,0,0)
+
+    return page
+
+def draw_job_reference_on_page(page_to_draw_on: canvas.Canvas,
+        job_reference: str) -> None:
+    """Draws a job reference onto a page."""
+
+    page_to_draw_on.setFont("Calibri", 11)
+    page_to_draw_on.drawString(162*mm, 275*mm, job_reference)
+
+def draw_paperwork_type_on_page(page_to_draw_on: canvas.Canvas,
+        paperwork_type: str) -> None:
+    """Draws the paperwork type subheading on the page."""
+
+    page_to_draw_on.setFont("Calibri-Bold", 22)
+    page_to_draw_on.drawString(5*mm, 280*mm, "Customer Paperwork")
+
+def draw_customer_paperwork_on_page(page_to_draw_on: canvas.Canvas,
+        image_path: str) -> None:
+    """Draws the image of the customer_paperwork on the page."""
+
+    page_to_draw_on.drawImage(
+        image_path, -85, 25, 
+        width = 730, height = 730, 
+        mask = None, preserveAspectRatio = True
+    )
+
 
 def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
@@ -66,16 +96,12 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
                 temp_image = save_temporary_image(working_pdf_path, temp_dir)
 
                 packet = io.BytesIO()
-                page = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-                page.setFillColorRGB(0,0,0)
+
+                page = create_blank_a4_page(packet)
                 draw_barcode_on_page(page, job_ref)
-
-                page.setFont("Calibri", 11)
-                page.drawString(162*mm, 275*mm, job_ref)
-                page.setFont("Calibri-Bold", 22)
-                page.drawString(5*mm, 280*mm, "Customer Paperwork")
-                page.drawImage(temp_image, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
-
+                draw_job_reference_on_page(page, job_ref)
+                draw_paperwork_type_on_page(page, "Customer Paperwork")
+                draw_customer_paperwork_on_page(page, temp_image)
                 page.save()
 
                 packet.seek(0)
