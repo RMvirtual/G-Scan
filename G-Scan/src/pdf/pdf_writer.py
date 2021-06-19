@@ -88,8 +88,11 @@ def convert_pdf_stream_to_customer_paperwork_file_writer_object(
     return output
 
 def create_customer_paperwork_bytes_packet(job_reference,
-        paperwork_image_path):
-    
+        paperwork_image_path) -> io.BytesIO:
+    """Creates a bytes packet containing data required to write a
+    customer paperwork page.
+    """
+
     packet = io.BytesIO()
     page = CustomerPaperworkPage(packet, job_reference, paperwork_image_path)
     packet.seek(0)
@@ -165,7 +168,6 @@ def create_loading_list_pod(master_application, file, scan_dir,
     without having to modify the document other than PDF conversion."""
 
     file_name, file_extension = os.path.splitext(file)
-
     temp_directory = file_system.get_temp_directory()
 
     # PDF files should be fine for a straight move
@@ -407,8 +409,12 @@ def upload_doc(file, scan_dir, dest_dir,
 
         return True
 
-class A4Page(canvas.Canvas):    
+class A4Page(canvas.Canvas):
+    """An A4 Page canvas class."""
+
     def __init__(self, packet: io.BytesIO) -> None:
+        """Creates a new A4 Page canvas."""
+
         super().__init__(packet, pagesize=A4, pageCompression=1)
         self.setFillColorRGB(0,0,0)        
 
@@ -440,7 +446,11 @@ class A4Page(canvas.Canvas):
         barcode.drawOn(self, 135*mm, 280*mm)
 
 class CustomerPaperworkPage(A4Page):
+    """A page of customer paperwork."""
+
     def __init__(self, packet, job_reference, paperwork_image):
+        """Creates a new customer paperwork page."""
+
         super().__init__(packet)
 
         self.draw_barcode_on_page(job_reference)
