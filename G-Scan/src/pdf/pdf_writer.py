@@ -21,9 +21,11 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
     file_name, file_extension = os.path.splitext(file)
 
+    temp_dir = str(master_application.temp_dir)
+
     # document generation for PDFs
     if file_extension.lower() == ".pdf":
-        with open(scan_dir + "/" + file, "rb") as current_file_pdf:
+        with open(file, "rb") as current_file_pdf:
             current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
             
             current_file_page_amount = current_file_pdf_reader.getNumPages()
@@ -34,12 +36,12 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
                 page_object = current_file_pdf_reader.getPage(page_number)
                 temp_file_writer = PyPDF2.PdfFileWriter()
                 temp_file_writer.addPage(page_object)
-                temp_file = open(master_application.temp_dir + "/" + "temp.pdf", "wb")
+                temp_file = open(temp_dir + "/" + "temp.pdf", "wb")
                 temp_file_writer.write(temp_file)
                 temp_file.close()
                 
-                scan_doc = master_application.temp_dir + "/" + "temp.pdf"
-                cust_pw = master_application.temp_dir + "/temp_image.png"
+                scan_doc = temp_dir + "/" + "temp.pdf"
+                cust_pw = temp_dir + "/temp_image.png"
                 
                 with wand_image(filename = scan_doc, resolution = 300) as img:
                     if img.width > img.height:
@@ -69,7 +71,7 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
 
             current_file_pdf.close()
         
-        output_stream = open(master_application.temp_dir + "/" + "result.pdf", "wb")
+        output_stream = open(dest_dir + "/" + "result.pdf", "wb")
         output.write(output_stream)
         output_stream.close()
 
@@ -77,11 +79,11 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
     elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
         with pil_image.open(scan_dir + "/" + file) as img:
             output = PyPDF2.PdfFileWriter()
-            temporary_png = master_application.temp_dir + "/" + file_name + ".png"
+            temporary_png = temp_dir + "/" + file_name + ".png"
             img.save(temporary_png)
             img.close()
 
-        cust_pw = master_application.temp_dir + "/temp_image.png"
+        cust_pw = temp_dir + "/temp_image.png"
 
         # arrange page into portrait orientation
         with wand_image(filename = temporary_png, resolution = 200) as img_simulator:
@@ -110,7 +112,7 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
 
         output.addPage(new_pdf.getPage(0))
 
-        output_stream = open(master_application.temp_dir + "/" + "result.pdf", "wb")
+        output_stream = open(temp_dir + "/" + "result.pdf", "wb")
         output.write(output_stream)
         output_stream.close()
 
