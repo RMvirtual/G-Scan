@@ -31,6 +31,10 @@ def rotate_image_to_portrait(image: wand_image):
 def convert_pdf_to_customer_paperwork(file_path: str,
         temporary_directory: str, destination_directory: str,
         job_reference: str) -> str:
+    """Opens a pdf file as a file stream and converts it into
+    customer paperwork format containing a heading and a barcoded
+    job reference.
+    """
 
     with open(file_path, "rb") as pdf_stream:            
         pdf_contents = convert_pdf_stream_to_customer_paperwork_file_writer_object(
@@ -85,43 +89,36 @@ def convert_pdf_stream_to_customer_paperwork_file_writer_object(
 
 def create_customer_paperwork_bytes_packet(job_reference,
         paperwork_image_path):
+    
     packet = io.BytesIO()
-
-    write_customer_paperwork_page_to_packet(
-        packet, job_reference, paperwork_image_path)
-        
+    page = CustomerPaperworkPage(packet, job_reference, paperwork_image_path)
     packet.seek(0)
 
     return packet
 
-def write_customer_paperwork_page_to_packet(packet: io.BytesIO,
-        job_reference: str, paperwork_image: str) -> canvas.Canvas:
-
-    page = A4Page(packet)
-    page.draw_barcode_on_page(job_reference)
-    page.draw_job_reference_on_page(job_reference)
-    page.draw_paperwork_type_on_page("Customer Paperwork")
-    page.draw_image_on_page(paperwork_image)
-    page.save()
-
-def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
+def create_cust_pw(master_application, pdf_file_path, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
     """Creates the customer paperwork page."""
 
-    file_name, file_extension = os.path.splitext(file)
+    file_name, file_extension = os.path.splitext(pdf_file_path)
 
     temp_dir = str(master_application.temp_dir)
 
+    is_pdf = (file_extension.lower() == ".pdf")
+
+    image_file_extensions = (".jpeg", ".jpg", ".png")
+    is_image_file = (file_extension.lower() in image_file_extensions)
+
     # Document generation for PDFs
-    if file_extension.lower() == ".pdf":
+    if is_pdf:
         output_file_path = convert_pdf_to_customer_paperwork(
-            file, temp_dir, dest_dir, job_ref)
+            pdf_file_path, temp_dir, dest_dir, job_ref)
         
         return output_file_path
 
     # document generation for image files (excluding TIF as these will always be pre-processed into PDFs by the document splitter function)
-    elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-        with pil_image.open(scan_dir + "/" + file) as img:
+    elif is_image_file:
+        with pil_image.open(scan_dir + "/" + pdf_file_path) as img:
             output = PyPDF2.PdfFileWriter()
             temporary_png = temp_dir + "/" + file_name + ".png"
             img.save(temporary_png)
@@ -425,7 +422,7 @@ class A4Page(canvas.Canvas):
         """Draws the paperwork type subheading on the page."""
 
         self.setFont("Calibri-Bold", 22)
-        self.drawString(5*mm, 280*mm, "Customer Paperwork")
+        self.drawString(5*mm, 280*mm, paperwork_type)
 
     def draw_image_on_page(self, image_path: str) -> None:
         """Draws the image of the customer_paperwork on the page."""
@@ -441,3 +438,13 @@ class A4Page(canvas.Canvas):
             job_reference, barHeight = 10*mm, barWidth = .5*mm)
         
         barcode.drawOn(self, 135*mm, 280*mm)
+
+class CustomerPaperworkPage(A4Page):
+    def __init__(self, packet, job_reference, paperwork_image):
+        super().__init__(packet)
+
+        self.draw_barcode_on_page(job_reference)
+        self.draw_job_reference_on_page(job_reference)
+        self.draw_paperwork_type_on_page("Customer Paperwork")
+        self.draw_image_on_page(paperwork_image)
+        self.save()
