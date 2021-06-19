@@ -73,7 +73,7 @@ def convert_pdf_to_customer_paperwork(file_path: str,
         job_reference: str) -> str:
 
     with open(file_path, "rb") as pdf_stream:            
-        pdf_contents = convert_pdf_stream_to_writer_object_as_customer_paperwork(
+        pdf_contents = convert_pdf_stream_to_customer_paperwork_file_writer_object(
             pdf_stream, temporary_directory, job_reference)
         
         output_stream = open(destination_directory + "/" + "result.pdf", "wb")
@@ -82,7 +82,20 @@ def convert_pdf_to_customer_paperwork(file_path: str,
 
         return destination_directory + "\\result.pdf"
 
-def convert_pdf_stream_to_writer_object_as_customer_paperwork(
+def extract_page_from_pdf_reader(pdf_reader: PyPDF2.PdfFileReader,
+        page_number: int, output_path: str):
+    """Extracts a single page from a pdf reader object and saves it."""
+    
+    page = pdf_reader.getPage(page_number)
+
+    extracted_page_writer = PyPDF2.PdfFileWriter()
+    extracted_page_writer.addPage(page)
+        
+    extracted_pdf_page = open(output_path, "wb")
+    extracted_page_writer.write(extracted_pdf_page)
+    extracted_pdf_page.close()
+
+def convert_pdf_stream_to_customer_paperwork_file_writer_object(
         pdf_stream, temp_directory: str,
         job_reference: str) -> PyPDF2.PdfFileWriter:
     """Converts all the pages in a PDF file into customer paperwork
@@ -94,14 +107,8 @@ def convert_pdf_stream_to_writer_object_as_customer_paperwork(
     number_of_pages = pdf_reader.getNumPages()
 
     for page_number in range(number_of_pages):
-        current_page = pdf_reader.getPage(page_number)
-        
-        single_page_writer = PyPDF2.PdfFileWriter()
-        single_page_writer.addPage(current_page)
-        
-        single_pdf_page = open(temp_directory + "/temp.pdf", "wb")
-        single_page_writer.write(single_pdf_page)
-        single_pdf_page.close()
+        extract_page_from_pdf_reader(
+            pdf_reader, page_number, temp_directory + "/temp.pdf")
         
         working_pdf_path = temp_directory + "/temp.pdf"
         
