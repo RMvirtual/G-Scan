@@ -17,14 +17,10 @@ from wand.image import Image as wand_image
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
-def save_temporary_image(pdf_path, temp_directory):
-    temporary_image_path = temp_directory + "/temp_image.png"
-
+def extract_portrait_png_from_pdf(pdf_path, output_path):
     with wand_image(filename = pdf_path, resolution = 300) as image:
         rotate_image_to_portrait(image)
-        image.save(filename = temporary_image_path)
-
-    return temporary_image_path
+        image.save(filename = output_path)
 
 def rotate_image_to_portrait(image: wand_image):
     is_landscape = (image.width > image.height)
@@ -112,10 +108,13 @@ def convert_pdf_stream_to_customer_paperwork_file_writer_object(
         
         working_pdf_path = temp_directory + "/temp.pdf"
         
-        temp_image = save_temporary_image(working_pdf_path, temp_directory)
+        extract_portrait_png_from_pdf(
+            working_pdf_path, temp_directory + "/temp_image.png")
 
         packet = io.BytesIO()
 
+        temp_image = temp_directory + "/temp_image.png"
+        
         page = create_blank_a4_page(packet)
         draw_barcode_on_page(page, job_reference)
         draw_job_reference_on_page(page, job_reference)
