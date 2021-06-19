@@ -17,17 +17,38 @@ from wand.image import Image as wand_image
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
+def save_temporary_image(pdf_path, temp_directory):
+    temporary_image_path = temp_directory + "/temp_image.png"
+
+    with wand_image(filename = pdf_path, resolution = 300) as image:
+        rotate_image_to_portrait(image)
+        image.save(filename = temporary_image_path)
+
+    return temporary_image_path
+
+def rotate_image_to_portrait(image: wand_image):
+    is_landscape = (image.width > image.height)
+
+    if is_landscape:
+        image.rotate(270)
+
+def draw_barcode_on_page(page_to_draw_on, job_reference):
+    barcode = code128.Code128(
+        job_reference, barHeight = 10*mm, barWidth = .5*mm)
+    
+    barcode.drawOn(page_to_draw_on, 135*mm, 280*mm)
+
+
 def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
     file_name, file_extension = os.path.splitext(file)
 
     temp_dir = str(master_application.temp_dir)
 
-    # document generation for PDFs
+    # Document generation for PDFs
     if file_extension.lower() == ".pdf":
         with open(file, "rb") as current_file_pdf:
             current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
-            
             current_file_page_amount = current_file_pdf_reader.getNumPages()
 
             output = PyPDF2.PdfFileWriter()
@@ -40,36 +61,27 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
                 temp_file_writer.write(temp_file)
                 temp_file.close()
                 
-                scan_doc = temp_dir + "/" + "temp.pdf"
-                cust_pw = temp_dir + "/temp_image.png"
+                working_pdf_path = temp_dir + "/" + "temp.pdf"
                 
-                with wand_image(filename = scan_doc, resolution = 300) as img:
-                    if img.width > img.height:
-                        img.rotate(270)
-                        img.save(filename = cust_pw)
-                    else:
-                        img.save(filename = cust_pw)
+                temp_image = save_temporary_image(working_pdf_path, temp_dir)
 
                 packet = io.BytesIO()
-                slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-                slab.setFillColorRGB(0,0,0)
-                barcode = code128.Code128(job_ref, barHeight = 10*mm, barWidth = .5*mm)
-                barcode.drawOn(slab, 135*mm, 280*mm)
+                page = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
+                page.setFillColorRGB(0,0,0)
+                draw_barcode_on_page(page, job_ref)
 
-                slab.setFont("Calibri", 11)
-                slab.drawString(162*mm, 275*mm, job_ref)
-                slab.setFont("Calibri-Bold", 22)
-                slab.drawString(5*mm, 280*mm, "Customer Paperwork")
-                slab.drawImage(cust_pw, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
+                page.setFont("Calibri", 11)
+                page.drawString(162*mm, 275*mm, job_ref)
+                page.setFont("Calibri-Bold", 22)
+                page.drawString(5*mm, 280*mm, "Customer Paperwork")
+                page.drawImage(temp_image, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
 
-                slab.save()
+                page.save()
 
                 packet.seek(0)
                 new_pdf = PyPDF2.PdfFileReader(packet)
 
                 output.addPage(new_pdf.getPage(0))
-
-            current_file_pdf.close()
         
         output_stream = open(dest_dir + "/" + "result.pdf", "wb")
         output.write(output_stream)
@@ -85,29 +97,29 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
             img.save(temporary_png)
             img.close()
 
-        cust_pw = temp_dir + "/temp_image.png"
+        working_image_path = temp_dir + "/temp_image.png"
 
         # arrange page into portrait orientation
         with wand_image(filename = temporary_png, resolution = 200) as img_simulator:
             if img_simulator.width > img_simulator.height:
                 img_simulator.rotate(270)
-                img_simulator.save(filename = cust_pw)
+                img_simulator.save(filename = working_image_path)
             else:
-                img_simulator.save(filename = cust_pw)
+                img_simulator.save(filename = working_image_path)
 
         packet = io.BytesIO()
-        slab = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-        slab.setFillColorRGB(0,0,0)
+        page = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
+        page.setFillColorRGB(0,0,0)
         barcode = code128.Code128(job_ref, barHeight = 10*mm, barWidth = .5*mm)
-        barcode.drawOn(slab, 135*mm, 280*mm)
+        barcode.drawOn(page, 135*mm, 280*mm)
 
-        slab.setFont("Calibri", 11)
-        slab.drawString(162*mm, 275*mm, job_ref)
-        slab.setFont("Calibri-Bold", 22)
-        slab.drawString(5*mm, 280*mm, "Customer Paperwork")
-        slab.drawImage(cust_pw, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
+        page.setFont("Calibri", 11)
+        page.drawString(162*mm, 275*mm, job_ref)
+        page.setFont("Calibri-Bold", 22)
+        page.drawString(5*mm, 280*mm, "Customer Paperwork")
+        page.drawImage(working_image_path, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
 
-        slab.save()
+        page.save()
 
         packet.seek(0)
         new_pdf = PyPDF2.PdfFileReader(packet)
