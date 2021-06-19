@@ -35,8 +35,7 @@ def draw_barcode_on_page(page_to_draw_on, job_reference):
     barcode.drawOn(page_to_draw_on, 135*mm, 280*mm)
 
 def create_blank_a4_page(packet: io.BytesIO) -> canvas.Canvas:
-    page = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-    page.setFillColorRGB(0,0,0)
+    page = A4Page(packet)
 
     return page
 
@@ -130,7 +129,6 @@ def create_customer_paperwork_bytes_packet(job_reference,
 
     return packet
 
-
 def write_customer_paperwork_page_to_packet(packet: io.BytesIO,
         job_reference: str, paperwork_image: str) -> canvas.Canvas:
 
@@ -140,7 +138,6 @@ def write_customer_paperwork_page_to_packet(packet: io.BytesIO,
     draw_paperwork_type_on_page(page, "Customer Paperwork")
     draw_customer_paperwork_on_page(page, paperwork_image)
     page.save()
-
 
 def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
@@ -153,7 +150,7 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
     # Document generation for PDFs
     if file_extension.lower() == ".pdf":
         output_file_path = convert_pdf_to_customer_paperwork(
-            file, temp_dir, dest_dir, job_ref) 
+            file, temp_dir, dest_dir, job_ref)
         
         return output_file_path
 
@@ -447,3 +444,10 @@ def upload_doc(file, scan_dir, dest_dir,
         os.remove(scan_dir + "/" + file)
 
         return True
+
+class A4Page(canvas.Canvas):    
+    def __init__(self, packet: io.BytesIO):
+        super().__init__(packet, pagesize=A4, pageCompression=1)
+        self.setFillColorRGB(0,0,0)        
+
+
