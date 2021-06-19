@@ -68,6 +68,39 @@ def draw_customer_paperwork_on_page(page_to_draw_on: canvas.Canvas,
         mask = None, preserveAspectRatio = True
     )
 
+def convert_pdf_file_to_customer_paperwork(pdf_reader: PyPDF2.PdfFileReader, 
+        output: PyPDF2.PdfFileWriter, temp_directory: str,
+        job_reference: str) -> None:
+    """Converts all the pages in a PDF file into customer paperwork
+    format."""
+    
+    number_of_pages = pdf_reader.getNumPages()
+
+    for page_number in range(number_of_pages):
+        page_object = pdf_reader.getPage(page_number)
+        temp_file_writer = PyPDF2.PdfFileWriter()
+        temp_file_writer.addPage(page_object)
+        temp_file = open(temp_directory + "/temp.pdf", "wb")
+        temp_file_writer.write(temp_file)
+        temp_file.close()
+        
+        working_pdf_path = temp_directory + "/temp.pdf"
+        
+        temp_image = save_temporary_image(working_pdf_path, temp_directory)
+
+        packet = io.BytesIO()
+
+        page = create_blank_a4_page(packet)
+        draw_barcode_on_page(page, job_reference)
+        draw_job_reference_on_page(page, job_reference)
+        draw_paperwork_type_on_page(page, "Customer Paperwork")
+        draw_customer_paperwork_on_page(page, temp_image)
+        page.save()
+
+        packet.seek(0)
+        new_pdf = PyPDF2.PdfFileReader(packet)
+
+        output.addPage(new_pdf.getPage(0))
 
 def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
@@ -78,36 +111,12 @@ def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
     # Document generation for PDFs
     if file_extension.lower() == ".pdf":
         with open(file, "rb") as current_file_pdf:
-            current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
-            current_file_page_amount = current_file_pdf_reader.getNumPages()
+            pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
 
             output = PyPDF2.PdfFileWriter()
             
-            for page_number in range(current_file_page_amount):
-                page_object = current_file_pdf_reader.getPage(page_number)
-                temp_file_writer = PyPDF2.PdfFileWriter()
-                temp_file_writer.addPage(page_object)
-                temp_file = open(temp_dir + "/" + "temp.pdf", "wb")
-                temp_file_writer.write(temp_file)
-                temp_file.close()
-                
-                working_pdf_path = temp_dir + "/" + "temp.pdf"
-                
-                temp_image = save_temporary_image(working_pdf_path, temp_dir)
-
-                packet = io.BytesIO()
-
-                page = create_blank_a4_page(packet)
-                draw_barcode_on_page(page, job_ref)
-                draw_job_reference_on_page(page, job_ref)
-                draw_paperwork_type_on_page(page, "Customer Paperwork")
-                draw_customer_paperwork_on_page(page, temp_image)
-                page.save()
-
-                packet.seek(0)
-                new_pdf = PyPDF2.PdfFileReader(packet)
-
-                output.addPage(new_pdf.getPage(0))
+            convert_pdf_file_to_customer_paperwork(
+                pdf_reader, output, temp_dir, job_ref)
         
         output_stream = open(dest_dir + "/" + "result.pdf", "wb")
         output.write(output_stream)
