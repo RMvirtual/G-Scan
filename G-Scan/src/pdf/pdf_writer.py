@@ -28,41 +28,6 @@ def rotate_image_to_portrait(image: wand_image):
     if is_landscape:
         image.rotate(270)
 
-def draw_barcode_on_page(page_to_draw_on, job_reference):
-    barcode = code128.Code128(
-        job_reference, barHeight = 10*mm, barWidth = .5*mm)
-    
-    barcode.drawOn(page_to_draw_on, 135*mm, 280*mm)
-
-def create_blank_a4_page(packet: io.BytesIO) -> canvas.Canvas:
-    page = A4Page(packet)
-
-    return page
-
-def draw_job_reference_on_page(page_to_draw_on: canvas.Canvas,
-        job_reference: str) -> None:
-    """Draws a job reference onto a page."""
-
-    page_to_draw_on.setFont("Calibri", 11)
-    page_to_draw_on.drawString(162*mm, 275*mm, job_reference)
-
-def draw_paperwork_type_on_page(page_to_draw_on: canvas.Canvas,
-        paperwork_type: str) -> None:
-    """Draws the paperwork type subheading on the page."""
-
-    page_to_draw_on.setFont("Calibri-Bold", 22)
-    page_to_draw_on.drawString(5*mm, 280*mm, "Customer Paperwork")
-
-def draw_customer_paperwork_on_page(page_to_draw_on: canvas.Canvas,
-        image_path: str) -> None:
-    """Draws the image of the customer_paperwork on the page."""
-
-    page_to_draw_on.drawImage(
-        image_path, -85, 25, 
-        width = 730, height = 730, 
-        mask = None, preserveAspectRatio = True
-    )
-
 def convert_pdf_to_customer_paperwork(file_path: str,
         temporary_directory: str, destination_directory: str,
         job_reference: str) -> str:
@@ -132,11 +97,11 @@ def create_customer_paperwork_bytes_packet(job_reference,
 def write_customer_paperwork_page_to_packet(packet: io.BytesIO,
         job_reference: str, paperwork_image: str) -> canvas.Canvas:
 
-    page = create_blank_a4_page(packet)
-    draw_barcode_on_page(page, job_reference)
-    draw_job_reference_on_page(page, job_reference)
-    draw_paperwork_type_on_page(page, "Customer Paperwork")
-    draw_customer_paperwork_on_page(page, paperwork_image)
+    page = A4Page(packet)
+    page.draw_barcode_on_page(job_reference)
+    page.draw_job_reference_on_page(job_reference)
+    page.draw_paperwork_type_on_page("Customer Paperwork")
+    page.draw_image_on_page(paperwork_image)
     page.save()
 
 def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
@@ -446,8 +411,33 @@ def upload_doc(file, scan_dir, dest_dir,
         return True
 
 class A4Page(canvas.Canvas):    
-    def __init__(self, packet: io.BytesIO):
+    def __init__(self, packet: io.BytesIO) -> None:
         super().__init__(packet, pagesize=A4, pageCompression=1)
         self.setFillColorRGB(0,0,0)        
 
+    def draw_job_reference_on_page(self, job_reference: str) -> None:
+        """Draws a job reference onto the page."""
 
+        self.setFont("Calibri", 11)
+        self.drawString(162*mm, 275*mm, job_reference)
+
+    def draw_paperwork_type_on_page(self, paperwork_type: str) -> None:
+        """Draws the paperwork type subheading on the page."""
+
+        self.setFont("Calibri-Bold", 22)
+        self.drawString(5*mm, 280*mm, "Customer Paperwork")
+
+    def draw_image_on_page(self, image_path: str) -> None:
+        """Draws the image of the customer_paperwork on the page."""
+
+        self.drawImage(
+            image_path, -85, 25, 
+            width = 730, height = 730, 
+            mask = None, preserveAspectRatio = True
+        )
+
+    def draw_barcode_on_page(self, job_reference: str):
+        barcode = code128.Code128(
+            job_reference, barHeight = 10*mm, barWidth = .5*mm)
+        
+        barcode.drawOn(self, 135*mm, 280*mm)
