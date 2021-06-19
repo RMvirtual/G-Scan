@@ -68,21 +68,40 @@ def draw_customer_paperwork_on_page(page_to_draw_on: canvas.Canvas,
         mask = None, preserveAspectRatio = True
     )
 
-def convert_pdf_file_to_customer_paperwork(pdf_reader: PyPDF2.PdfFileReader, 
-        output: PyPDF2.PdfFileWriter, temp_directory: str,
-        job_reference: str) -> None:
+def convert_pdf_to_customer_paperwork(file_path: str,
+        temporary_directory: str, destination_directory: str,
+        job_reference: str) -> str:
+
+    with open(file_path, "rb") as pdf_stream:            
+        pdf_contents = convert_pdf_stream_to_writer_object_as_customer_paperwork(
+            pdf_stream, temporary_directory, job_reference)
+        
+        output_stream = open(destination_directory + "/" + "result.pdf", "wb")
+        pdf_contents.write(output_stream)
+        output_stream.close()
+
+        return destination_directory + "\\result.pdf"
+
+def convert_pdf_stream_to_writer_object_as_customer_paperwork(
+        pdf_stream, temp_directory: str,
+        job_reference: str) -> PyPDF2.PdfFileWriter:
     """Converts all the pages in a PDF file into customer paperwork
     format."""
+
+    pdf_reader = PyPDF2.PdfFileReader(pdf_stream)
+    output = PyPDF2.PdfFileWriter()
     
     number_of_pages = pdf_reader.getNumPages()
 
     for page_number in range(number_of_pages):
-        page_object = pdf_reader.getPage(page_number)
-        temp_file_writer = PyPDF2.PdfFileWriter()
-        temp_file_writer.addPage(page_object)
-        temp_file = open(temp_directory + "/temp.pdf", "wb")
-        temp_file_writer.write(temp_file)
-        temp_file.close()
+        current_page = pdf_reader.getPage(page_number)
+        
+        single_page_writer = PyPDF2.PdfFileWriter()
+        single_page_writer.addPage(current_page)
+        
+        single_pdf_page = open(temp_directory + "/temp.pdf", "wb")
+        single_page_writer.write(single_pdf_page)
+        single_pdf_page.close()
         
         working_pdf_path = temp_directory + "/temp.pdf"
         
@@ -102,27 +121,22 @@ def convert_pdf_file_to_customer_paperwork(pdf_reader: PyPDF2.PdfFileReader,
 
         output.addPage(new_pdf.getPage(0))
 
+    return output
+
 def create_cust_pw(master_application, file, scan_dir, dest_dir, job_ref,
         dest_file_name, dest_duplicate_check):
+    """Creates the customer paperwork page."""
+
     file_name, file_extension = os.path.splitext(file)
 
     temp_dir = str(master_application.temp_dir)
 
     # Document generation for PDFs
     if file_extension.lower() == ".pdf":
-        with open(file, "rb") as current_file_pdf:
-            pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
-
-            output = PyPDF2.PdfFileWriter()
-            
-            convert_pdf_file_to_customer_paperwork(
-                pdf_reader, output, temp_dir, job_ref)
+        output_file_path = convert_pdf_to_customer_paperwork(
+            file, temp_dir, dest_dir, job_ref) 
         
-        output_stream = open(dest_dir + "/" + "result.pdf", "wb")
-        output.write(output_stream)
-        output_stream.close()
-
-        return dest_dir + "\\result.pdf"
+        return output_file_path
 
     # document generation for image files (excluding TIF as these will always be pre-processed into PDFs by the document splitter function)
     elif file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
