@@ -23,7 +23,7 @@ class TestPDFWriter(unittest.TestCase):
                 self.temp_dir = file_system.get_temp_directory()
 
         master_application = MasterApplication()
-        
+
         scan_file = dict.get("scan")
         scan_dir = self.get_folder_from_test_resources("scans")
         dest_dir = self.get_folder_from_test_resources("destination")
@@ -33,8 +33,8 @@ class TestPDFWriter(unittest.TestCase):
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
         result_file = create_cust_pw(
-            master_application, str(scan_file), str(scan_dir), str(dest_dir), job_ref,
-            dest_file_name, False
+            master_application, str(scan_file), str(scan_dir), str(dest_dir),
+            job_ref
         )
 
         correct_pdf = file_system.get_test_directory().joinpath(

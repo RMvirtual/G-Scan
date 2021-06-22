@@ -99,8 +99,7 @@ def create_customer_paperwork_bytes_packet(job_reference,
 
     return packet
 
-def create_cust_pw(master_application, pdf_file_path, scan_dir, dest_dir, job_ref,
-        dest_file_name, dest_duplicate_check):
+def create_cust_pw(master_application, pdf_file_path, scan_dir, dest_dir, job_ref):
     """Creates the customer paperwork page."""
 
     file_name, file_extension = os.path.splitext(pdf_file_path)
