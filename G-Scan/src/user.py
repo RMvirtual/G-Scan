@@ -36,8 +36,6 @@ def create_new_user(user_name, user_settings_data):
     user_settings_data[user_name] = new_user
     user_settings_data.sync()
 
-    print("Created user: ", new_user.get_name())
-
     return new_user
 
 class User(object):

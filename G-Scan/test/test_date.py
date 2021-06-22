@@ -47,7 +47,7 @@ class TestDate(unittest.TestCase):
     def test_current_month_number_is_five(self):
         month_number = date.get_current_month_number()
 
-        self.assertTrue(month_number == 5)
+        self.assertTrue(month_number == 6)
 
     def test_get_month_names_and_numbers(self):
         months = date.get_month_names_and_numbers()
@@ -59,9 +59,9 @@ class TestDate(unittest.TestCase):
     def test_get_current_month(self):
         month = date.get_current_month()
 
-        self.assertTrue(month.get_month_name() == "May")
-        self.assertTrue(month.get_month_number() == 5)
-        self.assertTrue(month.get_month_number_as_two_digits() == "05")
+        self.assertTrue(month.get_month_name() == "June")
+        self.assertTrue(month.get_month_number() == 6)
+        self.assertTrue(month.get_month_number_as_two_digits() == "06")
         self.assertTrue(month.get_year() == 2021)
         self.assertTrue(month.get_year_as_two_digits() == "21")
 

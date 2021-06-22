@@ -124,8 +124,6 @@ def check_path_exists(path) -> bool:
     """Returns a boolean value describing whether the path provided
     exists or not."""
 
-    print("Printing " + path)
-
     return os.path.exists(path)
 
 def check_if_file_exists(file_name, directory_path) -> bool:

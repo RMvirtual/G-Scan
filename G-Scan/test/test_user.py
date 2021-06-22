@@ -14,9 +14,6 @@ class TestUser(unittest.TestCase):
 
     def test_get_user_settings(self):
         current_user = user.get_user_settings()
-
-        print(current_user.get_name())
-
         self.assertTrue(current_user.get_name() == "rmvir")
     
     def test_create_new_user(self):

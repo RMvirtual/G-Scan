@@ -15,7 +15,7 @@ class TestJobReferences(unittest.TestCase):
     def test_calculate_base_job_number(self):
         current_date = date.get_current_month()
         base_job_number = job_ref.calculate_base_job_number(current_date)
-        self.assertTrue(base_job_number == "210500000")
+        self.assertTrue(base_job_number == "210600000", base_job_number)
 
         another_date = date.Date(1, "January", 2019)
         base_job_number = job_ref.calculate_base_job_number(another_date)
@@ -27,7 +27,6 @@ class TestJobReferences(unittest.TestCase):
             "2300", current_date)
 
         correct_number = "210502300"
-
         self.assertTrue(job_number == correct_number, correct_number)
 
     def test_create_quick_job_number(self):
@@ -35,13 +34,12 @@ class TestJobReferences(unittest.TestCase):
         job_reference = job_ref.create_quick_job_reference(
             "2300", current_date)
 
-        correct_reference = "GR210502300"
+        correct_reference = "GR210602300"
 
         self.assertTrue(job_reference == correct_reference, correct_reference)
 
     def test_create_job_reference(self):
         correct_reference = "GR190100200"
-
         input_values = ["GR190100200", "190100200"]
 
         for value in input_values:

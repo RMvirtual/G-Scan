@@ -54,7 +54,7 @@ def extract_page_from_pdf_reader(pdf_reader: PyPDF2.PdfFileReader,
 
     extracted_page_writer = PyPDF2.PdfFileWriter()
     extracted_page_writer.addPage(page)
-        
+
     extracted_pdf_page = open(output_path, "wb")
     extracted_page_writer.write(extracted_pdf_page)
     extracted_pdf_page.close()

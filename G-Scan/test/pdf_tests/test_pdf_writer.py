@@ -26,18 +26,12 @@ class TestPDFWriter(unittest.TestCase):
         master_application = MasterApplication()
         scan = dict.get("scan")
 
-        print("Scan is " + str(scan))
-
         scan_dir = file_system.get_test_directory().joinpath(
             "resources", "scans")
-
-        print("Scan dir is " + str(scan_dir))
 
         dest_dir = file_system.get_test_directory().joinpath(
             "resources", "destination"
         )
-
-        print("Dest dir is " + str(dest_dir))
 
         job_ref = "GR190100200"
 
@@ -60,8 +54,6 @@ class TestPDFWriter(unittest.TestCase):
             "resources", "correct_files", "p1testfile1withbarcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
-
-        print("Result file " + result_file)
 
         with Image(filename=result_file, resolution=150) as expected:
             difference = correct_image.compare(expected, metric="root_mean_square")
