@@ -3,7 +3,6 @@ import sys
 import os
 from pathlib import Path
 import shutil
-
 from wand.image import Image
 
 main_src_path = Path.cwd().parent.joinpath("src")
@@ -30,8 +29,7 @@ class TestPDFWriter(unittest.TestCase):
             "resources", "scans")
 
         dest_dir = file_system.get_test_directory().joinpath(
-            "resources", "destination"
-        )
+            "resources", "destination")
 
         job_ref = "GR190100200"
 
@@ -55,9 +53,8 @@ class TestPDFWriter(unittest.TestCase):
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
-        with Image(filename=result_file, resolution=150) as expected:
-            difference = correct_image.compare(expected, metric="root_mean_square")
-            self.assertLess(difference[1], 0.01)
+        self.check_if_paperwork_pages_are_identical(
+            correct_image, result_file)
 
     def setup_customer_paperwork(self) -> dict:
         current_directory = file_system.get_current_directory()
@@ -76,6 +73,13 @@ class TestPDFWriter(unittest.TestCase):
         }
 
         return dict
+
+    def check_if_paperwork_pages_are_identical(self, correct_image: Image,
+            result_file: Image):
+        with Image(filename=result_file, resolution=150) as expected:
+            difference = correct_image.compare(expected, metric="root_mean_square")
+            self.assertLess(difference[1], 0.01)
+
 
     class CustomerPaperworkData():
         """A data structure to hold the necessary info."""
