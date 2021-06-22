@@ -23,28 +23,17 @@ class TestPDFWriter(unittest.TestCase):
                 self.temp_dir = file_system.get_temp_directory()
 
         master_application = MasterApplication()
-        scan = dict.get("scan")
-
-        scan_dir = file_system.get_test_directory().joinpath(
-            "resources", "scans")
-
-        dest_dir = file_system.get_test_directory().joinpath(
-            "resources", "destination")
+        
+        scan_file = dict.get("scan")
+        scan_dir = self.get_folder_from_test_resources("scans")
+        dest_dir = self.get_folder_from_test_resources("destination")
 
         job_ref = "GR190100200"
-
-        file_name_attributes = file_naming.FileNamingAttributes()
-
-        file_name_attributes.paperwork_type = "Cust PW"
-        file_name_attributes.input_mode = "Normal"
-        file_name_attributes.file_extension = ".pdf"
-        file_name_attributes.page_number = 1
-        file_name_attributes.job_reference = job_ref
-
+        file_name_attributes = self.setup_file_name_attributes(job_ref)
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
         result_file = create_cust_pw(
-            master_application, str(scan), str(scan_dir), str(dest_dir), job_ref,
+            master_application, str(scan_file), str(scan_dir), str(dest_dir), job_ref,
             dest_file_name, False
         )
 
@@ -55,6 +44,23 @@ class TestPDFWriter(unittest.TestCase):
 
         self.check_if_paperwork_pages_are_identical(
             correct_image, result_file)
+
+    def get_folder_from_test_resources(self, folder):
+        full_path = file_system.get_test_directory().joinpath(
+            "resources", folder)
+
+        return full_path
+
+    def setup_file_name_attributes(self, job_ref):
+        file_name_attributes = file_naming.FileNamingAttributes()
+
+        file_name_attributes.paperwork_type = "Cust PW"
+        file_name_attributes.input_mode = "Normal"
+        file_name_attributes.file_extension = ".pdf"
+        file_name_attributes.page_number = 1
+        file_name_attributes.job_reference = job_ref
+        
+        return file_name_attributes
 
     def setup_customer_paperwork(self) -> dict:
         current_directory = file_system.get_current_directory()
