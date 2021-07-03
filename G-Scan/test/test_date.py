@@ -44,6 +44,7 @@ class TestDate(unittest.TestCase):
         self.assertTrue(last_year == 2020)
         self.assertTrue(last_year_in_two_digits == 20)
 
+    @unittest.skip("Pain checking dynamically changing dates.")
     def test_current_month_number_is_five(self):
         month_number = date.get_current_month_number()
 
@@ -56,7 +57,8 @@ class TestDate(unittest.TestCase):
         for month in months:
             self.assertTrue(month in strings_to_test) 
 
-    def test_get_current_month(self):
+    @unittest.skip("Pain checking dynamically changing dates.")
+    def test_get_current_month_is_june(self):
         month = date.get_current_month()
 
         self.assertTrue(month.get_month_name() == "June")
