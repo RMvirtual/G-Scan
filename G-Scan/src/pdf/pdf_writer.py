@@ -42,21 +42,15 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             
             return output_file_path
 
-        # document generation for image files (excluding TIF as these will always be pre-processed into PDFs by the document splitter function)
+        # Image file extensions exclude TIF as these will always be
+        # pre-processed into PDFs by the document splitter function.
         elif is_image_file:
-            file_name = directory_item.get_file_name()
-            temp_dir = str(file_system.get_temp_directory())
-
-            with pil_image.open(scan_dir + "/" + file_path) as img:
-                output = PyPDF2.PdfFileWriter()
-                temporary_png = temp_dir + "/" + file_name + ".png"
-                img.save(temporary_png)
-                img.close()
-
-            working_image_path = temp_dir + "/temp_image.png"
+            output = PyPDF2.PdfFileWriter()
+            working_image_path = self.save_image_as_png_to_temp_directory(
+                scan_dir, directory_item)
 
             # arrange page into portrait orientation
-            with wand_image(filename = temporary_png, resolution = 200) as img_simulator:
+            with wand_image(filename = working_image_path, resolution = 200) as img_simulator:
                 if img_simulator.width > img_simulator.height:
                     img_simulator.rotate(270)
                     img_simulator.save(filename = working_image_path)
@@ -73,7 +67,10 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             page.drawString(162*mm, 275*mm, job_ref)
             page.setFont("Calibri-Bold", 22)
             page.drawString(5*mm, 280*mm, "Customer Paperwork")
-            page.drawImage(working_image_path, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
+            page.drawImage(
+                working_image_path, -85, 25, width = 730, height = 730,
+                mask = None, preserveAspectRatio = True
+            )
 
             page.save()
 
@@ -87,6 +84,19 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             output_stream.close()
 
             return (temp_dir + "/result.pdf")
+
+    def save_image_as_png_to_temp_directory(self, scan_dir, directory_item):
+        file_name = directory_item.get_file_name()
+        temp_dir = str(file_system.get_temp_directory())
+
+        with pil_image.open(scan_dir + "/" + file_name) as img:
+            temporary_png = temp_dir + "/" + file_name + ".png"
+            img.save(temporary_png)
+            img.close()
+
+        working_image_path = temp_dir + "/temp_image.png"
+
+        return working_image_path
 
     def convert_pdf_to_customer_paperwork(self, source_path: str,
             destination_directory: str,
@@ -102,9 +112,9 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             pdf_contents = self.convert_stream_to_customer_paperwork_file_writer_object(
                 pdf_stream, temp_dir, job_reference)
             
-            output_stream = open(destination_directory + "/" + "result.pdf", "wb")
-            pdf_contents.write(output_stream)
-            output_stream.close()
+        output_stream = open(destination_directory + "/" + "result.pdf", "wb")
+        pdf_contents.write(output_stream)
+        output_stream.close()
 
         return destination_directory + "\\result.pdf"
 
@@ -165,12 +175,11 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         
         page = pdf_reader.getPage(page_number)
 
-        extracted_page_writer = PyPDF2.PdfFileWriter()
+        extracted_page_writer = PdfWriter()
         extracted_page_writer.addPage(page)
 
-        extracted_pdf_page = open(output_path, "wb")
-        extracted_page_writer.write(extracted_pdf_page)
-        extracted_pdf_page.close()
+        with open(output_path, "wb") as extracted_pdf_page:
+            extracted_page_writer.write(extracted_pdf_page)
 
 def create_loading_list_pod(master_application, file, scan_dir,
         dest_dir, dest_file_name, dest_duplicate_check):

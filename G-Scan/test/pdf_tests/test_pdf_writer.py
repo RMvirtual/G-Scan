@@ -31,7 +31,7 @@ class TestPDFWriter(unittest.TestCase):
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
         writer = PdfWriter()
-        result_file = writer.create_customer_paperwork(
+        result_file_path = writer.create_customer_paperwork(
             scan_file, scan_dir, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
@@ -40,9 +40,9 @@ class TestPDFWriter(unittest.TestCase):
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
         self.check_if_paperwork_pages_are_identical(
-            correct_image, result_file)
+            correct_image, result_file_path)
 
-        self.setup_customer_paperwork_png()
+        self.teardown_customer_paperwork_pdf(result_file_path)
 
     def test_creating_single_page_png_with_reference(self):
         dict = self.setup_customer_paperwork_png()
@@ -60,7 +60,7 @@ class TestPDFWriter(unittest.TestCase):
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
         writer = PdfWriter()
-        result_file = writer.create_customer_paperwork(
+        result_file_path = writer.create_customer_paperwork(
             scan_file, scan_dir, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
@@ -69,7 +69,9 @@ class TestPDFWriter(unittest.TestCase):
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
         self.check_if_paperwork_pages_are_identical(
-            correct_image, result_file)
+            correct_image, result_file_path)
+
+        self.teardown_customer_paperwork_pdf(result_file_path)
 
     def get_folder_from_test_resources(self, folder):
         full_path = file_system.get_test_directory().joinpath(
@@ -104,6 +106,9 @@ class TestPDFWriter(unittest.TestCase):
 
         return dict
 
+    def teardown_customer_paperwork_pdf(self, path):
+        os.remove(path)
+
     def setup_customer_paperwork_png(self) -> dict:
         page_to_copy = file_system.get_test_directory().joinpath(
             "resources", "correct_files", "p1testfile1.pdf")
@@ -122,8 +127,8 @@ class TestPDFWriter(unittest.TestCase):
         return dict
 
     def check_if_paperwork_pages_are_identical(self, correct_image: Image,
-            result_file: Image):
-        with Image(filename=result_file, resolution=150) as expected:
+            result_file_path: str):
+        with Image(filename=result_file_path, resolution=150) as expected:
             difference = correct_image.compare(expected, metric="root_mean_square")
             self.assertLess(difference[1], 0.01)
 
