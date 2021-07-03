@@ -14,126 +14,6 @@ from wand.image import Image as WandImage
 from pdf.paperwork_types import CustomerPaperworkPage
 from pdf.pdf_reader import PdfReader
 
-class PdfWriter(PyPDF2.PdfFileWriter):
-    """Writes PDF files."""
-
-    def __init__(self):
-        """Creates a new PDF Writer object."""
-
-        super().__init__()
-
-    def convert_png_to_customer_paperwork(
-            self, directory_item, destination_directory, job_reference):
-
-        paperwork_image_path = self.save_image_as_png_to_temp_directory(
-            directory_item)
-
-        packet = self.create_customer_paperwork_bytes_packet(
-            job_reference, paperwork_image_path)
-        
-        new_pdf_page = PdfReader(packet).getPage(0)
-        output = PdfWriter()
-        output.addPage(new_pdf_page)
-
-        with open(destination_directory + "\\result.pdf", "wb") \
-                as output_stream:
-            output.write(output_stream)
-
-        return destination_directory + "\\result.pdf"
-
-    def save_image_as_png_to_temp_directory(self,
-            directory_item: DirectoryItem) -> str:
-        file_name = directory_item.get_file_name()
-        temp_dir = str(file_system.get_temp_directory())
-
-        with WandImage(filename=str(directory_item), resolution=300) as img:
-            temp_image_path = temp_dir + "/" + file_name + ".png"
-            self.rotate_image_to_portrait(img)
-            img.save(filename=temp_image_path)
-            img.close()
-
-        return temp_image_path
-
-    def convert_pdf_to_customer_paperwork(self, source_path: str,
-            destination_directory: str,
-            job_reference: str) -> str:
-        """Opens a pdf file as a file stream and converts it into
-        customer paperwork format containing a heading and a barcoded
-        job reference.
-        """
-
-        with open(source_path, "rb") as pdf_stream:     
-            self.convert_pdf_stream_to_customer_paperwork_file_writer_object(
-                pdf_stream, job_reference)
-
-        output_path = destination_directory + "\\result.pdf"
-
-        with open(output_path, "wb") as output_stream:
-            self.write(output_stream)
-
-        return output_path
-
-    def convert_pdf_stream_to_customer_paperwork_file_writer_object(
-            self, stream, job_reference: str) -> None:
-        """Converts all the pages in a PDF file into customer paperwork
-        format."""
-
-        temp_directory = str(file_system.get_temp_directory())
-        pdf_reader = PdfReader(stream)        
-        number_of_pages = pdf_reader.getNumPages()
-
-        for page_number in range(number_of_pages):
-            working_pdf_path = temp_directory + "/temp.pdf"
-
-            self.extract_page_from_pdf_reader(
-                pdf_reader, page_number, working_pdf_path)
-            
-            paperwork_image_path = temp_directory + "/temp_image.png"
-            
-            self.convert_single_page_pdf_to_png(
-                working_pdf_path, paperwork_image_path)
-
-            packet = self.create_customer_paperwork_bytes_packet(
-                job_reference, paperwork_image_path)
-
-            new_pdf_page = PdfReader(packet).getPage(0)
-            self.addPage(new_pdf_page)
-
-    def convert_single_page_pdf_to_png(self, pdf_path: str, output_path: str):
-        with WandImage(filename = pdf_path, resolution = 300) as image:
-            self.rotate_image_to_portrait(image)
-            image.save(filename = output_path)
-
-    def rotate_image_to_portrait(self, image: WandImage):
-        is_landscape = (image.width > image.height)
-
-        if is_landscape:
-            image.rotate(270)
-
-    def create_customer_paperwork_bytes_packet(self, job_reference,
-            paperwork_image_path) -> io.BytesIO:
-        """Creates a bytes packet containing data required to write a
-        customer paperwork page.
-        """
-
-        packet = io.BytesIO()
-        page = CustomerPaperworkPage(packet, job_reference, paperwork_image_path)
-        packet.seek(0)
-
-        return packet
-
-    def extract_page_from_pdf_reader(self, pdf_reader: PdfReader,
-            page_number: int, output_path: str) -> None:
-        """Extracts a single page from a pdf reader object and saves it."""
-        
-        page = pdf_reader.getPage(page_number)
-
-        extracted_page_writer = PdfWriter()
-        extracted_page_writer.addPage(page)
-
-        with open(output_path, "wb") as extracted_pdf_page:
-            extracted_page_writer.write(extracted_pdf_page)
-
 def create_loading_list_pod(master_application, file, scan_dir,
         dest_dir, dest_file_name, dest_duplicate_check):
     """Moves a loading list or POD with correct naming convention
@@ -381,14 +261,59 @@ def upload_doc(file, scan_dir, dest_dir,
 
         return True
 
+class PdfWriter(PyPDF2.PdfFileWriter):
+    """Writes PDF files."""
+
+    def __init__(self):
+        """Creates a new PDF Writer object."""
+
+        super().__init__()
+
+    def save_image_as_png_to_temp_directory(self,
+            directory_item: DirectoryItem) -> str:
+        file_name = directory_item.get_file_name()
+        temp_dir = str(file_system.get_temp_directory())
+
+        with WandImage(filename=str(directory_item), resolution=300) as img:
+            temp_image_path = temp_dir + "/" + file_name + ".png"
+            self.rotate_image_to_portrait(img)
+            img.save(filename=temp_image_path)
+            img.close()
+
+        return temp_image_path
+
+    def convert_single_page_pdf_to_png(self, pdf_path: str, output_path: str):
+        with WandImage(filename = pdf_path, resolution = 300) as image:
+            self.rotate_image_to_portrait(image)
+            image.save(filename = output_path)
+
+    def rotate_image_to_portrait(self, image: WandImage):
+        is_landscape = (image.width > image.height)
+
+        if is_landscape:
+            image.rotate(270)
+
+    def extract_page_from_pdf_reader(self, pdf_reader: PdfReader,
+            page_number: int, output_path: str) -> None:
+        """Extracts a single page from a pdf reader object and saves it."""
+        
+        page = pdf_reader.getPage(page_number)
+
+        extracted_page_writer = PdfWriter()
+        extracted_page_writer.addPage(page)
+
+        with open(output_path, "wb") as extracted_pdf_page:
+            extracted_page_writer.write(extracted_pdf_page)
+
 class CustomerPaperworkPDFWriter(PdfWriter):
     def __init__(self):
         super().__init__()
 
     def create_pdf(
-            self, source_path: str, 
-            destination_path: str, job_reference: str) -> None:
-
+            self, source_path: str, destination_path: str,
+            job_reference: str) -> None:
+        """Creates a new customer paperwork PDF file."""
+        
         directory_item = DirectoryItem(source_path)
 
         is_pdf = directory_item.check_if_file_extension_matches(".pdf")
@@ -408,3 +333,79 @@ class CustomerPaperworkPDFWriter(PdfWriter):
                 directory_item, destination_path, job_reference)
 
             return output_file_path
+
+    def convert_pdf_to_customer_paperwork(self, source_path: str,
+            destination_directory: str,
+            job_reference: str) -> str:
+        """Opens a pdf file as a file stream and converts it into
+        customer paperwork format containing a heading and a barcoded
+        job reference.
+        """
+
+        with open(source_path, "rb") as pdf_stream:     
+            self.convert_pdf_stream_to_customer_paperwork_file_writer_object(
+                pdf_stream, job_reference)
+
+        output_path = destination_directory + "\\result.pdf"
+
+        with open(output_path, "wb") as output_stream:
+            self.write(output_stream)
+
+        return output_path
+
+    def convert_png_to_customer_paperwork(
+            self, directory_item, destination_directory, job_reference):
+
+        paperwork_image_path = self.save_image_as_png_to_temp_directory(
+            directory_item)
+
+        packet = self.create_customer_paperwork_bytes_packet(
+            job_reference, paperwork_image_path)
+        
+        new_pdf_page = PdfReader(packet).getPage(0)
+        output = PdfWriter()
+        output.addPage(new_pdf_page)
+
+        with open(destination_directory + "\\result.pdf", "wb") \
+                as output_stream:
+            output.write(output_stream)
+
+        return destination_directory + "\\result.pdf"
+
+    def convert_pdf_stream_to_customer_paperwork_file_writer_object(
+            self, stream, job_reference: str) -> None:
+        """Converts all the pages in a PDF file into customer paperwork
+        format."""
+
+        temp_directory = str(file_system.get_temp_directory())
+        pdf_reader = PdfReader(stream)        
+        number_of_pages = pdf_reader.getNumPages()
+
+        for page_number in range(number_of_pages):
+            working_pdf_path = temp_directory + "/temp.pdf"
+
+            self.extract_page_from_pdf_reader(
+                pdf_reader, page_number, working_pdf_path)
+            
+            paperwork_image_path = temp_directory + "/temp_image.png"
+            
+            self.convert_single_page_pdf_to_png(
+                working_pdf_path, paperwork_image_path)
+
+            packet = self.create_customer_paperwork_bytes_packet(
+                job_reference, paperwork_image_path)
+
+            new_pdf_page = PdfReader(packet).getPage(0)
+            self.addPage(new_pdf_page)
+
+    def create_customer_paperwork_bytes_packet(self, job_reference,
+            paperwork_image_path) -> io.BytesIO:
+        """Creates a bytes packet containing data required to write a
+        customer paperwork page.
+        """
+
+        packet = io.BytesIO()
+        page = CustomerPaperworkPage(packet, job_reference, paperwork_image_path)
+        packet.seek(0)
+
+        return packet
