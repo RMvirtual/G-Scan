@@ -10,9 +10,13 @@ class DirectoryItem():
     """A class for a directory item."""
 
     def __init__(self, path: str) -> None:
-        # super().__init__(path)
+        self.__path = Path(path)
+        self.__full_file_name =  self.__path.name
+        self.__file_name, self.__file_extension = os.path.splitext(
+            self.__full_file_name)
 
-        self.__file_name, self.__file_extension = os.path.splitext(path)
+    def __str__(self):
+        return str(self.__path)
 
     def get_file_name(self) -> str:
         return self.__file_name

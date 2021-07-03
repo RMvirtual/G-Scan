@@ -81,6 +81,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
             output.addPage(new_pdf.getPage(0))
 
+            temp_dir = str(file_system.get_temp_directory())
             output_stream = open(temp_dir + "/" + "result.pdf", "wb")
             output.write(output_stream)
             output_stream.close()
@@ -91,7 +92,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         file_name = directory_item.get_file_name()
         temp_dir = str(file_system.get_temp_directory())
 
-        with pil_image.open(scan_dir + "/" + file_name) as img:
+        with pil_image.open(str(directory_item)) as img:
             temporary_png = temp_dir + "/" + file_name + ".png"
             img.save(temporary_png)
             img.close()
