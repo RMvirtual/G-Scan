@@ -37,6 +37,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             directory_item)
         
         if is_pdf:
+            print("In PDF section.")
             output_file_path = self.convert_pdf_to_customer_paperwork(
                 file_path, dest_dir, job_ref)
             
@@ -45,6 +46,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         # Image file extensions exclude TIF as these will always be
         # pre-processed into PDFs by the document splitter function.
         elif is_image_file:
+            print("In image file section.")
             output = PyPDF2.PdfFileWriter()
             working_image_path = self.save_image_as_png_to_temp_directory(
                 scan_dir, directory_item)

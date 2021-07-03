@@ -111,7 +111,7 @@ class TestPDFWriter(unittest.TestCase):
 
     def setup_customer_paperwork_png(self) -> dict:
         page_to_copy = file_system.get_test_directory().joinpath(
-            "resources", "correct_files", "p1testfile1.pdf")
+            "resources", "correct_files", "p1testfile1.png")
 
         scans_directory = file_system.get_test_directory().joinpath(
             "resources", "scans")
@@ -121,7 +121,7 @@ class TestPDFWriter(unittest.TestCase):
 
         dict = {
             "original": page_to_copy,
-            "scan": scans_directory.joinpath("p1testfile1.pdf")
+            "scan": scans_directory.joinpath("p1testfile1.png")
         }
 
         return dict
