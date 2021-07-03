@@ -6,6 +6,38 @@ import os
 import shelve
 from pathlib import Path
 
+class DirectoryItem():
+    """A class for a directory item."""
+
+    def __init__(self, path: str) -> None:
+        # super().__init__(path)
+
+        self.__file_name, self.__file_extension = os.path.splitext(path)
+
+    def get_file_name(self) -> str:
+        return self.__file_name
+
+    def get_file_extension(self) -> str:
+        return self.__file_extension
+
+    def check_if_file_extension_matches(
+            self, extension_to_check: str) -> bool:
+        return (self.__file_extension.lower() == extension_to_check)
+
+    def check_if_file_extension_matches_in_tuple(
+            self, extensions_to_check: tuple) -> bool:
+        return (self.__file_extension.lower() in extensions_to_check)
+
+def is_file_single_page_image_format(file: DirectoryItem):
+    """Checks if a file is a single page image extension."""
+
+    image_file_extensions = (".jpeg", ".jpg", ".png")
+
+    is_image_file = file.check_if_file_extension_matches_in_tuple(
+        image_file_extensions)
+
+    return is_image_file
+
 def get_item_directory(path):
     """Gets the directory of a path."""
 

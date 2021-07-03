@@ -33,7 +33,7 @@ class TestPDFWriter(unittest.TestCase):
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
         writer = PdfWriter()
-        result_file = writer.create_cust_pw(
+        result_file = writer.create_customer_paperwork(
             scan_file, scan_dir, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(

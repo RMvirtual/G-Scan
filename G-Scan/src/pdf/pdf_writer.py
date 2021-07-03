@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from app import file_system
+from app.file_system import DirectoryItem 
 import io
 import os
 import PyPDF2
@@ -26,28 +27,27 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
         super().__init__()
 
-    def create_cust_pw(self, pdf_file_path: str, scan_dir: str, dest_dir: str,
-            job_ref: str):
+    def create_customer_paperwork(
+        self, file_path: str, scan_dir: str, dest_dir: str, job_ref: str):
         """Creates the customer paperwork page."""
 
-        file_name, file_extension = os.path.splitext(pdf_file_path)
-        is_pdf = (file_extension.lower() == ".pdf")
-
-        image_file_extensions = (".jpeg", ".jpg", ".png")
-        is_image_file = (file_extension.lower() in image_file_extensions)
-
-        temp_dir = str(file_system.get_temp_directory())
-
-        # Document generation for PDFs
+        directory_item = file_system.DirectoryItem(file_path)
+        is_pdf = directory_item.check_if_file_extension_matches(".pdf")
+        is_image_file = file_system.is_file_single_page_image_format(
+            directory_item)
+        
         if is_pdf:
             output_file_path = self.convert_pdf_to_customer_paperwork(
-                pdf_file_path, temp_dir, dest_dir, job_ref)
+                file_path, dest_dir, job_ref)
             
             return output_file_path
 
         # document generation for image files (excluding TIF as these will always be pre-processed into PDFs by the document splitter function)
         elif is_image_file:
-            with pil_image.open(scan_dir + "/" + pdf_file_path) as img:
+            file_name = directory_item.get_file_name()
+            temp_dir = str(file_system.get_temp_directory())
+
+            with pil_image.open(scan_dir + "/" + file_path) as img:
                 output = PyPDF2.PdfFileWriter()
                 temporary_png = temp_dir + "/" + file_name + ".png"
                 img.save(temporary_png)
@@ -88,17 +88,19 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
             return (temp_dir + "/result.pdf")
 
-    def convert_pdf_to_customer_paperwork(self, file_path: str,
-            temporary_directory: str, destination_directory: str,
+    def convert_pdf_to_customer_paperwork(self, source_path: str,
+            destination_directory: str,
             job_reference: str) -> str:
         """Opens a pdf file as a file stream and converts it into
         customer paperwork format containing a heading and a barcoded
         job reference.
         """
 
-        with open(file_path, "rb") as pdf_stream:     
+        temp_dir = str(file_system.get_temp_directory())
+
+        with open(source_path, "rb") as pdf_stream:     
             pdf_contents = self.convert_stream_to_customer_paperwork_file_writer_object(
-                pdf_stream, temporary_directory, job_reference)
+                pdf_stream, temp_dir, job_reference)
             
             output_stream = open(destination_directory + "/" + "result.pdf", "wb")
             pdf_contents.write(output_stream)
