@@ -118,7 +118,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         for page_number in range(number_of_pages):
             working_pdf_path = temp_directory + "/temp.pdf"
 
-            extract_page_from_pdf_reader(
+            self.extract_page_from_pdf_reader(
                 pdf_reader, page_number, working_pdf_path)
             
             paperwork_image_path = temp_directory + "/temp_image.png"
@@ -155,124 +155,18 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
         return packet
 
-def convert_pdf_to_customer_paperwork(file_path: str,
-        temporary_directory: str, destination_directory: str,
-        job_reference: str) -> str:
-    """Opens a pdf file as a file stream and converts it into
-    customer paperwork format containing a heading and a barcoded
-    job reference.
-    """
-
-    with open(file_path, "rb") as pdf_stream:     
-        pdf_contents = convert_stream_to_customer_paperwork_file_writer_object(
-            pdf_stream, temporary_directory, job_reference)
+    def extract_page_from_pdf_reader(self, pdf_reader: PyPDF2.PdfFileReader,
+            page_number: int, output_path: str):
+        """Extracts a single page from a pdf reader object and saves it."""
         
-        output_stream = open(destination_directory + "/" + "result.pdf", "wb")
-        pdf_contents.write(output_stream)
-        output_stream.close()
+        page = pdf_reader.getPage(page_number)
 
-    return destination_directory + "\\result.pdf"
+        extracted_page_writer = PyPDF2.PdfFileWriter()
+        extracted_page_writer.addPage(page)
 
-def extract_page_from_pdf_reader(pdf_reader: PyPDF2.PdfFileReader,
-        page_number: int, output_path: str):
-    """Extracts a single page from a pdf reader object and saves it."""
-    
-    page = pdf_reader.getPage(page_number)
-
-    extracted_page_writer = PyPDF2.PdfFileWriter()
-    extracted_page_writer.addPage(page)
-
-    extracted_pdf_page = open(output_path, "wb")
-    extracted_page_writer.write(extracted_pdf_page)
-    extracted_pdf_page.close()
-
-def convert_stream_to_customer_paperwork_file_writer_object(
-        stream, temp_directory: str, job_reference: str) \
-        -> PyPDF2.PdfFileWriter:
-    """Converts all the pages in a PDF file into customer paperwork
-    format."""
-
-    pdf_reader = PyPDF2.PdfFileReader(stream)
-    output = PyPDF2.PdfFileWriter()
-    
-    number_of_pages = pdf_reader.getNumPages()
-
-    for page_number in range(number_of_pages):
-        working_pdf_path = temp_directory + "/temp.pdf"
-
-        extract_page_from_pdf_reader(
-            pdf_reader, page_number, working_pdf_path)
-        
-        paperwork_image_path = temp_directory + "/temp_image.png"
-        convert_single_page_pdf_to_png(working_pdf_path, paperwork_image_path)
-
-        packet = create_customer_paperwork_bytes_packet(
-            job_reference, paperwork_image_path)
-
-        new_pdf_page = PyPDF2.PdfFileReader(packet).getPage(0)
-        output.addPage(new_pdf_page)
-
-    return output
-
-def create_cust_pw(pdf_file_path: str, scan_dir: str, dest_dir: str,
-        temp_dir: str, job_ref: str):
-    """Creates the customer paperwork page."""
-
-    file_name, file_extension = os.path.splitext(pdf_file_path)
-    is_pdf = (file_extension.lower() == ".pdf")
-
-    image_file_extensions = (".jpeg", ".jpg", ".png")
-    is_image_file = (file_extension.lower() in image_file_extensions)
-
-    # Document generation for PDFs
-    if is_pdf:
-        output_file_path = convert_pdf_to_customer_paperwork(
-            pdf_file_path, temp_dir, dest_dir, job_ref)
-        
-        return output_file_path
-
-    # document generation for image files (excluding TIF as these will always be pre-processed into PDFs by the document splitter function)
-    elif is_image_file:
-        with pil_image.open(scan_dir + "/" + pdf_file_path) as img:
-            output = PyPDF2.PdfFileWriter()
-            temporary_png = temp_dir + "/" + file_name + ".png"
-            img.save(temporary_png)
-            img.close()
-
-        working_image_path = temp_dir + "/temp_image.png"
-
-        # arrange page into portrait orientation
-        with wand_image(filename = temporary_png, resolution = 200) as img_simulator:
-            if img_simulator.width > img_simulator.height:
-                img_simulator.rotate(270)
-                img_simulator.save(filename = working_image_path)
-            else:
-                img_simulator.save(filename = working_image_path)
-
-        packet = io.BytesIO()
-        page = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-        page.setFillColorRGB(0,0,0)
-        barcode = code128.Code128(job_ref, barHeight = 10*mm, barWidth = .5*mm)
-        barcode.drawOn(page, 135*mm, 280*mm)
-
-        page.setFont("Calibri", 11)
-        page.drawString(162*mm, 275*mm, job_ref)
-        page.setFont("Calibri-Bold", 22)
-        page.drawString(5*mm, 280*mm, "Customer Paperwork")
-        page.drawImage(working_image_path, -85, 25, width = 730, height = 730, mask = None, preserveAspectRatio = True)
-
-        page.save()
-
-        packet.seek(0)
-        new_pdf = PyPDF2.PdfFileReader(packet)
-
-        output.addPage(new_pdf.getPage(0))
-
-        output_stream = open(temp_dir + "/" + "result.pdf", "wb")
-        output.write(output_stream)
-        output_stream.close()
-
-        return (temp_dir + "/result.pdf")
+        extracted_pdf_page = open(output_path, "wb")
+        extracted_page_writer.write(extracted_pdf_page)
+        extracted_pdf_page.close()
 
 def create_loading_list_pod(master_application, file, scan_dir,
         dest_dir, dest_file_name, dest_duplicate_check):
