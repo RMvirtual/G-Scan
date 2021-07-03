@@ -9,7 +9,7 @@ import PyPDF2
 import shutil
 from PIL import Image as pil_image
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4, A3
+from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.graphics.barcode import code128
 from reportlab.pdfbase import pdfmetrics
@@ -28,7 +28,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         super().__init__()
 
     def create_customer_paperwork(
-        self, file_path: str, scan_dir: str, dest_dir: str, job_ref: str):
+        self, file_path: str, dest_dir: str, job_ref: str):
         """Creates the customer paperwork page."""
 
         directory_item = file_system.DirectoryItem(file_path)
@@ -37,7 +37,6 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             directory_item)
         
         if is_pdf:
-            print("In PDF section.")
             output_file_path = self.convert_pdf_to_customer_paperwork(
                 file_path, dest_dir, job_ref)
             
@@ -46,60 +45,41 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         # Image file extensions exclude TIF as these will always be
         # pre-processed into PDFs by the document splitter function.
         elif is_image_file:
-            print("In image file section.")
-            output = PyPDF2.PdfFileWriter()
-            working_image_path = self.save_image_as_png_to_temp_directory(
-                scan_dir, directory_item)
+            output_file_path = self.convert_png_to_customer_paperwork(
+                directory_item, dest_dir, job_ref)
 
-            # arrange page into portrait orientation
-            with wand_image(filename = working_image_path, resolution = 200) as img_simulator:
-                if img_simulator.width > img_simulator.height:
-                    img_simulator.rotate(270)
-                    img_simulator.save(filename = working_image_path)
-                else:
-                    img_simulator.save(filename = working_image_path)
+            return output_file_path
 
-            packet = io.BytesIO()
-            page = canvas.Canvas(packet, pagesize = A4, pageCompression = 1)
-            page.setFillColorRGB(0,0,0)
-            barcode = code128.Code128(job_ref, barHeight = 10*mm, barWidth = .5*mm)
-            barcode.drawOn(page, 135*mm, 280*mm)
+    def convert_png_to_customer_paperwork(
+            self, directory_item, destination_directory, job_reference):
 
-            page.setFont("Calibri", 11)
-            page.drawString(162*mm, 275*mm, job_ref)
-            page.setFont("Calibri-Bold", 22)
-            page.drawString(5*mm, 280*mm, "Customer Paperwork")
-            page.drawImage(
-                working_image_path, -85, 25, width = 730, height = 730,
-                mask = None, preserveAspectRatio = True
-            )
+        paperwork_image_path = self.save_image_as_png_to_temp_directory(
+            directory_item)
 
-            page.save()
+        packet = self.create_customer_paperwork_bytes_packet(
+            job_reference, paperwork_image_path)
+        
+        new_pdf_page = PyPDF2.PdfFileReader(packet).getPage(0)
+        output = PyPDF2.PdfFileWriter()
+        output.addPage(new_pdf_page)
 
-            packet.seek(0)
-            new_pdf = PyPDF2.PdfFileReader(packet)
-
-            output.addPage(new_pdf.getPage(0))
-
-            temp_dir = str(file_system.get_temp_directory())
-            output_stream = open(temp_dir + "/" + "result.pdf", "wb")
+        with open(destination_directory + "\\result.pdf", "wb") \
+                as output_stream:
             output.write(output_stream)
-            output_stream.close()
 
-            return (temp_dir + "/result.pdf")
+        return destination_directory + "\\result.pdf"
 
-    def save_image_as_png_to_temp_directory(self, scan_dir, directory_item):
+    def save_image_as_png_to_temp_directory(self, directory_item):
         file_name = directory_item.get_file_name()
         temp_dir = str(file_system.get_temp_directory())
 
-        with pil_image.open(str(directory_item)) as img:
-            temporary_png = temp_dir + "/" + file_name + ".png"
-            img.save(temporary_png)
+        with wand_image(filename=str(directory_item), resolution=300) as img:
+            temp_image_path = temp_dir + "/" + file_name + ".png"
+            self.rotate_image_to_portrait(img)
+            img.save(filename=temp_image_path)
             img.close()
 
-        working_image_path = temp_dir + "/temp_image.png"
-
-        return working_image_path
+        return temp_image_path
 
     def convert_pdf_to_customer_paperwork(self, source_path: str,
             destination_directory: str,
@@ -112,16 +92,17 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         temp_dir = str(file_system.get_temp_directory())
 
         with open(source_path, "rb") as pdf_stream:     
-            pdf_contents = self.convert_stream_to_customer_paperwork_file_writer_object(
+            pdf_contents = self.convert_pdf_stream_to_customer_paperwork_file_writer_object(
                 pdf_stream, temp_dir, job_reference)
-            
-        output_stream = open(destination_directory + "/" + "result.pdf", "wb")
+
+        output_path = destination_directory + "\\result.pdf"
+        output_stream = open(output_path, "wb")
         pdf_contents.write(output_stream)
         output_stream.close()
 
-        return destination_directory + "\\result.pdf"
+        return output_path
 
-    def convert_stream_to_customer_paperwork_file_writer_object(
+    def convert_pdf_stream_to_customer_paperwork_file_writer_object(
             self, stream, temp_directory: str, job_reference: str) \
             -> PyPDF2.PdfFileWriter:
         """Converts all the pages in a PDF file into customer paperwork
@@ -139,7 +120,9 @@ class PdfWriter(PyPDF2.PdfFileWriter):
                 pdf_reader, page_number, working_pdf_path)
             
             paperwork_image_path = temp_directory + "/temp_image.png"
-            self.convert_single_page_pdf_to_png(working_pdf_path, paperwork_image_path)
+            
+            self.convert_single_page_pdf_to_png(
+                working_pdf_path, paperwork_image_path)
 
             packet = self.create_customer_paperwork_bytes_packet(
                 job_reference, paperwork_image_path)

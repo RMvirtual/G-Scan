@@ -32,7 +32,7 @@ class TestPDFWriter(unittest.TestCase):
 
         writer = PdfWriter()
         result_file_path = writer.create_customer_paperwork(
-            scan_file, scan_dir, dest_dir, job_ref)
+            scan_file, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
             "resources", "correct_files", "p1testfile1_pdf_with_barcode.pdf")
@@ -61,7 +61,7 @@ class TestPDFWriter(unittest.TestCase):
 
         writer = PdfWriter()
         result_file_path = writer.create_customer_paperwork(
-            scan_file, scan_dir, dest_dir, job_ref)
+            scan_file, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
             "resources", "correct_files", "p1testfile1_png_with_barcode.pdf")

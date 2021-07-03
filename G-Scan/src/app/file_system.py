@@ -24,6 +24,12 @@ class DirectoryItem():
     def get_file_extension(self) -> str:
         return self.__file_extension
 
+    def get_full_file_name(self) -> str:
+        return self.__full_file_name
+
+    def get_full_path(self) -> str:
+        return str(self.__path)
+
     def check_if_file_extension_matches(
             self, extension_to_check: str) -> bool:
         return (self.__file_extension.lower() == extension_to_check)
