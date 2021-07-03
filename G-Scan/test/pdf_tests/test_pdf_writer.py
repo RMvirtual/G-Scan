@@ -10,7 +10,7 @@ sys.path.append(main_src_path)
 
 import app.file_system as file_system
 import app.validation.file_naming as file_naming
-from pdf.pdf_writer import PdfWriter
+from pdf.pdf_writer import CustomerPaperworkPDFWriter, PdfWriter
 
 class TestPDFWriter(unittest.TestCase):
     """A class for testing the PDF writer module."""
@@ -30,8 +30,8 @@ class TestPDFWriter(unittest.TestCase):
         file_name_attributes = self.setup_file_name_attributes(job_ref)
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
-        writer = PdfWriter()
-        result_file_path = writer.create_customer_paperwork(
+        writer = CustomerPaperworkPDFWriter()
+        result_file_path = writer.create_pdf(
             scan_file, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
@@ -59,8 +59,8 @@ class TestPDFWriter(unittest.TestCase):
         file_name_attributes = self.setup_file_name_attributes(job_ref)
         dest_file_name = file_naming.create_destination_file_name(file_name_attributes)
 
-        writer = PdfWriter()
-        result_file_path = writer.create_customer_paperwork(
+        writer = CustomerPaperworkPDFWriter()
+        result_file_path = writer.create_pdf(
             scan_file, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(

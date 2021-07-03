@@ -2,14 +2,17 @@
 
 import io
 from pathlib import Path
+
+from PyPDF2.utils import PdfReadWarning
 from app import file_system
-from app.file_system import DirectoryItem 
+from app.file_system import DirectoryItem
 import os
 import PyPDF2
 import shutil
-from PIL import Image as pil_image
-from wand.image import Image as wand_image
+from PIL import Image as PILImage
+from wand.image import Image as WandImage
 from pdf.paperwork_types import CustomerPaperworkPage
+from pdf.pdf_reader import PdfReader
 
 class PdfWriter(PyPDF2.PdfFileWriter):
     """Writes PDF files."""
@@ -18,29 +21,6 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         """Creates a new PDF Writer object."""
 
         super().__init__()
-
-    def create_customer_paperwork(
-        self, file_path: str, dest_dir: str, job_ref: str):
-        """Creates the customer paperwork page."""
-
-        directory_item = file_system.DirectoryItem(file_path)
-        is_pdf = directory_item.check_if_file_extension_matches(".pdf")
-        is_image_file = file_system.is_file_single_page_image_format(
-            directory_item)
-        
-        if is_pdf:
-            output_file_path = self.convert_pdf_to_customer_paperwork(
-                file_path, dest_dir, job_ref)
-            
-            return output_file_path
-
-        # Image file extensions exclude TIF as these will always be
-        # pre-processed into PDFs by the document splitter function.
-        elif is_image_file:
-            output_file_path = self.convert_png_to_customer_paperwork(
-                directory_item, dest_dir, job_ref)
-
-            return output_file_path
 
     def convert_png_to_customer_paperwork(
             self, directory_item, destination_directory, job_reference):
@@ -51,8 +31,8 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         packet = self.create_customer_paperwork_bytes_packet(
             job_reference, paperwork_image_path)
         
-        new_pdf_page = PyPDF2.PdfFileReader(packet).getPage(0)
-        output = PyPDF2.PdfFileWriter()
+        new_pdf_page = PdfReader(packet).getPage(0)
+        output = PdfWriter()
         output.addPage(new_pdf_page)
 
         with open(destination_directory + "\\result.pdf", "wb") \
@@ -61,11 +41,12 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
         return destination_directory + "\\result.pdf"
 
-    def save_image_as_png_to_temp_directory(self, directory_item):
+    def save_image_as_png_to_temp_directory(self,
+            directory_item: DirectoryItem) -> str:
         file_name = directory_item.get_file_name()
         temp_dir = str(file_system.get_temp_directory())
 
-        with wand_image(filename=str(directory_item), resolution=300) as img:
+        with WandImage(filename=str(directory_item), resolution=300) as img:
             temp_image_path = temp_dir + "/" + file_name + ".png"
             self.rotate_image_to_portrait(img)
             img.save(filename=temp_image_path)
@@ -81,28 +62,24 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         job reference.
         """
 
-        temp_dir = str(file_system.get_temp_directory())
-
         with open(source_path, "rb") as pdf_stream:     
-            pdf_contents = self.convert_pdf_stream_to_customer_paperwork_file_writer_object(
-                pdf_stream, temp_dir, job_reference)
+            self.convert_pdf_stream_to_customer_paperwork_file_writer_object(
+                pdf_stream, job_reference)
 
         output_path = destination_directory + "\\result.pdf"
-        output_stream = open(output_path, "wb")
-        pdf_contents.write(output_stream)
-        output_stream.close()
+
+        with open(output_path, "wb") as output_stream:
+            self.write(output_stream)
 
         return output_path
 
     def convert_pdf_stream_to_customer_paperwork_file_writer_object(
-            self, stream, temp_directory: str, job_reference: str) \
-            -> PyPDF2.PdfFileWriter:
+            self, stream, job_reference: str) -> None:
         """Converts all the pages in a PDF file into customer paperwork
         format."""
 
-        pdf_reader = PyPDF2.PdfFileReader(stream)
-        output = PyPDF2.PdfFileWriter()
-        
+        temp_directory = str(file_system.get_temp_directory())
+        pdf_reader = PdfReader(stream)        
         number_of_pages = pdf_reader.getNumPages()
 
         for page_number in range(number_of_pages):
@@ -119,17 +96,15 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             packet = self.create_customer_paperwork_bytes_packet(
                 job_reference, paperwork_image_path)
 
-            new_pdf_page = PyPDF2.PdfFileReader(packet).getPage(0)
-            output.addPage(new_pdf_page)
-
-        return output
+            new_pdf_page = PdfReader(packet).getPage(0)
+            self.addPage(new_pdf_page)
 
     def convert_single_page_pdf_to_png(self, pdf_path: str, output_path: str):
-        with wand_image(filename = pdf_path, resolution = 300) as image:
+        with WandImage(filename = pdf_path, resolution = 300) as image:
             self.rotate_image_to_portrait(image)
             image.save(filename = output_path)
 
-    def rotate_image_to_portrait(self, image: wand_image):
+    def rotate_image_to_portrait(self, image: WandImage):
         is_landscape = (image.width > image.height)
 
         if is_landscape:
@@ -147,8 +122,8 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
         return packet
 
-    def extract_page_from_pdf_reader(self, pdf_reader: PyPDF2.PdfFileReader,
-            page_number: int, output_path: str):
+    def extract_page_from_pdf_reader(self, pdf_reader: PdfReader,
+            page_number: int, output_path: str) -> None:
         """Extracts a single page from a pdf reader object and saves it."""
         
         page = pdf_reader.getPage(page_number)
@@ -174,7 +149,7 @@ def create_loading_list_pod(master_application, file, scan_dir,
 
     # just image files need converting.
     if file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-        with pil_image.open(scan_dir + "/" + file) as img:
+        with PILImage.open(scan_dir + "/" + file) as img:
             output = PyPDF2.PdfFileWriter()
             temporary_image = temp_directory + file_name + ".png"
             img.save(temporary_image)
@@ -406,9 +381,30 @@ def upload_doc(file, scan_dir, dest_dir,
 
         return True
 
-class Directories():
-    """A data structure holding directories."""
-
+class CustomerPaperworkPDFWriter(PdfWriter):
     def __init__(self):
-        self.scan_file = ""
-        self.thing = ""
+        super().__init__()
+
+    def create_pdf(
+            self, source_path: str, 
+            destination_path: str, job_reference: str) -> None:
+
+        directory_item = DirectoryItem(source_path)
+
+        is_pdf = directory_item.check_if_file_extension_matches(".pdf")
+        is_image_file = file_system.is_file_single_page_image_format(
+            directory_item)
+        
+        if is_pdf:
+            output_file_path = self.convert_pdf_to_customer_paperwork(
+                source_path, destination_path, job_reference)
+            
+            return output_file_path
+
+        # Image file extensions exclude TIF as these will always be
+        # pre-processed into PDFs by the document splitter function.
+        elif is_image_file:
+            output_file_path = self.convert_png_to_customer_paperwork(
+                directory_item, destination_path, job_reference)
+
+            return output_file_path

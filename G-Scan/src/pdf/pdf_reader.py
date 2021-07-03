@@ -10,6 +10,12 @@ import PyPDF2
 import os
 import re
 
+class PdfReader(PyPDF2.PdfFileReader):
+    def __init__(self, path):
+        super().__init__(path)
+
+
+
 def read_barcodes(file_name, directory):
     """Reads barcodes on each page of a PDF file and returns them as
     a list."""
