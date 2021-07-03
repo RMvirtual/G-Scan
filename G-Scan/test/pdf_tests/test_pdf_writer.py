@@ -27,7 +27,6 @@ class TestPDFWriter(unittest.TestCase):
         scan_file = str(dict.get("scan"))
         scan_dir = str(self.get_folder_from_test_resources("scans"))
         dest_dir = str(self.get_folder_from_test_resources("destination"))
-        temp_dir = str(file_system.get_temp_directory())
 
         job_ref = "GR190100200"
         file_name_attributes = self.setup_file_name_attributes(job_ref)
@@ -35,7 +34,7 @@ class TestPDFWriter(unittest.TestCase):
 
         writer = PdfWriter()
         result_file = writer.create_cust_pw(
-            scan_file, scan_dir, dest_dir, temp_dir, job_ref)
+            scan_file, scan_dir, dest_dir, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
             "resources", "correct_files", "p1testfile1withbarcode.pdf")

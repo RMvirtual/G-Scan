@@ -27,7 +27,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         super().__init__()
 
     def create_cust_pw(self, pdf_file_path: str, scan_dir: str, dest_dir: str,
-            temp_dir: str, job_ref: str):
+            job_ref: str):
         """Creates the customer paperwork page."""
 
         file_name, file_extension = os.path.splitext(pdf_file_path)
@@ -35,6 +35,8 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
         image_file_extensions = (".jpeg", ".jpg", ".png")
         is_image_file = (file_extension.lower() in image_file_extensions)
+
+        temp_dir = str(file_system.get_temp_directory())
 
         # Document generation for PDFs
         if is_pdf:
