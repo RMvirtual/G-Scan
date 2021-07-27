@@ -2,7 +2,6 @@
 
 from app import file_system
 from gui.popupbox import PopupBox
-from pdf import pdf_writer
 from PIL import Image as pil_image
 from pyzbar.pyzbar import decode
 from wand.image import Image as wand_image
@@ -11,10 +10,16 @@ import os
 import re
 
 class PdfReader(PyPDF2.PdfFileReader):
-    def __init__(self, path):
-        super().__init__(path)
+    def __init__(self, stream):
+        """Creates a new PDF Reader file."""
 
+        super().__init__(stream)
+        self.__stream = stream
 
+    def get_number_of_pages(self):
+        """Returns the number of pages in the pdf."""
+
+        return self.getNumPages()
 
 def read_barcodes(file_name, directory):
     """Reads barcodes on each page of a PDF file and returns them as

@@ -10,7 +10,7 @@ sys.path.append(main_src_path)
 
 import app.file_system as file_system
 import app.validation.file_naming as file_naming
-from pdf.pdf_writer import CustomerPaperworkPDFWriter
+from pdf.paperwork_writers import CustomerPaperworkPDFWriter
 
 class TestCustomerPaperworkPDFWriter(unittest.TestCase):
     """A class for testing the PDF writer module."""
@@ -20,7 +20,7 @@ class TestCustomerPaperworkPDFWriter(unittest.TestCase):
         with Image(filename=result_file_path, resolution=150) as expected:
             difference = correct_image.compare(
                 expected, metric="root_mean_square")
-                
+
             self.assertLess(difference[1], 0.01)
 
     def get_folder_from_test_resources(self, folder):
@@ -118,6 +118,44 @@ class TestSinglePagePNGCustomerPaperworkWriter(
 
     def test_creating_single_page_png_with_reference(self):
         dict = self.setup_customer_paperwork_png()
+
+        scan_file = str(dict.get("scan"))
+        dest_dir = str(self.get_folder_from_test_resources("destination"))
+        job_ref = "GR190100200"
+
+        writer = CustomerPaperworkPDFWriter()
+        result_file_path = writer.create_pdf(scan_file, dest_dir, job_ref)
+
+        correct_pdf = file_system.get_test_directory().joinpath(
+            "resources", "correct_files", "p1testfile1_png_with_barcode.pdf")
+
+        correct_image = Image(filename=str(correct_pdf), resolution=150)
+
+        self.check_if_paperwork_pages_are_identical(
+            correct_image, result_file_path)
+
+        self.teardown_customer_paperwork_pdf(result_file_path)
+
+class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
+    def setup_multiple_page_pdf(self):
+        pdf_to_copy = file_system.get_test_directory().joinpath(
+            "resources", "correct_files", "testfile2_with_5_pages.pdf")
+
+        scans_directory = file_system.get_test_directory().joinpath(
+            "resources", "scans")
+
+        output_path = scans_directory.joinpath("testfile2_with_5_pages.pdf")
+        shutil.copy(pdf_to_copy, output_path)
+
+        dict = {
+            "original": pdf_to_copy,
+            "scan": output_path
+        }
+
+        return dict
+
+    def test_creating_multiple_page_pdf(self):
+        dict = self.setup_multiple_page_pdf()
 
         scan_file = str(dict.get("scan"))
         dest_dir = str(self.get_folder_from_test_resources("destination"))
