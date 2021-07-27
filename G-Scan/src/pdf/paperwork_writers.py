@@ -13,7 +13,7 @@ class CustomerPaperworkPDFWriter(PdfWriter):
         super().__init__()
 
     def create_pdf(
-            self, source_path: str, destination_path: str,
+            self, source_path: str, output_path: str,
             job_reference: str) -> None:
         """Creates a new customer paperwork PDF file."""
         
@@ -24,58 +24,47 @@ class CustomerPaperworkPDFWriter(PdfWriter):
             directory_item)
         
         if is_pdf:
-            output_file_path = self.convert_pdf_to_customer_paperwork(
-                source_path, destination_path, job_reference)
-            
-            return output_file_path
+            self.convert_pdf_to_customer_paperwork(
+                source_path, output_path, job_reference)
 
         # Image file extensions exclude TIF as these will always be
         # pre-processed into PDFs by the document splitter function.
         elif is_image_file:
             output_file_path = self.convert_png_to_customer_paperwork(
-                directory_item, destination_path, job_reference)
-
-            return output_file_path
+                directory_item, output_path, job_reference)
 
     def convert_pdf_to_customer_paperwork(self, source_path: str,
-            destination_directory: str,
-            job_reference: str) -> str:
+            output_path: str, job_reference: str) -> str:
         """Opens a pdf file as a file stream and converts it into
         customer paperwork format containing a heading and a barcoded
         job reference.
         """
 
         with open(source_path, "rb") as pdf_stream:     
-            self.convert_pdf_stream_to_customer_paperwork_file_writer_object(
+            self.__convert_pdf_stream_to_customer_paperwork_file_writer_object(
                 pdf_stream, job_reference)
-
-        output_path = destination_directory + "\\result.pdf"
 
         with open(output_path, "wb") as output_stream:
             self.write(output_stream)
 
-        return output_path
-
     def convert_png_to_customer_paperwork(
-            self, directory_item, destination_directory, job_reference):
+            self, directory_item, output_path, job_reference) -> None:
+        """Converts a png into customer paperwork format."""
 
         paperwork_image_path = self.save_image_as_png_to_temp_directory(
             directory_item)
 
-        packet = self.create_customer_paperwork_bytes_packet(
+        packet = self.__create_customer_paperwork_bytes_packet(
             job_reference, paperwork_image_path)
         
         new_pdf_page = PdfReader(packet).getPage(0)
         output = PdfWriter()
         output.addPage(new_pdf_page)
 
-        with open(destination_directory + "\\result.pdf", "wb") \
-                as output_stream:
+        with open(output_path, "wb") as output_stream:
             output.write(output_stream)
 
-        return destination_directory + "\\result.pdf"
-
-    def convert_pdf_stream_to_customer_paperwork_file_writer_object(
+    def __convert_pdf_stream_to_customer_paperwork_file_writer_object(
             self, stream, job_reference: str) -> None:
         """Converts all the pages in a PDF file into customer paperwork
         format."""
@@ -95,13 +84,13 @@ class CustomerPaperworkPDFWriter(PdfWriter):
             self.convert_single_page_pdf_to_png(
                 working_pdf_path, paperwork_image_path)
 
-            packet = self.create_customer_paperwork_bytes_packet(
+            packet = self.__create_customer_paperwork_bytes_packet(
                 job_reference, paperwork_image_path)
 
             new_pdf_page = PdfReader(packet).getPage(0)
             self.addPage(new_pdf_page)
 
-    def create_customer_paperwork_bytes_packet(self, job_reference,
+    def __create_customer_paperwork_bytes_packet(self, job_reference,
             paperwork_image_path) -> io.BytesIO:
         """Creates a bytes packet containing data required to write a
         customer paperwork page.

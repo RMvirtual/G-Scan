@@ -66,12 +66,12 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         dict = self.setup_customer_paperwork_pdf()
 
         scan_file = str(dict.get("scan"))
-        dest_dir = str(self.get_folder_from_test_resources("destination"))
+        dest_directory = str(self.get_folder_from_test_resources("destination"))
+        output_path = dest_directory + "\\single_page_pdf_test.pdf"
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
-        result_file_path = writer.create_pdf(
-            scan_file, dest_dir, job_ref)
+        writer.create_pdf(scan_file, output_path, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
             "resources", "correct_files", "p1testfile1_pdf_with_barcode.pdf")
@@ -79,9 +79,9 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
         self.check_if_paperwork_pages_are_identical(
-            correct_image, result_file_path)
+            correct_image, output_path)
 
-        self.teardown_customer_paperwork_pdf(result_file_path)
+        self.teardown_customer_paperwork_pdf(output_path)
 
 class TestSinglePagePNGCustomerPaperworkWriter(
         TestCustomerPaperworkPDFWriter):
@@ -120,11 +120,14 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         dict = self.setup_customer_paperwork_png()
 
         scan_file = str(dict.get("scan"))
-        dest_dir = str(self.get_folder_from_test_resources("destination"))
+        dest_directory = str(
+            self.get_folder_from_test_resources("destination"))
+        
+        output_path = dest_directory + "\\single_page_pdf_test.pdf"
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
-        result_file_path = writer.create_pdf(scan_file, dest_dir, job_ref)
+        writer.create_pdf(scan_file, output_path, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
             "resources", "correct_files", "p1testfile1_png_with_barcode.pdf")
@@ -132,9 +135,9 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
         self.check_if_paperwork_pages_are_identical(
-            correct_image, result_file_path)
+            correct_image, output_path)
 
-        self.teardown_customer_paperwork_pdf(result_file_path)
+        self.teardown_customer_paperwork_pdf(output_path)
 
 class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
     def setup_multiple_page_pdf(self):
@@ -158,18 +161,24 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
         dict = self.setup_multiple_page_pdf()
 
         scan_file = str(dict.get("scan"))
-        dest_dir = str(self.get_folder_from_test_resources("destination"))
+        dest_directory = str(
+            self.get_folder_from_test_resources("destination"))
+
+        output_path = dest_directory + "\\multiple_page_pdf_test.pdf"
+
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
-        result_file_path = writer.create_pdf(scan_file, dest_dir, job_ref)
+        writer.create_pdf(scan_file, output_path, job_ref)
 
         correct_pdf = file_system.get_test_directory().joinpath(
-            "resources", "correct_files", "p1testfile1_png_with_barcode.pdf")
+            "resources", "correct_files",
+            "test_file_2_with_5_pages_with_barcodes.pdf"
+        )
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
         self.check_if_paperwork_pages_are_identical(
-            correct_image, result_file_path)
+            correct_image, output_path)
 
-        self.teardown_customer_paperwork_pdf(result_file_path)
+        self.teardown_customer_paperwork_pdf(output_path)
