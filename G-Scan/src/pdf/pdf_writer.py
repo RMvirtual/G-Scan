@@ -2,7 +2,6 @@
 
 import io
 
-from PyPDF2.utils import PdfReadWarning
 from app import file_system
 from app.file_system import DirectoryItem
 import os
@@ -10,6 +9,41 @@ import PyPDF2
 import shutil
 from PIL import Image as PILImage
 from wand.image import Image as WandImage
+
+class PdfWriter(PyPDF2.PdfFileWriter):
+    """Writes PDF files."""
+
+    def __init__(self):
+        """Creates a new PDF Writer object."""
+
+        super().__init__()
+
+    def save_image_as_png_to_temp_directory(self,
+            directory_item: DirectoryItem) -> str:
+        """Saves a directory item as a png to the program's temp
+        directory."""
+        
+        file_name = directory_item.get_file_name()
+        temp_dir = str(file_system.get_temp_directory())
+
+        with WandImage(filename=str(directory_item), resolution=300) as img:
+            self.rotate_image_to_portrait(img)
+
+            temp_image_path = temp_dir + "/" + file_name + ".png"
+            img.save(filename=temp_image_path)
+
+        return temp_image_path
+
+    def convert_single_page_pdf_to_png(self, pdf_path: str, output_path: str):
+        with WandImage(filename = pdf_path, resolution = 300) as image:
+            self.rotate_image_to_portrait(image)
+            image.save(filename = output_path)
+
+    def rotate_image_to_portrait(self, image: WandImage):
+        is_landscape = (image.width > image.height)
+
+        if is_landscape:
+            image.rotate(270)
 
 def create_loading_list_pod(master_application, file, scan_dir,
         dest_dir, dest_file_name, dest_duplicate_check):
@@ -257,38 +291,3 @@ def upload_doc(file, scan_dir, dest_dir,
         os.remove(scan_dir + "/" + file)
 
         return True
-
-class PdfWriter(PyPDF2.PdfFileWriter):
-    """Writes PDF files."""
-
-    def __init__(self):
-        """Creates a new PDF Writer object."""
-
-        super().__init__()
-
-    def save_image_as_png_to_temp_directory(self,
-            directory_item: DirectoryItem) -> str:
-        """Saves a directory item as a png to the program's temp
-        directory."""
-        
-        file_name = directory_item.get_file_name()
-        temp_dir = str(file_system.get_temp_directory())
-
-        with WandImage(filename=str(directory_item), resolution=300) as img:
-            self.rotate_image_to_portrait(img)
-
-            temp_image_path = temp_dir + "/" + file_name + ".png"
-            img.save(filename=temp_image_path)
-
-        return temp_image_path
-
-    def convert_single_page_pdf_to_png(self, pdf_path: str, output_path: str):
-        with WandImage(filename = pdf_path, resolution = 300) as image:
-            self.rotate_image_to_portrait(image)
-            image.save(filename = output_path)
-
-    def rotate_image_to_portrait(self, image: WandImage):
-        is_landscape = (image.width > image.height)
-
-        if is_landscape:
-            image.rotate(270)

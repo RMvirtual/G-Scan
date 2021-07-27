@@ -165,7 +165,6 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
             self.get_folder_from_test_resources("destination"))
 
         output_path = dest_directory + "\\multiple_page_pdf_test.pdf"
-
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
