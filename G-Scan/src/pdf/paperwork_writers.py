@@ -87,9 +87,8 @@ class CustomerPaperworkPDFWriter(PdfWriter):
         for page_number in range(number_of_pages):
             working_pdf_path = temp_directory + "/temp.pdf"
 
-            pdf_extractor = PdfExtractor()
-            pdf_extractor.extract_page(
-                stream, page_number, working_pdf_path)
+            pdf_extractor = PdfExtractor(stream)
+            pdf_extractor.extract_page(page_number, working_pdf_path)
             
             paperwork_image_path = temp_directory + "/temp_image.png"
             

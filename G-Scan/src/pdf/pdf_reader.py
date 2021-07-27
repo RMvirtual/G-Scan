@@ -6,7 +6,6 @@ from PIL import Image as pil_image
 from pyzbar.pyzbar import decode
 from wand.image import Image as wand_image
 import PyPDF2
-import os
 import re
 
 class PdfReader(PyPDF2.PdfFileReader):
