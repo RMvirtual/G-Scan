@@ -1,15 +1,9 @@
-"""A module for performing file system functions such as retrieving
-commonly used directories etc.
-"""
-
 import os
 import shelve
 from pathlib import Path
 from rules_python.python.runfiles import runfiles
 
 class DirectoryItem():
-    """A class for a directory item."""
-
     def __init__(self, path: str) -> None:
         self.__path = Path(path)
         self.__full_file_name =  self.__path.name

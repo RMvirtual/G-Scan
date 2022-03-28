@@ -1,86 +1,61 @@
 import unittest
-import src.main.date.date as date
+import src.main.date.calendar as calendar
 
 class TestDate(unittest.TestCase):
     """A class for testing the date module."""
 
-    def test_month_names_in_get_months(self):
-        months = date.get_months(2021)
-        month_names_to_test = self.get_month_names_strings()
+    def test_should_get_month_names(self):
+        months = calendar.months(2021)
+        month_names_to_test = self.correct_month_names()
 
         for month in months:
-            self.assertTrue(month.get_month_name() in month_names_to_test)
+            self.assertTrue(month.month_name() in month_names_to_test)
 
-    def test_years_pull_through_in_get_months(self):
-        months = date.get_months(2021)
+    def test_should_get_years_from_months(self):
+        months = calendar.months(2021)
         
         for month in months:
-            self.assertTrue(month.get_year() == 2021)
+            self.assertTrue(month.year() == 2021)
 
-        months = date.get_months(2022)
+        months = calendar.months(2022)
         
         for month in months:
-            self.assertTrue(month.get_year() == 2022)
-
-    def test_get_current_year_is_2022(self):
-        current_year = date.get_current_year()
-        current_year_in_two_digits = date.get_current_year_as_two_digits()
-        
-        self.assertTrue(current_year == 2022)
-        self.assertTrue(current_year_in_two_digits == 22)
-
-    def test_get_last_year_is_2021(self):
-        last_year = date.get_last_year()
-        last_year_in_two_digits = date.get_last_year_as_two_digits()
-        
-        self.assertTrue(last_year == 2021)
-        self.assertTrue(last_year_in_two_digits == 21)
-
-    def test_current_month_number_is_three(self):
-        month_number = date.get_current_month_number()
-
-        self.assertTrue(month_number == 3)
+            self.assertTrue(month.year() == 2022)
 
     def test_get_month_names_and_numbers(self):
-        months = date.get_month_names_and_numbers()
-        strings_to_test = self.get_month_name_and_numbers_as_strings()
+        months = calendar.month_names_and_numbers()
+        correct_months = self.correct_month_names_and_numbers()
 
-        for month in months:
-            self.assertTrue(month in strings_to_test) 
+        (self.assertTrue(month in correct_months) for month in months)
 
     def test_get_current_month_is_march(self):
-        month = date.get_current_month()
+        month = calendar.current_month()
     
-        self.assertTrue(month.get_month_name() == "March")
-        self.assertTrue(month.get_month_number() == 3)
-        self.assertTrue(month.get_month_number_as_two_digits() == "03")
-        self.assertTrue(month.get_year() == 2022)
-        self.assertTrue(month.get_year_as_two_digits() == "22")
+        self.assertTrue(month.month_name() == "March")
+        self.assertTrue(month.month_number() == 3)
+        self.assertTrue(month.month_number_as_two_digits() == "03")
+        self.assertTrue(month.year() == 2022)
+        self.assertTrue(month.year_as_two_digits() == "22")
 
-    def test_get_years(self):
-        years_to_test = (2022, 2021)
-        years = date.get_years()
+    def test_should_get_past_two_years(self):
+        correct_years = (2022, 2021)
+        years = calendar.years()
 
-        for year in years:
-            self.assertTrue(year in years_to_test)
+        (self.assertTrue(year in years) for year in correct_years)
 
-    def get_month_names_strings(self):
-        month_names = [
+    def correct_month_names(self) -> list[str]:
+        return [
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ]
 
-        return month_names
-
-    def get_month_name_and_numbers_as_strings(self):
-        months = [
+    def correct_month_names_and_numbers(self) -> list[str]:
+        return [
             "January - 01", "February - 02", "March - 03",
             "April - 04", "May - 05", "June - 06",
             "July - 07", "August - 08", "September - 09",
             "October - 10", "November - 11", "December - 12"
         ]
-
-        return months
 
 if __name__ == '__main__':
     unittest.main()
