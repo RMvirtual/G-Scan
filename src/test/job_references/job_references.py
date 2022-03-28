@@ -7,7 +7,7 @@ class TestJobReferences(unittest.TestCase):
 
     def test_calculate_base_job_number(self):
         date = Date.from_month_number_and_year(3,2022)
-        job_number = job_refs.calculate_base_job_number(date)
+        job_number = job_refs.base_job_number(date)
         correct_job_number = "220300000"
 
         self.assertEqual(correct_job_number, job_number)
@@ -24,15 +24,8 @@ class TestJobReferences(unittest.TestCase):
         correct_reference = "GR190100200"
 
         for inputted_number in inputted_numbers:
-            job_reference = job_refs.create_job_reference(inputted_number)
+            job_reference = job_refs.job_reference(inputted_number)
             self.assertEqual(correct_reference, job_reference)
-
-    def test_create_gr_number(self):
-        job_number = "190105255"
-        correct_job_number = "GR190105255"
-        gr_number = job_refs.prefix_gr_to_job_number(job_number)
-
-        self.assertTrue(gr_number == correct_job_number)
 
     def test_full_number_input_length_check(self):
         correct_number = "190105255"

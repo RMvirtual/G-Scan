@@ -4,7 +4,7 @@ import operator
 import re
 from src.main.date.date import Date
 
-def calculate_base_job_number(date:Date):
+def base_job_number(date:Date):
     """Calculates a basic job number based on the year and month
     in a date object and pads out the rest of the job reference with
     remaining zeroes (e.g. 190800000)."""
@@ -16,21 +16,21 @@ def calculate_base_job_number(date:Date):
 
     return base_job_number
 
-def create_job_reference(user_input):
+def job_reference(user_input):
     """Creates a full FCL format job reference."""
 
     user_input = __remove_alphabetical_characters(user_input)
-    complete_job_reference = prefix_gr_to_job_number(user_input)
+    complete_job_reference = __prefix_gr_to_job_number(user_input)
     
     return complete_job_reference
 
-def create_quick_job_reference(user_input:str, date:Date):
+def quick_job_reference(user_input:str, date:Date):
     """Creates an FCL format job reference using a Date object to fill
     in any gaps with the user's input."""
 
     formatted_user_input = __remove_alphabetical_characters(user_input)
     job_number = create_quick_job_number(formatted_user_input, date)
-    complete_job_reference = prefix_gr_to_job_number(job_number)
+    complete_job_reference = __prefix_gr_to_job_number(job_number)
 
     return complete_job_reference
 
@@ -38,13 +38,13 @@ def create_quick_job_number(user_input:str, date:Date):
     """Creates an FCL format job number using a date object to fill in
     the year and month prefixes."""
     
-    base_job_number = calculate_base_job_number(date)
-    overwritten_job_number = __overwrite_from_right(base_job_number, user_input)
+    job_number = base_job_number(date)
+    overwritten_job_number = __overwrite_from_right(job_number, user_input)
     complete_job_number = overwritten_job_number
     
     return complete_job_number
 
-def prefix_gr_to_job_number(job_number:str) -> str:
+def __prefix_gr_to_job_number(job_number:str) -> str:
     """Takes a 9-digit job number and prefixes "GR" to it."""
 
     gr_number = "GR" + job_number
