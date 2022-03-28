@@ -11,23 +11,13 @@ def months(year: int) -> list[Date]:
     month_number = 1
 
     for month_name in month_names:
-        new_month = Date(month_number, month_name, year)
-        dates.append(new_month)
-
+        dates.append(Date(month_number, month_name, year))
         month_number += 1
 
     return dates
 
-def month_name_from_number(month_number: int) -> str:
-    months = {}
-    month_names = months_as_strings()
-
-    for month_number in range(1, 12):
-        months[month_number] = month_names[month_number - 1]
-
-    month_name = months[month_number]
-
-    return month_name
+def month_name_from_number(number: int) -> str:
+    return months_as_strings()[number - 1]
 
 def months_as_strings():
     return [month.month_name() for month in months(current_year())]
@@ -41,23 +31,29 @@ def years_as_strings() -> tuple:
 def current_month():
     return Date(current_month_number(), current_month_name(), current_year())
 
-def current_month_name():
-    return datetime.now().strftime('%B')
+def current_month_name() -> str:
+    return __current_time_as_string("%B")
 
 def current_month_number() -> int:
-    return int(datetime.now().strftime("%m"))
+    return __current_time_as_int("%m")
 
 def current_year() -> int:
-    return int(datetime.now().strftime('%Y'))
+    return __current_time_as_int("%Y")
 
 def current_year_as_two_digits() -> int:
-    return int(datetime.now().strftime('%y'))
+    return __current_time_as_int("%y")
 
 def last_year() -> int:
-    return int(datetime.now().strftime('%Y')) - 1
+    return __current_time_as_int("%Y") - 1
 
 def last_year_as_two_digits() -> int:
-    return int(datetime.now().strftime('%y')) - 1
+    return __current_time_as_int("%y") - 1
+
+def __current_time_as_string(format:str) -> str:
+    return datetime.now().strftime(format)
+
+def __current_time_as_int(format:str) -> int:
+    return int(__current_time_as_string(format))
 
 def month_names_and_numbers() -> list[str]:
     """Returns a list of strings of each month represented with a 
