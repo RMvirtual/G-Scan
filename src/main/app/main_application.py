@@ -1,19 +1,17 @@
-from wx.core import wxEVT_ACTIVATE, wxEVT_TEXT
-import app.backup as backup
+import src.main.file_system.backup as backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
 from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
-from pdf.pdf_viewer import PDFViewer
-import pdf.pdf_reader
-import pdf.pdf_writer
+from src.main.pdf.viewer import PDFViewer
+import src.main.pdf.reader
+import src.main.pdf.writer
 import user.user
 from user.user import User, UserDefaults
 import wx
 
-import app.file_system as file_system
-import validation.job_references as job_ref
-import validation.string_manipulation as string_manipulate
+import src.main.file_system.file_system as file_system
+import src.main.job_references.references as job_ref
 import date.date
 from date.date import Date
 import os
@@ -32,19 +30,17 @@ class Model():
     def check_user_input_length(user_input: str, input_mode: str) -> bool:
         """Checks the length of the user's input (removing any alphabetic
         characters) to ensure it will create a valid job reference number."""
-
-        user_input = string_manipulate.remove_alphabetical_characters(user_input)
         
         if input_mode == "Normal":
-            return job_ref.check_full_number_input_length(user_input)
+            return job_ref.is_full_input_length(user_input)
 
         elif input_mode == "Quick":
-            return job_ref.check_quick_mode_input_length(user_input)
+            return job_ref.is_quick_input_length(user_input)
 
-    def check_quick_mode_input_length(self, user_input: str, date: Date):
+    def check_quick_mode_input_length(self, user_input: str):
         """Checks the user input when quick mode is active is valid."""
 
-        return job_ref.check_quick_mode_input_length(user_input, date)
+        return job_ref.is_quick_input_length(user_input)
 
     def calculate_quick_mode_hint_message(self, date: Date):
         """Calculates the message to be displayed in the GUI's quick
