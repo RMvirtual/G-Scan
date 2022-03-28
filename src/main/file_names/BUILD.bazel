@@ -5,7 +5,7 @@ py_library(
   name = "file_names",
   srcs = glob(["*.py"]),
   deps = [
-    "//src/main/app"
+    "//src/main/file_system"
   ],
   visibility = ["//visibility:public"]
 )

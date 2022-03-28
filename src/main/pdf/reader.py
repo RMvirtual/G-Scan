@@ -1,6 +1,6 @@
 """A module containing functions for reading PDF files."""
 
-import src.main.app.file_system as file_system
+import main.filesystem.file_system as file_system
 from PIL import Image as pil_image
 from pyzbar.pyzbar import decode
 from wand.image import Image as wand_image
@@ -34,7 +34,7 @@ def read_barcodes(file_name, directory):
             temp_file_writer = PyPDF2.PdfFileWriter()
             temp_file_writer.addPage(page_object)
             
-            temp_directory = file_system.get_temp_directory()
+            temp_directory = file_system.temp_directory()
             temp_file_path = temp_directory + "temp.pdf"
 
             with open(temp_file_path, "wb") as temp_file:

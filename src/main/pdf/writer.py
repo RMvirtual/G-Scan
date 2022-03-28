@@ -2,8 +2,8 @@
 
 import io
 
-import src.main.app.file_system as file_system
-from src.main.app.file_system import DirectoryItem
+import main.filesystem.file_system as file_system
+from main.filesystem.file_system import DirectoryItem
 import os
 import PyPDF2
 import shutil
@@ -23,8 +23,8 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         """Saves a directory item as a png to the program's temp
         directory."""
         
-        file_name = directory_item.get_file_name()
-        temp_dir = str(file_system.get_temp_directory())
+        file_name = directory_item.file_name()
+        temp_dir = str(file_system.temp_directory())
 
         with WandImage(filename=str(directory_item), resolution=300) as img:
             self.rotate_image_to_portrait(img)
@@ -51,7 +51,7 @@ def create_loading_list_pod(master_application, file, scan_dir,
     without having to modify the document other than PDF conversion."""
 
     file_name, file_extension = os.path.splitext(file)
-    temp_directory = file_system.get_temp_directory()
+    temp_directory = file_system.temp_directory()
 
     # PDF files should be fine for a straight move
     if file_extension.lower() == ".pdf":
@@ -248,7 +248,7 @@ def upload_doc(file, scan_dir, dest_dir,
     """If duplicate file already exists in the destination directory,
     merge the pages together."""
 
-    temp_directory = file_system.get_temp_directory()
+    temp_directory = file_system.temp_directory()
 
     if dest_duplicate_check:
         temp_file_writer = PyPDF2.PdfFileWriter()

@@ -1,4 +1,4 @@
-import src.main.app.file_system as file_system
+import src.main.file_system.file_system as file_system
 import os
 import shelve
 
@@ -25,7 +25,7 @@ def get_current_user_name():
     return user_name
 
 def get_user_settings_file_connection():
-    user_settings_path = file_system.get_user_settings_data_path() 
+    user_settings_path = file_system.user_settings_data_path() 
     user_settings_data = shelve.open(str(user_settings_path))
 
     return user_settings_data
@@ -56,7 +56,7 @@ class User(object):
         self.__autoprocessing = True
 
     def sync(self) -> None:
-        user_settings_data = file_system.get_user_settings_data()
+        user_settings_data = file_system.user_settings_data()
         user_settings_data[self.__name] = self
         user_settings_data.sync()
 
@@ -77,7 +77,7 @@ class User(object):
         checks = []
 
         for directory in directories_to_check:
-            checks.append(file_system.check_path_is_directory(directory))
+            checks.append(file_system.is_path_directory(directory))
 
         valid_directory_checks = {
             "Scan": checks[0],

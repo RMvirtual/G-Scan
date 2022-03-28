@@ -3,7 +3,7 @@ import os
 import shutil
 from wand.image import Image
 
-import src.main.app.file_system as file_system
+import main.file_system.file_system as file_system
 import src.main.file_names.naming_scheme as file_naming
 from src.main.paperwork.writer import CustomerPaperworkPDFWriter
 
@@ -19,7 +19,7 @@ class TestCustomerPaperworkPDFWriter(unittest.TestCase):
             self.assertLess(difference[1], 0.01)
 
     def get_folder_from_test_resources(self, folder):
-        full_path = file_system.get_test_directory().joinpath(
+        full_path = file_system.test_directory().joinpath(
             "resources", folder)
 
         return full_path
@@ -42,10 +42,10 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         return file_name_attributes
 
     def setup_customer_paperwork_pdf(self) -> dict:       
-        original_page = file_system.get_test_directory().joinpath(
+        original_page = file_system.test_directory().joinpath(
             "resources", "correct_files", "p1testfile1.pdf")
         
-        scans_directory = file_system.get_test_directory().joinpath(
+        scans_directory = file_system.test_directory().joinpath(
             "resources", "scans")
 
         shutil.copy(original_page, scans_directory)
@@ -68,7 +68,7 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         writer = CustomerPaperworkPDFWriter()
         writer.create_pdf(scan_file, output_path, job_ref)
 
-        correct_pdf = file_system.get_test_directory().joinpath(
+        correct_pdf = file_system.test_directory().joinpath(
             "resources", "correct_files", "p1testfile1_pdf_with_barcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
@@ -95,10 +95,10 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         return file_name_attributes
 
     def setup_customer_paperwork_png(self) -> dict:
-        page_to_copy = file_system.get_test_directory().joinpath(
+        page_to_copy = file_system.test_directory().joinpath(
             "resources", "correct_files", "p1testfile1.png")
 
-        scans_directory = file_system.get_test_directory().joinpath(
+        scans_directory = file_system.test_directory().joinpath(
             "resources", "scans")
 
         with Image(filename = page_to_copy, resolution = 300) as image:
@@ -124,7 +124,7 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         writer = CustomerPaperworkPDFWriter()
         writer.create_pdf(scan_file, output_path, job_ref)
 
-        correct_pdf = file_system.get_test_directory().joinpath(
+        correct_pdf = file_system.test_directory().joinpath(
             "resources", "correct_files", "p1testfile1_png_with_barcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
@@ -136,10 +136,10 @@ class TestSinglePagePNGCustomerPaperworkWriter(
 
 class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
     def setup_multiple_page_pdf(self):
-        pdf_to_copy = file_system.get_test_directory().joinpath(
+        pdf_to_copy = file_system.test_directory().joinpath(
             "resources", "correct_files", "testfile2_with_5_pages.pdf")
 
-        scans_directory = file_system.get_test_directory().joinpath(
+        scans_directory = file_system.test_directory().joinpath(
             "resources", "scans")
 
         output_path = scans_directory.joinpath("testfile2_with_5_pages.pdf")
@@ -165,7 +165,7 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
         writer = CustomerPaperworkPDFWriter()
         writer.create_pdf(scan_file, output_path, job_ref)
 
-        correct_pdf = file_system.get_test_directory().joinpath(
+        correct_pdf = file_system.test_directory().joinpath(
             "resources", "correct_files",
             "test_file_2_with_5_pages_with_barcodes.pdf"
         )

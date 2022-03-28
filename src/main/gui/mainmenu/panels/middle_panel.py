@@ -77,7 +77,7 @@ class MiddlePanel(Panel):
         """
 
         michelin_man_logo_path = (
-            file_system.get_resources_directory()
+            file_system.resources_directory()
             + "images\\michelin_logo.jpg"
         )
 

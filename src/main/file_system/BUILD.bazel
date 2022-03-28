@@ -2,10 +2,11 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_imports//:requirements.bzl", "requirement")
 
 py_library(
-  name = "main",
+  name = "file_system",
   srcs = glob(["*.py"]),
   deps = [
-    requirement("wxPython")
+    "@rules_python//python/runfiles"
   ],
+  data = ["//data:user_settings.dat"],
   visibility = ["//visibility:public"]
 )

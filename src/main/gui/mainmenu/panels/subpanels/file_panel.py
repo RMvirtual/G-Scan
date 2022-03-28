@@ -53,7 +53,7 @@ class FilePanel(Panel):
         """Creates the logo in the file panel."""
 
         gscan_logo_path = (
-            filesystem.get_resources_directory() + "images\\g-scan_logo.png")
+            filesystem.resources_directory() + "images\\g-scan_logo.png")
         
         self.__logo_image = Image(self, gscan_logo_path)
 

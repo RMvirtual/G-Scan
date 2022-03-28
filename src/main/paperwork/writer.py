@@ -1,7 +1,7 @@
 import io
 
-import src.main.app.file_system as file_system
-from src.main.app.file_system import DirectoryItem
+import src.main.file_system.file_system as file_system
+from src.main.file_system.file_system import DirectoryItem
 from src.main.paperwork.types import CustomerPaperworkPage
 from src.main.pdf.reader import PdfReader
 from src.main.pdf.extractor import PdfExtractor
@@ -18,7 +18,7 @@ class CustomerPaperworkPDFWriter(PdfWriter):
         
         directory_item = DirectoryItem(source_path)
 
-        is_pdf = directory_item.check_if_file_extension_matches(".pdf")
+        is_pdf = directory_item.matches_file_extension(".pdf")
         is_image_file = file_system.is_file_single_page_image_format(
             directory_item)
         
@@ -84,7 +84,7 @@ class CustomerPaperworkPDFWriter(PdfWriter):
         """Converts all the pages in a PDF file into customer paperwork
         format."""
 
-        temp_directory = str(file_system.get_temp_directory())
+        temp_directory = str(file_system.temp_directory())
         pdf_reader = PdfReader(stream)        
         number_of_pages = pdf_reader.get_number_of_pages()
 

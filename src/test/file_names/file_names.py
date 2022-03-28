@@ -2,7 +2,7 @@ import unittest
 import os
 
 import src.main.file_names.naming_scheme as fn
-import src.main.app.file_system as fs
+import src.main.file_system.file_system as fs
 
 class TestFileNaming(unittest.TestCase):
     """A class for testing the file naming module."""
@@ -10,6 +10,7 @@ class TestFileNaming(unittest.TestCase):
     def test_create_backup_file_name(self):
         file_name = self.create_dummy_file_name_structure()
         backup_directory = self.get_backup_directory()
+
         backup_file_name = fn.create_backup_file_name(
             file_name, backup_directory)
 
@@ -23,11 +24,11 @@ class TestFileNaming(unittest.TestCase):
         file_name = "GR190100200.pdf"
 
         self.setup_one_file(file_name, backup_directory)
-        file_exists = fs.check_if_file_exists(file_name, backup_directory)
+        file_exists = fs.file_exists(file_name, backup_directory)
         self.assertTrue(file_exists)
 
         self.remove_one_file(file_name, backup_directory)
-        file_removed = not fs.check_if_file_exists(file_name, backup_directory)
+        file_removed = not fs.file_exists(file_name, backup_directory)
         self.assertTrue(file_removed)
 
     def setup_one_file(self, file_name: str, directory: str):
