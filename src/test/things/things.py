@@ -3,10 +3,15 @@ import unittest
 import src.test.things.date as datetest
 import src.test.things.user as usertest
 
-class ThingsTestSuite(unittest.TestSuite):
+def suite():
+    test_suite = unittest.TestSuite()
+    test_suite.addTest(unittest.makeSuite(datetest.TestDate))
+    test_suite.addTest(unittest.makeSuite(usertest.TestUser))
 
-    def __init__(self) -> None:
-        super().__init__(datetest.TestDate(), usertest.TestUser())
+    return test_suite
 
 if __name__ == '__main__':
-    unittest.main()
+    mySuit=suite()
+
+    runner=unittest.TextTestRunner()
+    runner.run(mySuit)

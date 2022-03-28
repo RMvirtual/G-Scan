@@ -5,7 +5,9 @@ py_library(
   name = "app",
   srcs = glob(["*.py"]),
   deps = [
-    requirement("wxPython")
+    requirement("wxPython"),
+    "@rules_python//python/runfiles"
   ],
+  data = ["//data:user_settings.dat"],
   visibility = ["//visibility:public"]
 )

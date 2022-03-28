@@ -50,7 +50,7 @@ class TestDate(unittest.TestCase):
 
     def test_get_current_month_is_march(self):
         month = date.get_current_month()
-
+    
         self.assertTrue(month.get_month_name() == "March")
         self.assertTrue(month.get_month_number() == 3)
         self.assertTrue(month.get_month_number_as_two_digits() == "03")
