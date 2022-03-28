@@ -1,5 +1,5 @@
-from pdf.pdf_reader import PdfReader
-from pdf.pdf_writer import PdfWriter
+from src.main.pdf.reader import PdfReader
+from src.main.pdf.writer import PdfWriter
 
 class PdfExtractor():
     def __init__(self, stream):

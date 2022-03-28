@@ -211,4 +211,3 @@ class UserDefaults():
         values.autoprocessing_mode = user.get_autoprocessing_mode()
 
         return values
-    

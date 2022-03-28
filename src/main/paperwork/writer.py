@@ -1,12 +1,11 @@
 import io
-from pathlib import Path
 
-from app import file_system
-from app.file_system import DirectoryItem
-from pdf.paperwork_types import CustomerPaperworkPage
-from pdf.pdf_reader import PdfReader
-from pdf.pdf_extractor import PdfExtractor
-from pdf.pdf_writer import PdfWriter
+import src.main.app.file_system as file_system
+from src.main.app.file_system import DirectoryItem
+from src.main.paperwork.types import CustomerPaperworkPage
+from src.main.pdf.reader import PdfReader
+from src.main.pdf.extractor import PdfExtractor
+from src.main.pdf.writer import PdfWriter
 
 class CustomerPaperworkPDFWriter(PdfWriter):
     def __init__(self):

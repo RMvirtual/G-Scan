@@ -7,18 +7,18 @@ from gui.settings.settings_menu import SettingsMenu
 from pdf.pdf_viewer import PDFViewer
 import pdf.pdf_reader
 import pdf.pdf_writer
-from user import User, UserDefaults
+import user.user
+from user.user import User, UserDefaults
 import wx
 
 import app.file_system as file_system
-import app.validation.job_references as job_ref
-import app.validation.string_manipulation as string_manipulate
-import date
-from date import Date
+import validation.job_references as job_ref
+import validation.string_manipulation as string_manipulate
+import date.date
+from date.date import Date
 import os
 import re
 import shelve
-import user
 
 class Model():
     """A class for the model."""

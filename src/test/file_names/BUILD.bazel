@@ -1,9 +1,9 @@
 load("@rules_python//python:defs.bzl", "py_test")
 
 py_test(
-    name = "validation",
+    name = "file_names",
     srcs = glob(["*.py"]),
     deps = [
-        "//src/main/things",
+        "//src/main/file_names",
     ],
 )

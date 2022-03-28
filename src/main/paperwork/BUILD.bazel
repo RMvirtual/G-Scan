@@ -2,10 +2,12 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_imports//:requirements.bzl", "requirement")
 
 py_library(
-  name = "validation",
+  name = "paperwork",
   srcs = glob(["*.py"]),
   deps = [
-    requirement("wxPython")
+    "//src/main/app",
+    "//src/main/file_names",
+    "//src/main/pdf"
   ],
   visibility = ["//visibility:public"]
 )

@@ -1,16 +1,11 @@
 import unittest
-import sys
 import os
-from pathlib import Path
 import shutil
 from wand.image import Image
 
-main_src_path = Path.cwd().parent.joinpath("src")
-sys.path.append(main_src_path)
-
-import src.app.file_system as file_system
-import app.validation.file_naming as file_naming
-from pdf.paperwork_writers import CustomerPaperworkPDFWriter
+import src.main.app.file_system as file_system
+import src.main.file_names.naming_scheme as file_naming
+from src.main.paperwork.writer import CustomerPaperworkPDFWriter
 
 class TestCustomerPaperworkPDFWriter(unittest.TestCase):
     """A class for testing the PDF writer module."""
@@ -181,3 +176,6 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
             correct_image, output_path)
 
         self.teardown_customer_paperwork_pdf(output_path)
+
+if __name__ == '__main__':
+    unittest.main()

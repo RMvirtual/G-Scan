@@ -2,8 +2,8 @@
 
 import io
 
-from app import file_system
-from app.file_system import DirectoryItem
+import src.main.app.file_system as file_system
+from src.main.app.file_system import DirectoryItem
 import os
 import PyPDF2
 import shutil

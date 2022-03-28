@@ -1,7 +1,6 @@
 """A module containing functions for reading PDF files."""
 
-from app import file_system
-from gui.popupbox import PopupBox
+import src.main.app.file_system as file_system
 from PIL import Image as pil_image
 from pyzbar.pyzbar import decode
 from wand.image import Image as wand_image

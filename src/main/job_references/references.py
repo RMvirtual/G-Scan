@@ -1,6 +1,6 @@
-from date import Date
-import app.validation.string_manipulation as sm
-import app.validation.string_length_comparison as slc
+from src.main.date.date import Date
+import src.main.job_references.string_manipulation as sm
+import src.main.job_references.length_comparison as slc
 
 """A module for calculating job references."""
 
