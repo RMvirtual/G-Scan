@@ -1,5 +1,5 @@
 import unittest
-from src.main.things.user import *
+from src.main.user.user import *
 
 class TestUser(unittest.TestCase):
     """A class for testing the user module."""

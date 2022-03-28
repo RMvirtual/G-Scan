@@ -83,3 +83,6 @@ class TestJobReferences(unittest.TestCase):
         for value in false_values:
             length_okay = job_ref.check_full_number_input_length(value)
             self.assertFalse(length_okay[0])
+
+if __name__ == '__main__':
+    unittest.main()

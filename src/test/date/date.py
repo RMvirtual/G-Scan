@@ -1,5 +1,5 @@
 import unittest
-import src.main.things.date as date
+import src.main.date.date as date
 
 class TestDate(unittest.TestCase):
     """A class for testing the date module."""

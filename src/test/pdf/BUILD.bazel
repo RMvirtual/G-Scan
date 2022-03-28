@@ -1,7 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_test")
 
 py_test(
-    name = "things",
+    name = "writer",
     srcs = glob(["*.py"]),
     deps = [
         "//src/main/things",

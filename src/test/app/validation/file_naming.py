@@ -53,3 +53,6 @@ class TestFileNaming(unittest.TestCase):
         
     def get_backup_directory(self) -> str:
         return "C:\\Users\\rmvir\\Desktop\\testfolder\\backup"
+
+if __name__ == '__main__':
+    unittest.main()

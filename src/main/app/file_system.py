@@ -2,10 +2,10 @@
 commonly used directories etc.
 """
 
-from rules_python.python.runfiles import runfiles
 import os
 import shelve
 from pathlib import Path
+from rules_python.python.runfiles import runfiles
 
 class DirectoryItem():
     """A class for a directory item."""

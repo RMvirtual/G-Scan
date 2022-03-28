@@ -125,3 +125,6 @@ class TestStringLengthComparison(unittest.TestCase):
 
         for test in false_tests:
             self.assertFalse(test)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,9 @@
+load("@rules_python//python:defs.bzl", "py_test")
+
+py_test(
+    name = "date",
+    srcs = glob(["*.py"]),
+    deps = [
+        "//src/main/date",
+    ],
+)

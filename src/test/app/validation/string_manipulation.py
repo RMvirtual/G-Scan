@@ -41,3 +41,6 @@ class TestStringFormatting(unittest.TestCase):
         for string in strings_to_test:
             overwritten_string = sm.overwrite_from_right(string, "hai")
             self.assertTrue(overwritten_string in correct_strings)
+
+if __name__ == '__main__':
+    unittest.main()

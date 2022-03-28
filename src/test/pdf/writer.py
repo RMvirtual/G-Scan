@@ -8,7 +8,7 @@ from wand.image import Image
 main_src_path = Path.cwd().parent.joinpath("src")
 sys.path.append(main_src_path)
 
-import app.file_system as file_system
+import src.app.file_system as file_system
 import app.validation.file_naming as file_naming
 from pdf.paperwork_writers import CustomerPaperworkPDFWriter
 
