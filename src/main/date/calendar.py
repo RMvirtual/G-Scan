@@ -51,18 +51,10 @@ def __current_time_as_int(format:str) -> int:
     return int(__current_time_as_string(format))
 
 def month_names_and_numbers() -> list[str]:
-    """Returns a list of strings of each month represented with a 
-    month name, a hyphen with a space either side and the month number
-    formatted to two digits.
-    """
     return [
         month.month_name_hyphen_number() for month in months(current_year())]
     
-def month_names_and_numbers_as_dictionary() -> dict:
-    """Returns a dictionary of the month numbers as keys and their
-    longform string representation of "month_name - month_number" as
-    values.
-    """
+def months_as_xxx_mm_to_number() -> dict:
     months_dictionary = {}
     month_and_name_strings = month_names_and_numbers()
     month_number = 1
@@ -74,10 +66,7 @@ def month_names_and_numbers_as_dictionary() -> dict:
     return months_dictionary
 
 def date_from_month_name_and_number(month_name_and_number: str, year) -> Date:
-    """Creates a Date object using the full "month_name - number"
-    string representation and year to create it.
-    """
-    month_names_and_numbers = month_names_and_numbers_as_dictionary()
+    month_names_and_numbers = months_as_xxx_mm_to_number()
     
     month_number = month_names_and_numbers[month_name_and_number]
     month_name = month_name_from_number(month_number)
