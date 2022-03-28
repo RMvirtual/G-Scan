@@ -2,9 +2,8 @@ import unittest
 import os
 import shutil
 from wand.image import Image
-
-import main.file_system.file_system as file_system
-import main.file_names.name_scheme as file_naming
+import src.main.file_system.file_system as file_system
+import src.main.file_names.name_scheme as file_naming
 from src.main.paperwork.writer import CustomerPaperworkPDFWriter
 
 class TestCustomerPaperworkPDFWriter(unittest.TestCase):

@@ -1,6 +1,6 @@
 """A module containing functions for reading PDF files."""
 
-import main.filesystem.file_system as file_system
+import src.main.file_system.file_system as file_system
 from PIL import Image as pil_image
 from pyzbar.pyzbar import decode
 from wand.image import Image as wand_image

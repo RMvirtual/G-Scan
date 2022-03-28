@@ -1,9 +1,7 @@
-"""Module for creating a PDFWriter class."""
-
 import io
 
-import main.filesystem.file_system as file_system
-from main.filesystem.file_system import DirectoryItem
+import src.main.file_system.file_system as file_system
+from src.main.file_system.file_system import DirectoryItem
 import os
 import PyPDF2
 import shutil
