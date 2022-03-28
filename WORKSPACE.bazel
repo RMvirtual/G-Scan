@@ -1,0 +1,10 @@
+workspace(
+    name = "gscan"
+)
+
+load("@rules_python//python:pip.bzl", "pip_install")
+
+pip_install(
+   name = "python_imports",
+   requirements = "//lib/python:pip_imports.txt",
+)

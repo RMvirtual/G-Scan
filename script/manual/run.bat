@@ -1,8 +1,8 @@
 : Windows script to run the driver for G-Scan.
 cls
 @echo off
-cd ..\G-Scan\test
-python -m unittest
+cd ..\..\G-Scan\src
+python Driver.py
 
-cd ..\..\script
+cd ..\..\script\manual
 @echo on
