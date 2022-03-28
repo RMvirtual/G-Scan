@@ -22,6 +22,5 @@ class Date(object):
     def month_name_hyphen_number(self) -> str:
         month_name = self.month_name()
         month_number = self.month_number_as_two_digits()
-        month_string = month_name + " - " + month_number
-
-        return month_string
+        
+        return month_name + " - " + month_number

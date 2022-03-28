@@ -22,13 +22,13 @@ class TestDate(unittest.TestCase):
         for month in months:
             self.assertTrue(month.year() == 2022)
 
-    def test_get_month_names_and_numbers(self):
+    def test_should_get_month_names_and_numbers(self):
         months = calendar.month_names_and_numbers()
         correct_months = self.correct_month_names_and_numbers()
 
         (self.assertTrue(month in correct_months) for month in months)
 
-    def test_get_current_month_is_march(self):
+    def test_should_get_current_month(self):
         month = calendar.current_month()
     
         self.assertTrue(month.month_name() == "March")

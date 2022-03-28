@@ -2,19 +2,14 @@ from datetime import datetime
 from src.main.date.date import Date
 
 def months(year: int) -> list[Date]:
-    month_names = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ]
-
-    dates = []
-    month_number = 1
-
-    for month_name in month_names:
-        dates.append(Date(month_number, month_name, year))
-        month_number += 1
-
-    return dates
+    names_and_numbers = {
+        1: "January", 2: "February", 3: "March", 4: "April", 5: "May",
+        6: "June", 7: "July", 8: "August", 9: "September", 10: "October",
+        11: "November", 12: "December"
+    }
+    
+    return [
+        Date(number, name, year) for number, name in names_and_numbers.items()]
 
 def month_name_from_number(number: int) -> str:
     return months_as_strings()[number - 1]
@@ -78,7 +73,7 @@ def month_names_and_numbers_as_dictionary() -> dict:
 
     return months_dictionary
 
-def date_from_month_name_number(month_name_and_number: str, year) -> Date:
+def date_from_month_name_and_number(month_name_and_number: str, year) -> Date:
     """Creates a Date object using the full "month_name - number"
     string representation and year to create it.
     """
