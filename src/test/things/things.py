@@ -3,11 +3,8 @@ import sys
 import os
 from pathlib import Path
 
-main_src_path = str(Path(os.getcwd()).parent) + "\\src"
-sys.path.append(main_src_path)
-
-import date
-from date import Date
+import src.main.things.date as date
+from src.main.things.date import Date
 
 class TestDate(unittest.TestCase):
     """A class for testing the date module."""
@@ -91,3 +88,6 @@ class TestDate(unittest.TestCase):
         ]
 
         return months
+
+if __name__ == '__main__':
+  unittest.main()
