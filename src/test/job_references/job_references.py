@@ -1,17 +1,17 @@
 import unittest
 import src.main.job_references.references as job_refs
-from src.main.date.date import Date
+import src.main.date.calendar as calendar
 
 class TestJobReferences(unittest.TestCase):
     def test_should_get_template_job_number(self):
-        date = Date.from_month_number_and_year(3,2022)
+        date = calendar.date(month=3, year=2022)
         job_number = job_refs.template_job_number(date)
         correct_job_number = "220300000"
 
         self.assertEqual(correct_job_number, job_number)
 
     def test_should_get_quick_job_number(self):
-        date = Date.from_month_number_and_year(3,2022)
+        date = calendar.date(month=3, year=2022)
         job_number = job_refs.job_number_from_brief("2300", date)
         correct_job_number = "220302300"
 

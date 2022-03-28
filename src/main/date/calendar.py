@@ -65,6 +65,9 @@ def months_as_xxx_mm_to_number() -> dict:
 
     return months_dictionary
 
+def date(month:int, year:int) -> Date:
+    return months(year)[month-1]
+
 def date_from_month_name_and_number(month_name_and_number: str, year) -> Date:
     month_names_and_numbers = months_as_xxx_mm_to_number()
     
