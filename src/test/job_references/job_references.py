@@ -7,14 +7,14 @@ class TestJobReferences(unittest.TestCase):
 
     def test_calculate_base_job_number(self):
         date = Date.from_month_number_and_year(3,2022)
-        job_number = job_refs.base_job_number(date)
+        job_number = job_refs.template_job_number(date)
         correct_job_number = "220300000"
 
         self.assertEqual(correct_job_number, job_number)
 
     def test_create_quick_job_number(self):
         date = Date.from_month_number_and_year(3,2022)
-        job_number = job_refs.quick_job_number("2300", date)
+        job_number = job_refs.job_number_from_brief("2300", date)
         correct_job_number = "220302300"
 
         self.assertEqual(correct_job_number, job_number)
@@ -24,12 +24,12 @@ class TestJobReferences(unittest.TestCase):
         correct_reference = "GR190100200"
 
         for inputted_number in inputted_numbers:
-            job_reference = job_refs.job_reference(inputted_number)
+            job_reference = job_refs.gr_reference(inputted_number)
             self.assertEqual(correct_reference, job_reference)
 
     def test_full_number_input_length_check(self):
         correct_number = "190105255"
-        length_okay = job_refs.is_input_correct_full_length(correct_number)
+        length_okay = job_refs.is_full_input_length(correct_number)
         self.assertTrue(length_okay[0])
 
         false_tests = [
@@ -40,7 +40,7 @@ class TestJobReferences(unittest.TestCase):
         ]
 
         for test in false_tests:
-            is_correct_length = job_refs.is_input_correct_full_length(test)
+            is_correct_length = job_refs.is_full_input_length(test)
             self.assertFalse(is_correct_length[0])
 
     def test_quick_mode_input_length_check(self):
@@ -50,7 +50,7 @@ class TestJobReferences(unittest.TestCase):
         ]
 
         for value in pass_values:
-            length_okay = job_refs.is_input_correct_short_length(value)
+            length_okay = job_refs.is_quick_input_length(value)
             self.assertTrue(length_okay[0])
 
         false_values = [
@@ -61,7 +61,7 @@ class TestJobReferences(unittest.TestCase):
         ]
 
         for value in false_values:
-            length_okay = job_refs.is_input_correct_full_length(value)
+            length_okay = job_refs.is_full_input_length(value)
             self.assertFalse(length_okay[0])
 
 if __name__ == '__main__':

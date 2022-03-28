@@ -3,51 +3,40 @@
 import re
 from src.main.date.date import Date
 
-def job_reference(user_input:str):
-    """Creates a full FCL format job reference by extracting the full
-    number from a string of characters.
-    """    
-    return "GR" + __remove_alphabetical_characters(user_input)
+def gr_reference(full_job_no:str):
+    return "GR" + __strip_alphabet(full_job_no)
     
-def quick_job_reference(user_input:str, date:Date):
-    """Creates an FCL format job reference using a Date object to fill
-    in any gaps with the user's input.
-    """
-    formatted_user_input = __remove_alphabetical_characters(user_input)
-    job_number = quick_job_number(formatted_user_input, date)
-    
-    return "GR" + job_number
+def quick_gr_reference(brief_job_no:str, date:Date):
+    full_job_no = job_number_from_brief(brief_job_no, date)
 
-def quick_job_number(user_input:str, date:Date):
-    """Creates an FCL format job number using a date object to fill in
-    the year and month prefixes.
-    """
-    job_number = base_job_number(date)
+    return gr_reference(full_job_no)
 
-    return __overwrite_from_right(job_number, user_input)
+def job_number_from_brief(brief_job_no:str, date:Date):
+    clean_brief_job_no = __strip_alphabet(brief_job_no)
 
-def base_job_number(date:Date):
-    """Calculates a basic job number based on the year and month
-    in a date object and pads out the rest of the job reference with
-    remaining zeroes (e.g. 190800000).
-    """
+    template_job_no = template_job_number(
+        date=date, digits_to_exclude=len(brief_job_no))
+   
+    return template_job_no + clean_brief_job_no
+
+def template_job_number(date:Date, digits_to_exclude:int=0):
     year = date.get_year_as_two_digits()
     month = date.get_month_number_as_two_digits()
+    zeroes_padding = (5 - digits_to_exclude)*"0"
 
-    return year + month + "00000"
+    return year + month + zeroes_padding
 
-def is_input_correct_full_length(user_input: str) -> tuple[bool, str]:
-    """Checks if a string's length under normal mode conditions (i.e.
-    string is 9 digits long.).
-    """
-    return (True, "") if len(user_input) == 9 else (
-        False, "Too many/few digits for a GR Number")
+def is_full_input_length(inputted_reference: str) -> tuple[bool, str]:
+    is_nine_digits = len(inputted_reference) == 9
+    message = "" if is_nine_digits else "Too many/few digits for a GR Number"
 
-def is_input_correct_short_length(user_input:str) -> tuple[bool, str]:
+    return is_nine_digits, message
+
+def is_quick_input_length(inputted_reference:str) -> tuple[bool, str]:
     """Checks if a string's length under quick mode conditions
     (i.e. the string is between 4 and 9 digits long).
     """
-    input_length = len(user_input)
+    input_length = len(inputted_reference)
     within_range = 4 <= input_length <= 9
     message = ""
 
@@ -63,15 +52,5 @@ def is_input_correct_short_length(user_input:str) -> tuple[bool, str]:
 
     return (within_range, message)
 
-def __remove_alphabetical_characters(string_to_modify:str) -> str:
+def __strip_alphabet(string_to_modify:str) -> str:
     return re.sub("[^0-9]", "", string_to_modify)
-
-def __overwrite_from_right(original_string:str, new_characters:str) -> str:
-    """Creates a new string with the original string overwritten from
-    the right by the contents of a new string. For example, GR190100000
-    overwritten by 1234 would return "GR190101234".
-    """
-    digits_to_overwrite = len(new_characters)
-    truncated_original_string = original_string[:-digits_to_overwrite]
-
-    return truncated_original_string + new_characters
