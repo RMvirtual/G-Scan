@@ -55,8 +55,7 @@ def create_loading_list_pod(master_application, file, scan_dir,
 
     # PDF files should be fine for a straight move
     if file_extension.lower() == ".pdf":
-        shutil.copyfile(
-            scan_dir + "/" + file, temp_directory + "result.pdf")
+        shutil.copyfile(scan_dir + "/" + file, temp_directory + "result.pdf")
 
     # just image files need converting.
     if file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":

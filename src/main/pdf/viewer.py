@@ -21,4 +21,3 @@ class PDFViewer():
         """Closes the PDF viewer."""
 
         self.pdf_window.quit()
-    

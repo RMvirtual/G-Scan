@@ -1,16 +1,14 @@
 import unittest
-
 import src.main.job_references.references as job_refs
 import src.main.date.date as date
 
 class TestJobReferences(unittest.TestCase):
     """A class for testing the job references module."""
 
-    @unittest.skip("Pain testing dynamically changing dates.")
     def test_calculate_base_job_number(self):
-        current_date = date.get_current_month()
+        current_date = date.Date.from_month_number_and_year(3,2022)
         base_job_number = job_refs.calculate_base_job_number(current_date)
-        self.assertTrue(base_job_number == "210600000", base_job_number)
+        self.assertTrue(base_job_number == "220300000", base_job_number)
 
         another_date = date.Date(1, "January", 2019)
         base_job_number = job_refs.calculate_base_job_number(another_date)
