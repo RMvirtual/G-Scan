@@ -1,4 +1,3 @@
-pytest
 Pillow
 Selenium
 PyPDF2

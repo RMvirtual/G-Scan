@@ -27,19 +27,19 @@ class TestDate(unittest.TestCase):
         for month in months:
             self.assertTrue(month.get_year() == 2022)
 
-    def test_get_current_year_is_2021(self):
+    def test_get_current_year_is_2022(self):
         current_year = date.get_current_year()
         current_year_in_two_digits = date.get_current_year_as_two_digits()
         
-        self.assertTrue(current_year == 2021)
-        self.assertTrue(current_year_in_two_digits == 21)
+        self.assertTrue(current_year == 2022)
+        self.assertTrue(current_year_in_two_digits == 22)
 
-    def test_get_last_year_is_2020(self):
+    def test_get_last_year_is_2021(self):
         last_year = date.get_last_year()
         last_year_in_two_digits = date.get_last_year_as_two_digits()
         
-        self.assertTrue(last_year == 2020)
-        self.assertTrue(last_year_in_two_digits == 20)
+        self.assertTrue(last_year == 2021)
+        self.assertTrue(last_year_in_two_digits == 21)
 
     @unittest.skip("Pain checking dynamically changing dates.")
     def test_current_month_number_is_five(self):
@@ -55,17 +55,17 @@ class TestDate(unittest.TestCase):
             self.assertTrue(month in strings_to_test) 
 
     @unittest.skip("Pain checking dynamically changing dates.")
-    def test_get_current_month_is_june(self):
+    def test_get_current_month_is_march(self):
         month = date.get_current_month()
 
-        self.assertTrue(month.get_month_name() == "June")
-        self.assertTrue(month.get_month_number() == 6)
-        self.assertTrue(month.get_month_number_as_two_digits() == "06")
-        self.assertTrue(month.get_year() == 2021)
-        self.assertTrue(month.get_year_as_two_digits() == "21")
+        self.assertTrue(month.get_month_name() == "March")
+        self.assertTrue(month.get_month_number() == 3)
+        self.assertTrue(month.get_month_number_as_two_digits() == "03")
+        self.assertTrue(month.get_year() == 2022)
+        self.assertTrue(month.get_year_as_two_digits() == "22")
 
     def test_get_years(self):
-        years_to_test = (2021, 2020)
+        years_to_test = (2022, 2021)
         years = date.get_years()
 
         for year in years:
