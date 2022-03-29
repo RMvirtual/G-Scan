@@ -4,7 +4,8 @@ import shutil
 from wand.image import Image
 import src.main.file_system.file_system as file_system
 import src.main.file_names.name_scheme as file_naming
-from src.main.paperwork.writer import CustomerPaperworkPDFWriter
+from src.main.paperwork.writer.customer_paperwork import (
+    CustomerPaperworkPDFWriter)
 
 class TestCustomerPaperworkPDFWriter(unittest.TestCase):
     """A class for testing the PDF writer module."""
@@ -64,7 +65,7 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
-        writer.create_pdf(scan_file, output_path, job_ref)
+        writer.write_to_file(scan_file, output_path, job_ref)
 
         correct_pdf = file_system.test_resources_directory() + (
             "/correct_files/p1testfile1_pdf_with_barcode.pdf")
@@ -116,16 +117,14 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
-        writer.create_pdf(scan_file, output_path, job_ref)
+        writer.write_to_file(scan_file, output_path, job_ref)
 
         correct_pdf = file_system.test_resources_directory() + (
             "/correct_files/p1testfile1_png_with_barcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
-        self.check_if_paperwork_pages_are_identical(
-            correct_image, output_path)
-
+        self.check_if_paperwork_pages_are_identical(correct_image, output_path)
         self.teardown_customer_paperwork_pdf(output_path)
 
 class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
@@ -154,7 +153,7 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
-        writer.create_pdf(scan_file, output_path, job_ref)
+        writer.write_to_file(scan_file, output_path, job_ref)
 
         correct_pdf = (
             file_system.test_resources_directory() +

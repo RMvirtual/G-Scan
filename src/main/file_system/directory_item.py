@@ -23,9 +23,14 @@ class DirectoryItem():
     def full_path(self) -> str:
         return str(self.__path)
 
-    def matches_file_extension(self, extension_to_check: str) -> bool:
-        return (self.__file_extension.lower() == extension_to_check)
+    def matches_file_extension(self, extension: str) -> bool:
+        return self.__file_extension.lower() == extension.lower()
 
-    def matches_multiple_file_extensions(self, extensions_to_check: tuple) \
-            -> bool:
-        return (self.__file_extension.lower() in extensions_to_check)
+    def matches_multiple_file_extensions(self, extensions: tuple[str]) -> bool:
+        return self.__file_extension.lower() in extensions
+
+    def is_single_page_image_format(self):
+        return self.matches_multiple_file_extensions((".jpeg", ".jpg", ".png"))
+
+    def is_pdf(self):
+        return self.matches_file_extension(".pdf")

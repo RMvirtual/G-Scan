@@ -62,9 +62,6 @@ def user_settings_data():
 def is_path_directory(path):
     return os.path.isdir(path)
 
-def is_file_single_page_image_format(file: DirectoryItem):
-    return file.matches_multiple_file_extensions((".jpeg", ".jpg", ".png"))
-
 def path_exists(path) -> bool:
     return os.path.exists(path)
 
