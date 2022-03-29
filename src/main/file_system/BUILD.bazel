@@ -7,6 +7,10 @@ py_library(
   deps = [
     "@rules_python//python/runfiles"
   ],
-  data = ["//data:user_settings.dat"],
+  data = [
+    "//data:user_settings.dat",
+    "//resources:test",
+    "//resources:images"
+  ],
   visibility = ["//visibility:public"]
 )

@@ -18,8 +18,10 @@ class TestCustomerPaperworkPDFWriter(unittest.TestCase):
             self.assertLess(difference[1], 0.01)
 
     def get_folder_from_test_resources(self, folder):
-        full_path = file_system.test_directory().joinpath(
-            "resources", folder)
+        test_dir = file_system.test_resources_directory()        
+        print("Test directory:", test_dir)
+
+        full_path = test_dir + folder
 
         return full_path
 
@@ -41,11 +43,11 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         return file_name_attributes
 
     def setup_customer_paperwork_pdf(self) -> dict:       
-        original_page = file_system.test_directory().joinpath(
-            "resources", "correct_files", "p1testfile1.pdf")
+        original_page = file_system.test_resources_directory() + (
+            "/correct_files/p1testfile1.pdf")
         
-        scans_directory = file_system.test_directory().joinpath(
-            "resources", "scans")
+        scans_directory = file_system.test_resources_directory() + (
+            "/scans")
 
         shutil.copy(original_page, scans_directory)
 
@@ -61,14 +63,14 @@ class TestSinglePagePDFCustomerPaperworkWriter(
 
         scan_file = str(dict.get("scan"))
         dest_directory = str(self.get_folder_from_test_resources("destination"))
-        output_path = dest_directory + "\\single_page_pdf_test.pdf"
+        output_path = dest_directory + "/single_page_pdf_test.pdf"
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
         writer.create_pdf(scan_file, output_path, job_ref)
 
-        correct_pdf = file_system.test_directory().joinpath(
-            "resources", "correct_files", "p1testfile1_pdf_with_barcode.pdf")
+        correct_pdf = file_system.test_resources_directory() + (
+            "/correct_files/p1testfile1_pdf_with_barcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
@@ -79,9 +81,6 @@ class TestSinglePagePDFCustomerPaperworkWriter(
 
 class TestSinglePagePNGCustomerPaperworkWriter(
         TestCustomerPaperworkPDFWriter):
-    """A class for testing the customer paperwork creation with a single page
-    png file."""
-
     def setup_file_name_attributes(self, job_ref):
         file_name_attributes = file_naming.FileNamingAttributes()
 
@@ -94,14 +93,14 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         return file_name_attributes
 
     def setup_customer_paperwork_png(self) -> dict:
-        page_to_copy = file_system.test_directory().joinpath(
-            "resources", "correct_files", "p1testfile1.png")
+        page_to_copy = file_system.test_resources_directory() + (
+            "/correct_files/p1testfile1.png")
 
-        scans_directory = file_system.test_directory().joinpath(
-            "resources", "scans")
+        scans_directory = file_system.test_resources_directory() + (
+            "/scans")
 
         with Image(filename = page_to_copy, resolution = 300) as image:
-            image.save(filename = str(scans_directory.joinpath("p1testfile1.png")))
+            image.save(filename = str(scans_directory + "/p1testfile1.png"))
 
         dict = {
             "original": page_to_copy,
@@ -117,14 +116,14 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         dest_directory = str(
             self.get_folder_from_test_resources("destination"))
         
-        output_path = dest_directory + "\\single_page_pdf_test.pdf"
+        output_path = dest_directory + "/single_page_pdf_test.pdf"
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
         writer.create_pdf(scan_file, output_path, job_ref)
 
-        correct_pdf = file_system.test_directory().joinpath(
-            "resources", "correct_files", "p1testfile1_png_with_barcode.pdf")
+        correct_pdf = file_system.test_resources_directory() + (
+            "/correct_files/p1testfile1_png_with_barcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
@@ -135,13 +134,16 @@ class TestSinglePagePNGCustomerPaperworkWriter(
 
 class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
     def setup_multiple_page_pdf(self):
-        pdf_to_copy = file_system.test_directory().joinpath(
-            "resources", "correct_files", "testfile2_with_5_pages.pdf")
+        pdf_to_copy = file_system.test_resources_directory() + (
+            "/correct_files/testfile2_with_5_pages.pdf")
 
-        scans_directory = file_system.test_directory().joinpath(
-            "resources", "scans")
+        test_dir = file_system.test_resources_directory()
+        print("Test directory: " + test_dir)
 
-        output_path = scans_directory.joinpath("testfile2_with_5_pages.pdf")
+        scans_directory = file_system.test_resources_directory() + (
+            "/scans")
+
+        output_path = scans_directory + ("/testfile2_with_5_pages.pdf")
         shutil.copy(pdf_to_copy, output_path)
 
         dict = {
@@ -158,15 +160,15 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
         dest_directory = str(
             self.get_folder_from_test_resources("destination"))
 
-        output_path = dest_directory + "\\multiple_page_pdf_test.pdf"
+        output_path = dest_directory + "/multiple_page_pdf_test.pdf"
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
         writer.create_pdf(scan_file, output_path, job_ref)
 
-        correct_pdf = file_system.test_directory().joinpath(
-            "resources", "correct_files",
-            "test_file_2_with_5_pages_with_barcodes.pdf"
+        correct_pdf = (
+            file_system.test_resources_directory() +
+            "/correct_files/test_file_2_with_5_pages_with_barcodes.pdf"
         )
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)

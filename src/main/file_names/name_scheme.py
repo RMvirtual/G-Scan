@@ -23,7 +23,7 @@ def backup_file_name(
     """
     file_name = (attributes.job_reference + "_" + attributes.paperwork_type)
 
-    duplicate_files = file_system.number_of_files_containing_substring(
+    duplicate_files = file_system.matching_file_names(
         file_name, backup_directory)
 
     if duplicate_files > 1:
