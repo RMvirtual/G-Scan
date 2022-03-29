@@ -28,43 +28,48 @@ class CustomerPaperworkPDFWriter(PdfWriter):
         self.__save_pdf(output)
 
     def __png_to_customer_paperwork(
-            self, directory_item:DirectoryItem, output:str,
-            job_reference:str) -> None:
-        paperwork_image_path = self.save_image_as_png_to_temp_directory(
-            directory_item)
-
-        packet = self.__customer_paperwork_bytes(
-            job_reference, paperwork_image_path)
+            self, source:DirectoryItem, output:str, job_reference:str) -> None:
+        extracted_image = self.save_image_as_png_to_temp_directory(source)
         
-        new_pdf_page = PdfReader(packet).getPage(0)
-        self.addPage(new_pdf_page)
+        paperwork_bytes = self.__customer_paperwork_bytes(
+            job_reference, extracted_image)
+        
+        new_page = PdfReader(paperwork_bytes).getPage(0)
+        self.addPage(new_page)
         self.__save_pdf(output)
 
     def __add_file_content(self, source:DirectoryItem, job_reference:str):
         with open(source.full_path(), "rb") as input_stream:
-            self.__pdf_stream_to_page(input_stream, job_reference)
+            self.__stream_to_pages(input_stream, job_reference)
 
-    def __pdf_stream_to_page(
+    def __stream_to_pages(
             self, input_stream:io.BufferedReader, job_reference:str) -> None:
-        temp_directory = str(file_system.temp_directory())
-        pdf_reader = PdfReader(input_stream)
-        number_of_pages = pdf_reader.get_number_of_pages()
+        temp_directory = file_system.temp_directory()
+        reader = PdfReader(input_stream)
+        number_of_pages = reader.get_number_of_pages()
 
         for page_number in range(number_of_pages):
-            extracted_page_path = temp_directory + "/temp.pdf"
-            extracted_page_as_png = temp_directory + "/temp_image.png"
+            self.__extract_page_from_pdf(input_stream, page_number)
 
-            pdf_extractor = PdfExtractor(input_stream)
-            pdf_extractor.extract_page(page_number, extracted_page_path)
-            
+            extracted_pdf = temp_directory + "/temp.pdf"        
+            extracted_png = temp_directory + "/temp_image.png"
+
             self.convert_single_page_pdf_to_png(
-                extracted_page_path, extracted_page_as_png)
+                extracted_pdf, extracted_png)
             
             packet = self.__customer_paperwork_bytes(
-                job_reference, extracted_page_as_png)
+                job_reference, extracted_png)
             
             new_pdf_page = PdfReader(packet).getPage(0)
             self.addPage(new_pdf_page)
+
+    def __extract_page_from_pdf(
+            self, input_stream:io.BufferedReader, page_number:int) -> None:
+        temp_directory = file_system.temp_directory()
+        extracted_page_as_pdf = temp_directory + "/temp.pdf"
+        pdf_extractor = PdfExtractor(input_stream)
+        pdf_extractor.extract_page(page_number, extracted_page_as_pdf)
+        
 
     def __customer_paperwork_bytes(
             self, job_reference:str, image_png:str) -> io.BytesIO:
