@@ -16,15 +16,14 @@ class CustomerPaperworkPDFWriter(PdfWriter):
     def write_to_file(self, source:str, output:str, job_reference:str) -> None:
         file = DirectoryItem(source)
         
-        if file.matches_file_extension(".pdf"):
-            self.__pdf_to_customer_paperwork(
-                source, output, job_reference)
+        if file.is_pdf():
+            self.__pdf_to_customer_paperwork(file, output, job_reference)
 
         elif file.is_single_page_image_format():
             self.__png_to_customer_paperwork(file, output, job_reference)
 
     def __pdf_to_customer_paperwork(
-            self, source: str, output: str, job_reference: str) -> str:
+            self, source:DirectoryItem, output: str, job_reference: str) -> str:
         self.__add_file_content(source, job_reference)
         self.__save_pdf(output)
 
@@ -41,8 +40,8 @@ class CustomerPaperworkPDFWriter(PdfWriter):
         self.addPage(new_pdf_page)
         self.__save_pdf(output)
 
-    def __add_file_content(self, source:str, job_reference:str):
-        with open(source, "rb") as input_stream:
+    def __add_file_content(self, source:DirectoryItem, job_reference:str):
+        with open(source.full_path(), "rb") as input_stream:
             self.__pdf_stream_to_page(input_stream, job_reference)
 
     def __pdf_stream_to_page(
