@@ -9,6 +9,7 @@ py_library(
   ],
   data = [
     "//data:user_settings.dat",
+    "//data:temp",
     "//resources:test",
     "//resources:images"
   ],

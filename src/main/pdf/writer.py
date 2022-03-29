@@ -5,8 +5,14 @@ from src.main.file_system.file_system import DirectoryItem
 import os
 import PyPDF2
 import shutil
-from PIL import Image as PILImage
-from wand.image import Image as WandImage
+from PIL import Image as pil_image
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4, A3
+from reportlab.lib.units import mm
+from reportlab.graphics.barcode import code128
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from wand.image import Image as wand_image
 
 class PdfWriter(PyPDF2.PdfFileWriter):
     """Writes PDF files."""
@@ -16,15 +22,15 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
         super().__init__()
 
-    def save_image_as_png_to_temp_directory(self,
-            directory_item: DirectoryItem) -> str:
+    def save_image_as_png_to_temp_directory(
+            self, directory_item: DirectoryItem) -> str:
         """Saves a directory item as a png to the program's temp
         directory."""
         
         file_name = directory_item.file_name()
-        temp_dir = str(file_system.temp_directory())
+        temp_dir = file_system.temp_directory()
 
-        with WandImage(filename=str(directory_item), resolution=300) as img:
+        with wand_image(filename=str(directory_item), resolution=300) as img:
             self.rotate_image_to_portrait(img)
 
             temp_image_path = temp_dir + "/" + file_name + ".png"
@@ -33,11 +39,11 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         return temp_image_path
 
     def convert_single_page_pdf_to_png(self, pdf_path: str, output_path: str):
-        with WandImage(filename = pdf_path, resolution = 300) as image:
+        with wand_image(filename = pdf_path, resolution = 300) as image:
             self.rotate_image_to_portrait(image)
             image.save(filename = output_path)
 
-    def rotate_image_to_portrait(self, image: WandImage):
+    def rotate_image_to_portrait(self, image: wand_image):
         is_landscape = (image.width > image.height)
 
         if is_landscape:
@@ -53,17 +59,17 @@ def create_loading_list_pod(master_application, file, scan_dir,
 
     # PDF files should be fine for a straight move
     if file_extension.lower() == ".pdf":
-        shutil.copyfile(scan_dir + "/" + file, temp_directory + "result.pdf")
+        shutil.copyfile(scan_dir + "/" + file, temp_directory + "/result.pdf")
 
     # just image files need converting.
     if file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
-        with PILImage.open(scan_dir + "/" + file) as img:
+        with pil_image.open(scan_dir + "/" + file) as img:
             output = PyPDF2.PdfFileWriter()
-            temporary_image = temp_directory + file_name + ".png"
+            temporary_image = temp_directory + "/" + file_name + ".png"
             img.save(temporary_image)
             img.close()
 
-        final_image = temp_directory + "temp_image.png"
+        final_image = temp_directory + "/temp_image.png"
 
         # arrange page into portrait orientation
         with wand_image(filename = temporary_image, resolution = 200) as img_simulator:
@@ -258,14 +264,14 @@ def upload_doc(file, scan_dir, dest_dir,
             page_object = dest_file_reader.getPage(pageNum)
             temp_file_writer.addPage(page_object)
 
-        result = open(temp_directory + "result.pdf", "rb")
+        result = open(temp_directory + "/result.pdf", "rb")
         result_reader = PyPDF2.PdfFileReader(result)
 
         for page_number in range(0, result_reader.numPages):
             result_page = result_reader.getPage(page_number)
             temp_file_writer.addPage(result_page)
 
-        temp_file = open(temp_directory + "temp.pdf", "wb")
+        temp_file = open(temp_directory + "/temp.pdf", "wb")
         temp_file_writer.write(temp_file)
         temp_file.close()
                         
@@ -283,7 +289,7 @@ def upload_doc(file, scan_dir, dest_dir,
     # the current file to the dest folder.
     elif not dest_duplicate_check:
         shutil.move(
-            temp_directory + "result.pdf", dest_dir + "/" + dest_file_name)
+            temp_directory + "/result.pdf", dest_dir + "/" + dest_file_name)
 
         os.remove(scan_dir + "/" + file)
 

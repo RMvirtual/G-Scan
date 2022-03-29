@@ -51,6 +51,11 @@ def user_settings_data_path() -> str:
 
     return r.Rlocation("data/user_settings.dat")
 
+def temp_directory() -> str:
+    r = runfiles.Create()
+
+    return r.Rlocation("gscan/data/temp")
+
 def user_settings_data():
     return shelve.open(user_settings_data_path())
    

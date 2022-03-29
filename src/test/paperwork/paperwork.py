@@ -19,9 +19,8 @@ class TestCustomerPaperworkPDFWriter(unittest.TestCase):
 
     def get_folder_from_test_resources(self, folder):
         test_dir = file_system.test_resources_directory()        
-        print("Test directory:", test_dir)
 
-        full_path = test_dir + folder
+        full_path = test_dir + "/" + folder
 
         return full_path
 
@@ -46,14 +45,12 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         original_page = file_system.test_resources_directory() + (
             "/correct_files/p1testfile1.pdf")
         
-        scans_directory = file_system.test_resources_directory() + (
-            "/scans")
-
+        scans_directory = file_system.test_resources_directory() + "/scans"
         shutil.copy(original_page, scans_directory)
 
         dict = {
             "original": original_page,
-            "scan": scans_directory.joinpath("p1testfile1.pdf")
+            "scan": scans_directory + "/p1testfile1.pdf"
         }
 
         return dict
@@ -61,9 +58,9 @@ class TestSinglePagePDFCustomerPaperworkWriter(
     def test_creating_single_page_pdf_with_reference(self):
         dict = self.setup_customer_paperwork_pdf()
 
-        scan_file = str(dict.get("scan"))
-        dest_directory = str(self.get_folder_from_test_resources("destination"))
-        output_path = dest_directory + "/single_page_pdf_test.pdf"
+        scan_file = dict.get("scan")
+        output_directory = self.get_folder_from_test_resources("output")
+        output_path = output_directory + "/single_page_pdf_test.pdf"
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
@@ -104,7 +101,7 @@ class TestSinglePagePNGCustomerPaperworkWriter(
 
         dict = {
             "original": page_to_copy,
-            "scan": scans_directory.joinpath("p1testfile1.png")
+            "scan": scans_directory + "/p1testfile1.png"
         }
 
         return dict
@@ -113,10 +110,9 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         dict = self.setup_customer_paperwork_png()
 
         scan_file = str(dict.get("scan"))
-        dest_directory = str(
-            self.get_folder_from_test_resources("destination"))
-        
-        output_path = dest_directory + "/single_page_pdf_test.pdf"
+        output_directory = self.get_folder_from_test_resources("output")
+        output_path = output_directory + "/single_page_pdf_test.pdf"
+
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
@@ -137,13 +133,9 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
         pdf_to_copy = file_system.test_resources_directory() + (
             "/correct_files/testfile2_with_5_pages.pdf")
 
-        test_dir = file_system.test_resources_directory()
-        print("Test directory: " + test_dir)
+        scans_directory = file_system.test_resources_directory() + "/scans"
+        output_path = scans_directory + "/testfile2_with_5_pages.pdf"
 
-        scans_directory = file_system.test_resources_directory() + (
-            "/scans")
-
-        output_path = scans_directory + ("/testfile2_with_5_pages.pdf")
         shutil.copy(pdf_to_copy, output_path)
 
         dict = {
@@ -156,11 +148,9 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
     def test_creating_multiple_page_pdf(self):
         dict = self.setup_multiple_page_pdf()
 
-        scan_file = str(dict.get("scan"))
-        dest_directory = str(
-            self.get_folder_from_test_resources("destination"))
-
-        output_path = dest_directory + "/multiple_page_pdf_test.pdf"
+        scan_file = dict.get("scan")
+        output_directory = self.get_folder_from_test_resources("output")
+        output_path = output_directory + "/multiple_page_pdf_test.pdf"
         job_ref = "GR190100200"
 
         writer = CustomerPaperworkPDFWriter()
