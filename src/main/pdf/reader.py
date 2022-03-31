@@ -17,7 +17,7 @@ def read_barcodes(file_name: str, directory: str):
     barcode_ref_list = []
 
     with open(directory + "/" + file_name, "rb") as current_file_pdf:
-        current_file_pdf_reader = PyPDF2.PdfFileReader(current_file_pdf)
+        current_file_pdf_reader = PdfReader(current_file_pdf)
         current_file_page_amount = current_file_pdf_reader.getNumPages()
 
         for page_number in range(current_file_page_amount):
