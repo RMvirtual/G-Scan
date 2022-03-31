@@ -1,8 +1,4 @@
-class FileNamingAttributes():
-    """A data structure holding the fields required to create a file
-    name.
-    """
-
+class FileNamingAttributes:
     def __init__(self):
         self.job_reference = ""
         self.paperwork_type = ""

@@ -68,6 +68,12 @@ def temp_directory() -> str:
     return r.Rlocation("gscan/data/temp")
 
 
+def staging_area() -> str:
+    r = runfiles.Create()
+
+    return r.Rlocation("gscan/resources/staging")
+
+
 def user_settings_data():
     return shelve.open(user_settings_data_path())
 
