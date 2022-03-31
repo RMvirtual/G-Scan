@@ -147,14 +147,9 @@ def image_converter(master_application, file, scan_dir, multi_page_handling):
 
                 # ensures page is nearest thing possible to portrait
                 # orientation
-                with wand.image.Image(filename=temporary_png,
-                                      resolution=300) as img_simulator:
-                    if img_simulator.width > img_simulator.height:
-                        img_simulator.rotate(270)
-                        img_simulator.save(filename=final_image)
-                    else:
-                        img_simulator.save(filename=final_image)
 
+                image.rotate_to_portrait(temporary_png, final_image)
+                
                 packet = io.BytesIO()
                 slab = canvas.Canvas(packet, pagesize=A4, pageCompression=1)
                 slab.setFillColorRGB(0, 0, 0)
