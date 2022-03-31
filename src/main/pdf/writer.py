@@ -15,18 +15,11 @@ from reportlab.pdfbase.ttfonts import TTFont
 from wand.image import Image as wand_image
 
 class PdfWriter(PyPDF2.PdfFileWriter):
-    """Writes PDF files."""
-
     def __init__(self):
-        """Creates a new PDF Writer object."""
-
         super().__init__()
 
     def save_image_as_png_to_temp_directory(
-            self, directory_item: DirectoryItem) -> str:
-        """Saves a directory item as a png to the program's temp
-        directory."""
-        
+            self, directory_item: DirectoryItem) -> str:       
         file_name = directory_item.file_name()
         temp_dir = file_system.temp_directory()
 
