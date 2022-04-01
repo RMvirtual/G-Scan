@@ -11,7 +11,7 @@ class ImagePanel(wx.Panel):
 
         self._image.SetScaleMode(wx.StaticBitmap.Scale_AspectFit)
 
-        self._sizer = wx.BoxSizer(wx.VERTICAL)
+        self._sizer = wx.BoxSizer(wx.HORIZONTAL)
         self._sizer.Add(self._image, 0, wx.EXPAND)
         self._sizer.SetSizeHints(self)
         self.SetSizer(self._sizer)

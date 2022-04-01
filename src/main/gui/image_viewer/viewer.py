@@ -16,11 +16,12 @@ class ImageViewer(Frame):
         self._image_panel = ImagePanel(self)
         self._navigation_panel = NavigationPanel(self)
 
-        sizer = wx.GridBagSizer(vgap=0, hgap=0)
+        sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(self._input_panel, pos=(0, 0), flag=wx.ALIGN_TOP)
-        sizer.Add(self._image_panel, pos=(1, 0), flag=wx.EXPAND)
-        sizer.Add(self._navigation_panel, pos=(2, 0), flag=wx.ALIGN_BOTTOM)
+        # Frame is blue colour.
+        sizer.Add(self._input_panel, 0, flag=wx.EXPAND) # Yellow
+        sizer.Add(self._image_panel, 1, flag=wx.EXPAND) # Red
+        sizer.Add(self._navigation_panel, 0, flag=wx.EXPAND) # Green
 
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
