@@ -1,6 +1,6 @@
 from wx.core import wxEVT_RADIOBUTTON
-import gui.widgets.fonts as fonts
-from gui.widgets.panel import Panel
+import src.main.gui.widgets.fonts as fonts
+from src.main.gui.widgets.panel import Panel
 from wx import RadioButton, RB_GROUP
 
 class RadioButtonMaster(RadioButton):

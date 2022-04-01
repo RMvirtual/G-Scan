@@ -4,8 +4,6 @@ load("@python_imports//:requirements.bzl", "requirement")
 py_library(
   name = "date",
   srcs = glob(["*.py"]),
-  deps = [
-    "//src/main/app"
-  ],
+  deps = [],
   visibility = ["//visibility:public"]
 )

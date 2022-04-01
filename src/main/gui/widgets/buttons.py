@@ -1,8 +1,9 @@
-import gui.widgets.fonts as fonts
-from gui.widgets.panel import Panel
-from gui.widgets.widget import Attributes
+import src.main.gui.widgets.fonts as fonts
+from src.main.gui.widgets.panel import Panel
+from src.main.gui.widgets.widget import Attributes
 from wx import BitmapButton, Button as wxButton, EVT_BUTTON, Image, \
     BITMAP_TYPE_ANY
+
 
 class Button(wxButton):
     """A class for a button."""
@@ -12,9 +13,9 @@ class Button(wxButton):
 
         super().__init__(
             panel,
-            label = text,
-            size = size,
-            pos = position
+            label=text,
+            size=size,
+            pos=position
         )
 
         self.SetFont(fonts.getCalibriFont(11))
@@ -40,12 +41,13 @@ class Button(wxButton):
 
         return new_button
 
+
 class ImageButton(BitmapButton):
     """A class for a button containing an image icon rather than text.
     """
 
     def __init__(self, panel: Panel, image_path: str, size: tuple,
-            position: tuple, scaling_factor):
+                 position: tuple, scaling_factor):
         """Creates a new image button."""
 
         bitmap_image = self.convert_image_path_to_bitmap(
@@ -53,9 +55,9 @@ class ImageButton(BitmapButton):
 
         super().__init__(
             panel,
-            bitmap = bitmap_image,
-            size = size,
-            pos = position
+            bitmap=bitmap_image,
+            size=size,
+            pos=position
         )
 
     def bind_function_to_click(self, callback_function) -> None:
@@ -80,12 +82,12 @@ class ImageButton(BitmapButton):
         return new_button
 
     def convert_image_path_to_bitmap(self, image_path: str,
-            scaling_factor: tuple):
+                                     scaling_factor: tuple):
         """Converts a path to an image into a bitmap image."""
 
         image = Image(
             image_path, BITMAP_TYPE_ANY).Scale(
-                scaling_factor[0], scaling_factor[1])
+            scaling_factor[0], scaling_factor[1])
 
         bitmap_image = image.ConvertToBitmap()
 

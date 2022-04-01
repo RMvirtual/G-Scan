@@ -5,7 +5,9 @@ py_library(
   name = "subpanels",
   srcs = glob(["*.py"]),
   deps = [
-    requirement("wxPython")
+    "//src/main/gui/widgets",
+    "//src/main/file_system",
+    "//src/main/date"
   ],
   visibility = ["//visibility:public"]
 )

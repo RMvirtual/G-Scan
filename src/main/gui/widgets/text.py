@@ -1,5 +1,5 @@
-import gui.widgets.fonts as fonts
-from gui.widgets.widget import Attributes
+import src.main.gui.widgets.fonts as fonts
+from src.main.gui.widgets.widget import Attributes
 from wx import BORDER_NONE, BORDER_SIMPLE, TE_MULTILINE, TE_READONLY, \
     TextCtrl, StaticText
 

@@ -1,6 +1,6 @@
-from gui.widgets.panel import Panel
-import gui.widgets.fonts as fonts
-from gui.widgets.widget import Attributes
+from src.main.gui.widgets.panel import Panel
+import src.main.gui.widgets.fonts as fonts
+from src.main.gui.widgets.widget import Attributes
 from wx import CheckBox as wxCheckBox
 
 class CheckBox(wxCheckBox):

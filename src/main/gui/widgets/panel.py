@@ -1,4 +1,4 @@
-from gui.widgets.widget import Attributes
+from src.main.gui.widgets.widget import Attributes
 from wx import Panel as wxPanel
 
 class Panel(wxPanel):

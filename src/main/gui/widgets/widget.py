@@ -1,7 +1,8 @@
-class Widget():
+class Widget:
     """A class for a base widget."""
 
-class Attributes():
+
+class Attributes:
     """A class acting as a data structure for holding widget attributes
     to be used with a widget's constructor."""
 
