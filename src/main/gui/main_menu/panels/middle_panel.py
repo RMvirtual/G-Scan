@@ -1,9 +1,10 @@
-from gui.widgets.panel import Panel
-from gui.widgets.buttons import Button, ImageButton
-from gui.widgets.text import TextLabel
-from gui.widgets.widget import Attributes
-import app.file_system as file_system
-import gui.widgets.fonts as fonts
+from src.main.gui.widgets.panel import Panel
+from src.main.gui.widgets.buttons import Button, ImageButton
+from src.main.gui.widgets.text import TextLabel
+from src.main.gui.widgets.widget import Attributes
+import src.main.file_system.file_system as file_system
+import src.main.gui.widgets.fonts as fonts
+
 
 class MiddlePanel(Panel):
     """Middle panel for the main menu GUI."""
@@ -18,7 +19,7 @@ class MiddlePanel(Panel):
         )
 
         self.__create_toolbar_widgets()
-        
+
     def __create_toolbar_widgets(self):
         """Creates widgets related to the middle toolbar."""
 
@@ -38,7 +39,7 @@ class MiddlePanel(Panel):
         """Creates the attributes data required for the start button."""
 
         attributes = self.create_empty_attributes()
-        
+
         attributes.text = "Start"
         attributes.size = (60, 25)
         attributes.position = (0, 0)
@@ -63,7 +64,7 @@ class MiddlePanel(Panel):
         attributes.size = (180, 14)
         attributes.position = (155, 3)
 
-        return attributes 
+        return attributes
 
     def __create_michelin_man_button(self):
         """Creates the michelin man button."""
@@ -77,8 +78,8 @@ class MiddlePanel(Panel):
         """
 
         michelin_man_logo_path = (
-            file_system.resources_directory()
-            + "images\\michelin_logo.jpg"
+                file_system.resources_directory()
+                + "images\\michelin_logo.jpg"
         )
 
         attributes = self.create_empty_attributes()
@@ -131,7 +132,7 @@ class MiddlePanel(Panel):
     def set_quick_mode_hint_text(self, text):
         """Overwrites the text found in the quick mode hint text
         box."""
-        
+
         self.__quick_mode_preview_text.SetLabel(text)
 
     def set_start_button_function(self, callback_function):

@@ -1,7 +1,8 @@
-from gui.widgets.frame import Frame
-from gui.mainmenu.panels.top_panel import TopPanel
-from gui.mainmenu.panels.middle_panel import MiddlePanel
-from gui.mainmenu.panels.bottom_panel import BottomPanel
+from src.main.gui.widgets.frame import Frame
+from src.main.gui.main_menu.panels.top_panel import TopPanel
+from src.main.gui.main_menu.panels.middle_panel import MiddlePanel
+from src.main.gui.main_menu.panels.bottom_panel import BottomPanel
+
 
 class MainMenu(Frame):
     """GUI for running the main application."""
@@ -18,10 +19,10 @@ class MainMenu(Frame):
 
     def __create_widgets(self):
         """Creates the widgets required for the GUI."""
-       
+
         super().__init__((870, 575), "G-Scan")
         self.__create_panels()
-        
+
         self.Show()
 
     def __create_panels(self):
@@ -38,24 +39,24 @@ class MainMenu(Frame):
         which button has been selected."""
 
         return "POD"
-    
+
     def get_user_input(self):
         """Gets the value of the user's input."""
 
         return "GR191000000"
-   
+
     def get_autoprocessing_mode(self):
         """Gets the current autoprocessing mode setting (True or
         False)"""
 
         return True
-    
+
     def clear_user_input(self):
         """Clears the user's input from the user input text entry
         box."""
 
         return True
-    
+
     def get_multi_page_handling_mode(self):
         """Returns the current setting of multi-page handling."""
 
@@ -69,7 +70,7 @@ class MainMenu(Frame):
     def set_quick_mode_hint_text(self, text):
         """Overwrites the text found in the quick mode hint text
         box."""
-        
+
         self.__middle_panel.set_quick_mode_hint_text(text)
 
     def get_main_application(self):

@@ -1,5 +1,6 @@
-from gui.widgets.panel import Panel
-from gui.widgets.text import TextConsole
+from src.main.gui.widgets.panel import Panel
+from src.main.gui.widgets.text import TextConsole
+
 
 class BottomPanel(Panel):
     """Bottom panel for the main menu GUI."""
@@ -12,7 +13,7 @@ class BottomPanel(Panel):
             size=(840, 230),
             position=(10, 295)
         )
-        
+
         self.__create_text_console()
 
     def __create_text_console(self):

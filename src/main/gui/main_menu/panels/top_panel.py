@@ -1,6 +1,8 @@
-from gui.widgets.panel import Panel
-from gui.mainmenu.panels.subpanels.file_panel import FilePanel
-from gui.mainmenu.panels.subpanels.user_settings_panel import UserSettingsPanel
+from src.main.gui.widgets.panel import Panel
+from src.main.gui.main_menu.panels.subpanels.file_panel import FilePanel
+from src.main.gui.main_menu.panels.subpanels.user_settings_panel import (
+    UserSettingsPanel)
+
 
 class TopPanel(Panel):
     """A class for the top panel of the main menu GUI."""

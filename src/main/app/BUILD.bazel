@@ -1,12 +1,11 @@
-load("@rules_python//python:defs.bzl", "py_library")
-load("@python_imports//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
 
-py_library(
+py_binary(
   name = "app",
-  srcs = glob(["*.py"]),
+  main = "driver.py",
+  srcs = glob(["driver.py"]),
   deps = [
-    requirement("wxPython"),
-    "@rules_python//python/runfiles"
+    "//src/main/gui/main_menu",
   ],
   data = ["//data:user_settings.dat"],
   visibility = ["//visibility:public"]

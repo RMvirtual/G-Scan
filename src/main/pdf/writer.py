@@ -46,8 +46,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
             image.rotate(270)
 
 
-def document_splitter(master_application, file, scan_dir,
-                      multi_page_handling):
+def document_splitter(master_application, file, scan_dir, multi_page_handling):
     file_name, file_extension = os.path.splitext(file)
     split_file_list = [file]
 

@@ -1,7 +1,7 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 
-class PDFViewer():
+
+class PDFViewer:
     """A class representing a PDF Viewer window that runs
     in Google Chrome."""
 

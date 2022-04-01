@@ -1,1 +1,1 @@
-# bazel run //src/main/cpp/app
+bazel run //src/main/app

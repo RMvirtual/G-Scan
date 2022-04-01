@@ -7,11 +7,12 @@ import src.main.file_names.name_scheme as file_naming
 from src.main.paperwork.writer.customer_paperwork import (
     CustomerPaperworkPDFWriter)
 
+
 class TestCustomerPaperworkPDFWriter(unittest.TestCase):
     """A class for testing the PDF writer module."""
 
-    def check_if_paperwork_pages_are_identical(self, correct_image: Image,
-            result_file_path: str):
+    def check_if_paperwork_pages_are_identical(
+            self, correct_image: Image, result_file_path: str):
         with Image(filename=result_file_path, resolution=150) as expected:
             difference = correct_image.compare(
                 expected, metric="root_mean_square")
@@ -19,14 +20,14 @@ class TestCustomerPaperworkPDFWriter(unittest.TestCase):
             self.assertLess(difference[1], 0.01)
 
     def get_folder_from_test_resources(self, folder):
-        test_dir = file_system.test_resources_directory()        
-
+        test_dir = file_system.test_resources_directory()
         full_path = test_dir + "/" + folder
 
         return full_path
 
     def teardown_customer_paperwork_pdf(self, path):
         os.remove(path)
+
 
 class TestSinglePagePDFCustomerPaperworkWriter(
     TestCustomerPaperworkPDFWriter):
@@ -39,13 +40,13 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         file_name_attributes.file_extension = ".pdf"
         file_name_attributes.page_number = 1
         file_name_attributes.job_reference = job_ref
-        
+
         return file_name_attributes
 
-    def setup_customer_paperwork_pdf(self) -> dict:       
+    def setup_customer_paperwork_pdf(self) -> dict:
         original_page = file_system.test_resources_directory() + (
             "/correct_files/p1testfile1.pdf")
-        
+
         scans_directory = file_system.test_resources_directory() + "/scans"
         shutil.copy(original_page, scans_directory)
 
@@ -77,8 +78,9 @@ class TestSinglePagePDFCustomerPaperworkWriter(
 
         self.teardown_customer_paperwork_pdf(output_path)
 
+
 class TestSinglePagePNGCustomerPaperworkWriter(
-        TestCustomerPaperworkPDFWriter):
+    TestCustomerPaperworkPDFWriter):
     def setup_file_name_attributes(self, job_ref):
         file_name_attributes = file_naming.FileNamingAttributes()
 
@@ -87,7 +89,7 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         file_name_attributes.file_extension = ".pdf"
         file_name_attributes.page_number = 1
         file_name_attributes.job_reference = job_ref
-        
+
         return file_name_attributes
 
     def setup_customer_paperwork_png(self) -> dict:
@@ -97,8 +99,8 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         scans_directory = file_system.test_resources_directory() + (
             "/scans")
 
-        with Image(filename = page_to_copy, resolution = 300) as image:
-            image.save(filename = str(scans_directory + "/p1testfile1.png"))
+        with Image(filename=page_to_copy, resolution=300) as image:
+            image.save(filename=str(scans_directory + "/p1testfile1.png"))
 
         dict = {
             "original": page_to_copy,
@@ -126,6 +128,7 @@ class TestSinglePagePNGCustomerPaperworkWriter(
 
         self.check_if_paperwork_pages_are_identical(correct_image, output_path)
         self.teardown_customer_paperwork_pdf(output_path)
+
 
 class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
     def setup_multiple_page_pdf(self):
@@ -156,8 +159,8 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
         writer.write_to_file(scan_file, output_path, job_ref)
 
         correct_pdf = (
-            file_system.test_resources_directory() +
-            "/correct_files/test_file_2_with_5_pages_with_barcodes.pdf"
+                file_system.test_resources_directory() +
+                "/correct_files/test_file_2_with_5_pages_with_barcodes.pdf"
         )
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
@@ -166,6 +169,7 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
             correct_image, output_path)
 
         self.teardown_customer_paperwork_pdf(output_path)
+
 
 if __name__ == '__main__':
     unittest.main()

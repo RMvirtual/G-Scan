@@ -1,6 +1,9 @@
-from app.main_application import MainApplication
+from src.main.gui.main_menu.main_menu import MainMenu
+
 
 def main():
-    mainApplication = MainApplication()
+    main_menu = MainMenu()
 
-main()
+
+if __name__ == '__main__':
+    main()
