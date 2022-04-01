@@ -1,4 +1,5 @@
 from src.main.gui.widgets.frame import Frame
+from src.main.gui.image_viewer.panels.input_panel import InputPanel
 import wx
 
 
@@ -9,19 +10,4 @@ class ImageViewer(Frame):
         self.Show()
 
     def _initialise_widgets(self) -> None:
-        self.SetBackgroundColour("WHITE")
-
-        self._input_panel = wx.Panel(parent=self)
-
-        self._reference_input_label = wx.StaticText(
-            parent=self._input_panel, label="Please enter job reference:")
-
-        self._job_reference_input = wx.TextCtrl(parent=self._input_panel)
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self._reference_input_label)
-        sizer.Add(self._job_reference_input)
-
-        sizer.SetSizeHints(self._input_panel)
-        self._input_panel.SetSizer(sizer)
-        self.SetSizer(sizer)
+        self._input_panel = InputPanel(self)
