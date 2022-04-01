@@ -1,0 +1,27 @@
+import wx
+from src.main.images.aspect_ratios import scaleDimensionsToImageAspectRatio
+
+
+def toBitmap(image_path: str) -> wx.Bitmap:
+    return wx.Bitmap(toImage(image_path))
+
+
+def toImage(image_path: str) -> wx.Image:
+    return wx.Image(name=image_path)
+
+
+def toScaledImage(image_path: str, width: int, height: int) -> wx.Image:
+    image = toImage(image_path)
+
+    return _scaledImage(image, width, height)
+
+
+def toScaledImagePreserveAspectRatio(image: wx.Image, width: int, height: int):
+    width, height = scaleDimensionsToImageAspectRatio(image, width, height)
+
+    return _scaledImage(image, width, height)
+
+
+def _scaledImage(image: wx.Image, width: int, height: int) -> wx.Image:
+    return image.Scale(
+        width=width, height=height, quality=wx.IMAGE_QUALITY_HIGH)
