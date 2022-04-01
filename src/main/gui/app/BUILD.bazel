@@ -2,12 +2,10 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_imports//:requirements.bzl", "requirement")
 
 py_library(
-  name = "gui",
+  name = "app",
   srcs = glob(["*.py"]),
   deps = [
-    "//src/main/gui/app",
-    "//src/main/gui/main_menu",
-    "//src/main/gui/widgets",
+    requirement("wxPython")
   ],
   visibility = ["//visibility:public"]
 )

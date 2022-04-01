@@ -39,7 +39,7 @@ def create_new_user(user_name, user_settings_data):
     return new_user
 
 class User(object):
-    """A user of the application. Contains their default settings and
+    """A user of the app. Contains their default settings and
     directory paths.
     """
 

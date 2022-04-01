@@ -27,7 +27,7 @@ class Panel(wxPanel):
         return attributes
 
     def get_main_application(self):
-        """Gets the main application associated with the frame
+        """Gets the main app associated with the frame
         containing this object.
         """
 

@@ -5,7 +5,7 @@ from src.main.gui.main_menu.panels.bottom_panel import BottomPanel
 
 
 class MainMenu(Frame):
-    """GUI for running the main application."""
+    """GUI for running the main app."""
 
     def __init__(self):
         """Constructor method."""
@@ -74,7 +74,7 @@ class MainMenu(Frame):
         self.__middle_panel.set_quick_mode_hint_text(text)
 
     def get_main_application(self):
-        """Gets the main application responsible for running the main
+        """Gets the main app responsible for running the main
         menu.
         """
 

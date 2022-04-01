@@ -869,7 +869,7 @@ class Controller():
         self.get_file(file_index, file_list)
 
 class MainApplication():
-    """A class for the main application of the program to run."""
+    """A class for the main app of the program to run."""
 
     def __init__(self):
         """Constructor method."""
