@@ -11,6 +11,8 @@ class ImageViewer(Frame):
         self._initialise_widgets()
         self.Show()
 
+        self.Bind(wx.EVT_SIZE, self.on_resize)
+
     def _initialise_widgets(self) -> None:
         self._input_panel = InputPanel(self)
         self._image_panel = ImagePanel(self)
@@ -30,3 +32,6 @@ class ImageViewer(Frame):
     def set_image(self, image_path: str):
         self._image_panel.setImage(image_path)
 
+    def on_resize(self, event: wx.Event):
+        self._image_panel.resize_image()
+        event.Skip()
