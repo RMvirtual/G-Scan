@@ -8,8 +8,8 @@ class NavigationPanel(wx.Panel):
         self._exit_button = wx.Button(parent=self, label="Exit")
 
         self._sizer = wx.BoxSizer(wx.VERTICAL)
-
-        self._sizer.Add(self._exit_button, 0, wx.ALIGN_CENTRE_HORIZONTAL)
+        self._sizer.Add(
+            self._exit_button, 0, wx.ALIGN_CENTRE_HORIZONTAL)
 
         self._sizer.SetSizeHints(self)
         self.SetSizer(self._sizer)

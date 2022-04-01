@@ -10,3 +10,9 @@ class ImagePanel(wx.Panel):
         self._sizer.Add(self._image, 0, wx.SHAPED)
         self._sizer.SetSizeHints(self)
         self.SetSizer(self._sizer)
+
+    def setImage(self, image_path: str) -> None:
+        image_bitmap = wx.Bitmap(
+            wx.Image(image_path, wx.BITMAP_TYPE_ANY))
+
+        self._image.SetBitmap(image_bitmap)

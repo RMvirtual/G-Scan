@@ -23,3 +23,7 @@ class ImageViewer(Frame):
 
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
+
+    def set_image(self, image_path: str):
+        self._image_panel.setImage(image_path)
+

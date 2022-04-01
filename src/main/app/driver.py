@@ -9,6 +9,9 @@ def main():
     # _main_menu = MainMenu()
     # _settings_menu = SettingsMenu()
     _image_viewer = ImageViewer((200, 200))
+    _image_viewer.set_image(
+        "C:/Users/rmvir/Desktop/gscan/resources/images/g-scan_logo.png")
+
     gui_app.run()
 
 
