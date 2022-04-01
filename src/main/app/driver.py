@@ -3,6 +3,7 @@ from src.main.gui.main_menu.main_menu import MainMenu
 from src.main.gui.settings.settings_menu import SettingsMenu
 from src.main.gui.image_viewer.viewer import ImageViewer
 
+
 def main():
     gui_app = GuiApplication()
     # _main_menu = MainMenu()

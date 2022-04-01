@@ -15,12 +15,12 @@ class InputPanel(wx.Panel):
         self._skip_button = wx.Button(parent=self, label="Skip")
         self._split_button = wx.Button(parent=self, label="Split")
 
-        sizer = wx.FlexGridSizer(rows=1, cols=5, vgap=0, hgap=5)
-        sizer.Add(self._reference_input_label)
-        sizer.Add(self._job_reference_input)
-        sizer.Add(self._submit_button)
-        sizer.Add(self._skip_button)
-        sizer.Add(self._split_button)
+        sizer = wx.GridBagSizer(vgap=0, hgap=0)
+        sizer.Add(self._reference_input_label, pos=(0, 0), span=(1, 4))
+        sizer.Add(self._job_reference_input, pos=(1, 0))
+        sizer.Add(self._submit_button, pos=(1, 1))
+        sizer.Add(self._skip_button, pos=(1, 2))
+        sizer.Add(self._split_button, pos=(1, 3))
 
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
