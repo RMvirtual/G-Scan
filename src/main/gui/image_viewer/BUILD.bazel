@@ -2,13 +2,9 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_imports//:requirements.bzl", "requirement")
 
 py_library(
-  name = "gui",
+  name = "image_viewer",
   srcs = glob(["*.py"]),
   deps = [
-    "//src/main/gui/app",
-    "//src/main/gui/main_menu",
-    "//src/main/gui/settings",
-    "//src/main/gui/image_viewer",
     "//src/main/gui/widgets",
   ],
   visibility = ["//visibility:public"]

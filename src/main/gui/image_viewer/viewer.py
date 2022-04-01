@@ -1,12 +1,11 @@
-from wx import Frame as wxFrame
+from src.main.gui.widgets.frame import Frame
 
 
-class ImageViewer(wxFrame):
+class ImageViewer(Frame):
     def __init__(self, size):
-        super().__init__(None, size=size, title="Paperwork Viewer")
+        super().__init__(size=size, title="Paperwork Viewer")
         self._initialise_widgets()
 
     def _initialise_widgets(self) -> None:
         self.SetBackgroundColour("WHITE")
-
 
