@@ -5,7 +5,7 @@ py_library(
   name = "panels",
   srcs = glob(["*.py"]),
   deps = [
-    requirement("wxPython")
+    "//src/main/gui/widgets"
   ],
   visibility = ["//visibility:public"]
 )

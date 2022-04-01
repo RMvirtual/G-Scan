@@ -1,67 +1,44 @@
-from gui.widgets.panel import Panel
-from gui.widgets.text import TextLabel, TextEntryBox
-from gui.widgets.buttons import Button
-from gui.widgets.widget import Attributes
+from src.main.gui.widgets.panel import Panel
+from src.main.gui.widgets.text import TextLabel, TextEntryBox
+from src.main.gui.widgets.buttons import Button
+from src.main.gui.widgets.widget import Attributes
+
 
 class TextValuesPanel(Panel):
-    """A class representing the text values panel in the gettings
-    window GUI."""
-
     def __init__(self, frame):
-        """Creates a new text values panel."""
-
         super().__init__(frame, (860, 125), (10, 10))
         self.__create_all_widgets()
 
     def __create_all_widgets(self):
-        """Creates all the widgets in the current panel."""
-
         self.__create_user_name_widgets()
         self.__create_scan_directory_widgets()
         self.__create_destination_directory_widgets()
         self.__create_backup_directory_widgets()
 
     def __create_user_name_widgets(self):
-        """Creates widgets related to the name of the current user."""
-
         self.__create_user_name_label()
         self.__create_user_name_entry_box()
 
     def __create_scan_directory_widgets(self):
-        """Creates widgets related to the current specified
-        scan directory."""
-
         self.__create_scan_directory_label()
         self.__create_scan_directory_entry_box()
         self.__create_browse_scan_directory_button()
 
     def __create_destination_directory_widgets(self):
-        """Creates widgets related to the current specified
-        destination directory."""
-
         self.__create_destination_directory_label()
         self.__create_destination_directory_entry_box()
         self.__create_browse_destination_directory_button()
 
     def __create_backup_directory_widgets(self):
-        """Creates widgets related to the current specified backup
-        directory."""
-
         self.__create_backup_directory_label()
         self.__create_backup_directory_entry_box()
         self.__create_browse_backup_directory_button()
 
     def __create_user_name_label(self) -> None:
-        """Creates the user name label."""
-
         attributes = self.__create_user_name_label_attributes()
         self.__user_name_label = TextLabel.from_attributes(attributes)
 
     def __create_user_name_label_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the user
-        name label.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = "User Name:"
@@ -71,16 +48,10 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_user_name_entry_box(self) -> None:
-        """Creates the user name entry box."""
-
         attributes = self.__create_user_name_entry_box_attributes()
         self.__user_name_entry_box = TextEntryBox.from_attributes(attributes)
 
     def __create_user_name_entry_box_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the user
-        name entry box.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = ""
@@ -90,16 +61,10 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_scan_directory_label(self) -> None:
-        """Creates the scan directory label."""
-
         attributes = self.__create_scan_directory_label_attributes()
         self.__scan_directory_label = TextLabel.from_attributes(attributes)
 
     def __create_scan_directory_label_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the scan
-        directory label.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = "Scan Directory:"
@@ -109,18 +74,12 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_scan_directory_entry_box(self) -> None:
-        """Creates the scan directory entry box."""
-
         attributes = self.__create_scan_directory_entry_box_attributes()
         
         self.__scan_directory_entry_box = (
             TextEntryBox.from_attributes(attributes))
 
     def __create_scan_directory_entry_box_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the scan
-        directory entry box.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = ""
@@ -130,8 +89,6 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_browse_scan_directory_button(self) -> None:
-        """Creates the scan directory file dialog button."""
-
         attributes = (
             self.__create_browse_scan_directory_button_attributes())
         
@@ -139,10 +96,6 @@ class TextValuesPanel(Panel):
             Button.from_attributes(attributes))
 
     def __create_browse_scan_directory_button_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the scan
-        directory file dialog button.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = "..."
@@ -152,16 +105,10 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_destination_directory_label(self) -> None:
-        """Creates the destination directory label."""
-
         attributes = self.__create_destination_directory_label_attributes()
         self.__destination_directory_label = TextLabel.from_attributes(attributes)
 
     def __create_destination_directory_label_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the
-        destination directory label.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = "Destination Directory:"
@@ -171,18 +118,12 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_destination_directory_entry_box(self) -> None:
-        """Creates the destination directory entry box."""
-
         attributes = (
             self.__create_destination_directory_entry_box_attributes())
 
         self.__destination_directory_entry_box = TextEntryBox.from_attributes(attributes)
 
     def __create_destination_directory_entry_box_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the
-        destination directory entry box.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = ""
@@ -192,8 +133,6 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_browse_destination_directory_button(self) -> None:
-        """Creates the destination directory file dialog button."""
-
         attributes = (
             self.__create_browse_destination_directory_button_attributes())
         
@@ -202,10 +141,6 @@ class TextValuesPanel(Panel):
 
     def __create_browse_destination_directory_button_attributes(self) \
             -> Attributes:
-        """Creates the attributes required to instantiate the
-        destination directory file dialog button.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = "..."
@@ -215,16 +150,10 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_backup_directory_label(self) -> None:
-        """Creates the backup directory label."""
-
         attributes = self.__create_backup_directory_label_attributes()
         self.__backup_directory_label = TextLabel.from_attributes(attributes)
 
     def __create_backup_directory_label_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the backup
-        directory label.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = "Backup Directory:"
@@ -234,18 +163,12 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_backup_directory_entry_box(self) -> None:
-        """Creates the backup directory entry box."""
-
         attributes = self.__create_backup_directory_entry_box_attributes()
         
         self.__backup_directory_entry_box = (
             TextEntryBox.from_attributes(attributes))
 
     def __create_backup_directory_entry_box_attributes(self) -> Attributes:
-        """Creates the attributes required to instantiate the backup
-        directory entry box.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = ""
@@ -255,8 +178,6 @@ class TextValuesPanel(Panel):
         return attributes
 
     def __create_browse_backup_directory_button(self) -> None:
-        """Creates the browse backup directory button."""
-
         attributes = (
             self.__create_browse_backup_directory_button_attributes())
         
@@ -265,10 +186,6 @@ class TextValuesPanel(Panel):
 
     def __create_browse_backup_directory_button_attributes(self) \
             -> Attributes:
-        """Creates the attributes required to instantiate the backup
-        directory file dialog button.
-        """
-
         attributes = self.create_empty_attributes()
 
         attributes.text = "..."
@@ -278,63 +195,38 @@ class TextValuesPanel(Panel):
         return attributes
 
     def get_user_name(self):
-        """Gets the user name."""
-
         self.__user_name_entry_box.get_value()
 
     def get_scan_directory(self):
-        """Gets the scan directory text field."""
-
         return self.__scan_directory_entry_box.GetValue()
 
     def get_destination_directory(self):
-        """Gets the destination directory text field."""
-
         return self.__destination_directory_entry_box.get_value()
 
     def get_backup_directory(self):
-        """Gets the backup directory text field."""
-
         return self.__backup_directory_entry_box.get_value()
 
     def set_user_name(self, user_name):
-        """Sets the user name."""
-
         self.__user_name_entry_box.SetValue(user_name)
 
     def set_scan_directory(self, directory):
-        """Sets the scan directory text field."""
-
         self.__scan_directory_entry_box.SetValue(directory)
 
     def set_destination_directory(self, directory):
-        """Sets the destination directory text field."""
-
         self.__destination_directory_entry_box.SetValue(directory)
 
     def set_backup_directory(self, directory):
-        """Sets the backup directory text field."""
-
         self.__backup_directory_entry_box.SetValue(directory)
 
     def set_browse_backup_directory_button_function(self, callback_function):
-        """Sets the function called when the browse button is clicked
-        on the backup directory."""
-
         self.__browse_backup_directory_button.bind_function_to_click(
             callback_function)
 
     def set_browse_scan_directory_button_function(self, callback_function):
-        """Sets the function called when the browse button is clicked
-        on the scan directory."""
-
         self.__browse_scan_directory_button.bind_function_to_click(
             callback_function)
 
-    def set_browse_destination_directory_button_function(self,
-            callback_function):
-        """Sets the function called when the browse button is clicked
-        on the destination directory."""
-
+    def set_browse_destination_directory_button_function(
+            self, callback_function) -> None:
         self.__browse_destination_directory_button.bind_function_to_click(
             callback_function)
