@@ -16,10 +16,13 @@ def toScaledImage(image_path: str, width: int, height: int) -> wx.Image:
     return _scaledImage(image, width, height)
 
 
-def toScaledImagePreserveAspectRatio(image: wx.Image, width: int, height: int):
-    width, height = scaleDimensionsToImageAspectRatio(image, width, height)
+def toScaledImagePreserveAspectRatio(image_path: str, width: int, height: int):
+    image = toImage(image_path)
 
-    return _scaledImage(image, width, height)
+    width, height = scaleDimensionsToImageAspectRatio(
+        image, width, height)
+
+    return toScaledImage(image_path, width, height)
 
 
 def _scaledImage(image: wx.Image, width: int, height: int) -> wx.Image:

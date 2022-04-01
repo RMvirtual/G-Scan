@@ -18,7 +18,7 @@ class ImageViewer(Frame):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self._input_panel, 0, wx.ALIGN_CENTRE_HORIZONTAL)
-        sizer.Add(self._image_panel, 0, wx.ALIGN_CENTRE_HORIZONTAL)
+        sizer.Add(self._image_panel, 0, wx.EXPAND)
         sizer.Add(self._navigation_panel, 0, wx.ALIGN_CENTRE_HORIZONTAL)
 
         sizer.SetSizeHints(self)
