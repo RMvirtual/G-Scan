@@ -15,6 +15,7 @@ class ImagePanel(wx.Panel):
         self._sizer.Add(self._image, 0, wx.EXPAND)
         self._sizer.SetSizeHints(self)
         self.SetSizer(self._sizer)
+        self.SetBackgroundColour(colour=wx.RED)
 
     def setImage(self, image_path: str) -> None:
         size = self.GetSize()

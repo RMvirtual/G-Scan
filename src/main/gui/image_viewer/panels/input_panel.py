@@ -24,3 +24,5 @@ class InputPanel(wx.Panel):
 
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
+
+        self.SetBackgroundColour(colour=wx.YELLOW)

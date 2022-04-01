@@ -16,13 +16,15 @@ class ImageViewer(Frame):
         self._image_panel = ImagePanel(self)
         self._navigation_panel = NavigationPanel(self)
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self._input_panel, 0, wx.ALIGN_CENTRE_HORIZONTAL)
-        sizer.Add(self._image_panel, 0, wx.EXPAND)
-        sizer.Add(self._navigation_panel, 0, wx.ALIGN_CENTRE_HORIZONTAL)
+        sizer = wx.GridBagSizer(vgap=0, hgap=0)
+
+        sizer.Add(self._input_panel, pos=(0, 0), flag=wx.ALIGN_TOP)
+        sizer.Add(self._image_panel, pos=(1, 0), flag=wx.EXPAND)
+        sizer.Add(self._navigation_panel, pos=(2, 0), flag=wx.ALIGN_BOTTOM)
 
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
+        self.SetBackgroundColour(colour=wx.BLUE)
 
     def set_image(self, image_path: str):
         self._image_panel.setImage(image_path)
