@@ -78,9 +78,7 @@ class MiddlePanel(Panel):
         """
 
         michelin_man_logo_path = (
-                file_system.resources_directory()
-                + "images\\michelin_logo.jpg"
-        )
+            file_system.image_resources_directory() + "\\michelin_logo.jpg")
 
         attributes = self.create_empty_attributes()
 

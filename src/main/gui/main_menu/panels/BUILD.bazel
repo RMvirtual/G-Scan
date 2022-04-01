@@ -5,6 +5,7 @@ py_library(
   name = "panels",
   srcs = glob(["*.py"]),
   deps = [
+    "//src/main/file_system",
     "//src/main/gui/widgets",
     "//src/main/gui/main_menu/panels/subpanels"
   ],

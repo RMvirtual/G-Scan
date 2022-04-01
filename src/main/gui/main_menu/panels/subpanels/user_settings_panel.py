@@ -1,4 +1,4 @@
-import src.main.date.date as date
+import src.main.date.calendar as date
 
 from src.main.gui.widgets.checkboxes import CheckBox
 from src.main.gui.widgets.dropdownboxes import DropdownBox
@@ -185,9 +185,9 @@ class UserSettingsPanel(Panel):
         self.__months_dropdown_box = DropdownBox.from_attributes(attributes)
 
     def __create_month_options_dropdown_box_attributes(self) -> Attributes:
-        month_options = date.get_month_names_and_numbers()
-        current_month = date.get_current_month()
-        start_option = current_month.get_month_name_and_number_string()
+        month_options = date.month_names_and_numbers()
+        current_month = date.current_month()
+        start_option = current_month.month_name_hyphen_number()
 
         attributes = self.create_empty_attributes()
 
@@ -203,8 +203,8 @@ class UserSettingsPanel(Panel):
         self.__years_dropdown_box = DropdownBox.from_attributes(attributes)
 
     def __create_year_options_dropdown_box_attributes(self) -> Attributes:
-        year_options = date.get_years_as_strings()
-        current_year = str(date.get_current_year())
+        year_options = date.years_as_strings()
+        current_year = str(date.current_year())
 
         attributes = self.create_empty_attributes()
 

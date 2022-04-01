@@ -32,7 +32,7 @@ class FilePanel(Panel):
 
     def __create_logo_widget(self):
         gscan_logo_path = (
-                filesystem.resources_directory() + "images\\g-scan_logo.png")
+                filesystem.image_resources_directory() + "\\g-scan_logo.png")
 
         self.__logo_image = Image(self, gscan_logo_path)
 
