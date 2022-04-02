@@ -4,14 +4,19 @@ import PyPDF2
 import src.main.barcodes.reader as barcode_reader
 
 
-class PdfReader(PyPDF2.PdfFileReader):
-    def __init__(self, stream):
-        super().__init__(stream)
-        self._stream = stream
+class PdfReader:
+    def __init__(self, source: str):
+        with open(file=source, mode="rb") as pdf_stream:
+            pdf_reader = PyPDF2.PdfFileReader(stream=pdf_stream)
+            self._pages = []
+
+            number_of_pages = pdf_reader.getNumPages()
+
+            for page_no in range(number_of_pages):
+                self._pages.append(pdf_reader.getPage(page_no))
 
     def number_of_pages(self) -> int:
-        return self.getNumPages()
-
+        return len(self._pages)
 
 def read_barcodes(file_name: str, directory: str):
     barcode_ref_list = []

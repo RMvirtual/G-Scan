@@ -7,15 +7,15 @@ class PdfExtractor():
         self.__stream = stream
 
     def extract_page(self, page_number: int, output_path: str) -> None:
-        page = self.__read_page(page_number)
-        self.__page_to_pdf(page, output_path)
+        page = self._read_page(page_number)
+        self._page_to_pdf(page, output_path)
 
-    def __read_page(self, page_number) -> PageObject:
+    def _read_page(self, page_number) -> PageObject:
         pdf_reader = PdfReader(self.__stream)
         
         return pdf_reader.getPage(page_number)
 
-    def __page_to_pdf(self, page_object, output_path) -> None:
+    def _page_to_pdf(self, page_object, output_path) -> None:
         page_writer = PdfWriter()
         page_writer.addPage(page_object)
 

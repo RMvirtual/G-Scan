@@ -5,9 +5,8 @@ py_library(
   name = "pdf",
   srcs = glob(["*.py"]),
   deps = [
-    "//src/main/app",
+    "//src/main/file_system",
     "//src/main/barcodes",
-    "//src/main/images"
   ],
   visibility = ["//visibility:public"]
 )

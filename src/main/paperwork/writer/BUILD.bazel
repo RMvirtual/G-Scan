@@ -7,7 +7,8 @@ py_library(
   deps = [
     "//src/main/file_system",
     "//src/main/file_names",
-    "//src/main/pdf"
+    "//src/main/pdf",
+    "//src/main/images"
   ],
   visibility = ["//visibility:public"]
 )

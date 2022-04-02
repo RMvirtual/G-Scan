@@ -6,7 +6,6 @@ py_library(
   srcs = glob(["*.py"]),
   deps = [
     "//src/main/gui/image_viewer/panels",
-    "//src/main/gui/widgets",
   ],
   visibility = ["//visibility:public"]
 )

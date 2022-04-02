@@ -5,6 +5,7 @@ py_library(
   name = "images",
   srcs = glob(["*.py"]),
   deps = [
+    "//src/main/pdf"
   ],
   visibility = ["//visibility:public"]
 )
