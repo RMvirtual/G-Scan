@@ -7,7 +7,7 @@ class TestBarcodeReader(unittest.TestCase):
     def test_should_read_barcode(self):
         pdf_file = (
             file_system.test_resources_directory() +
-            "/correct_files/p1testfile1_pdf_with_barcode.pdf"
+            "/correct_files/one_page_with_barcode.pdf"
         )
 
         barcodes = read_job_references(pdf_file)

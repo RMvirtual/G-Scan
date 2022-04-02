@@ -1,5 +1,3 @@
-from typing import List
-
 import PIL.Image
 from pyzbar.pyzbar import decode
 import re

@@ -45,14 +45,14 @@ class TestSinglePagePDFCustomerPaperworkWriter(
 
     def setup_customer_paperwork_pdf(self) -> dict:
         original_page = file_system.test_resources_directory() + (
-            "/correct_files/p1testfile1.pdf")
+            "/correct_files/one_page.pdf")
 
         scans_directory = file_system.test_resources_directory() + "/scans"
         shutil.copy(original_page, scans_directory)
 
         dict = {
             "original": original_page,
-            "scan": scans_directory + "/p1testfile1.pdf"
+            "scan": scans_directory + "/one_page.pdf"
         }
 
         return dict
@@ -69,7 +69,7 @@ class TestSinglePagePDFCustomerPaperworkWriter(
         writer.write_to_file(scan_file, output_path, job_ref)
 
         correct_pdf = file_system.test_resources_directory() + (
-            "/correct_files/p1testfile1_pdf_with_barcode.pdf")
+            "/correct_files/one_page_with_barcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 
@@ -94,17 +94,17 @@ class TestSinglePagePNGCustomerPaperworkWriter(
 
     def setup_customer_paperwork_png(self) -> dict:
         page_to_copy = file_system.test_resources_directory() + (
-            "/correct_files/p1testfile1.png")
+            "/correct_files/one_page.png")
 
         scans_directory = file_system.test_resources_directory() + (
             "/scans")
 
         with Image(filename=page_to_copy, resolution=300) as image:
-            image.save(filename=str(scans_directory + "/p1testfile1.png"))
+            image.save(filename=str(scans_directory + "/one_page.png"))
 
         dict = {
             "original": page_to_copy,
-            "scan": scans_directory + "/p1testfile1.png"
+            "scan": scans_directory + "/one_page.png"
         }
 
         return dict
@@ -122,7 +122,7 @@ class TestSinglePagePNGCustomerPaperworkWriter(
         writer.write_to_file(scan_file, output_path, job_ref)
 
         correct_pdf = file_system.test_resources_directory() + (
-            "/correct_files/p1testfile1_png_with_barcode.pdf")
+            "/correct_files/one_page_with_barcode.pdf")
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
 

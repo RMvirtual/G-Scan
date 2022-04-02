@@ -7,7 +7,7 @@ class TestPdfReader(unittest.TestCase):
     def test_should_get_number_of_pages(self):
         pdf_file = (
             file_system.test_resources_directory() +
-            "/correct_files/p1testfile1.pdf"
+            "/correct_files/one_page.pdf"
         )
 
         reader = PdfReader(source=pdf_file)
