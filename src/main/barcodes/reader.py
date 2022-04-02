@@ -1,3 +1,5 @@
+from typing import List
+
 import PIL.Image
 from pyzbar.pyzbar import decode
 import re
@@ -7,14 +9,10 @@ from src.main.pdf.reader import PdfReader
 import PyPDF2
 
 
-def read_job_references(source: str) -> tuple[str]:
-    if source.endswith(".pdf"):
-        job_references = _read_pdf(source)
+def read_job_references(source: str) -> list[str]:
+    read_method = _read_pdf if source.endswith(".pdf") else _read_image
 
-    else:
-        job_references = _read_image(source)
-
-    return job_references
+    return read_method(source)
 
 
 def _read_pdf(source: str):
@@ -27,13 +25,13 @@ def _read_pdf(source: str):
         temp_file_writer = PyPDF2.PdfFileWriter()
         temp_file_writer.addPage(page)
 
-        temp_directory = file_system.staging_area()
-        extracted_pdf = temp_directory + "/temp.pdf"
+        staging_area = file_system.staging_area()
+        extracted_pdf = staging_area + "/temp.pdf"
 
         with open(extracted_pdf, "wb") as pdf_extraction_stream:
             temp_file_writer.write(pdf_extraction_stream)
 
-        extracted_image = temp_directory + "/temp_image.png"
+        extracted_image = staging_area + "/temp_image.png"
 
         with wand.image.Image(filename=extracted_pdf, resolution=300) as img:
             img.save(filename=extracted_image)
