@@ -5,6 +5,7 @@ py_library(
   name = "barcodes",
   srcs = glob(["*.py"]),
   deps = [
+    "//src/main/pdf"
   ],
   visibility = ["//visibility:public"]
 )

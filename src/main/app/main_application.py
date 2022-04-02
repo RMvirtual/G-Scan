@@ -487,11 +487,11 @@ class Controller():
         valid_image_extensions = (".jpeg", ".jpg", ".png")
 
         if file_extension.lower() == ".pdf":
-            barcode_ref_list = pdf_reader.read_barcodes(
+            barcode_ref_list = pdf_reader._read_pdf(
                 current_file, scan_directory)
 
         elif file_extension.lower() in valid_image_extensions:
-            barcode_ref_list = pdf_reader.image_barcode_reader(
+            barcode_ref_list = pdf_reader._read_image(
                 current_file, scan_directory)
 
         # If no GR reference obtained, get the file using the PDF

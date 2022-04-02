@@ -11,7 +11,8 @@ py_library(
     "//data:user_settings.dat",
     "//data:temp",
     "//resources:test",
-    "//resources:images"
+    "//resources:images",
+    "//resources:staging"
   ],
   visibility = ["//visibility:public"]
 )
