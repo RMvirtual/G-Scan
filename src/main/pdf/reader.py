@@ -1,5 +1,5 @@
 import PyPDF2
-
+import fitz
 
 class PdfReader:
     def __init__(self, source: str):

@@ -25,8 +25,8 @@ class PdfWriter(PyPDF2.PdfFileWriter):
         file_name = directory_item.file_name()
         temp_dir = file_system.temp_directory()
 
-        with wand.image.Image(filename=str(directory_item),
-                              resolution=300) as img:
+        with wand.image.Image(
+                filename=str(directory_item), resolution=300) as img:
             self.rotate_image_to_portrait(img)
 
             temp_image_path = temp_dir + "/" + file_name + ".png"

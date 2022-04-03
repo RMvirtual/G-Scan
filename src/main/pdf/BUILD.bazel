@@ -6,6 +6,7 @@ py_library(
   srcs = glob(["*.py"]),
   deps = [
     "//src/main/file_system",
+    requirement("pymupdf")
   ],
   visibility = ["//visibility:public"]
 )

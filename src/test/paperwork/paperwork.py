@@ -133,10 +133,10 @@ class TestSinglePagePNGCustomerPaperworkWriter(
 class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
     def setup_multiple_page_pdf(self):
         pdf_to_copy = file_system.test_resources_directory() + (
-            "/correct_files/testfile2_with_5_pages.pdf")
+            "/correct_files/five_pages.pdf")
 
         scans_directory = file_system.test_resources_directory() + "/scans"
-        output_path = scans_directory + "/testfile2_with_5_pages.pdf"
+        output_path = scans_directory + "/five_pages.pdf"
 
         shutil.copy(pdf_to_copy, output_path)
 
@@ -160,7 +160,7 @@ class TestMultiplePagePDFCustomerPaperwork(TestCustomerPaperworkPDFWriter):
 
         correct_pdf = (
                 file_system.test_resources_directory() +
-                "/correct_files/test_file_2_with_5_pages_with_barcodes.pdf"
+                "/correct_files/five_pages_with_barcodes.pdf"
         )
 
         correct_image = Image(filename=str(correct_pdf), resolution=150)
