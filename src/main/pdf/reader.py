@@ -1,6 +1,7 @@
 import PyPDF2
 import fitz
 
+
 class PdfReader:
     def __init__(self, source: str):
         self._pdf_stream = open(file=source, mode="rb")
