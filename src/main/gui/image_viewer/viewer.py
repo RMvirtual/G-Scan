@@ -34,3 +34,6 @@ class ImageViewer(wx.Frame):
     def on_resize(self, event: wx.Event):
         self._image_panel.resize_image()
         event.Skip()
+
+    def set_pixelmap(self, pixmap):
+        self._image_panel.set_pixelmap(pixmap)

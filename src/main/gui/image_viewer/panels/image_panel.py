@@ -8,7 +8,7 @@ class ImagePanel(wx.Panel):
 
         self._image_path = ""
         self._image = wx.StaticBitmap(
-            parent=self, bitmap=wx.Bitmap(wx.Image(200, 200)))
+            parent=self, bitmap=wx.Bitmap(wx.Image(800, 800)))
 
         self._image.SetScaleMode(wx.StaticBitmap.Scale_AspectFit)
 
@@ -21,6 +21,15 @@ class ImagePanel(wx.Panel):
     def set_image(self, image_path: str) -> None:
         self._image_path = image_path
         self.resize_image()
+
+    def set_pixelmap(self, pix):
+        if pix.alpha:
+            bitmap = wx.Bitmap.FromBufferRGBA(
+                pix.width, pix.height, pix.samples)
+        else:
+            bitmap = wx.Bitmap.FromBuffer(pix.width, pix.height, pix.samples)
+
+        self._image.SetBitmap(bitmap)
 
     def resize_image(self):
         size = self.GetSize()

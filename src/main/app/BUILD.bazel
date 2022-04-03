@@ -6,6 +6,7 @@ py_binary(
   srcs = glob(["driver.py"]),
   deps = [
     "//src/main/gui",
+    "//src/main/pdf"
   ],
   data = ["//data:user_settings.dat"],
   visibility = ["//visibility:public"]
