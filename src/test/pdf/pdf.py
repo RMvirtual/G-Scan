@@ -1,6 +1,7 @@
 import unittest
 import src.main.file_system.file_system as file_system
 import src.main.pdf.reader as pdf_reader
+import src.main.pdf.writer as pdf_writer
 
 
 class TestPdfReader(unittest.TestCase):
@@ -35,6 +36,10 @@ class TestPdfReader(unittest.TestCase):
 
         pdf_writer.write_pdf(pdf_file, output_path)
         self._open_pdf_file_and_check_page_quantity(output_path, 1)
+
+    def _setup_pdf(self):
+        return []
+
 
 
 if __name__ == "__main__":
