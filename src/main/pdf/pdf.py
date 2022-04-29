@@ -1,4 +1,3 @@
-
 class Pdf:
     def __init__(self, page_images: list = None):
         self._initialise_pages(page_images)

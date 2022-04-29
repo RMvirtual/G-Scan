@@ -10,11 +10,7 @@ class TestPdfReader(unittest.TestCase):
             "/correct_files/one_page.pdf"
         )
 
-        pdf_file = pdf_reader.read_pdf(source=pdf_file_path)
-        no_of_pages = pdf_file.number_of_pages()
-        correct_no_of_pages = 1
-
-        self.assertEqual(correct_no_of_pages, no_of_pages)
+        self._open_pdf_file_and_check_page_quantity(pdf_file_path, 1)
 
     def test_should_read_three_page_pdf(self):
         pdf_file_path = (
@@ -22,11 +18,12 @@ class TestPdfReader(unittest.TestCase):
             "/correct_files/three_pages.pdf"
         )
 
-        pdf_file = pdf_reader.read_pdf(source=pdf_file_path)
-        no_of_pages = pdf_file.number_of_pages()
-        correct_no_of_pages = 3
+        self._open_pdf_file_and_check_page_quantity(pdf_file_path, 3)
 
-        self.assertEqual(correct_no_of_pages, no_of_pages)
+    def _open_pdf_file_and_check_page_quantity(
+            self, file_path: str, correct_no_of_pages: int):
+        pdf_file = pdf_reader.read_pdf(source=file_path)
+        self.assertEqual(correct_no_of_pages, pdf_file.number_of_pages())
 
 
 if __name__ == "__main__":
