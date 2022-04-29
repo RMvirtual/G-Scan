@@ -2,7 +2,7 @@ import unittest
 import src.main.file_system.file_system as file_system
 import src.main.pdf.reader as pdf_reader
 import src.main.pdf.writer as pdf_writer
-
+from src.main.pdf.pdf import Pdf
 
 class TestPdfReader(unittest.TestCase):
     def test_should_read_one_page_pdf(self):
@@ -38,8 +38,7 @@ class TestPdfReader(unittest.TestCase):
         self._open_pdf_file_and_check_page_quantity(output_path, 1)
 
     def _setup_pdf(self):
-        return []
-
+        return Pdf()
 
 
 if __name__ == "__main__":
