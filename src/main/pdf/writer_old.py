@@ -15,10 +15,6 @@ from reportlab.pdfbase.ttfonts import TTFont
 import wand.image
 import src.main.images.image as image
 
-from src.main.pdf.pdf import Pdf
-
-def write_pdf(pdf_file: Pdf):
-
 
 class PdfWriter(PyPDF2.PdfFileWriter):
     def __init__(self):

@@ -7,7 +7,7 @@ from src.main.paperwork.page_types.customer_paperwork import (
 
 from src.main.pdf.reader import PdfReader
 from src.main.pdf.extractor import PdfExtractor
-from src.main.pdf.writer import PdfWriter
+from src.main.pdf.writer_old import PdfWriter
 
 
 class CustomerPaperworkPDFWriter(PdfWriter):

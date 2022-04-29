@@ -1,5 +1,5 @@
 from src.main.pdf.reader import PdfReader
-from src.main.pdf.writer import PdfWriter
+from src.main.pdf.writer_old import PdfWriter
 from PyPDF2.pdf import PageObject
 
 class PdfExtractor():

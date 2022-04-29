@@ -25,6 +25,17 @@ class TestPdfReader(unittest.TestCase):
         pdf_file = pdf_reader.read_pdf(source=file_path)
         self.assertEqual(correct_no_of_pages, pdf_file.number_of_pages())
 
+    def test_should_write_pdf(self):
+        pdf_file = self._setup_pdf()
+
+        output_path = (
+            file_system.test_resources_directory() +
+            "/output/pdf_write_attempt.pdf"
+        )
+
+        pdf_writer.write_pdf(pdf_file, output_path)
+        self._open_pdf_file_and_check_page_quantity(output_path, 1)
+
 
 if __name__ == "__main__":
     unittest.main()

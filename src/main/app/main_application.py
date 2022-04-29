@@ -5,7 +5,7 @@ from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
 from src.main.pdf.viewer import PDFViewer
 import src.main.pdf.reader
-import src.main.pdf.writer
+import src.main.pdf.writer_old
 import user.user
 from user.user import User, UserDefaults
 import wx
