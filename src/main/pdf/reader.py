@@ -1,28 +1,19 @@
 import fitz
+import src.main.pdf.pdf as pdf
 
 
-class PdfReader:
-    def __init__(self, source: str):
-        self._pdf_stream = fitz.Document(source)
-        self._pages = []
+def read_pdf(source: str):
+    pdf_stream = fitz.Document(source)
 
-        number_of_pages = self._pdf_stream.page_count
+    pages = pdf.Pdf()
+    number_of_pages = pdf_stream.page_count
 
-        for page_no in range(number_of_pages):
-            page = self._pdf_stream.load_page(page_no)
-            pixels = fitz.utils.get_pixmap(page, dpi=300)
-            self._pages.append(pixels)
+    for page_no in range(number_of_pages):
+        page = pdf_stream.load_page(page_no)
+        pixels = fitz.utils.get_pixmap(page, dpi=300)
 
-        self._pdf_stream.close()
+        pages.append(pixels)
 
-    def number_of_pages(self) -> int:
-        return len(self._pages)
+    pdf_stream.close()
 
-    def page(self, page_no: int):
-        return self._pages[page_no]
-
-    def pages(self) :
-        return self._pages
-
-    def close(self) -> None:
-        self._pdf_stream.close()
+    return pages

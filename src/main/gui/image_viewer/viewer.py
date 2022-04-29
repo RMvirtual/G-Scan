@@ -36,4 +36,4 @@ class ImageViewer(wx.Frame):
         event.Skip()
 
     def set_pixelmap(self, pixmap):
-        self._image_panel.set_pixelmap(pixmap)
+        self._image_panel.set_pixel_map(pixmap)

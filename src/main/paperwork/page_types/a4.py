@@ -9,6 +9,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
+
 class A4Page(canvas.Canvas):
     def __init__(self, packet: io.BytesIO) -> None:
         super().__init__(packet, pagesize=A4, pageCompression=1)
@@ -24,9 +25,9 @@ class A4Page(canvas.Canvas):
 
     def draw_image_on_page(self, image_path: str) -> None:
         self.drawImage(
-            image_path, -85, 25, 
-            width = 730, height = 730, 
-            mask = None, preserveAspectRatio = True
+            image_path, -85, 25,
+            width=730, height=730,
+            mask=None, preserveAspectRatio=True
         )
 
     def draw_barcode_on_page(self, job_reference: str) -> None:

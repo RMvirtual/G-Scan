@@ -1,5 +1,6 @@
+import fitz
 import wx
-from src.main.images.image_conversion import toScaledImagePreserveAspectRatio
+import src.main.images.image_conversion as image_conversion
 
 
 class ImagePanel(wx.Panel):
@@ -7,34 +8,51 @@ class ImagePanel(wx.Panel):
         super(ImagePanel, self).__init__(parent=parent)
 
         self._image_path = ""
-        self._image = wx.StaticBitmap(
+
+        self._image_control = wx.StaticBitmap(
             parent=self, bitmap=wx.Bitmap(wx.Image(800, 800)))
 
-        self._image.SetScaleMode(wx.StaticBitmap.Scale_AspectFit)
+        self._image_control.SetScaleMode(wx.StaticBitmap.Scale_AspectFit)
 
         self._sizer = wx.BoxSizer(wx.VERTICAL)
-        self._sizer.Add(self._image, 0, wx.EXPAND)
+        self._sizer.Add(self._image_control, 0, wx.EXPAND)
         self._sizer.SetSizeHints(self)
         self.SetSizer(self._sizer)
         self.SetBackgroundColour(colour=wx.RED)
+        self._pixel_map = None
 
     def set_image(self, image_path: str) -> None:
         self._image_path = image_path
         self.resize_image()
 
-    def set_pixelmap(self, pix):
-        if pix.alpha:
-            bitmap = wx.Bitmap.FromBufferRGBA(
-                pix.width, pix.height, pix.samples)
-        else:
-            bitmap = wx.Bitmap.FromBuffer(pix.width, pix.height, pix.samples)
+    def set_pixel_map(self, pix):
+        self._pixel_map = pix
+        bitmap = self._bitmap_from_pixel_map()
+        self._image_control.SetBitmap(bitmap)
 
-        self._image.SetBitmap(bitmap)
+    def _bitmap_from_pixel_map(self) -> wx.Bitmap:
+        if self._pixel_map.alpha:
+            bitmap = wx.Bitmap.FromBufferRGBA(
+                self._pixel_map.width,
+                self._pixel_map.height,
+                self._pixel_map.samples
+            )
+
+        else:
+            bitmap = wx.Bitmap.FromBuffer(
+                self._pixel_map.width,
+                self._pixel_map.height,
+                self._pixel_map.samples
+            )
+
+        return bitmap
 
     def resize_image(self):
         size = self.GetSize()
 
-        img = toScaledImagePreserveAspectRatio(
-            self._image_path, size.width, size.height)
+        scaled_pixel_map = fitz.Pixmap(
+            src=self._pixel_map, width=size.width, height=size.height,
+            clip=None
+        )
 
-        self._image.SetBitmap(wx.Bitmap(img))
+        self.set_pixel_map(scaled_pixel_map)
