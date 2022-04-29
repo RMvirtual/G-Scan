@@ -3,6 +3,7 @@ load("@rules_python//python:defs.bzl", "py_test")
 py_test(
     name = "paperwork",
     srcs = glob(["*.py"]),
+    main = "documents.py",
     deps = [
         "//src/main/paperwork",
     ],

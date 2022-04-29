@@ -14,11 +14,22 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import wand.image
 import src.main.images.image as image
+import fitz
 
 from src.main.pdf.pdf import Pdf
 
-def write_pdf(pdf_file: Pdf):
+def write_pdf(pdf_file: Pdf, output_path: str):
+    doc = fitz.open()  # PDF with the pictures
+    number_of_pages = pdf_file.number_of_pages()
 
+    for page_no in range(number_of_pages):
+        fitz.open("pdf", pdf_file)  # open stream as PDF
+
+        page = pdf_file.page(page_no)
+        doc_page = doc.new_page(width=page.width(), height=page.height())
+        doc_page.show_pdf_page()
+
+    doc.save(output_path)
 
 class PdfWriter(PyPDF2.PdfFileWriter):
     def __init__(self):
