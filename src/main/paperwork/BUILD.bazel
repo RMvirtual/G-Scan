@@ -5,7 +5,6 @@ py_library(
   name = "paperwork",
   srcs = glob(["*.py"]),
   deps = [
-    "//src/main/paperwork/page_types",
     "//src/main/paperwork/writer",
     "//src/main/paperwork/documents"
   ],

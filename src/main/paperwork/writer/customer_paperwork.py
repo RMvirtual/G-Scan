@@ -2,10 +2,6 @@ import io
 
 import src.main.file_system.file_system as file_system
 from src.main.file_system.file_system import DirectoryItem
-from src.main.paperwork.page_types.customer_paperwork import (
-    CustomerPaperworkPage)
-
-from src.main.pdf.reader import PdfReader
 from src.main.pdf.extractor import PdfExtractor
 from src.main.pdf.writer_old import PdfWriter
 

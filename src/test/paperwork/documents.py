@@ -3,7 +3,7 @@ import os
 import src.main.file_system.file_system as file_system
 from src.main.paperwork.documents.a4 import A4Document
 from src.main.paperwork.documents.customer_paperwork import CustomerPaperwork
-
+import filecmp
 
 class TestA4Document(unittest.TestCase):
     def test_should_create_a4_document_file(self):
@@ -19,7 +19,16 @@ class TestA4Document(unittest.TestCase):
         document.draw_page(image_path=image)
         document.save()
 
+        correct_file = (
+                file_system.test_resources_directory()
+                + "/correct_files/new_a4_document.pdf"
+        )
+
+        files_match = filecmp.cmp(
+            f1=correct_file, f2=output_path, shallow=False)
+
         self.assertTrue(os.path.exists(image))
+        self.assertTrue(files_match)
 
     def test_should_create_customer_paperwork_file(self):
         output_path = (
