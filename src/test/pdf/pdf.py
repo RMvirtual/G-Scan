@@ -20,6 +20,17 @@ class TestPdfReader(unittest.TestCase):
         self.assertEqual(dpi_300_pixel_dims["height"], page.height)
         self.assertEqual(dpi_300_pixel_dims["width"], page.width)
 
+        print(page.pixel(0,0))
+        pixel_colours = [(255, 255, 255)]
+
+        for row in range(dpi_300_pixel_dims["height"]):
+            for column in range(dpi_300_pixel_dims["width"]):
+                pixel = page.pixel(column, row)
+
+                if pixel not in pixel_colours:
+                    pixel_colours.append(pixel)
+
+        print(pixel_colours)
 
 if __name__ == "__main__":
     unittest.main()
