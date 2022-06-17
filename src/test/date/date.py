@@ -32,9 +32,9 @@ class TestDate(unittest.TestCase):
     def test_should_get_current_month(self):
         month = calendar.current_month()
 
-        self.assertTrue(month.month_name() == "April")
-        self.assertTrue(month.month_number() == 4)
-        self.assertTrue(month.month_number_as_two_digits() == "04")
+        self.assertTrue(month.month_name() == "June")
+        self.assertTrue(month.month_number() == 6)
+        self.assertTrue(month.month_number_as_two_digits() == "06")
         self.assertTrue(month.year() == 2022)
         self.assertTrue(month.year_as_two_digits() == "22")
 

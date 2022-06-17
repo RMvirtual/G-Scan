@@ -1,8 +1,10 @@
+import src.main.pdf.page
+
 class Pdf:
     def __init__(self, page_images: list = None):
         self._initialise_pages(page_images)
 
-    def _initialise_pages(self, page_images):
+    def _initialise_pages(self, page_images: list):
         if not page_images:
             page_images = []
 
