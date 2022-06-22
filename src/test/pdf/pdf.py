@@ -1,36 +1,51 @@
+import numpy
 import unittest
 import src.main.file_system.file_system as file_system
 import src.main.pdf.reader as pdf_reader
 
 
 class TestPdfReader(unittest.TestCase):
-    def test_should_read_one_page_pdf(self):
-        pdf_file_path = (
+    def test_should_read_300x300_pdf(self):
+        self._populate_correct_pdf_values()
+
+        pdf_path = (
             file_system.test_resources_directory() +
-            "/correct_files/one_page.pdf"
+            "/correct_files/300x300.pdf"
         )
 
-        page = pdf_reader.read_pdf(source=pdf_file_path)[0]
+        page = pdf_reader.read_pdf(source=pdf_path)[0]
 
         dpi_300_pixel_dims = {
-            "height": 3508,
-            "width": 2481
+            "height": 300,
+            "width": 300
         }
 
         self.assertEqual(dpi_300_pixel_dims["height"], page.height)
         self.assertEqual(dpi_300_pixel_dims["width"], page.width)
 
-        print(page.pixel(0,0))
-        pixel_colours = [(255, 255, 255)]
-
         for row in range(dpi_300_pixel_dims["height"]):
             for column in range(dpi_300_pixel_dims["width"]):
                 pixel = page.pixel(column, row)
+                correct_pixel = self.CORRECT_PDF_VALUES[column, row]
 
-                if pixel not in pixel_colours:
-                    pixel_colours.append(pixel)
+                for i in range(3):
+                    self.assertEqual(pixel[i], correct_pixel[i], msg=str(
+                        column) + ", " + str(column))
 
-        print(pixel_colours)
+    def _populate_correct_pdf_values(self):
+        black_pixels = numpy.full(
+            shape=(150, 300, 3),
+            fill_value=(255, 255, 255)
+        )
+
+        white_pixels = numpy.full(
+            shape=(150, 300, 3),
+            fill_value=(0, 0, 0)
+        )
+
+        self.CORRECT_PDF_VALUES = numpy.concatenate(
+            (white_pixels, black_pixels), axis=0)
+
 
 if __name__ == "__main__":
     unittest.main()
