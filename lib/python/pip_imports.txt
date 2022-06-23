@@ -7,3 +7,4 @@ wand
 pyzbar
 reportlab
 wxPython
+numpy
