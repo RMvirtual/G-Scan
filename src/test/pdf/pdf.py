@@ -25,12 +25,13 @@ class TestPdfReader(unittest.TestCase):
 
         for row in range(dpi_300_pixel_dims["height"]):
             for column in range(dpi_300_pixel_dims["width"]):
-                pixel = page.pixel(column, row)
+                pixel = page.pixel(row, column)
                 correct_pixel = self.CORRECT_PDF_VALUES[column, row]
 
                 for i in range(3):
-                    self.assertEqual(pixel[i], correct_pixel[i], msg=str(
-                        column) + ", " + str(column))
+                    self.assertEqual(pixel[i], correct_pixel[i], msg=(
+                        "\nRow: " + str(row) + ", Column: " + str(column)
+                    ))
 
     def _populate_correct_pdf_values(self):
         black_pixels = numpy.full(
