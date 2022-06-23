@@ -5,7 +5,10 @@ py_library(
   name = "barcodes",
   srcs = glob(["*.py"]),
   deps = [
-    "//src/main/pdf"
+    "//src/main/pdf",
+    requirement("Pillow"),
+    requirement("pyzbar"),
+    requirement("wand")
   ],
   visibility = ["//visibility:public"]
 )
