@@ -27,15 +27,15 @@ def base_name(path):
 
 
 def file_name(path):
-    file_name, _ = os.path.splitext(base_name(path))
+    name, _ = os.path.splitext(base_name(path))
 
-    return file_name
+    return name
 
 
 def file_ext(path):
-    _, file_ext = os.path.splitext(base_name(path))
+    _, extension = os.path.splitext(base_name(path))
 
-    return file_ext
+    return extension
 
 
 def test_resources_directory() -> str:
