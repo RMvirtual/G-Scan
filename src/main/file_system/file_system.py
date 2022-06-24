@@ -86,15 +86,15 @@ def path_exists(path) -> bool:
     return os.path.exists(path)
 
 
-def file_exists(file_name: str, directory_path) -> bool:
-    return path_exists(directory_path + "\\" + file_name)
+def file_exists(name: str, directory_path) -> bool:
+    return path_exists(directory_path + "\\" + name)
 
 
-def matching_file_names(file_name: str, directory_path: str) -> int:
+def matching_file_names(name: str, directory_path: str) -> int:
     count = 0
 
     for item in directory_items(directory_path):
-        if file_name in item:
+        if name in item:
             count += 1
 
     return count

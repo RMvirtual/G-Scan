@@ -2,6 +2,7 @@ import unittest
 import src.main.job_references.references as job_refs
 import src.main.date.calendar as calendar
 
+
 class TestJobReferences(unittest.TestCase):
     def test_should_get_template_job_number(self):
         date = calendar.date(month=3, year=2022)
@@ -26,32 +27,33 @@ class TestJobReferences(unittest.TestCase):
             self.assertEqual(correct_reference, job_reference)
 
     def test_should_validate_full_number_length(self):
-        correct_length = "190105255"
+        valid_number = "190105255"
 
-        incorrect_lengths = [
+        invalid_numbers = [
             "1901052555", "19010525", "" "ABCDEFGHIJKLMNOPQRSTUVQXYZ"]
 
-        self.assertTrue(job_refs.is_full_input_length(correct_length))
+        self.assertTrue(job_refs.is_full_input_length(valid_number))
 
-        (self.assertFalse(job_refs.is_full_input_length(value))
-            for value in incorrect_lengths)
+        for number in invalid_numbers:
+            self.assertFalse(job_refs.is_full_input_length(number))
 
     def test_should_validate_quick_number_length(self):
-        correct_values = [
+        valid_numbers = [
             "190105255", "1234", "12345",
             "123456", "1234567", "12345678", "123456789"
         ]
             
-        incorrect_values = [
+        invalid_numbers = [
             "0123456789", "OHNANANAAAAWHATSMANAME", "",
             "ABCDEFGHIJKLMNOPQRSTUVQXYZ"
         ]
 
-        (self.assertTrue(job_refs.is_quick_input_length(value))
-            for value in correct_values)
+        for number in valid_numbers:
+            self.assertTrue(job_refs.is_quick_input_length(number))
+            
+        for number in invalid_numbers:
+            self.assertFalse(job_refs.is_quick_input_length(number))
 
-        (self.assertFalse(job_refs.is_quick_input_length(value))
-            for value in incorrect_values)
 
 if __name__ == '__main__':
     unittest.main()
