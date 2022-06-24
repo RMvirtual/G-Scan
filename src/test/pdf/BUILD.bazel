@@ -5,6 +5,6 @@ py_test(
     srcs = glob(["*.py"]),
     deps = [
         "//src/main/file_system",
-        "//src/main/pdf",
+        "//src/main/pdf"
     ],
 )
