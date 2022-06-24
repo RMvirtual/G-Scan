@@ -1,5 +1,6 @@
 import unittest
 import src.main.file_names.name_scheme as file_naming
+import src.main.file_system.file_system as file_system
 
 class TestFileNames(unittest.TestCase):
     def test_should_create_backup_file_name_with_no_page_suffix(self):        
@@ -20,7 +21,8 @@ class TestFileNames(unittest.TestCase):
         return attributes
         
     def __backup_directory(self) -> str:
-        return "C:\\Users\\rmvir\\Desktop\\gscan\\resources\\test\\backup"
+        return file_system.test_resources_directory() + "/backup"
+
 
 if __name__ == '__main__':
     unittest.main()
