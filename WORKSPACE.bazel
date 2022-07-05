@@ -11,9 +11,11 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_python/archive/0.6.0.tar.gz",
 )
 
+register_toolchains("//:py_3_toolchain")
+
 load("@rules_python//python:pip.bzl", "pip_install")
 
 pip_install(
    name = "python_imports",
-   requirements = "//lib/python:pip_imports.txt",
+   requirements = "//lib/pip-imports:pip_imports.txt",
 )
