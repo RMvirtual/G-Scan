@@ -1,5 +1,7 @@
 import unittest
-import src.main.date.calendar as calendar
+import sys
+
+print(sys.path)
 
 
 class TestDate(unittest.TestCase):

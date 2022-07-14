@@ -1,0 +1,10 @@
+Pillow
+Selenium
+PyPDF2
+pymupdf
+pypiwin32
+wand
+pyzbar
+reportlab
+wxPython
+numpy
