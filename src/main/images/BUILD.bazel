@@ -5,7 +5,9 @@ py_library(
   name = "images",
   srcs = glob(["*.py"]),
   deps = [
-    "//src/main/pdf"
+    "//src/main/pdf",
+    requirement("Pillow"),
+    requirement("wxPython")
   ],
   visibility = ["//visibility:public"]
 )

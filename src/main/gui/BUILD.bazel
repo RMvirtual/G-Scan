@@ -10,6 +10,7 @@ py_library(
     "//src/main/gui/settings",
     "//src/main/gui/image_viewer",
     "//src/main/gui/widgets",
+    requirement("wxPython")
   ],
   visibility = ["//visibility:public"]
 )

@@ -7,7 +7,8 @@ py_library(
   deps = [
     "//src/main/file_system",
     "//src/main/gui/widgets",
-    "//src/main/gui/main_menu/panels/subpanels"
+    "//src/main/gui/main_menu/panels/subpanels",
+    requirement("wxPython")
   ],
   visibility = ["//visibility:public"]
 )
