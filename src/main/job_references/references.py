@@ -1,41 +1,44 @@
 import re
 from src.main.date.date import Date
+import src.main.date.calendar as calendar
 
 
-def gr_reference(full_job_no: str) -> str:
-    return "GR" + _strip_alphabet(full_job_no)
+class GrReference:
+    def __init__(self, date: Date = None, reference_number: str = None):
+        self._date = date
+        self._job_reference = reference_number
 
+    @staticmethod
+    def TemplateReference(date: Date):
+        return GrReference(date=date, reference_number="00000")
 
-def quick_gr_reference(brief_job_no: str, date: Date) -> str:
-    full_job_no = job_number_from_brief(brief_job_no, date)
+    @staticmethod
+    def FromFullReference(reference_number: str):
+        # Get calendar date from reference number provided.
+        date = calendar.date(reference_number[2:4], reference_number[0:2])
 
-    return gr_reference(full_job_no)
+        gr_reference = GrReference(
+            date=date,
+            reference_number=reference_number[5:]
+        )
 
+        return gr_reference
 
-def job_number_from_brief(brief_job_no: str, date: Date) -> str:
-    clean_brief_job_no = _strip_alphabet(brief_job_no)
+    def _is_full_input_length(self, inputted_reference: str) -> bool:
+        return len(inputted_reference) == 9
 
-    template_job_no = template_job_number(
-        date=date, digits_to_exclude=len(clean_brief_job_no))
+    def _is_quick_input_length(self, inputted_reference: str) -> bool:
+        return 4 <= len(inputted_reference) <= 9
 
-    return template_job_no + clean_brief_job_no
+    def _strip_alphabet(self, string_to_modify: str) -> str:
+        return re.sub("[^0-9]", "", string_to_modify)
 
+    def pad_reference(self, brief_reference: str):
+        self._job_reference = brief_reference
 
-def template_job_number(date: Date, digits_to_exclude: int = 0) -> str:
-    year = date.year_as_two_digits()
-    month = date.month_number_as_two_digits()
-    zeroes_padding = (5 - digits_to_exclude) * "0"
-
-    return year + month + zeroes_padding
-
-
-def is_full_input_length(inputted_reference: str) -> bool:
-    return len(inputted_reference) == 9
-
-
-def is_quick_input_length(inputted_reference: str) -> bool:
-    return 4 <= len(inputted_reference) <= 9
-
-
-def _strip_alphabet(string_to_modify: str) -> str:
-    return re.sub("[^0-9]", "", string_to_modify)
+    def as_string(self) -> str:
+        return "GR" + self._strip_alphabet(
+            self._date.year_as_two_digits()
+            + self._date.month_number_as_two_digits()
+            + self._job_reference
+        )

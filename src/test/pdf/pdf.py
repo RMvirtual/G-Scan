@@ -9,7 +9,7 @@ class TestPdfReader(unittest.TestCase):
     DOCUMENT_WIDTH = 300
     PIXEL_COLOURS = 3
 
-    def test_should_read_300x300_pdf(self):
+    def test_should_read_minimum_size_pdf(self):
         self._populate_correct_pdf_values()
 
         pdf_path = (

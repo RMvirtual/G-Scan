@@ -22,7 +22,7 @@ def months_as_strings():
 
 
 def years() -> tuple[int, int]:
-    return (current_year(), last_year())
+    return current_year(), last_year()
 
 
 def years_as_strings() -> tuple:
