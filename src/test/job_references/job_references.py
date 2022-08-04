@@ -27,8 +27,18 @@ class TestJobReferences(unittest.TestCase):
             reference = GrReference.FromFullReference(number)
             self.assertEqual(correct_reference, reference.as_string())
 
-    def test_should_error_if_wrong_length(self):
-        self.fail(msg="Test not completed")
+    def test_should_error_if_full_input_is_too_short(self):
+        incorrect_input = "19010021"
+
+        with self.assertRaises(Exception):
+            _ = GrReference.FromFullReference(incorrect_input)
+
+    def test_should_error_if_full_input_is_too_long(self):
+        incorrect_input = "1901002101"
+
+        with self.assertRaises(Exception):
+            _ = GrReference.FromFullReference(incorrect_input)
+
 
     def test_should_invalidate_full_numbers(self):
         invalid_numbers = [

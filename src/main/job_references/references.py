@@ -14,7 +14,10 @@ class GrReference:
 
     @staticmethod
     def FromFullReference(job_reference: str):
-        digits = re.sub("[^0-9]", "", job_reference)
+        digits = re.sub("\D", "", job_reference)  # Remove alphabet
+
+        if len(digits) != 9:
+            raise Exception("Incorrect number of digits.")
 
         # Get calendar date from reference number provided.
         date = calendar.date(
