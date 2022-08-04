@@ -35,7 +35,7 @@ class GrReference:
     def add_quick_reference(self, job_reference: str):
         digits = re.sub("\D", "", job_reference)  # Remove alphabet
 
-        if not (0 <= len(digits) <= 5):
+        if not (1 <= len(digits) <= 5):
             raise Exception("Incorrect number of digits.")
 
         self.pad_reference(digits)

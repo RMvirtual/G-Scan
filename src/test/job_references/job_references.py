@@ -45,21 +45,29 @@ class TestJobReferences(unittest.TestCase):
 
         self.assertEqual(correct_gr_ref, job_number.as_string())
 
-    def test_should_validate_quick_numbers(self):
-        valid_numbers = [
-            "190105255", "1234", "12345",
-            "123456", "1234567", "12345678", "123456789"
-        ]
+    def test_should_error_if_quick_job_number_is_wrong_format(self):
+        date = calendar.date(month=3, year=2022)
+        job_number = GrReference.TemplateReference(date)
+        incorrect_input = "ABCDE"
 
-        self.fail(msg="Test not completed")
+        with self.assertRaises(Exception):
+            job_number.add(incorrect_input)
 
-    def test_should_invalidate_quick_numbers(self):
-        invalid_numbers = [
-            "0123456789", "OHNANANAAAAWHATSMANAME", "",
-            "ABCDEFGHIJKLMNOPQRSTUVQXYZ"
-        ]
-        
-        self.fail(msg="Test not completed")
+    def test_should_error_if_quick_job_number_is_too_short(self):
+        date = calendar.date(month=3, year=2022)
+        job_number = GrReference.TemplateReference(date)
+        incorrect_input = ""
+
+        with self.assertRaises(Exception):
+            job_number.add(incorrect_input)
+
+    def test_should_error_if_quick_job_number_is_too_long(self):
+        date = calendar.date(month=3, year=2022)
+        job_number = GrReference.TemplateReference(date)
+        incorrect_input = "220302300"
+
+        with self.assertRaises(Exception):
+            job_number.add(incorrect_input)
 
 
 if __name__ == '__main__':
