@@ -32,11 +32,13 @@ class GrReference:
 
         return gr_reference
 
-    def _is_full_input_length(self, inputted_reference: str) -> bool:
-        return len(inputted_reference) == 9
+    def add_quick_reference(self, job_reference: str):
+        digits = re.sub("\D", "", job_reference)  # Remove alphabet
 
-    def _is_quick_input_length(self, inputted_reference: str) -> bool:
-        return 4 <= len(inputted_reference) <= 9
+        if not (0 <= len(digits) <= 5):
+            raise Exception("Incorrect number of digits.")
+
+        self.pad_reference(digits)
 
     def pad_reference(self, brief_reference: str):
         # Needs edge case where date should be overwritten.

@@ -11,14 +11,6 @@ class TestJobReferences(unittest.TestCase):
 
         self.assertEqual(correct_gr_ref, gr_ref.as_string())
 
-    def test_should_create_quick_job_number(self):
-        date = calendar.date(month=3, year=2022)
-        job_number = GrReference(date)
-        job_number.pad_reference("2300")
-        correct_gr_ref = "GR220302300"
-
-        self.assertEqual(correct_gr_ref, job_number.as_string())
-
     def test_should_create_full_gr_reference(self):
         numbers = ["GR190100200", "190100200"]
         correct_reference = "GR190100200"
@@ -44,6 +36,14 @@ class TestJobReferences(unittest.TestCase):
 
         with self.assertRaises(Exception):
             _ = GrReference.FromFullReference(incorrect_input)
+
+    def test_should_create_quick_job_number(self):
+        date = calendar.date(month=3, year=2022)
+        job_number = GrReference.TemplateReference(date)
+        job_number.add_quick_reference("2300")
+        correct_gr_ref = "GR220302300"
+
+        self.assertEqual(correct_gr_ref, job_number.as_string())
 
     def test_should_validate_quick_numbers(self):
         valid_numbers = [
