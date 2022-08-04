@@ -13,13 +13,18 @@ class GrReference:
         return GrReference(date=date, reference_number="00000")
 
     @staticmethod
-    def FromFullReference(reference_number: str):
+    def FromFullReference(job_reference: str):
+        digits = re.sub("[^0-9]", "", job_reference)
+
         # Get calendar date from reference number provided.
-        date = calendar.date(reference_number[2:4], reference_number[0:2])
+        date = calendar.date(
+            int(digits[2:4]),
+            int(digits[0:2])
+        )
 
         gr_reference = GrReference(
             date=date,
-            reference_number=reference_number[5:]
+            reference_number=digits[4:]
         )
 
         return gr_reference
@@ -30,14 +35,14 @@ class GrReference:
     def _is_quick_input_length(self, inputted_reference: str) -> bool:
         return 4 <= len(inputted_reference) <= 9
 
-    def _strip_alphabet(self, string_to_modify: str) -> str:
-        return re.sub("[^0-9]", "", string_to_modify)
-
     def pad_reference(self, brief_reference: str):
-        self._job_reference = brief_reference
+        # Needs edge case where date should be overwritten.
+        self._job_reference = (
+            "0" * (5-len(brief_reference)) + brief_reference)
 
     def as_string(self) -> str:
-        return "GR" + self._strip_alphabet(
+        return (
+            "GR" +
             self._date.year_as_two_digits()
             + self._date.month_number_as_two_digits()
             + self._job_reference

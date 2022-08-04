@@ -25,7 +25,7 @@ class TestJobReferences(unittest.TestCase):
 
         for number in numbers:
             reference = GrReference.FromFullReference(number)
-            self.assertEqual(correct_reference, reference)
+            self.assertEqual(correct_reference, reference.as_string())
 
     def test_should_error_if_wrong_length(self):
         self.fail(msg="Test not completed")
