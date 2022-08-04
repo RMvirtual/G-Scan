@@ -39,12 +39,11 @@ class TestJobReferences(unittest.TestCase):
         with self.assertRaises(Exception):
             _ = GrReference.FromFullReference(incorrect_input)
 
+    def test_should_error_if_full_input_is_wrong_format(self):
+        incorrect_input = "ABCDEFGHI"
 
-    def test_should_invalidate_full_numbers(self):
-        invalid_numbers = [
-            "1901052555", "19010525", "" "ABCDEFGHIJKLMNOPQRSTUVQXYZ"]
-
-        self.fail(msg="Test not completed")
+        with self.assertRaises(Exception):
+            _ = GrReference.FromFullReference(incorrect_input)
 
     def test_should_validate_quick_numbers(self):
         valid_numbers = [
