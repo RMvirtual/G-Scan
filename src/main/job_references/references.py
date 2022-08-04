@@ -38,9 +38,9 @@ class GrReference:
         if not (1 <= len(digits) <= 5):
             raise Exception("Incorrect number of digits.")
 
-        self.pad_reference(digits)
+        self._pad_reference(digits)
 
-    def pad_reference(self, brief_reference: str):
+    def _pad_reference(self, brief_reference: str):
         # Needs edge case where date should be overwritten.
         self._job_reference = (
             "0" * (5-len(brief_reference)) + brief_reference)
