@@ -59,7 +59,7 @@ class TestJobReferences(unittest.TestCase):
         incorrect_input = ""
 
         with self.assertRaises(Exception):
-            job_number.add(incorrect_input)
+            job_number.add_quick_reference(incorrect_input)
 
     def test_should_error_if_quick_job_number_is_too_long(self):
         date = calendar.date(month=3, year=2022)
@@ -67,7 +67,7 @@ class TestJobReferences(unittest.TestCase):
         incorrect_input = "220302300"
 
         with self.assertRaises(Exception):
-            job_number.add(incorrect_input)
+            job_number.add_quick_reference(incorrect_input)
 
 
 if __name__ == '__main__':

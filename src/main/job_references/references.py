@@ -18,8 +18,8 @@ class GrReference:
 
         if len(digits) != 9:
             raise Exception("Incorrect number of digits.")
+            # More specific error required.
 
-        # Get calendar date from reference number provided.
         date = calendar.date(
             int(digits[2:4]),
             int(digits[0:2])
