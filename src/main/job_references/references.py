@@ -5,16 +5,16 @@ import src.main.date.calendar as calendar
 
 class GrReference:
     def __init__(self, date: Date = None, job_number: str = None):
-        self._prefix = "GR"
+        self._company_prefix = "GR"
         self._date = date
         self._job_number = job_number
 
     @staticmethod
-    def TemplateReference(date: Date):
+    def FromDate(date: Date):
         return GrReference(date=date, job_number="00000")
 
     @staticmethod
-    def FullReference(job_reference: str):
+    def FromFullNumber(job_reference: str):
         digits = GrReference._extract_digits_from_string(job_reference)
 
         if not GrReference._digits_are_valid_full_reference(digits):
@@ -24,7 +24,12 @@ class GrReference:
 
         return GrReference(date=date, job_number=digits[4:])
 
-    def set_job_number(self, job_number: str):
+    @property
+    def job_number(self):
+        return self._job_number
+
+    @job_number.setter
+    def job_number(self, job_number: str):
         digits = self._extract_digits_from_string(job_number)
 
         if not self._digits_are_valid_job_number(digits):
@@ -63,4 +68,4 @@ class GrReference:
         )
 
     def to_string(self) -> str:
-        return self._prefix + self._date_prefix() + self._job_number
+        return self._company_prefix + self._date_prefix() + self._job_number
