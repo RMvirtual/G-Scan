@@ -6,7 +6,7 @@ import src.main.date.calendar as calendar
 class TestJobReferences(unittest.TestCase):
     def test_should_create_template_gr_reference(self):
         date = calendar.date(month=3, year=2022)
-        gr_ref = GrReference.FromDate(date)
+        gr_ref = GrReference(date=date)
         correct_gr_ref = "GR220300000"
 
         self.assertEqual(correct_gr_ref, gr_ref.to_string())
@@ -16,30 +16,30 @@ class TestJobReferences(unittest.TestCase):
         correct_reference = "GR190100200"
 
         for number in numbers:
-            reference = GrReference.FromFullNumber(number)
+            reference = GrReference(job_number=number)
             self.assertEqual(correct_reference, reference.to_string())
 
     def test_should_error_if_full_input_is_too_short(self):
         incorrect_input = "19010021"
 
         with self.assertRaises(ValueError):
-            _ = GrReference.FromFullNumber(incorrect_input)
+            _ = GrReference(job_number=incorrect_input)
 
     def test_should_error_if_full_input_is_too_long(self):
         incorrect_input = "1901002101"
 
         with self.assertRaises(ValueError):
-            _ = GrReference.FromFullNumber(incorrect_input)
+            _ = GrReference(job_number=incorrect_input)
 
     def test_should_error_if_full_input_is_wrong_format(self):
         incorrect_input = "ABCDEFGHI"
 
         with self.assertRaises(ValueError):
-            _ = GrReference.FromFullNumber(incorrect_input)
+            _ = GrReference(job_number=incorrect_input)
 
     def test_should_create_quick_job_number(self):
         date = calendar.date(month=3, year=2022)
-        gr_ref = GrReference.FromDate(date)
+        gr_ref = GrReference(date=date)
         gr_ref.job_number = "2300"
         correct_gr_ref = "GR220302300"
 
@@ -47,7 +47,7 @@ class TestJobReferences(unittest.TestCase):
 
     def test_should_error_if_quick_job_number_is_wrong_format(self):
         date = calendar.date(month=3, year=2022)
-        gr_ref = GrReference.FromDate(date)
+        gr_ref = GrReference(date=date)
         incorrect_input = "ABCDE"
 
         with self.assertRaises(ValueError):
@@ -55,7 +55,7 @@ class TestJobReferences(unittest.TestCase):
 
     def test_should_error_if_quick_job_number_is_too_short(self):
         date = calendar.date(month=3, year=2022)
-        gr_ref = GrReference.FromDate(date)
+        gr_ref = GrReference(date=date)
         incorrect_input = ""
 
         with self.assertRaises(ValueError):
@@ -63,7 +63,7 @@ class TestJobReferences(unittest.TestCase):
 
     def test_should_error_if_quick_job_number_is_too_long(self):
         date = calendar.date(month=3, year=2022)
-        gr_ref = GrReference.FromDate(date)
+        gr_ref = GrReference(date=date)
         incorrect_input = "220302300"
 
         with self.assertRaises(ValueError):
