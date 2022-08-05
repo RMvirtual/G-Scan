@@ -9,7 +9,7 @@ class TestJobReferences(unittest.TestCase):
         gr_ref = GrReference.TemplateReference(date)
         correct_gr_ref = "GR220300000"
 
-        self.assertEqual(correct_gr_ref, gr_ref.as_string())
+        self.assertEqual(correct_gr_ref, gr_ref.to_string())
 
     def test_should_create_full_gr_reference(self):
         numbers = ["GR190100200", "190100200"]
@@ -17,7 +17,7 @@ class TestJobReferences(unittest.TestCase):
 
         for number in numbers:
             reference = GrReference.FullReference(number)
-            self.assertEqual(correct_reference, reference.as_string())
+            self.assertEqual(correct_reference, reference.to_string())
 
     def test_should_error_if_full_input_is_too_short(self):
         incorrect_input = "19010021"
@@ -43,7 +43,7 @@ class TestJobReferences(unittest.TestCase):
         job_number.add_quick_reference("2300")
         correct_gr_ref = "GR220302300"
 
-        self.assertEqual(correct_gr_ref, job_number.as_string())
+        self.assertEqual(correct_gr_ref, job_number.to_string())
 
     def test_should_error_if_quick_job_number_is_wrong_format(self):
         date = calendar.date(month=3, year=2022)
