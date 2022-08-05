@@ -61,11 +61,5 @@ class GrReference:
     def _extract_digits_from_string(string: str):
         return re.sub("\\D", "", string)
 
-    def _date_prefix(self) -> str:
-        return (
-            self._date.year_as_two_digits() +
-            self._date.month_number_as_two_digits()
-        )
-
     def to_string(self) -> str:
-        return self._company_prefix + self._date_prefix() + self._job_number
+        return self._company_prefix + self._date.yymm() + self._job_number
