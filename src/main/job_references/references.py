@@ -24,15 +24,8 @@ class GrReference:
 
         return GrReference(date=date, job_number=digits[4:])
 
-    @staticmethod
-    def _date_from_full_reference(digits: str) -> Date:
-        year_digits = int(digits[0:2])
-        month_digits = int(digits[2:4])
-
-        return calendar.date(month=month_digits, year=year_digits)
-
-    def add_quick_reference(self, job_reference: str):
-        digits = self._extract_digits_from_string(job_reference)
+    def set_job_number(self, job_number: str):
+        digits = self._extract_digits_from_string(job_number)
 
         if not self._digits_are_valid_job_number(digits):
             raise ValueError("Incorrect number of digits.")
@@ -43,6 +36,13 @@ class GrReference:
         # Needs edge case where date should be overwritten.
         self._job_number = (
             "0" * (5-len(brief_reference)) + brief_reference)
+
+    @staticmethod
+    def _date_from_full_reference(digits: str) -> Date:
+        year_digits = int(digits[0:2])
+        month_digits = int(digits[2:4])
+
+        return calendar.date(month=month_digits, year=year_digits)
 
     @staticmethod
     def _digits_are_valid_full_reference(digits: str):
