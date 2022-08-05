@@ -10,14 +10,21 @@ class GrReference:
     def __init__(self, date: Date = None, job_number: str = None):
         self._company_prefix = "GR"
 
-        if date is None:
-            self._set_from_full_job_number(job_number)
+        if job_number and date is None:
+            self._set_full_job_number(job_number)
 
-        else:
+        elif date and job_number is None:
             self._date = date
             self._job_number = "00000"
 
-    def _set_from_full_job_number(self, job_number: str) -> None:
+        elif date and job_number:
+            pass
+
+        else:
+            self._date = calendar.current_month()
+            self._job_number = "00000"
+
+    def _set_full_job_number(self, job_number: str) -> None:
         digits = self._extract_digits_from_string(job_number)
 
         if not self._digits_are_valid_full_reference(digits):
