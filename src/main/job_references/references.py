@@ -11,20 +11,20 @@ class GrReference:
         self._company_prefix = "GR"
 
         if job_number:
-            if date is None:
+            if date:
+                pass  # Not thought this out when both params used.
+
+            else:
                 self._set_full_job_number(job_number)
 
-            elif date:
-                pass
-
-        elif job_number is None:
+        else:
             if date:
                 self._date = date
-                self._job_number = "00000"
 
             else:
                 self._date = calendar.current_month()
-                self._job_number = "00000"
+
+            self._job_number = "00000"
 
     def _set_full_job_number(self, job_number: str) -> None:
         digits = self._extract_digits_from_string(job_number)
