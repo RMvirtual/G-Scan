@@ -1,2 +1,2 @@
 # G-Scan
-Paperwork processing application I designed.
+Paperwork processing application.
