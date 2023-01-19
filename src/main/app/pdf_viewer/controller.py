@@ -1,4 +1,5 @@
 from src.main.gui.image_viewer.viewer import ImageViewer
+import fitz
 
 
 class ImageViewerController:
@@ -13,6 +14,9 @@ class ImageViewerController:
         self._viewer.set_split_callback(self.split)
 
     def load(self, image_path: str) -> None:
+        print("Loading", image_path)
+        document = fitz.open(image_path)
+
         self._viewer.set_image(image_path)
 
     def close(self, event: any = None) -> None:
