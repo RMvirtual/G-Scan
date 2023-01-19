@@ -40,7 +40,8 @@ class TestPdfReader(unittest.TestCase):
         self.CORRECT_PDF_VALUES = numpy.concatenate(
             (white_pixels, black_pixels), axis=0)
 
-    def _150x300_matrix(self, fill_value):
+    @staticmethod
+    def _150x300_matrix(fill_value):
         return numpy.full(
             shape=(150, 300, 3),
             fill_value=fill_value

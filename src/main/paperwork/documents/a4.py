@@ -9,7 +9,10 @@ class A4Document:
 
     def _initialise_canvas(self, file_name):
         self.canvas = canvas.Canvas(
-            filename=file_name, pagesize=A4, pageCompression=1)
+            filename=file_name,
+            pagesize=A4,
+            pageCompression=1
+        )
 
         self.canvas.setFillColorRGB(0, 0, 0)
 

@@ -5,8 +5,8 @@ import wx
 
 
 class ImageViewer(wx.Frame):
-    def __init__(self, size):
-        super().__init__(parent=None, size=size, title="Paperwork Viewer")
+    def __init__(self):
+        super().__init__(parent=None, title="Paperwork Viewer")
         self._initialise_widgets()
         self.Show()
 

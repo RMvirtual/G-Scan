@@ -1,13 +1,24 @@
 load("@rules_python//python:defs.bzl", "py_binary")
 
 py_binary(
-  name = "app",
-  main = "driver.py",
-  srcs = glob(["driver.py"]),
-  deps = [
-    "//src/main/gui",
-    "//src/main/pdf"
-  ],
-  data = ["//data:user_settings.dat"],
-  visibility = ["//visibility:public"]
+    name = "app",
+    srcs = glob(["driver.py"]),
+    data = ["//data:user_settings.dat"],
+    main = "driver.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src/main/gui",
+        "//src/main/pdf",
+    ],
+)
+
+py_binary(
+    name = "pdf_viewer",
+    srcs = ["pdf_viewer.py"],
+    data = [],
+    main = "pdf_viewer.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src/main/gui",
+    ],
 )
