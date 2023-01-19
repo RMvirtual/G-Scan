@@ -1,0 +1,13 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "pdf_viewer",
+    srcs = glob(["*.py"]),
+    data = [],
+    main = "pdf_viewer.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src/main/gui/app",
+        "//src/main/gui/image_viewer",
+    ],
+)

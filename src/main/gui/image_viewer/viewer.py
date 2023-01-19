@@ -42,5 +42,4 @@ class ImageViewer(wx.Frame):
         self._navigation_panel.set_exit_callback(callback)
 
     def close(self, event: any = None) -> None:
-        print("Close function called.")
         self.Close()

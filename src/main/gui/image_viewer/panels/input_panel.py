@@ -31,17 +31,17 @@ class InputPanel(wx.Panel):
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
 
-    def _bind(self, widget, callback) -> None:
-        self.Bind(wx.EVT_MENU, callback, widget)
+    def _bind_button(self, widget, callback) -> None:
+        self.Bind(wx.EVT_BUTTON, callback, widget)
 
     def bind_submit_callback(self, callback) -> None:
-        self._bind(self._submit_button, callback)
+        self._bind_button(self._submit_button, callback)
 
     def bind_skip_callback(self, callback) -> None:
-        self._bind(self._skip_button, callback)
+        self._bind_button(self._skip_button, callback)
 
     def bind_split_callback(self, callback) -> None:
-        self._bind(self._split_button, callback)
+        self._bind_button(self._split_button, callback)
 
     def clear_job_ref_input(self) -> None:
         self._job_ref_input.Clear()
