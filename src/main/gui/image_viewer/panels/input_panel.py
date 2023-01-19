@@ -7,17 +7,23 @@ class InputPanel(wx.Panel):
         self._initialise_widgets()
 
     def _initialise_widgets(self) -> None:
+        self._create_widgets()
+        self._layout_widgets()
+        self.SetBackgroundColour(colour=wx.YELLOW)
+
+    def _create_widgets(self) -> None:
         self._reference_input_label = wx.StaticText(
-            parent=self, label="Please enter job reference:")
+            self, label="Please enter job reference:")
 
-        self._job_reference_input = wx.TextCtrl(parent=self)
-        self._submit_button = wx.Button(parent=self, label="Submit")
-        self._skip_button = wx.Button(parent=self, label="Skip")
-        self._split_button = wx.Button(parent=self, label="Split")
+        self._job_ref_input = wx.TextCtrl(self)
+        self._submit_button = wx.Button(self, label="Submit")
+        self._skip_button = wx.Button(self, label="Skip")
+        self._split_button = wx.Button(self, label="Split")
 
+    def _layout_widgets(self) -> None:
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
         sizer.Add(self._reference_input_label, pos=(0, 0), span=(1, 4))
-        sizer.Add(self._job_reference_input, pos=(1, 0))
+        sizer.Add(self._job_ref_input, pos=(1, 0))
         sizer.Add(self._submit_button, pos=(1, 1))
         sizer.Add(self._skip_button, pos=(1, 2))
         sizer.Add(self._split_button, pos=(1, 3))
@@ -25,4 +31,20 @@ class InputPanel(wx.Panel):
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
 
-        self.SetBackgroundColour(colour=wx.YELLOW)
+    def _bind(self, widget, callback) -> None:
+        self.Bind(wx.EVT_MENU, callback, widget)
+
+    def bind_submit_callback(self, callback) -> None:
+        self._bind(self._submit_button, callback)
+
+    def bind_skip_callback(self, callback) -> None:
+        self._bind(self._skip_button, callback)
+
+    def bind_split_callback(self, callback) -> None:
+        self._bind(self._split_button, callback)
+
+    def clear_job_ref_input(self) -> None:
+        self._job_ref_input.Clear()
+
+    def job_ref_input(self) -> str:
+        return self._job_ref_input.GetValue()

@@ -37,3 +37,10 @@ class ImageViewer(wx.Frame):
 
     def set_pixelmap(self, pixmap):
         self._image_panel.set_pixel_map(pixmap)
+
+    def set_exit_callback(self, callback) -> None:
+        self._navigation_panel.set_exit_callback(callback)
+
+    def close(self, event: any = None) -> None:
+        print("Close function called.")
+        self.Close()

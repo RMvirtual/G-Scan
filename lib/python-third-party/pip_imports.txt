@@ -3,7 +3,7 @@ reportlab
 wand
 Selenium
 PyPDF2
-pymupdf
+pymupdf==1.21.1
 pypiwin32
 pyzbar
 numpy

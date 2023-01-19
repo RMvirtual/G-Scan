@@ -50,9 +50,11 @@ class ImagePanel(wx.Panel):
     def resize_image(self):
         size = self.GetSize()
 
+        """
         scaled_pixel_map = fitz.Pixmap(
-            src=self._pixel_map, width=size.width, height=size.height,
+            source=self._pixel_map, width=size.width, height=size.height,
             clip=None
         )
 
         self.set_pixel_map(scaled_pixel_map)
+        """
