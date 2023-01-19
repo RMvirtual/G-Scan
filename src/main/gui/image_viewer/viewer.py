@@ -1,6 +1,6 @@
-from src.main.gui.image_viewer.panels.image_panel import ImagePanel
-from src.main.gui.image_viewer.panels.input_panel import InputPanel
-from src.main.gui.image_viewer.panels.navigation_panel import NavigationPanel
+from .panels.image import ImagePanel
+from .panels.input import InputPanel
+from .panels.navigation import NavigationPanel
 import wx
 
 

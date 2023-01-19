@@ -1,6 +1,4 @@
-import fitz
 import wx
-import src.main.images.image_conversion as image_conversion
 
 
 class ImagePanel(wx.Panel):
