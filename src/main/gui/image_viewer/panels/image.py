@@ -19,8 +19,8 @@ class ImagePanel(wx.Panel):
         self.SetBackgroundColour(colour=wx.RED)
         self._pixel_map = None
 
-    def set_image(self, image_path: str) -> None:
-        self._image_path = image_path
+    def set_image(self, bitmap: wx.Bitmap) -> None:
+        self._image_control.SetBitmap(bitmap)
         self.resize_image()
 
     def set_pixel_map(self, pix):

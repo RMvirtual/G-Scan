@@ -28,8 +28,8 @@ class ImageViewer(wx.Frame):
         self.SetSizer(sizer)
         self.SetBackgroundColour(colour=wx.BLUE)
 
-    def set_image(self, image_path: str):
-        self._image_panel.set_image(image_path)
+    def set_image(self, bitmap: wx.Bitmap) -> None:
+        self._image_panel.set_image(bitmap)
 
     def on_resize(self, event: wx.Event):
         self._image_panel.resize_image()

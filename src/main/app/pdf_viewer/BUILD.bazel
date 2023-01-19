@@ -11,5 +11,6 @@ py_binary(
         "//src/main/gui/app",
         "//src/main/gui/image_viewer",
         requirement("pymupdf"),
+        requirement("wxPython"),
     ],
 )

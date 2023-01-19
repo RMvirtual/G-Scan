@@ -1,5 +1,6 @@
 from src.main.gui.image_viewer.viewer import ImageViewer
 import fitz
+import wx
 
 
 class ImageViewerController:
@@ -18,8 +19,13 @@ class ImageViewerController:
         document = fitz.open(image_path)
         number_of_pages = document.page_count
         print(f"Number of Pages: {number_of_pages}")
+        page = document[0]
+        pixel_buffer = page.get_pixmap()
 
-        self._viewer.set_image(image_path)
+        bitmap = wx.Bitmap.FromBuffer(
+            pixel_buffer.width, pixel_buffer.height, pixel_buffer.samples)
+
+        self._viewer.set_image(bitmap)
 
     def close(self, event: any = None) -> None:
         self._viewer.close()
