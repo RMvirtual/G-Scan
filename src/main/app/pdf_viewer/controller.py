@@ -1,14 +1,9 @@
 from src.main.gui.image_viewer.viewer import ImageViewer
-from src.main.gui.app.app import GuiApplication
 
 
 class ImageViewerController:
     def __init__(self):
-        print("Application started.")
-        self._application = GuiApplication()
         self._initialise_viewer()
-        self._application.run()
-        print("Application ended.")
 
     def _initialise_viewer(self):
         self._viewer = ImageViewer()
