@@ -14,8 +14,10 @@ class ImageViewerController:
         self._viewer.set_split_callback(self.split)
 
     def load(self, image_path: str) -> None:
-        print("Loading", image_path)
+        print(f"Loading {image_path}")
         document = fitz.open(image_path)
+        number_of_pages = document.page_count
+        print(f"Number of Pages: {number_of_pages}")
 
         self._viewer.set_image(image_path)
 
