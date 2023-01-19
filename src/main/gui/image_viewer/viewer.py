@@ -38,6 +38,15 @@ class ImageViewer(wx.Frame):
     def set_pixelmap(self, pixmap):
         self._image_panel.set_pixel_map(pixmap)
 
+    def set_submit_callback(self, callback) -> None:
+        self._input_panel.bind_submit_callback(callback)
+
+    def set_skip_callback(self, callback) -> None:
+        self._input_panel.bind_skip_callback(callback)
+
+    def set_split_callback(self, callback) -> None:
+        self._input_panel.bind_split_callback(callback)
+
     def set_exit_callback(self, callback) -> None:
         self._navigation_panel.set_exit_callback(callback)
 
