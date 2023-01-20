@@ -11,20 +11,20 @@ class ImagePanel(wx.Panel):
         self._canvas = FloatCanvas(self, size=(width, height))
         self._initialise_sizer()
         self.SetBackgroundColour(colour=wx.RED)
-        self._canvas.SetBackgroundColour("Grey")
+        self._canvas.SetBackgroundColour(wx.LIGHT_GREY)
         self._initialise_bindings()
 
     def _initialise_sizer(self) -> None:
         self._sizer = wx.BoxSizer(wx.VERTICAL)
 
         self._sizer.Add(
-            self._canvas, 0,
-            wx.ALIGN_TOP | wx.ALIGN_LEFT |
-            wx.SHAPED | wx.RESERVE_SPACE_EVEN_IF_HIDDEN
+            window=self._canvas,
+            flag=wx.ALIGN_TOP | wx.ALIGN_LEFT |
+            wx.SHAPED | wx.RESERVE_SPACE_EVEN_IF_HIDDEN,
         )
 
-        self._sizer.SetSizeHints(self)
         self.SetSizer(self._sizer)
+        self._sizer.Size
 
     def _initialise_bindings(self) -> None:
         self._canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
