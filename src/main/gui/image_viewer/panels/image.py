@@ -20,7 +20,7 @@ class ImagePanel(wx.Panel):
         self._sizer.Add(
             window=self._canvas,
             flag=wx.ALIGN_TOP | wx.ALIGN_LEFT |
-            wx.SHAPED | wx.RESERVE_SPACE_EVEN_IF_HIDDEN,
+            wx.SHAPED | wx.EXPAND
         )
 
         self.SetSizer(self._sizer)
