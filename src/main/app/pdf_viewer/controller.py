@@ -29,15 +29,10 @@ class ImageViewerController:
         )
 
         image = bitmap.ConvertToImage()
-        x, y = self._viewer.image_panel_size
-        new_image = image.Scale(width=x, height=y)
-        # self._viewer.set_bitmap(bitmap)
-        self._viewer.set_image(new_image)
+        self._viewer.set_image(image)
 
-        print(f"Image Panel Size: {self._viewer.image_panel_size}")
-
-    def close(self, event: any = None) -> None:
-        self._viewer.close()
+    def close(self, event: wx.EVT_CLOSE = None) -> None:
+        self._viewer.close(event)
 
     def submit(self, event: any = None) -> None:
         print("SUBMIT")

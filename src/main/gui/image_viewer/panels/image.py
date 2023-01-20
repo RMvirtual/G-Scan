@@ -8,42 +8,46 @@ class ImagePanel(wx.Panel):
         super(ImagePanel, self).__init__(parent=parent)
 
         width, height = self.GetSize()
-        self._nav_canvas = FloatCanvas(self, size=(width, height))
+        self._canvas = FloatCanvas(self, size=(width, height))
         self._initialise_sizer()
         self.SetBackgroundColour(colour=wx.RED)
-        self._nav_canvas.SetBackgroundColour("Grey")
-        self._initialise_navigation()
+        self._canvas.SetBackgroundColour("Grey")
+        self._initialise_bindings()
 
     def _initialise_sizer(self) -> None:
         self._sizer = wx.BoxSizer(wx.VERTICAL)
+
         self._sizer.Add(
-            self._nav_canvas, 0,
+            self._canvas, 0,
             wx.ALIGN_TOP | wx.ALIGN_LEFT |
             wx.SHAPED | wx.RESERVE_SPACE_EVEN_IF_HIDDEN
         )
+
         self._sizer.SetSizeHints(self)
         self.SetSizer(self._sizer)
 
-    def _initialise_navigation(self) -> None:
-        self._nav_canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
-        self._nav_canvas.Bind(wx.EVT_LEFT_DCLICK, self.zoom_to_fit)
+    def _initialise_bindings(self) -> None:
+        self._canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
+        self._canvas.Bind(wx.EVT_LEFT_DCLICK, self.zoom_to_fit)
+        self._canvas.Bind(wx.EVT_SIZE, self.on_resize)
 
     def set_image(self, image: wx.Image) -> None:
         width, height = self.GetSize()
+        scaled_bitmap = ScaledBitmap(image.ConvertToBitmap(), (0, 0), height)
+        self._canvas.AddObject(scaled_bitmap)
+        self._canvas.Draw()
 
-        self._nav_canvas.AddScaledBitmap(image, (0, 0), height, "cc")
-        self._nav_canvas.Draw()
+    def on_wheel(self, event: wx.EVT_MOUSEWHEEL):
+        zoom_factor = (1 / 1.2) if event.GetWheelRotation() < 0 else 1.2
 
-    def set_bitmap(self, bitmap: wx.Bitmap) -> None:
-        pass
+        self._canvas.Zoom(
+            zoom_factor, event.Position, "Pixel", keepPointInPlace=True)
 
-    def on_wheel(self, event):
-        self._nav_canvas.Zoom(
-            1 / 1.2 if event.GetWheelRotation() < 0 else 1.2,
-            event.Position, "Pixel", keepPointInPlace=True)
+    def zoom_to_fit(self, _event: wx.EVT_LEFT_DCLICK):
+        self._canvas.ZoomToBB()
 
-    def zoom_to_fit(self, _event):
-        self._nav_canvas.ZoomToBB()
+    def on_resize(self, _event: wx.EVT_SIZE):
+        print("On Resize called in image panel.")
 
     @property
     def size(self) -> tuple[int, int]:
