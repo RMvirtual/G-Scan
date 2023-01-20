@@ -13,10 +13,15 @@ class ImageViewer(wx.Frame):
         self.Bind(wx.EVT_SIZE, self.on_resize)
 
     def _initialise_widgets(self) -> None:
+        self._initialise_panels()
+        self._initialise_sizer()
+
+    def _initialise_panels(self) -> None:
         self._input_panel = InputPanel(self)
         self._image_panel = ImagePanel(self)
         self._navigation_panel = NavigationPanel(self)
 
+    def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Frame is blue colour.
