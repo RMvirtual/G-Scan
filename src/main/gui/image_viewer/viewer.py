@@ -28,15 +28,14 @@ class ImageViewer(wx.Frame):
         self.SetSizer(sizer)
         self.SetBackgroundColour(colour=wx.BLUE)
 
-    def set_image(self, bitmap: wx.Bitmap) -> None:
-        self._image_panel.set_image(bitmap)
+    def set_image(self, image: wx.Image) -> None:
+        self._image_panel.set_image(image)
+
+    def set_bitmap(self, bitmap: wx.Bitmap) -> None:
+        self._image_panel.set_bitmap(bitmap)
 
     def on_resize(self, event: wx.Event):
-        self._image_panel.resize_image()
         event.Skip()
-
-    def set_pixelmap(self, pixmap):
-        self._image_panel.set_pixel_map(pixmap)
 
     def set_submit_callback(self, callback) -> None:
         self._input_panel.bind_submit_callback(callback)
@@ -52,3 +51,7 @@ class ImageViewer(wx.Frame):
 
     def close(self, event: any = None) -> None:
         self.Close()
+
+    @property
+    def image_panel_size(self):
+        return self._image_panel.size

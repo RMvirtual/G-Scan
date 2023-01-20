@@ -4,8 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/bazel-g-scan/external/python3_9_x86_64-pc-windows-msvc" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/bazel-g-scan/external/python3_9_x86_64-pc-windows-msvc/DLLs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/bazel-g-scan/external/python3_9_x86_64-pc-windows-msvc/Lib" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/bazel-g-scan/external/python3_9_x86_64-pc-windows-msvc/Lib/site-packages" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/bazel-g-scan/external/python_third_party/pypi__pymupdf/site-packages/fitz" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bazel-bin" />
       <excludeFolder url="file://$MODULE_DIR$/bazel-gscan" />
       <excludeFolder url="file://$MODULE_DIR$/bazel-out" />
