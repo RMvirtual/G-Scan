@@ -19,12 +19,11 @@ class ImagePanel(wx.Panel):
 
         self._sizer.Add(
             window=self._canvas,
-            flag=wx.ALIGN_TOP | wx.ALIGN_LEFT |
-            wx.SHAPED | wx.EXPAND
+            proportion=1,
+            flag=wx.ALIGN_TOP | wx.ALIGN_LEFT | wx.EXPAND
         )
 
         self.SetSizer(self._sizer)
-        self._sizer.Size
 
     def _initialise_bindings(self) -> None:
         self._canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
