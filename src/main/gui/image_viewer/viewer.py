@@ -6,7 +6,13 @@ import wx
 
 class ImageViewer(wx.Frame):
     def __init__(self):
-        super().__init__(parent=None, title="Paperwork Viewer")
+        display_size = wx.DisplaySize()
+        width = display_size[0]/2
+        height = display_size[1]
+
+        super().__init__(
+            parent=None, title="Paperwork Viewer", size=(width, height)
+        )
         self._initialise_widgets()
         self.Show()
 
@@ -29,7 +35,7 @@ class ImageViewer(wx.Frame):
         sizer.Add(self._image_panel, 1, flag=wx.EXPAND)  # Red
         sizer.Add(self._navigation_panel, 0, flag=wx.EXPAND)  # Green
 
-        sizer.SetSizeHints(self)
+        # sizer.SetSizeHints(self)
         self.SetSizer(sizer)
         self.SetBackgroundColour(colour=wx.BLUE)
 
