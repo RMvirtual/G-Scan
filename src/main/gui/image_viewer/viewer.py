@@ -1,6 +1,5 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-
 from src.main.gui.app import screen_size
 from src.main.gui.image_viewer.panels.image import BitmapViewer
 from src.main.gui.image_viewer.panels.input import InputPanel
@@ -14,12 +13,15 @@ class ImageViewer(wx.Frame):
         self.Show()
 
     def _initialise_widgets(self) -> None:
-        self.CreateStatusBar()
-        self.SetStatusText("HELLO WORLD")
+        self._initialise_status_bar()
         self._initialise_panels()
         self._initialise_sizer()
 
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
+
+    def _initialise_status_bar(self) -> None:
+        self.CreateStatusBar()
+        self.SetStatusText("HELLO WORLD")
 
     def _initialise_panels(self) -> None:
         self._input_panel = InputPanel(self)
