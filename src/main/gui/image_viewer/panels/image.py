@@ -2,13 +2,17 @@ import wx
 from wx.lib.floatcanvas.NavCanvas import NavCanvas
 from wx.lib.floatcanvas import FloatCanvas
 
-class ImagePanel(NavCanvas):
-    def __init__(self, parent: wx.Frame):
+class BitmapViewer(NavCanvas):
+    def __init__(self, parent: wx.Frame) -> None:
         super().__init__(
-            parent=parent, ProjectionFun=None, BackgroundColor="wx.LIGHT_GREY")
+            parent=parent,
+            ProjectionFun=None,
+            BackgroundColor="DARK SLATE BLUE"
+        )
 
         self._initialise_bindings()
         self.Canvas.MaxScale = 20
+        self.set_image("")
 
     def _initialise_bindings(self) -> None:
         self.Canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
@@ -17,6 +21,8 @@ class ImagePanel(NavCanvas):
         self.Canvas.Bind(FloatCanvas.EVT_MOTION, self.on_move)
 
     def set_image(self, image: wx.Image) -> None:
+        image = wx.Image("C:/Users/ryanm/Desktop/wx test/white_tank.png")
+
         scaled_bitmap = FloatCanvas.ScaledBitmap2(
             image,
             (0, 0),
@@ -25,12 +31,8 @@ class ImagePanel(NavCanvas):
         )
 
         self.Canvas.AddObject(scaled_bitmap)
-        self.Canvas.Draw()
-        self.Canvas.ZoomToBB()
 
     def on_wheel(self, event: wx.EVT_MOUSEWHEEL):
-        print("Wheel motion received.")
-
         zoom_factor = (1 / 1.2) if event.GetWheelRotation() < 0 else 1.2
 
         self.Canvas.Zoom(

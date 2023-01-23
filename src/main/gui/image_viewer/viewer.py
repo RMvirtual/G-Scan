@@ -1,4 +1,4 @@
-from .panels.image import ImagePanel
+from .panels.image import BitmapViewer
 from .panels.input import InputPanel
 from .panels.navigation import NavigationPanel
 import wx
@@ -24,30 +24,28 @@ class ImageViewer(wx.Frame):
         self._initialise_panels()
         self._initialise_sizer()
 
-        self.SetBackgroundColour(colour=wx.BLUE)
-        self.Layout()
+        self.SetBackgroundColour(colour=wx.LIGHT_GREY)
 
     def _initialise_panels(self) -> None:
         self._input_panel = InputPanel(self)
-        self._image_panel = ImagePanel(self)
+        self._nav_canvas = BitmapViewer(self)
         self._navigation_panel = NavigationPanel(self)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(self._input_panel, 0, flag=wx.EXPAND)  # Yellow
-        sizer.Add(self._image_panel, 1, flag=wx.EXPAND)  # Red
-        sizer.Add(self._navigation_panel, 0, flag=wx.EXPAND)  # Green
+        sizer.Add(self._input_panel, 0, wx.EXPAND)  # Yellow
+        sizer.Add(self._nav_canvas, 1, wx.EXPAND)  # BLUE
+        sizer.Add(self._navigation_panel, 0, wx.EXPAND)  # Green
 
         self.SetSizer(sizer)
+        sizer.Layout()
 
     def set_image(self, image: wx.Image) -> None:
-        self._image_panel.set_image(image)
+        self._nav_canvas.set_image(image)
 
-    def on_resize(self, event: wx.Event):
+    def on_resize(self, _event: wx.Event):
         print("Resizing in viewer.")
-        self.Layout()
-        event.Skip()
 
     def set_submit_callback(self, callback) -> None:
         self._input_panel.bind_submit_callback(callback)
