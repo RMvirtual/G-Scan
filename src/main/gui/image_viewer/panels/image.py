@@ -16,9 +16,7 @@ class BitmapViewer(NavCanvas):
         self.Canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
         self.Canvas.Bind(wx.EVT_LEFT_DCLICK, self.zoom_to_fit)
 
-    def set_image(self, image: wx.Image) -> None:
-        image = wx.Image("C:/Users/ryanm/Desktop/wx test/white_tank.png")
-
+    def load_image(self, image: wx.Image) -> None:
         scaled_bitmap = FloatCanvas.ScaledBitmap2(
             image,
             (0, 0),

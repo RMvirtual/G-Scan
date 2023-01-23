@@ -41,7 +41,7 @@ class ImageViewer(wx.Frame):
         self.SetSizer(sizer)
 
     def set_image(self, image: wx.Image) -> None:
-        self._nav_canvas.set_image(image)
+        self._nav_canvas.load_image(image)
 
     def on_resize(self, _event: wx.Event):
         print("Resizing in viewer.")
