@@ -10,7 +10,6 @@ class ImageViewer(wx.Frame):
         size, position = screen_size.recommended_metrics()
         super().__init__(parent=None, title=title, size=size, pos=position)
         self._initialise_widgets()
-        self.Show()
 
     def _initialise_widgets(self) -> None:
         self._initialise_status_bar()
