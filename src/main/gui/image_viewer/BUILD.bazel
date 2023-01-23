@@ -5,5 +5,8 @@ py_library(
     name = "image_viewer",
     srcs = glob(["**/*.py"]),
     visibility = ["//visibility:public"],
-    deps = [requirement("wxPython")],
+    deps = [
+        requirement("wxPython"),
+        "//src/main/gui/app",
+    ],
 )

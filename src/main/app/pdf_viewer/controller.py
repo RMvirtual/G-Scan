@@ -8,14 +8,14 @@ class ImageViewerController:
 
     def _initialise_viewer(self):
         self._viewer = ImageViewer()
-        self._initialise_event_callbacks()
+        self._bind_event_callbacks()
 
-    def _initialise_event_callbacks(self) -> None:
-        self._viewer.set_exit_callback(self.close)
-        self._viewer.set_submit_callback(self.submit)
-        self._viewer.set_skip_callback(self.skip)
-        self._viewer.set_split_callback(self.split)
-        self._viewer.set_bitmap_movement_callback(self.bitmap_movement)
+    def _bind_event_callbacks(self) -> None:
+        self._viewer.bind_exit(self.close)
+        self._viewer.bind_submit(self.submit)
+        self._viewer.bind_skip(self.skip)
+        self._viewer.bind_split(self.split)
+        self._viewer.bind_bitmap_movement(self.bitmap_movement)
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)
@@ -43,8 +43,3 @@ class ImageViewerController:
 
     def bitmap_movement(self, event: "FloatCanvas.EVT_MOTION") -> None:
         self._viewer.status_bar = "%i, %i"%tuple(event.Coords)
-
-        """
-        if event.Moving():
-            self._viewer.status_bar = f"{event.GetPosition()}"
-        """
