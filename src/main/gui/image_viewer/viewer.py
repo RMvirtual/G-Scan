@@ -15,22 +15,10 @@ class ImageViewer(wx.Frame):
 
         self._initialise_widgets()
         self.Show()
-        self.Bind(wx.EVT_SIZE, self.on_resize)
-
-    @property
-    def _size_and_position(self) -> tuple[tuple[int, int], wx.Point]:
-        size = self._width_and_height
-
-        return size, wx.Point(x=size[0], y=0)
-
-    @property
-    def _width_and_height(self) -> tuple[int, int]:
-        width, height = wx.DisplaySize()
-
-        return width/2, height/1.1
 
     def _initialise_widgets(self) -> None:
         self.CreateStatusBar()
+        self.SetStatusText("HELLO WORLD")
         self._initialise_panels()
         self._initialise_sizer()
 
@@ -48,11 +36,11 @@ class ImageViewer(wx.Frame):
         sizer.Add(window=self._navigation_panel, proportion=0, flag=wx.EXPAND)
         self.SetSizer(sizer)
 
+    def close(self, _event: wx.Event = None) -> None:
+        self.Close()
+
     def set_image(self, image: wx.Image) -> None:
         self._nav_canvas.load_image(image)
-
-    def on_resize(self, _event: wx.Event):
-        print("Resizing in viewer.")
 
     def set_submit_callback(self, callback) -> None:
         self._input_panel.bind_submit_callback(callback)
@@ -66,9 +54,25 @@ class ImageViewer(wx.Frame):
     def set_exit_callback(self, callback) -> None:
         self._navigation_panel.set_exit_callback(callback)
 
-    def close(self, _event: wx.Event = None) -> None:
-        self.Close()
+    def set_bitmap_movement_callback(self, callback):
+        self._nav_canvas.Canvas.Bind(wx.EVT_MOTION, callback)
 
-    def notify(self, event: wx.Event) -> None:
-        if event.EventObject is self._nav_canvas:
-            print(True)
+    @property
+    def status_bar(self) -> str:
+        return ""
+
+    @status_bar.setter
+    def status_bar(self, new_status: str) -> None:
+        self.SetStatusText(new_status)
+
+    @property
+    def _size_and_position(self) -> tuple[tuple[int, int], wx.Point]:
+        size = self._width_and_height
+
+        return size, wx.Point(x=size[0], y=0)
+
+    @property
+    def _width_and_height(self) -> tuple[int, int]:
+        width, height = wx.DisplaySize()
+
+        return width/2, height/1.1

@@ -2,7 +2,6 @@ from src.main.gui.image_viewer.viewer import ImageViewer
 import fitz
 import wx
 
-
 class ImageViewerController:
     def __init__(self):
         self._initialise_viewer()
@@ -16,6 +15,7 @@ class ImageViewerController:
         self._viewer.set_submit_callback(self.submit)
         self._viewer.set_skip_callback(self.skip)
         self._viewer.set_split_callback(self.split)
+        self._viewer.set_bitmap_movement_callback(self.bitmap_movement)
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)
@@ -24,9 +24,7 @@ class ImageViewerController:
         pixel_buffer = page.get_pixmap()
 
         bitmap = wx.Bitmap.FromBuffer(
-            pixel_buffer.width, pixel_buffer.height,
-            pixel_buffer.samples
-        )
+            pixel_buffer.width, pixel_buffer.height, pixel_buffer.samples)
 
         image = bitmap.ConvertToImage()
         self._viewer.set_image(image)
@@ -42,3 +40,6 @@ class ImageViewerController:
 
     def split(self, event: any = None) -> None:
         print("SPLIT")
+
+    def bitmap_movement(self, event: wx.EVT_MOTION) -> None:
+        self._viewer.status_bar = "%i, %i"%tuple(event.Coords)
