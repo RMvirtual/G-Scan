@@ -6,5 +6,5 @@ PyPDF2
 pymupdf==1.21.1
 pypiwin32
 pyzbar
-numpy
-wxPython
+numpy==1.23.5
+wxPython==4.1.1

@@ -20,10 +20,12 @@ class ImageViewer(wx.Frame):
         self.Bind(wx.EVT_SIZE, self.on_resize)
 
     def _initialise_widgets(self) -> None:
+        self.CreateStatusBar()
         self._initialise_panels()
         self._initialise_sizer()
 
-        self.SetBackgroundColour(colour=wx.BLUE)  # Blue
+        self.SetBackgroundColour(colour=wx.BLUE)
+        self.Layout()
 
     def _initialise_panels(self) -> None:
         self._input_panel = InputPanel(self)
@@ -44,6 +46,7 @@ class ImageViewer(wx.Frame):
 
     def on_resize(self, event: wx.Event):
         print("Resizing in viewer.")
+        self.Layout()
         event.Skip()
 
     def set_submit_callback(self, callback) -> None:
@@ -60,7 +63,3 @@ class ImageViewer(wx.Frame):
 
     def close(self, _event: wx.Event = None) -> None:
         self.Close()
-
-    @property
-    def image_panel_size(self):
-        return self._image_panel.size
