@@ -17,10 +17,10 @@ class BitmapViewer(NavCanvas):
         self.Canvas.Bind(wx.EVT_LEFT_DCLICK, self.zoom_to_fit)
 
     def load_image(self, image: wx.Image) -> None:
-        scaled_bitmap = FloatCanvas.ScaledBitmap2(
+        bitmap = FloatCanvas.ScaledBitmap2(
             Bitmap=image, XY=(0,0), Height=image.GetHeight(), Position="bl")
 
-        self.Canvas.AddObject(scaled_bitmap)
+        self.Canvas.AddObject(bitmap)
         self.Canvas.ZoomToBB()
 
     def on_wheel(self, event: wx.EVT_MOUSEWHEEL):
