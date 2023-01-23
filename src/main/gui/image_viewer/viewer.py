@@ -36,7 +36,7 @@ class ImageViewer(wx.Frame):
 
         sizer.Add(
             window=self._input_panel, proportion=0, flag=wx.EXPAND)
-        sizer.Add(window=self._nav_canvas, proportion=1, flag=wx.ALL)
+        sizer.Add(window=self._nav_canvas, proportion=1, flag=wx.ALL|wx.EXPAND)
         sizer.Add(window=self._navigation_panel, proportion=0, flag=wx.EXPAND)
         self.SetSizer(sizer)
 
