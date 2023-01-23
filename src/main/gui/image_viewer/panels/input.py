@@ -12,36 +12,41 @@ class InputPanel(wx.Panel):
         self.SetBackgroundColour(colour=wx.YELLOW)
 
     def _create_widgets(self) -> None:
-        self._reference_input_label = wx.StaticText(
+        self._input_label = wx.StaticText(
             self, label="Please enter job reference:")
 
-        self._job_ref_input = wx.TextCtrl(self)
-        self._submit_button = wx.Button(self, label="Submit")
-        self._skip_button = wx.Button(self, label="Skip")
-        self._split_button = wx.Button(self, label="Split")
+        self._input = wx.TextCtrl(self)
+        self._submit = wx.Button(self, label="Submit")
+        self._skip = wx.Button(self, label="Skip")
+        self._split = wx.Button(self, label="Split")
 
     def _layout_widgets(self) -> None:
+        border = 5
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
-        sizer.Add(self._reference_input_label, pos=(0, 0), span=(1, 4))
-        sizer.Add(self._job_ref_input, pos=(1, 0))
-        sizer.Add(self._submit_button, pos=(1, 1))
-        sizer.Add(self._skip_button, pos=(1, 2))
-        sizer.Add(self._split_button, pos=(1, 3))
 
-        sizer.SetSizeHints(self)
-        self.SetSizer(sizer)
+        sizer.Add(
+            window=self._input_label, pos=(0, 0), span=(1, 4),
+            flag=wx.ALL, border=border
+        )
+
+        sizer.Add(window=self._input, pos=(1, 0), flag=wx.ALL, border=border)
+        sizer.Add(window=self._submit, pos=(1, 1), flag=wx.ALL, border=border)
+        sizer.Add(window=self._skip, pos=(1, 2), flag=wx.ALL, border=border)
+        sizer.Add(window=self._split, pos=(1, 3), flag=wx.ALL, border=border)
+
+        self.SetSizerAndFit(sizer)
 
     def bind_submit_callback(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._submit_button)
+        self.Bind(wx.EVT_BUTTON, callback, self._submit)
 
     def bind_skip_callback(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._skip_button)
+        self.Bind(wx.EVT_BUTTON, callback, self._skip)
 
     def bind_split_callback(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._split_button)
+        self.Bind(wx.EVT_BUTTON, callback, self._split)
 
     def clear_job_ref_input(self) -> None:
-        self._job_ref_input.Clear()
+        self._input.Clear()
 
     def job_ref_input(self) -> str:
-        return self._job_ref_input.GetValue()
+        return self._input.GetValue()

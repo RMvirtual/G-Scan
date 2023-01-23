@@ -34,12 +34,11 @@ class ImageViewer(wx.Frame):
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(self._input_panel, 0, wx.EXPAND)  # Yellow
-        sizer.Add(self._nav_canvas, 1, wx.EXPAND)  # BLUE
-        sizer.Add(self._navigation_panel, 0, wx.EXPAND)  # Green
-
+        sizer.Add(
+            window=self._input_panel, proportion=0, flag=wx.EXPAND)
+        sizer.Add(window=self._nav_canvas, proportion=1, flag=wx.ALL)
+        sizer.Add(window=self._navigation_panel, proportion=0, flag=wx.EXPAND)
         self.SetSizer(sizer)
-        sizer.Layout()
 
     def set_image(self, image: wx.Image) -> None:
         self._nav_canvas.set_image(image)

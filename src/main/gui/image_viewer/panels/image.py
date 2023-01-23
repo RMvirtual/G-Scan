@@ -11,14 +11,10 @@ class BitmapViewer(NavCanvas):
         )
 
         self._initialise_bindings()
-        self.Canvas.MaxScale = 20
-        self.set_image("")
 
     def _initialise_bindings(self) -> None:
         self.Canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
         self.Canvas.Bind(wx.EVT_LEFT_DCLICK, self.zoom_to_fit)
-        self.Canvas.Bind(wx.EVT_SIZE, self.on_resize)
-        self.Canvas.Bind(FloatCanvas.EVT_MOTION, self.on_move)
 
     def set_image(self, image: wx.Image) -> None:
         image = wx.Image("C:/Users/ryanm/Desktop/wx test/white_tank.png")
@@ -40,9 +36,3 @@ class BitmapViewer(NavCanvas):
 
     def zoom_to_fit(self, _event: wx.EVT_LEFT_DCLICK = None):
         self.Canvas.ZoomToBB()
-
-    def on_resize(self, _event: wx.EVT_SIZE):
-        print("On Resize called in image panel.")
-
-    def on_move(self, event: wx.EVT_MOTION):
-        print(f"Coordinates: {event.Coords}")
