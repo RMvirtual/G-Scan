@@ -27,6 +27,7 @@ class BitmapViewer(NavCanvas):
         )
 
         self.Canvas.AddObject(scaled_bitmap)
+        self.Canvas.ZoomToBB()
 
     def on_wheel(self, event: wx.EVT_MOUSEWHEEL):
         zoom_factor = (1 / 1.2) if event.GetWheelRotation() < 0 else 1.2
