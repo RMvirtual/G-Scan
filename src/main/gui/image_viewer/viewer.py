@@ -6,18 +6,28 @@ import wx
 
 class ImageViewer(wx.Frame):
     def __init__(self):
-        display_size = wx.DisplaySize()
-        width = display_size[0] / 2
-        height = display_size[1] / 1.1
+        size, position = self._size_and_position
 
         super().__init__(
             parent=None, title="Paperwork Viewer",
-            size=(width, height), pos=wx.Point(x=width, y=0)
+            size=size, pos=position
         )
+
         self._initialise_widgets()
         self.Show()
-
         self.Bind(wx.EVT_SIZE, self.on_resize)
+
+    @property
+    def _size_and_position(self) -> tuple[tuple[int, int], wx.Point]:
+        size = self._width_and_height
+
+        return size, wx.Point(x=size[0], y=0)
+
+    @property
+    def _width_and_height(self) -> tuple[int, int]:
+        width, height = wx.DisplaySize()
+
+        return width/2, height/1.1
 
     def _initialise_widgets(self) -> None:
         self.CreateStatusBar()
@@ -33,9 +43,7 @@ class ImageViewer(wx.Frame):
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(wx.VERTICAL)
-
-        sizer.Add(
-            window=self._input_panel, proportion=0, flag=wx.EXPAND)
+        sizer.Add(window=self._input_panel, proportion=0, flag=wx.EXPAND)
         sizer.Add(window=self._nav_canvas, proportion=1, flag=wx.EXPAND)
         sizer.Add(window=self._navigation_panel, proportion=0, flag=wx.EXPAND)
         self.SetSizer(sizer)
@@ -62,4 +70,5 @@ class ImageViewer(wx.Frame):
         self.Close()
 
     def notify(self, event: wx.Event) -> None:
-        print(event.EventObject == self._nav_canvas)
+        if event.EventObject is self._nav_canvas:
+            print(True)
