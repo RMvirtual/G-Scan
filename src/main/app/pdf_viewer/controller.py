@@ -7,7 +7,7 @@ class ImageViewerController:
         self._initialise_viewer()
 
     def _initialise_viewer(self):
-        self._viewer = ImageViewer()
+        self._viewer = ImageViewer("G-Scan")
         self._bind_event_callbacks()
 
     def _bind_event_callbacks(self) -> None:

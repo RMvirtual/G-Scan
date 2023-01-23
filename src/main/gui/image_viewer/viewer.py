@@ -7,12 +7,9 @@ from src.main.gui.image_viewer.panels.input import InputPanel
 from src.main.gui.image_viewer.panels.navigation import NavigationPanel
 
 class ImageViewer(wx.Frame):
-    def __init__(self):
+    def __init__(self, title: str):
         size, position = screen_size.recommended_metrics()
-
-        super().__init__(
-            parent=None, title="Paperwork Viewer", size=size, pos=position)
-
+        super().__init__(parent=None, title=title, size=size, pos=position)
         self._initialise_widgets()
         self.Show()
 
@@ -59,7 +56,7 @@ class ImageViewer(wx.Frame):
 
     @property
     def status_bar(self) -> str:
-        return ""
+        return self.GetStatusText()
 
     @status_bar.setter
     def status_bar(self, new_status: str) -> None:
