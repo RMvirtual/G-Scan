@@ -1,9 +1,10 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.app import screen_size
-from src.main.gui.image_viewer.panels.image import BitmapViewer
-from src.main.gui.image_viewer.panels.input import InputPanel
-from src.main.gui.image_viewer.panels.navigation import NavigationPanel
+from src.main.gui.image_viewer.image import BitmapViewer
+from src.main.gui.image_viewer.input import InputPanel
+from src.main.gui.image_viewer.navigation import NavigationPanel
+from src.main.gui.image_viewer.menu_bar import MenuBar
 
 class ImageViewer(wx.Frame):
     def __init__(self, title: str):
@@ -13,6 +14,7 @@ class ImageViewer(wx.Frame):
 
     def _initialise_widgets(self) -> None:
         self._initialise_status_bar()
+        self._initialise_menu_bar()
         self._initialise_panels()
         self._initialise_sizer()
 
@@ -21,6 +23,14 @@ class ImageViewer(wx.Frame):
     def _initialise_status_bar(self) -> None:
         self.CreateStatusBar()
         self.SetStatusText("HELLO WORLD")
+
+    def _initialise_menu_bar(self) -> None:
+        self._menu_bar = MenuBar()
+        file_menu = wx.Menu()
+        file_item = file_menu.Append(wx.ID_EXIT, "Quit", "Quit application")
+        self._menu_bar.Append(file_menu, "&File")
+        self.SetMenuBar(self._menu_bar)
+        self.Bind(wx.EVT_MENU, self.close, file_item)
 
     def _initialise_panels(self) -> None:
         self._top_toolbar = InputPanel(self)
