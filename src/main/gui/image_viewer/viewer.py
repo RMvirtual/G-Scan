@@ -23,37 +23,37 @@ class ImageViewer(wx.Frame):
         self.SetStatusText("HELLO WORLD")
 
     def _initialise_panels(self) -> None:
-        self._input_panel = InputPanel(self)
-        self._nav_canvas = BitmapViewer(self)
-        self._navigation_panel = NavigationPanel(self)
+        self._top_toolbar = InputPanel(self)
+        self._bitmap_viewer = BitmapViewer(self)
+        self._bottom_toolbar = NavigationPanel(self)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(window=self._input_panel, proportion=0, flag=wx.EXPAND)
-        sizer.Add(window=self._nav_canvas, proportion=1, flag=wx.EXPAND)
-        sizer.Add(window=self._navigation_panel, proportion=0, flag=wx.EXPAND)
+        sizer.Add(window=self._top_toolbar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(window=self._bitmap_viewer, proportion=1, flag=wx.EXPAND)
+        sizer.Add(window=self._bottom_toolbar, proportion=0, flag=wx.EXPAND)
         self.SetSizer(sizer)
 
     def close(self, _event: wx.Event = None) -> None:
         self.Close()
 
     def set_image(self, image: wx.Image) -> None:
-        self._nav_canvas.load_image(image)
+        self._bitmap_viewer.load_image(image)
 
     def bind_exit(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._navigation_panel.exit)
+        self.Bind(wx.EVT_BUTTON, callback, self._bottom_toolbar.exit)
 
     def bind_bitmap_movement(self, callback):
-        self._nav_canvas.Canvas.Bind(FloatCanvas.EVT_MOTION, callback)
+        self._bitmap_viewer.Canvas.Bind(FloatCanvas.EVT_MOTION, callback)
 
     def bind_submit(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._input_panel.submit)
+        self.Bind(wx.EVT_BUTTON, callback, self._top_toolbar.submit)
 
     def bind_skip(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._input_panel.skip)
+        self.Bind(wx.EVT_BUTTON, callback, self._top_toolbar.skip)
 
     def bind_split(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._input_panel.split)
+        self.Bind(wx.EVT_BUTTON, callback, self._top_toolbar.split)
 
     @property
     def status_bar(self) -> str:
