@@ -2,6 +2,7 @@ from .panels.image import BitmapViewer
 from .panels.input import InputPanel
 from .panels.navigation import NavigationPanel
 import wx
+from wx.lib.floatcanvas import FloatCanvas
 
 
 class ImageViewer(wx.Frame):
@@ -55,7 +56,7 @@ class ImageViewer(wx.Frame):
         self._navigation_panel.set_exit_callback(callback)
 
     def set_bitmap_movement_callback(self, callback):
-        self._nav_canvas.Canvas.Bind(wx.EVT_MOTION, callback)
+        self._nav_canvas.Canvas.Bind(FloatCanvas.EVT_MOTION, callback)
 
     @property
     def status_bar(self) -> str:
