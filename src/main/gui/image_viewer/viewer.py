@@ -60,3 +60,6 @@ class ImageViewer(wx.Frame):
 
     def close(self, _event: wx.Event = None) -> None:
         self.Close()
+
+    def notify(self, event: wx.Event) -> None:
+        print(event.EventObject == self._nav_canvas)
