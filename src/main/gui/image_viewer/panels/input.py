@@ -4,14 +4,14 @@ import wx
 class InputPanel(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super().__init__(parent=parent)
-        self._initialise_widgets()
+        self._initialise()
 
-    def _initialise_widgets(self) -> None:
-        self._create_widgets()
-        self._layout_widgets()
+    def _initialise(self) -> None:
+        self._initialise_widgets()
+        self._initialise_sizer()
         self.SetBackgroundColour(colour=wx.YELLOW)
 
-    def _create_widgets(self) -> None:
+    def _initialise_widgets(self) -> None:
         self._input_label = wx.StaticText(
             self, label="Please enter job reference:")
 
@@ -20,7 +20,7 @@ class InputPanel(wx.Panel):
         self.skip = wx.Button(self, label="Skip")
         self.split = wx.Button(self, label="Split")
 
-    def _layout_widgets(self) -> None:
+    def _initialise_sizer(self) -> None:
         border = 5
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
 
@@ -34,7 +34,7 @@ class InputPanel(wx.Panel):
         sizer.Add(window=self.skip, pos=(1, 2), flag=wx.ALL, border=border)
         sizer.Add(window=self.split, pos=(1, 3), flag=wx.ALL, border=border)
 
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
 
     def clear_job_ref_input(self) -> None:
         self.input.Clear()

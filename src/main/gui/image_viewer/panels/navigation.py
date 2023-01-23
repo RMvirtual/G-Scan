@@ -18,4 +18,4 @@ class NavigationPanel(wx.Panel):
             flag=wx.ALL|wx.ALIGN_RIGHT, border=5
         )
 
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)

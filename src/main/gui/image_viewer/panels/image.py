@@ -18,7 +18,7 @@ class BitmapViewer(NavCanvas):
 
     def load_image(self, image: wx.Image) -> None:
         scaled_bitmap = FloatCanvas.ScaledBitmap2(
-            image, (0, 0), Height=image.GetHeight(), Position="tl")
+            Bitmap=image, XY=(0,0), Height=image.GetHeight(), Position="bl")
 
         self.Canvas.AddObject(scaled_bitmap)
         self.Canvas.ZoomToBB()
