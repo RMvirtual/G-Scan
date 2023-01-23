@@ -42,4 +42,5 @@ class ImageViewerController:
         print("SPLIT")
 
     def bitmap_movement(self, event: wx.EVT_MOTION) -> None:
-        self._viewer.status_bar = "%i, %i"%tuple(event.Coords)
+        if event.Moving():
+            self._viewer.status_bar = f"{event.GetPosition()}"
