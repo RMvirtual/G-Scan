@@ -8,11 +8,11 @@ class Logo(wx.Panel):
         super(Logo, self).__init__(parent)
 
         image_dir = file_system.image_resources_directory()
-        image_path = image_dir + "\\g-scan_logo.png"
-        image = wx.Image(image_path, wx.BITMAP_TYPE_ANY)
+        image_path = image_dir + "\\logo.png"
+        image = wx.Image(image_path, wx.BITMAP_TYPE_PNG)
 
         self.bitmap_ctrl = GenStaticBitmap(
-            parent=self, ID=-1, bitmap=image.ConvertToBitmap())
+            parent=self, ID=-1, bitmap=image.ConvertToBitmap(depth=32))
 
         self.sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         self.sizer.AddStretchSpacer(prop=1)

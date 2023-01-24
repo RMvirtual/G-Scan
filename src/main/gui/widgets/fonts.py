@@ -9,6 +9,8 @@ def getFont(font: str, size: int) -> wx.Font:
     """Creates a font to be used."""
 
     font = wx.Font(
-        size, wx.MODERN, wx.NORMAL, wx.NORMAL, False, font)
+        pointSize=size, family=wx.MODERN, style=wx.NORMAL, weight=wx.NORMAL,
+        underline=False, facename=font
+    )
 
     return font
