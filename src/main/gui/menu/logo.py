@@ -15,11 +15,14 @@ class Logo(wx.Panel):
             parent=self, ID=-1, bitmap=image.ConvertToBitmap())
 
         self.sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        self.sizer.AddStretchSpacer(1)
+        self.sizer.AddStretchSpacer(prop=1)
+
         self.sizer.Add(
             window=self.bitmap_ctrl, proportion=1,
-            flag=wx.ALIGN_CENTRE, border=0
+            flag=wx.ALIGN_BOTTOM|wx.ALL, border=15
         )
-        self.sizer.AddStretchSpacer(1)
+
+        self.sizer.AddStretchSpacer(prop=1)
+        self.SetSizer(self.sizer)
 
         self.SetBackgroundColour(colour=wx.RED)

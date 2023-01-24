@@ -16,12 +16,12 @@ class InitialOptions(wx.Panel):
 
         self.sizer.Add(
             window=self.ops, proportion=0,
-            flag=wx.ALL|wx.ALIGN_CENTRE_VERTICAL, border=10
+            flag=wx.ALL|wx.ALIGN_TOP, border=15
         )
 
         self.sizer.Add(
             window=self.pods, proportion=0,
-            flag=wx.ALL|wx.ALIGN_CENTRE_VERTICAL, border=10
+            flag=wx.ALL|wx.ALIGN_TOP, border=15
         )
 
         self.sizer.AddStretchSpacer(prop=1)
