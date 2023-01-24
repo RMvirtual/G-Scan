@@ -1,5 +1,6 @@
-from src.main.gui.app import screen_size
 import wx
+from src.main.gui.app import screen_size
+from src.main.gui.menu.initial_options import InitialOptions
 
 class MainMenu(wx.Frame):
     def __init__(self, title) -> None:
@@ -7,5 +8,18 @@ class MainMenu(wx.Frame):
         super().__init__(parent=None, title=title, size=size, pos=position)
 
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
+        self._initial_options = InitialOptions(self)
 
-        self._initial_menu = wx.Panel()
+        self._sizer = wx.BoxSizer(orient=wx.VERTICAL)
+
+        self._sizer.AddStretchSpacer()
+
+        self._sizer.Add(
+            window=self._initial_options, proportion=1,
+            flag=wx.EXPAND, border=0
+        )
+
+        self._sizer.AddStretchSpacer()
+
+        self.SetSizer(self._sizer)
+
