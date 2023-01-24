@@ -18,16 +18,13 @@ class MainMenu(wx.Frame):
         self._sizer.AddStretchSpacer()
 
         self._sizer.Add(
-            window=self._logo, proportion=1,
-            flag=wx.EXPAND, border=0
-        )
+            window=self._logo, proportion=1, flag=wx.EXPAND, border=0)
 
         self._sizer.Add(
-            window=self._initial_options, proportion=1,
-            flag=wx.EXPAND, border=0
+            window=self._initial_options, proportion=1, flag=wx.EXPAND,
+            border=0
         )
 
         self._sizer.AddStretchSpacer()
 
         self.SetSizer(self._sizer)
-
