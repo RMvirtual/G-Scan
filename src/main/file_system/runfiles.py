@@ -8,6 +8,8 @@ def test_resources_directory() -> str:
 
 
 def image_resources_directory() -> str:
+    return _from_runfiles("gscan\\resources\\images")
+
     r = runfiles.Create()
 
     return r.Rlocation("gscan/resources/images")
@@ -35,3 +37,7 @@ def staging_area() -> str:
     r = runfiles.Create()
 
     return r.Rlocation("gscan/resources/staging")
+
+
+def _from_runfiles(file_path: str):
+    return runfiles.Create().Rlocation(file_path)
