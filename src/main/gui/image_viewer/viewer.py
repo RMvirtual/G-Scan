@@ -1,7 +1,7 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.app import screen_size
-from src.main.gui.image_viewer.image import BitmapViewer
+from src.main.gui.image_viewer.bitmap_canvas import BitmapViewer
 from src.main.gui.image_viewer.input import InputPanel
 from src.main.gui.image_viewer.navigation import NavigationPanel
 from src.main.gui.image_viewer.menu_bar import MenuBar

@@ -46,8 +46,6 @@ def __copy_file(file_name, backup_file_name, scan_directory,
         backup_directory):
     """Attempts to copy the file over."""
 
-    copying_success = False
-
     try:
         scan_file_path = __append_file_to_path(file_name, scan_directory)
         backup_file_path = __append_file_to_path(

@@ -1,10 +1,8 @@
-import sys
-from controller import ImageViewerController
-from src.main.gui.app.app import GuiApplication
+from src.main.app.pdf_viewer.controller import ImageViewerController
+from src.main.gui.app import GuiApplication
 
 
 def main(image_path: str = None) -> None:
-    """Main Loop for loading an image to test viewer functionality."""
     application = GuiApplication()
     viewer = ImageViewerController()
 
@@ -15,4 +13,4 @@ def main(image_path: str = None) -> None:
 
 
 if __name__ == '__main__':
-    main(sys.argv[1]) if len(sys.argv) > 1 else main()
+    main()

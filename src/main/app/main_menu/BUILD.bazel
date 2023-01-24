@@ -2,7 +2,7 @@ load("@python_third_party//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary")
 
 py_binary(
-    name = "pdf_viewer",
+    name = "main_menu",
     srcs = glob(["*.py"]),
     data = [],
     main = "__main__.py",
@@ -10,6 +10,5 @@ py_binary(
     deps = [
         "//src/main/gui/app",
         "//src/main/gui/menu",
-        requirement("wxPython"),
     ],
 )

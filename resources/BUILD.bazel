@@ -1,5 +1,11 @@
-exports_files([
-    "images",
-    "test",
-    "staging"
-])
+filegroup(
+    name = "resources",
+    srcs = [
+        "//resources/images",
+        "//resources/staging",
+        "//resources/test",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+exports_files(glob(["*"]))

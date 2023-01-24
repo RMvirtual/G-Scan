@@ -1,6 +1,6 @@
 import os
 import shelve
-from rules_python.python.runfiles import runfiles
+import src.main.file_system.runfiles
 from src.main.file_system.directory_item import DirectoryItem
 
 
@@ -27,55 +27,19 @@ def base_name(path):
 
 
 def file_name(path):
-    name, _ = os.path.splitext(base_name(path))
-
-    return name
+    return name_and_extension(path)[0]
 
 
-def file_ext(path):
-    _, extension = os.path.splitext(base_name(path))
-
-    return extension
+def file_ext(path) -> str:
+    return name_and_extension(path)[1]
 
 
-def test_resources_directory() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("gscan/resources/test")
-
-
-def image_resources_directory() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("gscan/resources/images")
-
-
-def data_directory() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("data/user_settings.dat")
-
-
-def user_settings_data_path() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("data/user_settings.dat")
-
-
-def temp_directory() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("gscan/data/temp")
-
-
-def staging_area() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("gscan/resources/staging")
+def name_and_extension(path: str) -> tuple[str, str]:
+    return os.path.splitext(base_name(path))[0:2]
 
 
 def user_settings_data():
-    return shelve.open(user_settings_data_path())
+    return shelve.open(runfiles.user_settings_data_path())
 
 
 def is_path_directory(path):
@@ -91,10 +55,5 @@ def file_exists(name: str, directory_path) -> bool:
 
 
 def matching_file_names(name: str, directory_path: str) -> int:
-    count = 0
-
-    for item in directory_items(directory_path):
-        if name in item:
-            count += 1
-
-    return count
+    return len([
+        item for item in directory_items(directory_path) if name in item])

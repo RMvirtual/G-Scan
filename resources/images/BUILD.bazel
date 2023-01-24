@@ -1,0 +1,7 @@
+filegroup(
+    name = "images",
+    srcs = glob(["*"]),
+    visibility = ["//visibility:public"],
+)
+
+exports_files(glob(["*"]))
