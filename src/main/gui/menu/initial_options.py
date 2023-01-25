@@ -6,7 +6,7 @@ class InitialOptions(wx.Panel):
 
         self._initialise_buttons()
         self._initialise_sizer()
-        self.SetBackgroundColour(wx.BLUE)
+        #  self.SetBackgroundColour(wx.BLUE)
 
     def _initialise_buttons(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())

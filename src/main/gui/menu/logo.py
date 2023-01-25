@@ -17,7 +17,7 @@ class Logo(wx.Panel):
 
         self._initialise_sizer()
         self.Bind(wx.EVT_SIZE, self.on_resize)
-        self.SetBackgroundColour(colour=wx.RED)
+
         self.on_resize()
 
     def _initialise_sizer(self) -> None:
