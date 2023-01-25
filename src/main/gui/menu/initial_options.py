@@ -18,17 +18,14 @@ class InitialOptions(wx.Panel):
         self.pods.SetFont(font)
 
     def _initialise_sizer(self) -> None:
+        flags = wx.ALL|wx.ALIGN_TOP
+        border = 15
+
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         sizer.AddStretchSpacer(prop=1)
 
-        alignment_flag = wx.ALL|wx.ALIGN_TOP
-        border = 15
-
-        sizer.Add(
-            window=self.ops, proportion=0, flag=alignment_flag, border=border)
-
-        sizer.Add(
-            window=self.pods, proportion=0, flag=alignment_flag, border=border)
+        sizer.Add(window=self.ops, proportion=0, flag=flags, border=border)
+        sizer.Add(window=self.pods, proportion=0, flag=flags, border=border)
 
         sizer.AddStretchSpacer(prop=1)
 
