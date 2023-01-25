@@ -4,12 +4,7 @@ class InitialOptions(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super(InitialOptions, self).__init__(parent)
 
-        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
-        self.ops = wx.Button(parent=self, label="Ops")
-        self.ops.SetFont(font)
-
-        self.pods = wx.Button(parent=self, label="PODs")
-        self.pods.SetFont(font)
+        self._initialise_buttons()
 
         self.sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         self.sizer.AddStretchSpacer(prop=1)
@@ -26,3 +21,12 @@ class InitialOptions(wx.Panel):
 
         self.SetSizer(self.sizer)
         self.SetBackgroundColour(wx.BLUE)
+
+    def _initialise_buttons(self) -> None:
+        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
+
+        self.ops = wx.Button(parent=self, label="Ops")
+        self.ops.SetFont(font)
+
+        self.pods = wx.Button(parent=self, label="PODs")
+        self.pods.SetFont(font)
