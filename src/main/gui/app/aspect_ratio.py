@@ -8,13 +8,7 @@ def aspectRatio(width: int, height: int) -> float:
 def scale_to_ratio(ratio: float, width: int, height: int) -> tuple[int, int]:
     too_wide = aspectRatio(width, height) > ratio
 
-    if too_wide:
-        width = height * ratio
-
-    else:
-        height = width / ratio
-
-    return width, height
+    return (height*ratio, height) if too_wide else (width, width/ratio)
 
 
 def scale_with_ratio(
