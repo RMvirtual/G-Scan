@@ -2,6 +2,7 @@ import wx
 from wx.lib.statbmp import GenStaticBitmap
 
 from src.main import file_system
+from src.main.gui.app import aspect_ratio
 
 class Logo(wx.Panel):
     def __init__(self, parent: wx.Frame):
@@ -27,11 +28,14 @@ class Logo(wx.Panel):
         self.SetBackgroundColour(colour=wx.RED)
 
     def on_resize(self, event) -> None:
-        width, height = self.GetSize()
-        print(f"Panel Size: {self.GetSize()}")
-        print(f"Bitmap Ctrl Size: {self.bitmap_ctrl.Size}")
+        panel_width, panel_height = self.Size
+
+        new_width, new_height = aspect_ratio.best_fit(
+            image=self.image, width=panel_width, height=panel_height)
 
         scaled_image = self.image.Scale(
-            width=width, height=height, quality=wx.IMAGE_QUALITY_NORMAL)
+            width=new_width, height=new_height,
+            quality=wx.IMAGE_QUALITY_NORMAL
+        )
 
         self.bitmap_ctrl.SetBitmap(scaled_image.ConvertToBitmap())
