@@ -5,21 +5,7 @@ class InitialOptions(wx.Panel):
         super(InitialOptions, self).__init__(parent)
 
         self._initialise_buttons()
-
-        self.sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        self.sizer.AddStretchSpacer(prop=1)
-
-        self.sizer.Add(
-            window=self.ops, proportion=0, flag=wx.ALL|wx.ALIGN_TOP, border=15)
-
-        self.sizer.Add(
-            window=self.pods, proportion=0,
-            flag=wx.ALL|wx.ALIGN_TOP, border=15
-        )
-
-        self.sizer.AddStretchSpacer(prop=1)
-
-        self.SetSizer(self.sizer)
+        self._initialise_sizer()
         self.SetBackgroundColour(wx.BLUE)
 
     def _initialise_buttons(self) -> None:
@@ -30,3 +16,20 @@ class InitialOptions(wx.Panel):
 
         self.pods = wx.Button(parent=self, label="PODs")
         self.pods.SetFont(font)
+
+    def _initialise_sizer(self) -> None:
+        sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
+        sizer.AddStretchSpacer(prop=1)
+
+        alignment_flag = wx.ALL|wx.ALIGN_TOP
+        border = 15
+
+        sizer.Add(
+            window=self.ops, proportion=0, flag=alignment_flag, border=border)
+
+        sizer.Add(
+            window=self.pods, proportion=0, flag=alignment_flag, border=border)
+
+        sizer.AddStretchSpacer(prop=1)
+
+        self.SetSizer(sizer)
