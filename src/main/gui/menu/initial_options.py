@@ -22,11 +22,11 @@ class InitialOptions(wx.Panel):
         border = 15
 
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        sizer.AddStretchSpacer(prop=1)
+        sizer.AddStretchSpacer()
 
         sizer.Add(window=self.ops, proportion=0, flag=flags, border=border)
         sizer.Add(window=self.pods, proportion=0, flag=flags, border=border)
 
-        sizer.AddStretchSpacer(prop=1)
+        sizer.AddStretchSpacer()
 
         self.SetSizer(sizer)

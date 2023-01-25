@@ -21,22 +21,22 @@ class Logo(wx.Panel):
         self.on_resize()
 
     def _initialise_sizer(self) -> None:
-        self.sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        flags = wx.ALL|wx.ALIGN_BOTTOM|wx.SHAPED
+        sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        flags = wx.ALIGN_CENTRE_HORIZONTAL
 
-        self.sizer.Add(window=self.bitmap, proportion=0, flag=flags, border=0)
+        sizer.AddStretchSpacer()
+        sizer.Add(window=self.bitmap, proportion=0, flag=flags, border=0)
+        sizer.AddStretchSpacer()
 
-        self.SetSizer(self.sizer)
+        self.SetSizer(sizer)
 
     def on_resize(self, _event = None) -> None:
-        panel_width, panel_height = self.Size
-
-        new_width, new_height = aspect_ratio.scale_with_ratio(
-            image=self.image, new_width=panel_width, new_height=panel_height)
-
-        scaled_image = self.image.Scale(
-            width=new_width, height=new_height,
-            quality=wx.IMAGE_QUALITY_NORMAL
-        )
+        width, height = self._scaled_image_metrics()
+        scaled_image = self.image.Scale(width, height, wx.IMAGE_QUALITY_NORMAL)
 
         self.bitmap.SetBitmap(scaled_image.ConvertToBitmap())
+
+    def _scaled_image_metrics(self) -> tuple[int, int]:
+        width, height = self.Size
+
+        return aspect_ratio.scale_with_ratio(self.image, width, height)
