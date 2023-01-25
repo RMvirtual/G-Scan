@@ -22,9 +22,7 @@ class MainMenu(wx.Frame):
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         flags = wx.EXPAND
 
-        # sizer.AddStretchSpacer()
         sizer.Add(window=self._logo, proportion=1, flag=flags, border=0)
         sizer.Add(window=self._options, proportion=2, flag=flags, border=0)
-        # sizer.AddStretchSpacer()
 
         self.SetSizer(sizer)
