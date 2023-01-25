@@ -35,4 +35,3 @@ class Logo(wx.Panel):
             width=width, height=height, quality=wx.IMAGE_QUALITY_NORMAL)
 
         self.bitmap_ctrl.SetBitmap(scaled_image.ConvertToBitmap())
-        self.sizer.Layout()
