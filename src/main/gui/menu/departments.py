@@ -1,8 +1,8 @@
 import wx
 
-class InitialOptions(wx.Panel):
+class Departments(wx.Panel):
     def __init__(self, parent: wx.Frame):
-        super(InitialOptions, self).__init__(parent)
+        super(Departments, self).__init__(parent)
 
         self._initialise_buttons()
         self._initialise_sizer()

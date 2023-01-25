@@ -1,6 +1,6 @@
 import wx
 from src.main.gui.app import screen_size
-from src.main.gui.menu.initial_options import InitialOptions
+from src.main.gui.menu.departments import Departments
 from src.main.gui.menu.logo import Logo
 
 
@@ -15,7 +15,7 @@ class MainMenu(wx.Frame):
 
 
     def _initialise_panels(self) -> None:
-        self._options = InitialOptions(self)
+        self._options = Departments(self)
         self._logo = Logo(self)
 
     def _initialise_sizer(self) -> None:
