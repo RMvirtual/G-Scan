@@ -20,15 +20,13 @@ class MainMenu(wx.Frame):
 
     def _initialise_initial_screen_sizer(self) -> None:
         self._sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        self._sizer.AddStretchSpacer(prop=1)
 
         self._sizer.Add(
-            window=self._logo, proportion=1, flag=wx.EXPAND, border=0)
+            window=self._logo, proportion=2, flag=wx.EXPAND, border=0)
 
         self._sizer.Add(
-            window=self._initial_options, proportion=1, flag=wx.EXPAND,
+            window=self._initial_options, proportion=6, flag=wx.EXPAND,
             border=0
         )
 
-        self._sizer.AddStretchSpacer(prop=1)
         self.SetSizer(self._sizer)

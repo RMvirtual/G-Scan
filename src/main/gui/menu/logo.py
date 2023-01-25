@@ -18,6 +18,7 @@ class Logo(wx.Panel):
         self._initialise_sizer()
         self.Bind(wx.EVT_SIZE, self.on_resize)
         self.SetBackgroundColour(colour=wx.RED)
+        self.on_resize()
 
     def _initialise_sizer(self) -> None:
         self.sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
@@ -29,7 +30,7 @@ class Logo(wx.Panel):
 
         self.SetSizer(self.sizer)
 
-    def on_resize(self, _event) -> None:
+    def on_resize(self, _event = None) -> None:
         panel_width, panel_height = self.Size
 
         new_width, new_height = aspect_ratio.scale_with_ratio(
