@@ -15,7 +15,7 @@ class MainMenu(wx.Frame):
 
 
     def _initialise_panels(self) -> None:
-        self._options = Departments(self)
+        self._departments = Departments(self)
         self._logo = Logo(self)
 
     def _initialise_sizer(self) -> None:
@@ -23,6 +23,6 @@ class MainMenu(wx.Frame):
         flags = wx.EXPAND
 
         sizer.Add(window=self._logo, proportion=1, flag=flags, border=0)
-        sizer.Add(window=self._options, proportion=2, flag=flags, border=0)
+        sizer.Add(window=self._departments, proportion=2, flag=flags, border=0)
 
         self.SetSizer(sizer)
