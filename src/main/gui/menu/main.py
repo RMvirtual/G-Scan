@@ -10,23 +10,21 @@ class MainMenu(wx.Frame):
         super().__init__(parent=None, title=title, size=size, pos=position)
 
         self._initialise_panels()
-        self._initialise_initial_screen_sizer()
+        self._initialise_sizer()
         self.SetBackgroundColour(colour=wx.WHITE)
 
 
     def _initialise_panels(self) -> None:
-        self._initial_options = InitialOptions(self)
+        self._options = InitialOptions(self)
         self._logo = Logo(self)
 
-    def _initialise_initial_screen_sizer(self) -> None:
-        self._sizer = wx.BoxSizer(orient=wx.VERTICAL)
+    def _initialise_sizer(self) -> None:
+        sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        flags = wx.EXPAND
 
-        self._sizer.Add(
-            window=self._logo, proportion=2, flag=wx.EXPAND, border=0)
+        # sizer.AddStretchSpacer()
+        sizer.Add(window=self._logo, proportion=1, flag=flags, border=0)
+        sizer.Add(window=self._options, proportion=2, flag=flags, border=0)
+        # sizer.AddStretchSpacer()
 
-        self._sizer.Add(
-            window=self._initial_options, proportion=6, flag=wx.EXPAND,
-            border=0
-        )
-
-        self.SetSizer(self._sizer)
+        self.SetSizer(sizer)
