@@ -24,7 +24,7 @@ class Logo(wx.Panel):
         self.sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
         self.sizer.Add(
-            window=self.bitmap, proportion=1,
+            window=self.bitmap, proportion=0,
             flag=wx.ALL|wx.ALIGN_BOTTOM|wx.SHAPED, border=0
         )
 
