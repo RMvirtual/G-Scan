@@ -9,7 +9,7 @@ class MainMenu(wx.Frame):
         size, position = screen_size.recommended_metrics()
         super().__init__(parent=None, title=title, size=size, pos=position)
 
-        self.SetBackgroundColour(colour=wx.LIGHT_GREY)
+        self.SetBackgroundColour(colour=wx.WHITE)
         self._initial_options = InitialOptions(self)
         self._logo = Logo(self)
 
