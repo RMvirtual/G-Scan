@@ -1,5 +1,5 @@
 import wx
-from src.main.gui.app.aspect_ratio import best_fit
+from src.main.gui.app.aspect_ratio import scale_with_ratio
 
 
 def toBitmap(image_path: str) -> wx.Bitmap:
@@ -19,7 +19,7 @@ def toScaledImage(image_path: str, width: int, height: int) -> wx.Image:
 def toScaledImagePreserveAspectRatio(image_path: str, width: int, height: int):
     image = toImage(image_path)
 
-    width, height = best_fit(
+    width, height = scale_with_ratio(
         image, width, height)
 
     return toScaledImage(image_path, width, height)

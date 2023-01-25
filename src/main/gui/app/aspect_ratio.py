@@ -5,11 +5,10 @@ def aspectRatio(width: int, height: int) -> float:
     return float(width) / float(height)
 
 
-def scaleDimensionsToRatio(
-        ratio: float, width: int, height: int) -> tuple[int, int]:
-    is_too_wide = aspectRatioCorrectness(ratio, width, height)["too wide"]
+def scale_to_ratio(ratio: float, width: int, height: int) -> tuple[int, int]:
+    too_wide = aspectRatio(width, height) > ratio
 
-    if is_too_wide:
+    if too_wide:
         width = height * ratio
 
     else:
@@ -18,19 +17,10 @@ def scaleDimensionsToRatio(
     return width, height
 
 
-def best_fit(
-        image: wx.Image, width: int, height: int) -> tuple[int, int]:
-    return scaleDimensionsToRatio(aspectRatioFromImage(image), width, height)
+def scale_with_ratio(
+        image: wx.Image, new_width: int, new_height: int) -> tuple[int, int]:
+    return scale_to_ratio(image_aspect_ratio(image), new_width, new_height)
 
-def aspectRatioFromImage(image: wx.Image) -> float:
+
+def image_aspect_ratio(image: wx.Image) -> float:
     return aspectRatio(image.GetWidth(), image.GetHeight())
-
-def aspectRatioCorrectness(
-        ratio: float, width: int, height: int) -> dict[str, bool]:
-    new_ratio = aspectRatio(width, height)
-
-    return {
-        "preserved": new_ratio == ratio,
-        "too wide": new_ratio > ratio,
-        "too tall": new_ratio < ratio
-    }

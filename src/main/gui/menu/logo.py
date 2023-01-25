@@ -30,8 +30,8 @@ class Logo(wx.Panel):
     def on_resize(self, event) -> None:
         panel_width, panel_height = self.Size
 
-        new_width, new_height = aspect_ratio.best_fit(
-            image=self.image, width=panel_width, height=panel_height)
+        new_width, new_height = aspect_ratio.scale_with_ratio(
+            image=self.image, new_width=panel_width, new_height=panel_height)
 
         scaled_image = self.image.Scale(
             width=new_width, height=new_height,
