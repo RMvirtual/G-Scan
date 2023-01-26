@@ -29,6 +29,18 @@ class Settings(wx.Frame):
         self.save = wx.Button(parent=self, label="Save")
         self.exit = wx.Button(parent=self, label="Exit")
 
+        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
+
+        items = [
+            self.scan_dir_label, self.scan_dir_box, self.scan_dir_browse,
+            self.dest_dir_label, self.dest_dir_box, self.dest_dir_browse,
+            self.save, self.exit
+        ]
+
+        for item in items:
+            item.SetFont(font)
+
+
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer()
         sizer.Add(window=self.scan_dir_label, pos=(0,0), flag=wx.EXPAND)
