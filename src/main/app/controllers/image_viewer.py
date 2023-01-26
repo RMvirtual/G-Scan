@@ -1,4 +1,4 @@
-from src.main.gui.image_viewer.viewer import ImageViewer
+from src.main.gui import ImageViewer
 import fitz
 import wx
 

@@ -1,5 +1,5 @@
 import wx
-from src.main.gui.menu.main import MainMenu
+from src.main.gui import MainMenu
 from src.main.app.controllers.image_viewer import ImageViewerController
 
 

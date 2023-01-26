@@ -1,5 +1,5 @@
 import wx
-from src.main.gui.app import screen_size
+from src.main.gui.metrics import screen_size
 from src.main.gui.menu.departments import Departments
 from src.main.gui.menu.logo import Logo
 from src.main.gui.menu.operations import Operations

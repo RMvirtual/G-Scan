@@ -1,0 +1,1 @@
+from src.main.gui.menu.main import MainMenu

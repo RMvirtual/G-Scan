@@ -8,6 +8,7 @@ py_binary(
     main = "main_menu.py",
     visibility = ["//visibility:public"],
     deps = [
+        requirement("wxPython"),
         "//src/main/app/controllers",
         "//src/main/gui",
     ],

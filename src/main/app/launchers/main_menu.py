@@ -1,13 +1,12 @@
-import sys
-from src.main.app.controllers.main_menu import MainMenuController
-from src.main.gui.app.app import GuiApplication
+import wx
+from src.main.app.controllers import MainMenuController
 
 
 def main() -> None:
-    application = GuiApplication()
+    application = wx.App()
     _main_menu = MainMenuController()
 
-    application.run()
+    application.MainLoop()
 
 
 if __name__ == '__main__':

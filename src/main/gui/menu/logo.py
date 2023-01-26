@@ -2,7 +2,8 @@ import wx
 from wx.lib.statbmp import GenStaticBitmap
 
 from src.main import file_system
-from src.main.gui.app import aspect_ratio
+from src.main.gui.metrics import aspect_ratio
+
 
 class Logo(wx.Panel):
     def __init__(self, parent: wx.Frame):
