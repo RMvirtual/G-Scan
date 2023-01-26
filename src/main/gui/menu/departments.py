@@ -51,5 +51,4 @@ class DepartmentOptions(wx.Panel):
         sizer.Add(window=self.ops, proportion=0, flag=flags, border=border)
         sizer.Add(window=self.pods, proportion=0, flag=flags, border=border)
 
-
         self.SetSizer(sizer)

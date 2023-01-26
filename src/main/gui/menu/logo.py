@@ -25,9 +25,7 @@ class Logo(wx.Panel):
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         flags = wx.ALIGN_CENTRE_HORIZONTAL
 
-        sizer.AddStretchSpacer()
         sizer.Add(window=self.bitmap, proportion=0, flag=flags, border=0)
-        sizer.AddStretchSpacer()
 
         self.SetSizer(sizer)
 
