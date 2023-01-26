@@ -338,7 +338,7 @@ class Controller():
             self.__settings_menu.set_backup_directory)
 
     def __close_settings_menu(self, event = None):
-        self.__settings_menu.close()
+        self.__settings_menu.close_all()
 
     def get_current_user(self):
         """Returns the current user of the program as a User object."""
@@ -410,7 +410,7 @@ class Controller():
                 "No available files found in scan directory.",
                 230, 75)
             
-            self.pdf_viewer.close()
+            self.pdf_viewer.close_all()
 
             return
 

@@ -39,7 +39,7 @@ def _read_pdf(source: str):
         for ref in refs:
             barcode_ref_list.append(ref)
 
-    pdf_reader.close()
+    pdf_reader.close_all()
 
     return barcode_ref_list
 

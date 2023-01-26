@@ -15,7 +15,7 @@ def get_user_settings():
     except Exception as exception:
         user = create_new_user(current_username, user_settings_data)
 
-    user_settings_data.close()
+    user_settings_data.close_all()
 
     return user
 
@@ -60,7 +60,7 @@ class User(object):
         user_settings_data[self.__name] = self
         user_settings_data.sync()
 
-        user_settings_data.close()
+        user_settings_data.close_all()
 
     def validate_directories_check(self) -> dict:
         """Returns an a dictionary (hash map) with the keys as the

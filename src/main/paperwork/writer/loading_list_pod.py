@@ -30,7 +30,7 @@ def create_loading_list_pod(master_application, file, scan_dir,
             output = PyPDF2.PdfFileWriter()
             temporary_image = temp_directory + "/" + file_name + ".png"
             img.save(temporary_image)
-            img.close()
+            img.close_all()
 
         final_image = temp_directory + "/temp_image.png"
 
@@ -57,4 +57,4 @@ def create_loading_list_pod(master_application, file, scan_dir,
 
         output_stream = open(temp_directory + "/" + "result.pdf", "wb")
         output.write(output_stream)
-        output_stream.close()
+        output_stream.close_all()

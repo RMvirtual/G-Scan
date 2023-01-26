@@ -108,12 +108,12 @@ def split_pdf_document(master_application, file, scan_dir):
                 with open(scan_dir + "/" + split_pdf_file_name,
                           "wb") as split_pdf_file:
                     split_pdf_holder.write(split_pdf_file)
-                split_pdf_file.close()
+                split_pdf_file.close_all()
                 master_application.write_log("Created " + split_pdf_file_name)
 
                 split_file_list.append(split_pdf_file_name)
 
-            current_file_pdf.close()
+            current_file_pdf.close_all()
             os.remove(scan_dir + "/" + file)
 
     return split_file_list
@@ -165,9 +165,9 @@ def image_converter(master_application, file, scan_dir, multi_page_handling):
 
             with open(scan_dir + "/" + pdf_file, "wb") as output_stream:
                 output.write(output_stream)
-            output_stream.close()
+            output_stream.close_all()
             master_application.write_log("Created " + pdf_file)
-            img.close()
+            img.close_all()
             os.remove(scan_dir + "/" + file)
 
     if file_extension.lower() == ".jpeg" or file_extension.lower() == ".jpg" \
@@ -202,7 +202,7 @@ def image_converter(master_application, file, scan_dir, multi_page_handling):
 
         with open(scan_dir + "/" + pdf_file, "wb") as output_stream:
             output.write(output_stream)
-        output_stream.close()
+        output_stream.close_all()
         master_application.write_log("Created " + pdf_file)
         os.remove(scan_dir + "/" + file)
 
@@ -235,10 +235,10 @@ def upload_doc(file, scan_dir, dest_dir,
 
         temp_file = open(temp_directory + "/temp.pdf", "wb")
         temp_file_writer.write(temp_file)
-        temp_file.close()
+        temp_file.close_all()
 
-        result.close()
-        dest_file_object.close()
+        result.close_all()
+        dest_file_object.close_all()
 
         shutil.move(
             temp_directory + "temp.pdf", dest_dir + "/" + dest_file_name)
