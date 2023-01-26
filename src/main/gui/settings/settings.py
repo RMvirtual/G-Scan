@@ -20,11 +20,27 @@ class Settings(wx.Frame):
         self.scan_dir_box = wx.TextCtrl(parent=self, value="NULL")
         self.scan_dir_browse = wx.Button(parent=self, label="...")
 
+        self.dest_dir_label = wx.StaticText(
+            parent=self, label="Destination Directory")
+
+        self.dest_dir_box = wx.TextCtrl(parent=self, value="NULL")
+        self.dest_dir_browse = wx.Button(parent=self, label="...")
+
+        self.save = wx.Button(parent=self, label="Save")
+        self.exit = wx.Button(parent=self, label="Exit")
+
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer()
         sizer.Add(window=self.scan_dir_label, pos=(0,0))
         sizer.Add(window=self.scan_dir_box, pos=(0,1))
         sizer.Add(window=self.scan_dir_browse, pos=(0,2))
+
+        sizer.Add(window=self.dest_dir_label, pos=(1,0))
+        sizer.Add(window=self.dest_dir_box, pos=(1,1))
+        sizer.Add(window=self.dest_dir_browse, pos=(1,2))
+
+        sizer.Add(window=self.save, pos=(2,0))
+        sizer.Add(window=self.exit, pos=(2,1))
 
         self.SetSizer(sizer)
 
