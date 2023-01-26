@@ -18,7 +18,7 @@ class Departments(wx.Panel):
         sizer.Add(
             window=self.options, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)
 
-        sizer.Add(window=self.toolbar, flag=wx.ALIGN_RIGHT)
+        sizer.Add(window=self.toolbar, proportion=0, flag=wx.ALIGN_RIGHT)
 
         self.SetSizer(sizer)
 
@@ -43,15 +43,13 @@ class DepartmentOptions(wx.Panel):
             button.SetFont(font)
 
     def _initialise_sizer(self) -> None:
-        flags = wx.ALL|wx.ALIGN_TOP
+        flags = wx.LEFT|wx.RIGHT|wx.ALIGN_TOP
         border = 15
 
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        sizer.AddStretchSpacer()
 
         sizer.Add(window=self.ops, proportion=0, flag=flags, border=border)
         sizer.Add(window=self.pods, proportion=0, flag=flags, border=border)
 
-        sizer.AddStretchSpacer()
 
         self.SetSizer(sizer)
