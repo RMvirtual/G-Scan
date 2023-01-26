@@ -1,15 +1,14 @@
 load("@python_third_party//:requirements.bzl", "requirement")
-load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_python//python:defs.bzl", "py_library")
 
-py_binary(
+py_library(
     name = "pdf_viewer",
     srcs = glob(["*.py"]),
-    data = [],
-    main = "__main__.py",
     visibility = ["//visibility:public"],
     deps = [
+        requirement("wxPython"),
+        requirement("pymupdf"),
         "//src/main/gui/app",
         "//src/main/gui/menu",
-        requirement("wxPython"),
     ],
 )

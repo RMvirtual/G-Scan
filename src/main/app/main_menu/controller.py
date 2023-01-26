@@ -1,5 +1,6 @@
 import wx
 from src.main.gui.menu.main import MainMenu
+from src.main.app.pdf_viewer.controller import ImageViewerController
 
 
 class MainMenuController:
@@ -7,6 +8,7 @@ class MainMenuController:
         self._menu = MainMenu("G-Scan")
         self._initialise_callbacks()
         self._menu.Show()
+        self._paperwork_viewer = ImageViewerController()
 
     def _initialise_callbacks(self) -> None:
         self._menu.departments.ops.Bind(wx.EVT_BUTTON, self._menu.view_ops)
@@ -23,4 +25,4 @@ class MainMenuController:
         self._menu.Close()
 
     def _paperwork_viewer(self, event = None) -> None:
-        print("Paperwork Viewer should launch.")
+        self._paperwork_viewer.launch()

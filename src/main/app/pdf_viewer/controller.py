@@ -9,7 +9,6 @@ class ImageViewerController:
     def _initialise_viewer(self):
         self._viewer = ImageViewer("G-Scan")
         self._bind_event_callbacks()
-        self._viewer.Show()
 
     def _bind_event_callbacks(self) -> None:
         self._viewer.bind_exit(self.close)
@@ -44,3 +43,6 @@ class ImageViewerController:
 
     def bitmap_movement(self, event: "FloatCanvas.EVT_MOTION") -> None:
         self._viewer.status_bar = "%i, %i"%tuple(event.Coords)
+
+    def launch(self) -> None:
+        self._viewer.Show()
