@@ -5,11 +5,10 @@ py_binary(
     name = "main_menu",
     srcs = glob(["*.py"]),
     data = [],
-    main = "__main__.py",
+    main = "main_menu.py",
     visibility = ["//visibility:public"],
     deps = [
-        "//src/main/app/pdf_viewer",
-        "//src/main/gui/app",
-        "//src/main/gui/menu",
+        "//src/main/app/controllers",
+        "//src/main/gui",
     ],
 )

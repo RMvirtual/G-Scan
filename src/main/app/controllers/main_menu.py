@@ -1,6 +1,6 @@
 import wx
 from src.main.gui.menu.main import MainMenu
-from src.main.app.pdf_viewer.controller import ImageViewerController
+from src.main.app.controllers.image_viewer import ImageViewerController
 
 
 class MainMenuController:

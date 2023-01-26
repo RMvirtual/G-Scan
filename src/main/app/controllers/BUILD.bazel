@@ -2,13 +2,12 @@ load("@python_third_party//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library")
 
 py_library(
-    name = "pdf_viewer",
+    name = "controllers",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
         requirement("wxPython"),
         requirement("pymupdf"),
-        "//src/main/gui/app",
-        "//src/main/gui/menu",
+        "//src/main/gui",
     ],
 )

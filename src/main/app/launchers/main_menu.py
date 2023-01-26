@@ -1,5 +1,5 @@
 import sys
-from src.main.app.main_menu.controller import MainMenuController
+from src.main.app.controllers.main_menu import MainMenuController
 from src.main.gui.app.app import GuiApplication
 
 

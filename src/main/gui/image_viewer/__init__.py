@@ -1,0 +1,1 @@
+from src.main.gui.image_viewer.viewer import ImageViewer
