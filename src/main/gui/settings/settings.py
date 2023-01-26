@@ -31,16 +31,16 @@ class Settings(wx.Frame):
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer()
-        sizer.Add(window=self.scan_dir_label, pos=(0,0))
-        sizer.Add(window=self.scan_dir_box, pos=(0,1))
-        sizer.Add(window=self.scan_dir_browse, pos=(0,2))
+        sizer.Add(window=self.scan_dir_label, pos=(0,0), flag=wx.EXPAND)
+        sizer.Add(window=self.scan_dir_box, pos=(0,1), flag=wx.EXPAND)
+        sizer.Add(window=self.scan_dir_browse, pos=(0,2), flag=wx.EXPAND)
 
-        sizer.Add(window=self.dest_dir_label, pos=(1,0))
-        sizer.Add(window=self.dest_dir_box, pos=(1,1))
-        sizer.Add(window=self.dest_dir_browse, pos=(1,2))
+        sizer.Add(window=self.dest_dir_label, pos=(1,0), flag=wx.EXPAND)
+        sizer.Add(window=self.dest_dir_box, pos=(1,1), flag=wx.EXPAND)
+        sizer.Add(window=self.dest_dir_browse, pos=(1,2), flag=wx.EXPAND)
 
-        sizer.Add(window=self.save, pos=(2,0))
-        sizer.Add(window=self.exit, pos=(2,1))
+        sizer.Add(window=self.save, pos=(2,0), flag=wx.EXPAND)
+        sizer.Add(window=self.exit, pos=(2,1), flag=wx.EXPAND)
 
         self.SetSizer(sizer)
 
