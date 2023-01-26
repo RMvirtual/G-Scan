@@ -6,6 +6,7 @@ class OperationsOptions(wx.Panel):
         super(OperationsOptions, self).__init__(parent)
 
         self._initialise_buttons()
+        self._initialise_sizers()
 
     def _initialise_buttons(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())
