@@ -9,13 +9,17 @@ class OperationsOptions(wx.Panel):
         self._initialise_sizers()
 
     def _initialise_buttons(self) -> None:
+        self.cust_pwork = wx.Button(parent=self, label="Customer\nPaperwork")
+        self.loading_list = wx.Button(parent=self, label="Loading\nList")
+        self.back = wx.Button(parent=self, label="Back")
+
+        self._initialise_fonts()
+
+    def _initialise_fonts(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())
 
-        self.loading_list = wx.Button(parent=self, label="Loading\nList")
-        self.loading_list.SetFont(font)
-
-        self.cust_pwork = wx.Button(parent=self, label="Customer\nPaperwork")
-        self.cust_pwork.SetFont(font)
+        for button in [self.cust_pwork, self.loading_list, self.back]:
+            button.SetFont(font)
 
     def _initialise_sizers(self) -> None:
         flags = wx.ALL|wx.ALIGN_TOP
@@ -31,5 +35,10 @@ class OperationsOptions(wx.Panel):
             window=self.cust_pwork, proportion=0, flag=flags, border=border)
 
         sizer.AddStretchSpacer()
+
+        sizer.Add(
+            window=self.back, proportion=0, flag=wx.ALL|wx.ALIGN_BOTTOM,
+            border=border
+        )
 
         self.SetSizer(sizer)
