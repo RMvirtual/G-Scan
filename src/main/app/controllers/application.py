@@ -23,16 +23,16 @@ class ApplicationController:
         self._image_viewer.bind_exit(self.launch_main_menu)
 
     def launch_main_menu(self, event = None) -> None:
-        self.switch_to_app(self._main_menu)
+        self.switch_to(self._main_menu)
 
     def launch_image_viewer(self, event = None) -> None:
-        self.switch_to_app(self._image_viewer)
+        self.switch_to(self._image_viewer)
 
     def close_all(self, event = None) -> None:
         for app in self._apps:
             app.close()
 
-    def switch_to_app(self, application) -> None:
+    def switch_to(self, application) -> None:
         self._active_app.hide()
         self._active_app = application
 
