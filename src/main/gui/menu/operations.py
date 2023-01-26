@@ -10,17 +10,14 @@ class Operations(wx.Panel):
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())
         self.back.SetFont(font)
 
-        border = 15
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         sizer.Add(
-            window=self.options, proportion=1,
-            flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTRE_HORIZONTAL, border=border
-        )
+            window=self.options, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)
 
         sizer.Add(
             window=self.back, proportion=0,
-            flag=wx.ALL|wx.ALIGN_RIGHT, border=border
+            flag=wx.ALL|wx.ALIGN_RIGHT, border=15
         )
 
         self.SetSizer(sizer)
