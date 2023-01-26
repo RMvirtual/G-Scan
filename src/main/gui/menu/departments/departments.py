@@ -1,5 +1,5 @@
 import wx
-from src.main.gui.menu.settings_toolbar import SettingsToolbar
+from src.main.gui.menu.departments.settings_toolbar import SettingsToolbar
 
 
 class Departments(wx.Panel):

@@ -1,8 +1,7 @@
 import wx
 from src.main.gui.metrics import screen_size
-from src.main.gui.menu.departments import Departments
+from src.main.gui.menu.departments import Departments, Operations
 from src.main.gui.menu.logo import Logo
-from src.main.gui.menu.operations import Operations
 
 class MainMenu(wx.Frame):
     def __init__(self, title) -> None:
