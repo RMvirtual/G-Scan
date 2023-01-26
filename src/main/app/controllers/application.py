@@ -1,6 +1,6 @@
 from src.main.app.controllers.image_viewer import ImageViewerController
 from src.main.app.controllers.main_menu import MainMenuController
-from src.main.app.controllers.settings import Settings
+from src.main.app.controllers.settings import SettingsController
 
 class ApplicationController:
     def __init__(self):
@@ -10,7 +10,7 @@ class ApplicationController:
     def _initialise_apps(self) -> None:
         self._main_menu = MainMenuController()
         self._image_viewer = ImageViewerController()
-        self._settings = Settings()
+        self._settings = SettingsController()
         self._apps = [
             self._main_menu, self._image_viewer, self._settings]
 
@@ -22,6 +22,9 @@ class ApplicationController:
 
         self._main_menu.bind_settings(self.launch_settings)
         self._main_menu.bind_exit(self.close_all)
+
+        self._settings.bind_save_button(self.launch_main_menu)
+        self._settings.bind_exit_button(self.launch_main_menu)
 
         self._image_viewer.bind_exit(self.launch_main_menu)
 
