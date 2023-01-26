@@ -13,16 +13,20 @@ class MainMenuController:
         self._menu.operations.back.Bind(
             wx.EVT_BUTTON, self._menu.view_departments)
 
-        self._menu.departments.exit.Bind(wx.EVT_BUTTON, self._exit_btn_press)
+    def show(self) -> None:
+        self._menu.Show()
 
-        self._menu.operations.cust_pwork.Bind(
-            wx.EVT_BUTTON, self._paperwork_viewer)
+    def hide(self) -> None:
+        self._menu.Hide()
 
-    def _exit_btn_press(self, event = None) -> None:
+    def close(self) -> None:
         self._menu.Close()
 
-    def _paperwork_viewer(self, event = None) -> None:
-        self._paperwork_viewer.launch()
+    def bind_exit(self, callback) -> None:
+        self._menu.departments.exit.Bind(wx.EVT_BUTTON, callback)
 
-    def launch(self) -> None:
-        self._menu.Show()
+    def bind_customer_paperwork(self, callback) -> None:
+        self._menu.operations.cust_pwork.Bind(wx.EVT_BUTTON, callback)
+
+    def bind_loading_list(self, callback) -> None:
+        self._menu.operations.loading_list.Bind(wx.EVT_BUTTON, callback)

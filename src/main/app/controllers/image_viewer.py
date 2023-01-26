@@ -11,7 +11,6 @@ class ImageViewerController:
         self._bind_event_callbacks()
 
     def _bind_event_callbacks(self) -> None:
-        self._viewer.bind_exit(self.close)
         self._viewer.bind_submit(self.submit)
         self._viewer.bind_skip(self.skip)
         self._viewer.bind_split(self.split)
@@ -29,9 +28,6 @@ class ImageViewerController:
         image = bitmap.ConvertToImage()
         self._viewer.set_image(image)
 
-    def close(self, event: wx.EVT_CLOSE = None) -> None:
-        self._viewer.close(event)
-
     def submit(self, event: any = None) -> None:
         print("SUBMIT")
 
@@ -44,5 +40,14 @@ class ImageViewerController:
     def bitmap_movement(self, event: "FloatCanvas.EVT_MOTION") -> None:
         self._viewer.status_bar = "%i, %i"%tuple(event.Coords)
 
-    def launch(self) -> None:
+    def show(self) -> None:
         self._viewer.Show()
+
+    def hide(self) -> None:
+        self._viewer.Hide()
+
+    def close(self, event: wx.EVT_CLOSE = None) -> None:
+        self._viewer.close(event)
+
+    def bind_exit(self, callback) -> None:
+        self._viewer.bind_exit(callback)
