@@ -2,7 +2,7 @@ import wx
 from src.main.gui.app import screen_size
 from src.main.gui.menu.departments import Departments
 from src.main.gui.menu.logo import Logo
-from src.main.gui.menu.operations import OperationsOptions
+from src.main.gui.menu.operations import Operations
 
 class MainMenu(wx.Frame):
     def __init__(self, title) -> None:
@@ -18,7 +18,7 @@ class MainMenu(wx.Frame):
     def _initialise_panels(self) -> None:
         self.logo = Logo(self)
         self.departments = Departments(self)
-        self.operations = OperationsOptions(self)
+        self.operations = Operations(self)
 
         self.operations.Hide()
 

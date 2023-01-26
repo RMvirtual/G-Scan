@@ -1,9 +1,9 @@
 import wx
 
 
-class OperationsOptions(wx.Panel):
+class Operations(wx.Panel):
     def __init__(self, parent: wx.Frame):
-        super(OperationsOptions, self).__init__(parent)
+        super(Operations, self).__init__(parent)
 
         self._initialise_buttons()
         self._initialise_sizers()
