@@ -9,14 +9,18 @@ class Settings(wx.Frame):
         super().__init__(
             parent=None, title="Settings", size=size, pos=position)
 
+        self.title = wx.StaticText(parent=self, label="Settings")
         self.directories = Directories(self)
 
         self.save = wx.Button(parent=self, label="Save")
         self.exit = wx.Button(parent=self, label="Exit")
 
-        font = wx.Font(wx.FontInfo(pointSize=20).Bold())
-        self.save.SetFont(font)
-        self.exit.SetFont(font)
+        title_font = wx.Font(wx.FontInfo(pointSize=30).Bold())
+        self.title.SetFont(title_font)
+
+        smaller_font = wx.Font(wx.FontInfo(pointSize=12).Bold())
+        self.save.SetFont(smaller_font)
+        self.exit.SetFont(smaller_font)
 
         self._initialise_sizer()
 
@@ -28,11 +32,14 @@ class Settings(wx.Frame):
         sizer.AddStretchSpacer()
 
         sizer.Add(
-            window=self.directories,
-            flag=wx.ALIGN_CENTRE_HORIZONTAL
+            window=self.title,
+            flag=wx.ALIGN_LEFT|wx.ALL, border=15
         )
 
-        sizer.AddStretchSpacer()
+        sizer.Add(
+            window=self.directories, proportion=1,
+            flag=wx.ALIGN_LEFT|wx.ALL, border=15
+        )
 
         sizer.Add(
             window=self.save, proportion=0,
@@ -43,6 +50,8 @@ class Settings(wx.Frame):
             window=self.exit, proportion=0,
             flag=wx.ALIGN_RIGHT|wx.ALL, border=15
         )
+
+        sizer.AddStretchSpacer()
 
         self.SetSizer(sizer)
 

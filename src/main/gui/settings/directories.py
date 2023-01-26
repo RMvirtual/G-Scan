@@ -21,7 +21,7 @@ class Directories(wx.Panel):
         self.dest_dir_box = wx.TextCtrl(parent=self, value="NULL")
         self.dest_dir_browse = wx.Button(parent=self, label="...")
 
-        font = wx.Font(wx.FontInfo(pointSize=20).Bold())
+        font = wx.Font(wx.FontInfo(pointSize=12))
 
         items = [
             self.scan_dir_label, self.scan_dir_box, self.scan_dir_browse,
@@ -33,7 +33,7 @@ class Directories(wx.Panel):
 
 
     def _initialise_sizer(self) -> None:
-        sizer = wx.GridBagSizer()
+        sizer = wx.GridBagSizer(vgap=5, hgap=5)
         sizer.Add(window=self.scan_dir_label, pos=(0,0), flag=wx.EXPAND)
         sizer.Add(window=self.scan_dir_box, pos=(0,1), flag=wx.EXPAND)
         sizer.Add(window=self.scan_dir_browse, pos=(0,2), flag=wx.EXPAND)
