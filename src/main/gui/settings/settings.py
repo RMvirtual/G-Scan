@@ -23,8 +23,10 @@ class Settings(wx.Frame):
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer()
         sizer.Add(window=self.scan_dir_label, pos=(0,0))
-        sizer.Add(window=self.scan_dir_box, pos=(1,0))
-        sizer.Add(window=self.scan_dir_browse, pos=(2,0))
+        sizer.Add(window=self.scan_dir_box, pos=(0,1))
+        sizer.Add(window=self.scan_dir_browse, pos=(0,2))
+
+        self.SetSizer(sizer)
 
     def show(self) -> None:
         self.Show()
