@@ -22,8 +22,8 @@ class Logo(wx.Panel):
         self.on_resize()
 
     def _initialise_sizer(self) -> None:
-        sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        flags = wx.ALIGN_CENTRE_HORIZONTAL
+        sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
+        flags = wx.ALIGN_BOTTOM
 
         sizer.Add(window=self.bitmap, proportion=0, flag=flags, border=0)
 

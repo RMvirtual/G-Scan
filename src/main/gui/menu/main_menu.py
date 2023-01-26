@@ -27,8 +27,8 @@ class MainMenu(wx.Frame):
         flags = wx.EXPAND
 
         sizer.Add(window=self.logo, proportion=1, flag=flags, border=0)
-        sizer.Add(window=self.departments, proportion=2, flag=flags, border=0)
-        sizer.Add(window=self.operations, proportion=2, flag=flags, border=0)
+        sizer.Add(window=self.departments, proportion=3, flag=flags, border=0)
+        sizer.Add(window=self.operations, proportion=3, flag=flags, border=0)
 
         self.SetSizer(sizer)
 
