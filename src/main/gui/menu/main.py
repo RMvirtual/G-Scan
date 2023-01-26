@@ -35,7 +35,9 @@ class MainMenu(wx.Frame):
 
     def _initialise_callbacks(self) -> None:
         self._departments.ops.Bind(wx.EVT_BUTTON, self._view_ops)
+        self._departments.exit.Bind(wx.EVT_BUTTON, self._exit_btn_press)
         self._operations.back.Bind(wx.EVT_BUTTON, self._view_departments)
+
 
     def _view_ops(self, event = None) -> None:
         self._departments.Hide()
@@ -48,3 +50,6 @@ class MainMenu(wx.Frame):
         self._departments.Show()
 
         self.Layout()
+
+    def _exit_btn_press(self, event = None) -> None:
+        self.Close()
