@@ -9,13 +9,17 @@ class Departments(wx.Panel):
         #  self.SetBackgroundColour(wx.BLUE)
 
     def _initialise_buttons(self) -> None:
+        self.ops = wx.Button(parent=self, label="Ops")
+        self.pods = wx.Button(parent=self, label="PODs")
+        self.exit = wx.Button(parent=self, label="Exit")
+
+        self._initialise_fonts()
+
+    def _initialise_fonts(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())
 
-        self.ops = wx.Button(parent=self, label="Ops")
-        self.ops.SetFont(font)
-
-        self.pods = wx.Button(parent=self, label="PODs")
-        self.pods.SetFont(font)
+        for button in [self.ops, self.pods, self.exit]:
+            button.SetFont(font)
 
     def _initialise_sizer(self) -> None:
         flags = wx.ALL|wx.ALIGN_TOP
@@ -28,5 +32,10 @@ class Departments(wx.Panel):
         sizer.Add(window=self.pods, proportion=0, flag=flags, border=border)
 
         sizer.AddStretchSpacer()
+
+        sizer.Add(
+            window=self.exit, proportion=0, flag=wx.ALL|wx.ALIGN_BOTTOM,
+            border=border
+        )
 
         self.SetSizer(sizer)
