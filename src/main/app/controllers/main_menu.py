@@ -27,7 +27,7 @@ class MainMenuController:
         self._menu.departments.toolbar.exit.Bind(wx.EVT_BUTTON, callback)
 
     def bind_customer_paperwork(self, callback) -> None:
-        self._menu.operations.cust_pwork.Bind(wx.EVT_BUTTON, callback)
+        self._menu.operations.options.cust_pwork.Bind(wx.EVT_BUTTON, callback)
 
     def bind_loading_list(self, callback) -> None:
-        self._menu.operations.loading_list.Bind(wx.EVT_BUTTON, callback)
+        self._menu.operations.options.loading_list.Bind(wx.EVT_BUTTON, callback)
