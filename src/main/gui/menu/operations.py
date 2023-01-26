@@ -29,10 +29,10 @@ class Operations(wx.Panel):
         sizer.AddStretchSpacer()
 
         sizer.Add(
-            window=self.loading_list, proportion=0, flag=flags, border=border)
+            window=self.cust_pwork, proportion=0, flag=flags, border=border)
 
         sizer.Add(
-            window=self.cust_pwork, proportion=0, flag=flags, border=border)
+            window=self.loading_list, proportion=0, flag=flags, border=border)
 
         sizer.AddStretchSpacer()
 

@@ -6,7 +6,6 @@ class Departments(wx.Panel):
 
         self._initialise_buttons()
         self._initialise_sizer()
-        #  self.SetBackgroundColour(wx.BLUE)
 
     def _initialise_buttons(self) -> None:
         self.ops = wx.Button(parent=self, label="Ops")

@@ -1,1 +1,1 @@
-from src.main.gui.menu.main import MainMenu
+from src.main.gui.menu.main_menu import MainMenu
