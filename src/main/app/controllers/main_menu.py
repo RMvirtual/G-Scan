@@ -1,14 +1,11 @@
 import wx
 from src.main.gui import MainMenu
-from src.main.app.controllers.image_viewer import ImageViewerController
 
 
 class MainMenuController:
     def __init__(self):
         self._menu = MainMenu("G-Scan")
         self._initialise_callbacks()
-        self._menu.Show()
-        self._paperwork_viewer = ImageViewerController()
 
     def _initialise_callbacks(self) -> None:
         self._menu.departments.ops.Bind(wx.EVT_BUTTON, self._menu.view_ops)
@@ -26,3 +23,6 @@ class MainMenuController:
 
     def _paperwork_viewer(self, event = None) -> None:
         self._paperwork_viewer.launch()
+
+    def launch(self) -> None:
+        self._menu.Show()

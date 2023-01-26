@@ -1,10 +1,11 @@
 import wx
-from src.main.app.controllers import MainMenuController
+from src.main.app.controllers import ApplicationController
 
 
 def main() -> None:
     application = wx.App()
-    _main_menu = MainMenuController()
+    controller = ApplicationController()
+    controller.launch_main_menu()
 
     application.MainLoop()
 
