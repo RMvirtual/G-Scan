@@ -1,7 +1,7 @@
 from src.main.gui.widgets.frame import Frame
-from src.main.gui.settings.panels.text_values_panel import TextValuesPanel
-from src.main.gui.settings.panels.mode_options_panel import ModeOptionsPanel
-from src.main.gui.settings.panels.buttons_panel import ButtonsPanel
+from src.main.gui.settings_old.panels.text_values_panel import TextValuesPanel
+from src.main.gui.settings_old.panels.mode_options_panel import ModeOptionsPanel
+from src.main.gui.settings_old.panels.buttons_panel import ButtonsPanel
 
 
 class SettingsMenu(Frame):

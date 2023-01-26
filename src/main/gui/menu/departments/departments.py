@@ -1,5 +1,5 @@
 import wx
-from src.main.gui.menu.departments.settings_toolbar import SettingsToolbar
+from src.main.gui.menu.departments.michelin_toolbar import SettingsToolbar
 
 
 class Departments(wx.Panel):
@@ -33,22 +33,25 @@ class DepartmentOptions(wx.Panel):
     def _initialise_buttons(self) -> None:
         self.ops = wx.Button(parent=self, label="Ops")
         self.pods = wx.Button(parent=self, label="PODs")
+        self.quick_start = wx.Button(parent=self, label="Quick Start")
+
+        self.buttons = [self.ops, self.pods, self.quick_start]
 
         self._initialise_fonts()
 
     def _initialise_fonts(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())
 
-        for button in [self.ops, self.pods]:
+        for button in self.buttons:
             button.SetFont(font)
 
     def _initialise_sizer(self) -> None:
-        flags = wx.LEFT|wx.RIGHT|wx.ALIGN_TOP
-        border = 15
-
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        sizer.Add(window=self.ops, proportion=0, flag=flags, border=border)
-        sizer.Add(window=self.pods, proportion=0, flag=flags, border=border)
+        for button in self.buttons:
+            sizer.Add(
+                window=button, proportion=0,
+                flag=wx.LEFT|wx.RIGHT|wx.ALIGN_TOP, border=15
+            )
 
         self.SetSizer(sizer)

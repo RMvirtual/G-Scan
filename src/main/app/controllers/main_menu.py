@@ -31,3 +31,6 @@ class MainMenuController:
 
     def bind_loading_list(self, callback) -> None:
         self._menu.operations.options.loading_list.Bind(wx.EVT_BUTTON, callback)
+
+    def bind_settings(self, callback) -> None:
+        self._menu.departments.toolbar.settings.Bind(wx.EVT_BUTTON, callback)
