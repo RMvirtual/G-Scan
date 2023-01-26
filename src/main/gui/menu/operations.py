@@ -15,12 +15,13 @@ class Operations(wx.Panel):
 
         sizer.Add(
             window=self.options, proportion=1,
-            flag=wx.ALL|wx.ALIGN_CENTRE_HORIZONTAL, border=border
+            flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTRE_HORIZONTAL, border=border
         )
 
         sizer.Add(
             window=self.back, proportion=0,
-            flag=wx.ALL|wx.ALIGN_RIGHT, border=border)
+            flag=wx.ALL|wx.ALIGN_RIGHT, border=border
+        )
 
         self.SetSizer(sizer)
 
@@ -45,18 +46,15 @@ class OperationsOptions(wx.Panel):
             button.SetFont(font)
 
     def _initialise_sizers(self) -> None:
-        flags = wx.ALL|wx.ALIGN_TOP
+        flags = wx.LEFT|wx.RIGHT|wx.ALIGN_TOP
         border = 15
 
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        sizer.AddStretchSpacer()
 
         sizer.Add(
             window=self.cust_pwork, proportion=0, flag=flags, border=border)
 
         sizer.Add(
             window=self.loading_list, proportion=0, flag=flags, border=border)
-
-        sizer.AddStretchSpacer()
 
         self.SetSizer(sizer)
