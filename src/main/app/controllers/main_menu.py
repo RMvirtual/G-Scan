@@ -8,7 +8,8 @@ class MainMenuController:
         self._initialise_callbacks()
 
     def _initialise_callbacks(self) -> None:
-        self._menu.departments.ops.Bind(wx.EVT_BUTTON, self._menu.view_ops)
+        self._menu.departments.options.ops.Bind(
+            wx.EVT_BUTTON, self._menu.view_ops)
 
         self._menu.operations.back.Bind(
             wx.EVT_BUTTON, self._menu.view_departments)
@@ -23,7 +24,7 @@ class MainMenuController:
         self._menu.Close()
 
     def bind_exit(self, callback) -> None:
-        self._menu.departments.exit.Bind(wx.EVT_BUTTON, callback)
+        self._menu.departments.toolbar.exit.Bind(wx.EVT_BUTTON, callback)
 
     def bind_customer_paperwork(self, callback) -> None:
         self._menu.operations.cust_pwork.Bind(wx.EVT_BUTTON, callback)
