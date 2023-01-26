@@ -9,6 +9,8 @@ class MainMenu(wx.Frame):
         size, position = screen_size.recommended_metrics()
         super().__init__(parent=None, title=title, size=size, pos=position)
 
+        self.SetDoubleBuffered(True)
+
         self._initialise_panels()
         self._initialise_sizer()
         self._initialise_callbacks()
@@ -33,9 +35,16 @@ class MainMenu(wx.Frame):
 
     def _initialise_callbacks(self) -> None:
         self._departments.ops.Bind(wx.EVT_BUTTON, self._view_ops)
+        self._operations.back.Bind(wx.EVT_BUTTON, self._view_departments)
 
-    def _view_ops(self, event=None) -> None:
+    def _view_ops(self, event = None) -> None:
         self._departments.Hide()
         self._operations.Show()
+
+        self.Layout()
+
+    def _view_departments(self, event = None) -> None:
+        self._operations.Hide()
+        self._departments.Show()
 
         self.Layout()
