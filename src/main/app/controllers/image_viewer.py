@@ -5,13 +5,6 @@ import wx
 class ImageViewerController:
     def __init__(self, parent_window: wx.Frame):
         self._viewer = ImageViewer(parent_window)
-        self._bind_event_callbacks()
-
-    def _bind_event_callbacks(self) -> None:
-        self._viewer.bind_submit(self.submit)
-        self._viewer.bind_skip(self.skip)
-        self._viewer.bind_split(self.split)
-        self._viewer.bind_bitmap_movement(self.bitmap_movement)
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)
@@ -29,15 +22,6 @@ class ImageViewerController:
     def panel(self) -> wx.Panel:
         return self._viewer
 
-    def submit(self, event: any = None) -> None:
-        print("SUBMIT")
-
-    def skip(self, event: any = None) -> None:
-        print("SKIP")
-
-    def split(self, event: any = None) -> None:
-        print("SPLIT")
-
     def bitmap_movement(self, event: "FloatCanvas.EVT_MOTION") -> None:
         self._viewer.status_bar = "%i, %i"%tuple(event.Coords)
 
@@ -52,3 +36,15 @@ class ImageViewerController:
 
     def bind_exit(self, callback) -> None:
         self._viewer.bind_exit(callback)
+
+    def bind_submit(self, callback) -> None:
+        self._viewer.bind_submit(callback)
+
+    def bind_skip(self, callback) -> None:
+        self._viewer.bind_skip(callback)
+
+    def bind_split(self, callback) -> None:
+        self._viewer.bind_split(callback)
+
+    def bind_bitmap_movement(self, callback) -> None:
+        self._viewer.bind_bitmap_movement(callback)
