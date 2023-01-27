@@ -38,28 +38,16 @@ class Directories(wx.Panel):
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=5, hgap=5)
+
         alignment_flags = wx.ALIGN_LEFT|wx.ALIGN_CENTRE_VERTICAL
+        align_and_expand = wx.EXPAND|alignment_flags
 
-        sizer.Add(
-            window=self.scan_dir_label, pos=(0,0),
-            flag=alignment_flags
-        )
-
-        sizer.Add(
-            window=self.scan_dir_box, pos=(0,1),
-            flag=wx.EXPAND|alignment_flags
-        )
-
+        sizer.Add(window=self.scan_dir_label, pos=(0,0), flag=alignment_flags)
+        sizer.Add(window=self.scan_dir_box, pos=(0,1), flag=align_and_expand)
         sizer.Add(window=self.scan_dir_browse, pos=(0,2), flag=alignment_flags)
         sizer.Add(window=self.dest_dir_label, pos=(1,0), flag=alignment_flags)
-
-        sizer.Add(
-            window=self.dest_dir_box, pos=(1,1),
-            flag=wx.EXPAND|alignment_flags
-        )
-
+        sizer.Add(window=self.dest_dir_box, pos=(1,1), flag=align_and_expand)
         sizer.Add(window=self.dest_dir_browse, pos=(1,2), flag=alignment_flags)
 
         sizer.AddGrowableCol(1)
-
         self.SetSizer(sizer)
