@@ -22,6 +22,7 @@ class Window(wx.Frame):
         sizer.Add(self._panel, proportion=1, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
+        self.Layout()
 
     def _initialise_status_bar(self) -> None:
         self.CreateStatusBar()

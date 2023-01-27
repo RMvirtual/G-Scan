@@ -3,7 +3,7 @@ from src.main.gui import MainMenu
 
 
 class MainMenuController:
-    def __init__(self, parent_window):
+    def __init__(self, parent_window: wx.Frame):
         self._menu = MainMenu(parent_window)
         self._initialise_callbacks()
 
