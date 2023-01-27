@@ -1,5 +1,6 @@
 import wx
 from src.main.gui.settings.directories import Directories
+from src.main.gui.settings.defaults import Defaults
 
 
 class Settings(wx.Panel):
@@ -8,6 +9,7 @@ class Settings(wx.Panel):
 
         self.title = wx.StaticText(parent=self, label="Settings")
         self.directories = Directories(self)
+        self.defaults = Defaults(self)
 
         self.save = wx.Button(parent=self, label="Save")
         self.exit = wx.Button(parent=self, label="Exit")
@@ -36,6 +38,11 @@ class Settings(wx.Panel):
         sizer.Add(
             window=self.directories, proportion=1,
             flag=wx.ALL|wx.EXPAND, border=15
+        )
+
+        sizer.Add(
+            window=self.defaults, proportion=1,
+            flag=wx.ALL|wx.ALIGN_CENTRE_HORIZONTAL, border=15
         )
 
         sizer.Add(
