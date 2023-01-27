@@ -2,6 +2,7 @@ from src.main.app.controllers.image_viewer import ImageViewerController
 from src.main.app.controllers.main_menu import MainMenuController
 from src.main.app.controllers.settings import SettingsController
 from src.main.gui.window import Window
+from src.main.app.controllers.window import WindowController
 
 
 class ApplicationController:
