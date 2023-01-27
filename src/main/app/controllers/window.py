@@ -1,9 +1,9 @@
 import wx
-from src.main.app.controllers.display_interface import DisplayableController
+from src.main.app.controllers.display_interface import DisplayController
 from src.main.gui.window import Window
 
 
-class WindowController(DisplayableController):
+class WindowController(DisplayController):
     def __init__(self):
         self.window = Window()
 
@@ -19,7 +19,7 @@ class WindowController(DisplayableController):
     def panel(self) -> wx.Panel:
         return self.window.panel
 
-    def display(self, controller: DisplayableController) -> None:
+    def display(self, controller: DisplayController) -> None:
         self.window.panel = controller.panel
 
 

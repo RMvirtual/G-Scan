@@ -1,11 +1,12 @@
 import wx
-from src.main.app.controllers.display_interface import DisplayableController
+from src.main.app.controllers.display_interface import (
+    Display, DisplayController)
 from src.main.gui import MainMenu
 
 
-class MainMenuController(DisplayableController):
-    def __init__(self, parent_window: wx.Frame):
-        self._menu = MainMenu(parent_window)
+class MainMenuController(DisplayController):
+    def __init__(self, parent_window: Display):
+        self._menu = MainMenu(parent_window.window)
         self._initialise_callbacks()
 
     def _initialise_callbacks(self) -> None:

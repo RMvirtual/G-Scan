@@ -2,7 +2,13 @@ from abc import ABC, abstractmethod
 import wx
 
 
-class DisplayableController(ABC):
+class Display(ABC):
+    @abstractmethod
+    def window(self) -> wx.Frame:
+        ...
+
+
+class DisplayController(ABC):
     @abstractmethod
     def close(self) -> None:
         ...
