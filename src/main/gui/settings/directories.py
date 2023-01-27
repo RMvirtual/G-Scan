@@ -8,8 +8,6 @@ class Directories(wx.Panel):
         self._initialise_widgets()
         self._initialise_sizer()
 
-        self.SetBackgroundColour(wx.BLUE)
-
     def _initialise_widgets(self) -> None:
         self.scan_dir_label = wx.StaticText(
             parent=self, label="Scan Directory")
