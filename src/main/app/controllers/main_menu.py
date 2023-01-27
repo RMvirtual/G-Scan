@@ -3,8 +3,8 @@ from src.main.gui import MainMenu
 
 
 class MainMenuController:
-    def __init__(self):
-        self._menu = MainMenu("G-Scan")
+    def __init__(self, parent_window):
+        self._menu = MainMenu(parent_window)
         self._initialise_callbacks()
 
     def _initialise_callbacks(self) -> None:
@@ -13,6 +13,10 @@ class MainMenuController:
 
         self._menu.operations.back.Bind(
             wx.EVT_BUTTON, self._menu.view_departments)
+
+    @property
+    def panel(self) -> wx.Panel:
+        return self._menu
 
     def show(self) -> None:
         self._menu.Show()

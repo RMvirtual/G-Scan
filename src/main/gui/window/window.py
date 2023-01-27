@@ -6,13 +6,20 @@ class Window(wx.Frame):
     def __init__(self):
         size, position = screen_size.recommended_metrics()
         super().__init__(parent=None, title="", size=size, pos=position)
-        self._initialise_widgets()
-        self.panel = None
+        self.SetDoubleBuffered(True)
 
-    def set_panel(self, panel: wx.Panel) -> None:
-        self.panel = panel
+        self._initialise_widgets()
+        self._panel: wx.Panel or None = None
+
+    @property
+    def panel(self) -> wx.Panel:
+        return self.panel
+
+    @panel.setter
+    def panel(self, panel: wx.Panel) -> None:
+        self._panel = panel
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(self.panel, flag=wx.EXPAND)
+        sizer.Add(self._panel, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
 

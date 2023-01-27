@@ -14,3 +14,9 @@ class WindowController:
 
     def close(self) -> None:
         self.window.Close()
+
+    def set_panel(self, panel: wx.Panel) -> None:
+        self.window.panel = panel
+
+    def refresh(self) -> None:
+        self.window.Refresh()

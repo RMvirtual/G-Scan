@@ -1,14 +1,11 @@
 import wx
-from src.main.gui.metrics import screen_size
 from src.main.gui.menu.departments import Departments, Operations
 from src.main.gui.menu.logo import Logo
 
-class MainMenu(wx.Frame):
-    def __init__(self, title) -> None:
-        size, position = screen_size.recommended_metrics()
-        super().__init__(parent=None, title=title, size=size, pos=position)
 
-        self.SetDoubleBuffered(True)
+class MainMenu(wx.Panel):
+    def __init__(self, parent: wx.Frame) -> None:
+        super().__init__(parent=parent)
 
         self._initialise_panels()
         self._initialise_sizer()
