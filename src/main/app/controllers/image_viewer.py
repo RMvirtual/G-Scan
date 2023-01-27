@@ -3,11 +3,8 @@ import fitz
 import wx
 
 class ImageViewerController:
-    def __init__(self):
-        self._initialise_viewer()
-
-    def _initialise_viewer(self):
-        self._viewer = ImageViewer("G-Scan")
+    def __init__(self, parent_window: wx.Frame):
+        self._viewer = ImageViewer(parent_window)
         self._bind_event_callbacks()
 
     def _bind_event_callbacks(self) -> None:
@@ -27,6 +24,10 @@ class ImageViewerController:
 
         image = bitmap.ConvertToImage()
         self._viewer.set_image(image)
+
+    @property
+    def panel(self) -> wx.Panel:
+        return self._viewer
 
     def submit(self, event: any = None) -> None:
         print("SUBMIT")

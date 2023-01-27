@@ -1,20 +1,19 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-from src.main.gui.metrics import screen_size
 from src.main.gui.image_viewer.bitmap_canvas import BitmapViewer
 from src.main.gui.image_viewer.input import InputPanel
 from src.main.gui.image_viewer.navigation import NavigationPanel
 from src.main.gui.image_viewer.menu_bar import MenuBar
 
-class ImageViewer(wx.Frame):
-    def __init__(self, title: str):
-        size, position = screen_size.recommended_metrics()
-        super().__init__(parent=None, title=title, size=size, pos=position)
+
+class ImageViewer(wx.Panel):
+    def __init__(self, parent_window: wx.Frame):
+        super().__init__(parent=parent_window)
         self._initialise_widgets()
 
     def _initialise_widgets(self) -> None:
-        self._initialise_status_bar()
-        self._initialise_menu_bar()
+        #  self._initialise_status_bar()
+        #  self._initialise_menu_bar()
         self._initialise_panels()
         self._initialise_sizer()
 
