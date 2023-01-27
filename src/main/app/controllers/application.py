@@ -24,7 +24,6 @@ class ApplicationController:
         main_menu.bind_exit(self.close)
 
         self._window.display(main_menu)
-        main_menu.show()
         self.active_controller = main_menu
 
     def launch_image_viewer(self, event = None) -> None:
@@ -34,7 +33,6 @@ class ApplicationController:
         image_viewer = ImageViewerController(self._window.window)
         image_viewer.bind_exit(self.launch_main_menu)
         self._window.display(image_viewer)
-        image_viewer.show()
 
         self.active_controller = image_viewer
 
@@ -46,7 +44,7 @@ class ApplicationController:
         self._window.display(settings)
         settings.bind_save_button(self.save_settings)
         settings.bind_exit_button(self.launch_main_menu)
-        settings.show()
+
         self.active_controller = settings
 
     def close(self, event = None) -> None:
