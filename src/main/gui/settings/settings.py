@@ -24,7 +24,7 @@ class Settings(wx.Panel):
         title_font = wx.Font(wx.FontInfo(pointSize=30).Bold())
         self.title.SetFont(title_font)
 
-        smaller_font = wx.Font(wx.FontInfo(pointSize=12).Bold())
+        smaller_font = wx.Font(wx.FontInfo(pointSize=12))
         self.save.SetFont(smaller_font)
         self.exit.SetFont(smaller_font)
 
@@ -33,7 +33,8 @@ class Settings(wx.Panel):
 
         sizer.Add(
             window=self.title, proportion=0,
-            flag=wx.ALIGN_LEFT|wx.ALL, border=15)
+            flag=wx.ALIGN_LEFT|wx.TOP|wx.LEFT|wx.RIGHT, border=15
+        )
 
         sizer.Add(
             window=self.directories, proportion=0,
