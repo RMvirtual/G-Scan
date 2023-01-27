@@ -8,10 +8,10 @@ class WindowController(DisplayableController):
         self.window = Window()
 
     def show(self) -> None:
-        self._window.Show()
+        self.window.Show()
 
     def hide(self) -> None:
-        self._window.Hide()
+        self.window.Hide()
 
     def close(self) -> None:
         self.window.Close()
@@ -20,5 +20,7 @@ class WindowController(DisplayableController):
         return self.window.panel
 
     def display(self, controller: DisplayableController) -> None:
-        ...
+        self.window.panel = controller.panel
+
+
 
