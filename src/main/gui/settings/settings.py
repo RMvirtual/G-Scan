@@ -33,7 +33,7 @@ class Settings(wx.Panel):
 
         sizer.Add(
             window=self.title, proportion=0,
-            flag=wx.ALIGN_LEFT|wx.TOP|wx.LEFT|wx.RIGHT, border=15
+            flag=wx.ALIGN_LEFT|wx.ALL, border=15
         )
 
         sizer.Add(
