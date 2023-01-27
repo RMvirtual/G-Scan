@@ -44,9 +44,11 @@ class Directories(wx.Panel):
         align_and_expand = wx.EXPAND|alignment
 
         sizer.Add(window=self.title, pos=(0, 0), span=(1,3), flag=alignment)
+
         sizer.Add(window=self.scan_label, pos=(1, 0), flag=alignment)
         sizer.Add(window=self.scan_box, pos=(1, 1), flag=align_and_expand)
         sizer.Add(window=self.scan_browse, pos=(1, 2), flag=alignment)
+
         sizer.Add(window=self.dest_label, pos=(2, 0), flag=alignment)
         sizer.Add(window=self.dest_box, pos=(2, 1), flag=align_and_expand)
         sizer.Add(window=self.dest_browse, pos=(2, 2), flag=alignment)
