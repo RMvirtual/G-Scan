@@ -25,7 +25,7 @@ class Defaults(wx.Panel):
         title_font = wx.Font(wx.FontInfo(pointSize=20).Bold())
         self.title.SetFont(title_font)
 
-        font = wx.Font(wx.FontInfo(pointSize=12).Bold())
+        font = wx.Font(wx.FontInfo(pointSize=12))
         self.departments_label.SetFont(font)
         self.paperwork_label.SetFont(font)
         self.departments.SetFont(font)
