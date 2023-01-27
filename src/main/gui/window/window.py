@@ -4,6 +4,8 @@ from src.main.gui.metrics import screen_size
 
 class Window(wx.Frame):
     def __init__(self):
+        """Takes only one full panel to occupy entire window."""
+
         size, position = screen_size.recommended_metrics()
         super().__init__(parent=None, title="", size=size, pos=position)
         self.SetDoubleBuffered(True)
@@ -17,6 +19,8 @@ class Window(wx.Frame):
 
     @panel.setter
     def panel(self, panel: wx.Panel) -> None:
+        """Takes one full panel at a time."""
+
         self._panel = panel
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(self._panel, proportion=1, flag=wx.EXPAND)
