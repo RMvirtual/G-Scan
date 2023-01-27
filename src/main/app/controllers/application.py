@@ -14,6 +14,9 @@ class ApplicationController:
         self._window.Show()
 
     def launch_main_menu(self) -> None:
+        if self.active_controller:
+            self.active_controller.close()
+
         main_menu = MainMenuController(self._window)
         main_menu.bind_customer_paperwork(self.launch_image_viewer)
         main_menu.bind_loading_list(self.launch_image_viewer)
