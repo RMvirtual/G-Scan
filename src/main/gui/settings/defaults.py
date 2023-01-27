@@ -34,21 +34,13 @@ class Defaults(wx.Panel):
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=15, hgap=30)
 
-        sizer.Add(
-            window=self.title, pos=(0,0), span=(1,2), flag=wx.ALIGN_LEFT)
-
-        sizer.Add(
-            window=self.departments_label, pos=(1,0), flag=wx.ALIGN_LEFT)
-
+        sizer.Add(window=self.title, pos=(0,0), span=(1,2), flag=wx.ALIGN_LEFT)
+        sizer.Add(window=self.departments_label, pos=(1,0), flag=wx.ALIGN_LEFT)
         sizer.Add(window=self.paperwork_label, pos=(1,1), flag=wx.ALIGN_LEFT)
 
-        sizer.Add(
-            window=self.departments, pos=(2,0),
-            flag=wx.ALIGN_CENTRE_HORIZONTAL
-        )
-
-        sizer.Add(
-            window=self.paperwork, pos=(2,1), flag=wx.ALIGN_CENTRE_HORIZONTAL)
+        align_centre = wx.ALIGN_CENTRE_HORIZONTAL
+        sizer.Add(window=self.departments, pos=(2,0), flag=align_centre)
+        sizer.Add(window=self.paperwork, pos=(2,1), flag=align_centre)
 
         self.SetSizer(sizer)
 

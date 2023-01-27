@@ -31,32 +31,24 @@ class Settings(wx.Panel):
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
-        sizer.AddStretchSpacer()
+        sizer.Add(
+            window=self.title, proportion=0,
+            flag=wx.ALIGN_LEFT|wx.ALL, border=15)
 
         sizer.Add(
-            window=self.title,
+            window=self.directories, proportion=0,
+            flag=wx.EXPAND|wx.ALL, border=15
+        )
+
+        sizer.Add(
+            window=self.defaults, proportion=0,
             flag=wx.ALIGN_LEFT|wx.ALL, border=15
         )
 
-        sizer.Add(
-            window=self.directories, proportion=1,
-            flag=wx.ALL|wx.EXPAND, border=15
-        )
+        nav_aligns = wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM
 
-        sizer.Add(
-            window=self.defaults, proportion=1,
-            flag=wx.ALL|wx.ALIGN_LEFT, border=15
-        )
-
-        sizer.Add(
-            window=self.save, proportion=0,
-            flag=wx.ALIGN_RIGHT|wx.ALL, border=15
-        )
-
-        sizer.Add(
-            window=self.exit, proportion=0,
-            flag=wx.ALIGN_RIGHT|wx.ALL, border=15
-        )
+        sizer.Add(window=self.save, proportion=0, flag=nav_aligns, border=15)
+        sizer.Add(window=self.exit, proportion=0, flag=nav_aligns, border=15)
 
         sizer.AddStretchSpacer()
 
