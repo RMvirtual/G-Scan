@@ -8,8 +8,8 @@ class Window(wx.Frame):
         super().__init__(parent=None, title="", size=size, pos=position)
         self.SetDoubleBuffered(True)
 
-        self._initialise_widgets()
-        self._panel: wx.Panel or None = None
+        self._panel = None
+        self.SetBackgroundColour(colour=wx.WHITE)
 
     @property
     def panel(self) -> wx.Panel:
@@ -19,12 +19,9 @@ class Window(wx.Frame):
     def panel(self, panel: wx.Panel) -> None:
         self._panel = panel
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(self._panel, flag=wx.EXPAND)
+        sizer.Add(self._panel, proportion=1, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
-
-    def _initialise_widgets(self) -> None:
-        self.SetBackgroundColour(colour=wx.WHITE)
 
     def _initialise_status_bar(self) -> None:
         self.CreateStatusBar()

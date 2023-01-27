@@ -19,4 +19,3 @@ class ApplicationController:
 
         self._window_controller.set_panel(self.active_controller.panel)
         self.active_controller.show()
-        self._window_controller.refresh()
