@@ -8,6 +8,8 @@ class Defaults(wx.Panel):
         self._initialise_sizer()
 
     def _initialise_widgets(self) -> None:
+        self.title = wx.StaticText(parent=self, label="Defaults")
+
         self.departments_label = wx.StaticText(
             parent=self, label="Department")
 
@@ -17,8 +19,13 @@ class Defaults(wx.Panel):
         self.departments = self._default_combobox()
         self.paperwork = self._default_combobox()
 
-        font = wx.Font(wx.FontInfo(pointSize=14).Bold())
+        self._initialise_fonts()
 
+    def _initialise_fonts(self) -> None:
+        title_font = wx.Font(wx.FontInfo(pointSize=20).Bold())
+        self.title.SetFont(title_font)
+
+        font = wx.Font(wx.FontInfo(pointSize=12).Bold())
         self.departments_label.SetFont(font)
         self.paperwork_label.SetFont(font)
         self.departments.SetFont(font)
@@ -28,20 +35,23 @@ class Defaults(wx.Panel):
         sizer = wx.GridBagSizer(vgap=15, hgap=30)
 
         sizer.Add(
-            window=self.departments_label, pos=(0,0), flag=wx.ALIGN_LEFT)
-
-        sizer.Add(window=self.paperwork_label, pos=(0,1), flag=wx.ALIGN_LEFT)
+            window=self.title, pos=(0,0), span=(1,2), flag=wx.ALIGN_LEFT)
 
         sizer.Add(
-            window=self.departments, pos=(1,0),
+            window=self.departments_label, pos=(1,0), flag=wx.ALIGN_LEFT)
+
+        sizer.Add(window=self.paperwork_label, pos=(1,1), flag=wx.ALIGN_LEFT)
+
+        sizer.Add(
+            window=self.departments, pos=(2,0),
             flag=wx.ALIGN_CENTRE_HORIZONTAL
         )
 
         sizer.Add(
-            window=self.paperwork, pos=(1,1), flag=wx.ALIGN_CENTRE_HORIZONTAL)
+            window=self.paperwork, pos=(2,1), flag=wx.ALIGN_CENTRE_HORIZONTAL)
 
         self.SetSizer(sizer)
 
     def _default_combobox(self) -> wx.ComboBox:
         return wx.ComboBox(
-            parent=self, value = "NULL", choices=["NULL1", "NULL2"])
+            parent=self, value="NULL", choices=["NULL1", "NULL2"])

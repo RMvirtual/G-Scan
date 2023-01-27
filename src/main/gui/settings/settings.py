@@ -42,7 +42,7 @@ class Settings(wx.Panel):
 
         sizer.Add(
             window=self.defaults, proportion=1,
-            flag=wx.ALL|wx.ALIGN_CENTRE_HORIZONTAL, border=15
+            flag=wx.ALL|wx.ALIGN_LEFT, border=15
         )
 
         sizer.Add(
