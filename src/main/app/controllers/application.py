@@ -13,7 +13,7 @@ class ApplicationController:
         self._window = Window()
         self._window.Show()
 
-    def launch_main_menu(self) -> None:
+    def launch_main_menu(self, event = None) -> None:
         if self.active_controller:
             self.active_controller.close()
 
@@ -34,16 +34,22 @@ class ApplicationController:
         image_viewer = ImageViewerController(self._window)
         self._window.panel = image_viewer.panel
         image_viewer.show()
+
         self.active_controller = image_viewer
 
     def launch_settings(self, event = None) -> None:
         if self.active_controller:
             self.active_controller.close()
 
-        image_viewer = SettingsController(self._window)
-        self._window.panel = image_viewer.panel
-        image_viewer.show()
-        self.active_controller = image_viewer
+        settings = SettingsController(self._window)
+        self._window.panel = settings.panel
+        settings.bind_save_button(self.save_settings)
+        settings.bind_exit_button(self.launch_main_menu)
+        settings.show()
+        self.active_controller = settings
 
     def close(self, event = None) -> None:
         self._window.Close()
+
+    def save_settings(self, event = None) -> None:
+        self.launch_main_menu()
