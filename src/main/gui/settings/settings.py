@@ -18,7 +18,7 @@ class Settings(wx.Frame):
         title_font = wx.Font(wx.FontInfo(pointSize=30).Bold())
         self.title.SetFont(title_font)
 
-        smaller_font = wx.Font(wx.FontInfo(pointSize=12).Bold())
+        smaller_font = wx.Font(wx.FontInfo(pointSize=20).Bold())
         self.save.SetFont(smaller_font)
         self.exit.SetFont(smaller_font)
 
