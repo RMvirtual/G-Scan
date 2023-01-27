@@ -8,18 +8,37 @@ class Defaults(wx.Panel):
         self._initialise_sizer()
 
     def _initialise_widgets(self) -> None:
+        self.departments_label = wx.StaticText(
+            parent=self, label="Department")
+
+        self.paperwork_label = wx.StaticText(
+            parent=self, label="Paperwork Type")
+
         self.departments = self._default_combobox()
         self.paperwork = self._default_combobox()
 
-        font = wx.Font(wx.FontInfo(pointSize=20).Bold())
+        font = wx.Font(wx.FontInfo(pointSize=14).Bold())
 
+        self.departments_label.SetFont(font)
+        self.paperwork_label.SetFont(font)
         self.departments.SetFont(font)
         self.paperwork.SetFont(font)
 
     def _initialise_sizer(self) -> None:
-        sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        sizer.Add(window=self.departments, proportion=0)
-        sizer.Add(window=self.paperwork, proportion=0)
+        sizer = wx.GridBagSizer(vgap=15, hgap=30)
+
+        sizer.Add(
+            window=self.departments_label, pos=(0,0), flag=wx.ALIGN_LEFT)
+
+        sizer.Add(window=self.paperwork_label, pos=(0,1), flag=wx.ALIGN_LEFT)
+
+        sizer.Add(
+            window=self.departments, pos=(1,0),
+            flag=wx.ALIGN_CENTRE_HORIZONTAL
+        )
+
+        sizer.Add(
+            window=self.paperwork, pos=(1,1), flag=wx.ALIGN_CENTRE_HORIZONTAL)
 
         self.SetSizer(sizer)
 
