@@ -11,6 +11,11 @@ class Defaults(wx.Panel):
         self.departments = self._default_combobox()
         self.paperwork = self._default_combobox()
 
+        font = wx.Font(wx.FontInfo(pointSize=20).Bold())
+
+        self.departments.SetFont(font)
+        self.paperwork.SetFont(font)
+
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         sizer.Add(window=self.departments, proportion=0)
