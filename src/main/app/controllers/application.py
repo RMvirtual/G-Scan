@@ -32,6 +32,7 @@ class ApplicationController:
             self.active_controller.close()
 
         image_viewer = ImageViewerController(self._window)
+        image_viewer.bind_exit(self.launch_main_menu)
         self._window.panel = image_viewer.panel
         image_viewer.show()
 
