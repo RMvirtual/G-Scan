@@ -19,6 +19,14 @@ class ImageViewer(wx.Panel):
 
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
 
+    @property
+    def status_bar(self) -> str:
+        return self.GetStatusText()
+
+    @status_bar.setter
+    def status_bar(self, new_status: str) -> None:
+        self.SetStatusText(new_status)
+
     def _initialise_status_bar(self) -> None:
         self.CreateStatusBar()
         self.SetStatusText("HELLO WORLD")
@@ -50,24 +58,16 @@ class ImageViewer(wx.Panel):
         self._bitmap_viewer.load_image(image)
 
     def bind_exit(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._bottom_toolbar.exit)
+        self._bottom_toolbar.exit.Bind(wx.EVT_BUTTON, callback)
 
     def bind_bitmap_movement(self, callback):
         self._bitmap_viewer.Canvas.Bind(FloatCanvas.EVT_MOTION, callback)
 
     def bind_submit(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._top_toolbar.submit)
+        self._top_toolbar.submit.Bind(wx.EVT_BUTTON, callback)
 
     def bind_skip(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._top_toolbar.skip)
+        self._top_toolbar.skip.Bind(wx.EVT_BUTTON, callback)
 
     def bind_split(self, callback) -> None:
-        self.Bind(wx.EVT_BUTTON, callback, self._top_toolbar.split)
-
-    @property
-    def status_bar(self) -> str:
-        return self.GetStatusText()
-
-    @status_bar.setter
-    def status_bar(self, new_status: str) -> None:
-        self.SetStatusText(new_status)
+        self._top_toolbar.split.Bind(wx.EVT_BUTTON, callback)
