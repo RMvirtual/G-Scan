@@ -20,10 +20,12 @@ class Directories(wx.Panel):
         self.dest_dir_label = wx.StaticText(
             parent=self, label="Destination Directory")
 
-        self.dest_dir_box = wx.TextCtrl(
-            parent=self, value="NULL")
+        self.dest_dir_box = wx.TextCtrl(parent=self, value="NULL")
         self.dest_dir_browse = wx.Button(parent=self, label="...")
 
+        self._initialise_fonts()
+
+    def _initialise_fonts(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=12))
 
         items = [
@@ -33,7 +35,6 @@ class Directories(wx.Panel):
 
         for item in items:
             item.SetFont(font)
-
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=5, hgap=5)
