@@ -1,8 +1,10 @@
-from src.main.gui import ImageViewer
 import fitz
 import wx
+from src.main.app.controllers.display_interface import DisplayableController
+from src.main.gui import ImageViewer
 
-class ImageViewerController:
+
+class ImageViewerController(DisplayableController):
     def __init__(self, parent_window: wx.Frame):
         self._viewer = ImageViewer(parent_window)
 
