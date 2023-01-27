@@ -5,7 +5,6 @@ from src.main.app.controllers import ApplicationController
 def main() -> None:
     application = wx.App()
     controller = ApplicationController()
-    controller.launch_main_menu()
 
     application.MainLoop()
 

@@ -12,6 +12,7 @@ py_library(
         "//src/main/gui/metrics",
         "//src/main/gui/settings",
         "//src/main/gui/widgets",
+        "//src/main/gui/window",
         requirement("wxPython"),
     ],
 )
