@@ -12,7 +12,6 @@ class ApplicationController:
 
     def _initialise_window(self) -> None:
         self._window = WindowController()
-        self._window.show()
 
     def launch_main_menu(self, event = None) -> None:
         self.display(self._create_main_menu())
@@ -22,6 +21,9 @@ class ApplicationController:
 
     def launch_settings(self, event = None) -> None:
         self.display(self._create_settings())
+
+    def show(self) -> None:
+        self._window.show()
 
     def close(self, event = None) -> None:
         self._window.close()
