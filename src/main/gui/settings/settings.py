@@ -1,13 +1,10 @@
 import wx
-from src.main.gui.metrics import screen_size
 from src.main.gui.settings.directories import Directories
 
 
-class Settings(wx.Frame):
-    def __init__(self) -> None:
-        size, position = screen_size.recommended_metrics()
-        super().__init__(
-            parent=None, title="Settings", size=size, pos=position)
+class Settings(wx.Panel):
+    def __init__(self, window: wx.Frame) -> None:
+        super().__init__(parent=window)
 
         self.title = wx.StaticText(parent=self, label="Settings")
         self.directories = Directories(self)

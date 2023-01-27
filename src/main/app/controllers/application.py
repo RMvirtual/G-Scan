@@ -36,10 +36,14 @@ class ApplicationController:
         image_viewer.show()
         self.active_controller = image_viewer
 
-        print("At end of image viewer.")
-
     def launch_settings(self, event = None) -> None:
-        print("Settings launch.")
+        if self.active_controller:
+            self.active_controller.close()
+
+        image_viewer = SettingsController(self._window)
+        self._window.panel = image_viewer.panel
+        image_viewer.show()
+        self.active_controller = image_viewer
 
     def close(self, event = None) -> None:
         self._window.Close()

@@ -3,8 +3,8 @@ from src.main.gui import Settings
 
 
 class SettingsController:
-    def __init__(self):
-        self._settings = Settings()
+    def __init__(self, window: wx.Frame):
+        self._settings = Settings(window)
 
     def show(self) -> None:
         self._settings.show()
@@ -20,3 +20,8 @@ class SettingsController:
 
     def bind_exit_button(self, callback) -> None:
         self._settings.exit.Bind(wx.EVT_BUTTON, callback)
+
+    @property
+    def panel(self) -> wx.Panel:
+        return self._settings
+
