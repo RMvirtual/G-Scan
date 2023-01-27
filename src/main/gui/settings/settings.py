@@ -35,7 +35,7 @@ class Settings(wx.Panel):
 
         sizer.Add(
             window=self.directories, proportion=1,
-            flag=wx.ALIGN_LEFT|wx.ALL, border=15
+            flag=wx.ALL|wx.EXPAND, border=15
         )
 
         sizer.Add(

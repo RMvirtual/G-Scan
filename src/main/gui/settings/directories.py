@@ -8,6 +8,8 @@ class Directories(wx.Panel):
         self._initialise_widgets()
         self._initialise_sizer()
 
+        self.SetBackgroundColour(wx.BLUE)
+
     def _initialise_widgets(self) -> None:
         self.scan_dir_label = wx.StaticText(
             parent=self, label="Scan Directory")
@@ -18,7 +20,8 @@ class Directories(wx.Panel):
         self.dest_dir_label = wx.StaticText(
             parent=self, label="Destination Directory")
 
-        self.dest_dir_box = wx.TextCtrl(parent=self, value="NULL")
+        self.dest_dir_box = wx.TextCtrl(
+            parent=self, value="NULL")
         self.dest_dir_browse = wx.Button(parent=self, label="...")
 
         font = wx.Font(wx.FontInfo(pointSize=12))
@@ -41,5 +44,9 @@ class Directories(wx.Panel):
         sizer.Add(window=self.dest_dir_label, pos=(1,0), flag=wx.EXPAND)
         sizer.Add(window=self.dest_dir_box, pos=(1,1), flag=wx.EXPAND)
         sizer.Add(window=self.dest_dir_browse, pos=(1,2), flag=wx.EXPAND)
+
+        sizer.AddGrowableCol(0)
+        sizer.AddGrowableCol(1)
+        sizer.AddGrowableCol(2)
 
         self.SetSizer(sizer)
