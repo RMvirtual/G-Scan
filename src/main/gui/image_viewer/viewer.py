@@ -12,24 +12,10 @@ class ImageViewer(wx.Panel):
         self._initialise_widgets()
 
     def _initialise_widgets(self) -> None:
-        #  self._initialise_status_bar()
-        #  self._initialise_menu_bar()
         self._initialise_panels()
         self._initialise_sizer()
 
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
-
-    @property
-    def status_bar(self) -> str:
-        return self.GetStatusText()
-
-    @status_bar.setter
-    def status_bar(self, new_status: str) -> None:
-        self.SetStatusText(new_status)
-
-    def _initialise_status_bar(self) -> None:
-        self.CreateStatusBar()
-        self.SetStatusText("HELLO WORLD")
 
     def _initialise_menu_bar(self) -> None:
         self._menu_bar = MenuBar()
