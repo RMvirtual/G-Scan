@@ -8,17 +8,10 @@ class SettingsController:
         self._app = root_application
         self._settings = Settings(root_application.frame())
         self._initialise_callbacks()
-        self._app.set_panel(self._settings)
 
     def _initialise_callbacks(self) -> None:
         self._settings.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._settings.exit.Bind(wx.EVT_BUTTON, self.on_exit)
-
-    def show(self) -> None:
-        self._settings.show()
-
-    def hide(self) -> None:
-        self._settings.hide()
 
     def close(self) -> None:
         self._settings.close()
