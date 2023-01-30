@@ -77,3 +77,11 @@ class Directories(wx.Panel):
     @scan_directory.setter
     def scan_directory(self, directory: str) -> None:
         self.scan_box.SetValue(directory)
+
+    @property
+    def dest_directory(self) -> str:
+        return self.scan_box.GetValue()
+
+    @dest_directory.setter
+    def dest_directory(self, directory: str) -> None:
+        self.scan_box.SetValue(directory)

@@ -1,0 +1,6 @@
+{
+  "scan_directory": null,
+  "dest_directory": "\\\\office\\edocs",
+  "department": "ops",
+  "document_type": "customer_paperwork"
+}
