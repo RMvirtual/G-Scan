@@ -32,9 +32,13 @@ class SettingsController:
             with open(directory + "\\user_defaults.json", "r") as _file:
                 contents = json.loads(_file.read())
 
-            print(contents)
+        self._gui.directories.scan_directory = (
+            "NULL" if not contents["scan_directory"]
+            else contents["scan_directory"]
+        )
 
-        self._gui.directories.scan_directory = "\\\\test_me"
+        self._gui.directories.dest_directory = contents["dest_directory"]
+
 
     def on_save(self, event = None) -> None:
         self._root.launch_main_menu()
