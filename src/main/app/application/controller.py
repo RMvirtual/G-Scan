@@ -11,21 +11,23 @@ class ApplicationController(ApplicationInterface):
         self._active_controller = None
 
     def launch_main_menu(self, event = None) -> None:
-        self._clear_controller()
-
-        self._active_controller = MainMenuController(
-            display=self._display, application=self)
+        self._set_controller(
+            MainMenuController(display=self._display, application=self))
 
         self._display.frame().Layout()
 
     def launch_image_viewer(self, event = None) -> None:
-        self.display(self._create_image_viewer())
+        self._clear_controller()
+
+        self._active_controller = ImageViewerController(self._display)
 
     def launch_settings(self, event = None) -> None:
-        self.display(self._create_settings())
+        self._clear_controller()
+
+        self._active_controller = SettingsController(self._display)
 
     def exit(self) -> None:
-        pass
+        self.close()
 
     def show(self) -> None:
         self._display.show()
@@ -36,23 +38,23 @@ class ApplicationController(ApplicationInterface):
     def save_settings(self, event = None) -> None:
         self.launch_main_menu()
 
+    def _set_controller(self, controller) -> None:
+        self._clear_controller()
+        self._active_controller = controller
+
     def _clear_controller(self) -> None:
         if self._active_controller:
             self._active_controller.close()
 
     def _create_image_viewer(self) -> None:
-        self._clear_controller()
-
-        self._active_controller = ImageViewerController(self._display)
         # result.bind_exit(self.launch_main_menu)
 
         # return result
+        ...
 
     def _create_settings(self) -> None:
-        self._clear_controller()
-
-        self._active_controller = SettingsController(self._display)
         # result.bind_save_button(self.save_settings)
         # result.bind_exit_button(self.launch_main_menu)
 
         # return result
+        ...
