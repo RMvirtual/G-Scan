@@ -2,11 +2,10 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_third_party//:requirements.bzl", "requirement")
 
 py_library(
-    name = "departments",
+    name = "fonts",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
-        "//src/main/gui/fonts",
         requirement("wxPython"),
     ],
 )

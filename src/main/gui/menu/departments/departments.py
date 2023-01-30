@@ -1,6 +1,6 @@
 import wx
 from src.main.gui.menu.departments.michelin_toolbar import SettingsToolbar
-
+from src.main.gui import fonts
 
 class Departments(wx.Panel):
     def __init__(self, parent: wx.Frame):
@@ -40,7 +40,7 @@ class DepartmentOptions(wx.Panel):
         self._initialise_fonts()
 
     def _initialise_fonts(self) -> None:
-        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
+        font = fonts.font(point_size=30, bold=True)
 
         for button in self.buttons:
             button.SetFont(font)
