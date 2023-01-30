@@ -40,6 +40,7 @@ class ApplicationController:
 
     def _create_main_menu(self) -> DisplayController:
         result = MainMenuController(self._window)
+
         result.bind_customer_paperwork(self.launch_image_viewer)
         result.bind_loading_list(self.launch_image_viewer)
         result.bind_settings(self.launch_settings)

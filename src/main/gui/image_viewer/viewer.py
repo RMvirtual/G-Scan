@@ -1,9 +1,9 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-from src.main.gui.image_viewer.bitmap_canvas import BitmapViewer
-from src.main.gui.image_viewer.input import InputPanel
-from src.main.gui.image_viewer.navigation import NavigationPanel
-from src.main.gui.image_viewer.files import FilesPanel
+from src.main.gui.image_viewer.panels.bitmap_canvas import BitmapViewer
+from src.main.gui.image_viewer.toolbars.input import InputPanel
+from src.main.gui.image_viewer.toolbars.navigation import NavigationPanel
+from src.main.gui.image_viewer.panels.files import FilesPanel
 
 
 class ImageViewer(wx.Panel):

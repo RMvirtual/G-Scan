@@ -19,31 +19,28 @@ class Window(wx.Frame):
 
     @panel.setter
     def panel(self, panel: wx.Panel) -> None:
-        """Takes one full panel at a time."""
-
-        if self._panel:
-            self._replace_panel(panel)
-
-        else:
-            self._initialise_panel(panel)
-
+        self._replace(panel) if self._panel else self._initialise_panel(panel)
         self.Layout()
 
     def _initialise_panel(self, panel: wx.Panel) -> None:
         self._panel = panel
-        sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(self._panel, proportion=1, flag=wx.EXPAND)
+        self._initialise_sizer()
 
-        self.SetSizer(sizer)
-
-    def _replace_panel(self, new_panel: wx.Panel) -> None:
-        self.GetSizer().Replace(self._panel, new_panel)
+    def _replace(self, panel: wx.Panel) -> None:
+        self.GetSizer().Replace(self._panel, panel)
         self._panel.Destroy()
-        self._panel = new_panel
+
+        self._panel = panel
 
     def _initialise_status_bar(self) -> None:
         self.CreateStatusBar()
         self.SetStatusText("HELLO WORLD")
+
+    def _initialise_sizer(self) -> None:
+        sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        sizer.Add(self._panel, proportion=1, flag=wx.EXPAND)
+
+        self.SetSizer(sizer)
 
     @property
     def status_bar(self) -> str:
