@@ -1,4 +1,5 @@
 import wx
+from src.main.gui import fonts
 from src.main.gui.settings.directories import Directories
 from src.main.gui.settings.defaults import Defaults
 
@@ -13,20 +14,22 @@ class Settings(wx.Panel):
         self.SetBackgroundColour(colour=wx.WHITE)
 
     def _initialise_widgets(self) -> None:
-        self.title = wx.StaticText(parent=self, label="Settings")
+        self._initialise_title()
         self.directories = Directories(self)
         self.defaults = Defaults(self)
+        self._initialise_bottom_buttons()
 
+    def _initialise_bottom_buttons(self) -> None:
         self.save = wx.Button(parent=self, label="Save")
         self.exit = wx.Button(parent=self, label="Exit")
 
-    def _initialise_fonts(self) -> None:
-        title_font = wx.Font(wx.FontInfo(pointSize=30).Bold())
-        self.title.SetFont(title_font)
+        font = fonts.font(point_size=12)
+        self.save.SetFont(font)
+        self.exit.SetFont(font)
 
-        smaller_font = wx.Font(wx.FontInfo(pointSize=12))
-        self.save.SetFont(smaller_font)
-        self.exit.SetFont(smaller_font)
+    def _initialise_title(self) -> None:
+        self.title = wx.StaticText(parent=self, label="Settings")
+        self.title.SetFont(fonts.font(point_size=30, bold=True))
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
