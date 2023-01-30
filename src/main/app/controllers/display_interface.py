@@ -3,6 +3,7 @@ import wx
 
 
 class Display(ABC):
+    @property
     @abstractmethod
     def window(self) -> wx.Frame:
         ...

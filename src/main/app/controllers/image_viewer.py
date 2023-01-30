@@ -9,6 +9,7 @@ from src.main.gui import ImageViewer
 class ImageViewerController(DisplayController):
     def __init__(self, parent_window: Display) -> None:
         self._viewer = ImageViewer(parent_window.window)
+        self._create_menu_bar()
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)
@@ -34,6 +35,14 @@ class ImageViewerController(DisplayController):
 
     def hide(self) -> None:
         self._viewer.Hide()
+
+    def _create_menu_bar(self) -> None:
+        result = wx.MenuBar()
+        file_menu = wx.Menu()
+        file_item = file_menu.Append(wx.ID_EXIT, "Quit", "Quit Program")
+        result.Append(file_menu, "&File")
+
+        self._viewer.Parent.SetMenuBar(result)
 
     def close(self, event: wx.EVT_CLOSE = None) -> None:
         self._viewer.close(event)
