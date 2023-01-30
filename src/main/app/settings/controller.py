@@ -1,11 +1,18 @@
 import wx
-from src.main.app.display import Display
+from src.main.app.settings.interface import SettingsInterface
 from src.main.gui import Settings
 
 
 class SettingsController:
-    def __init__(self, window: Display):
-        self._settings = Settings(window.frame())
+    def __init__(self, root_application: SettingsInterface):
+        self._app = root_application
+        self._settings = Settings(root_application.frame())
+        self._initialise_callbacks()
+        self._app.set_panel(self._settings)
+
+    def _initialise_callbacks(self) -> None:
+        self._settings.save.Bind(wx.EVT_BUTTON, self.on_save)
+        self._settings.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
     def show(self) -> None:
         self._settings.show()
@@ -20,11 +27,11 @@ class SettingsController:
     def panel(self) -> wx.Panel:
         return self._settings
 
-    def bind_save_button(self, callback) -> None:
-        self._settings.save.Bind(wx.EVT_BUTTON, callback)
+    def on_save(self, event = None) -> None:
+        self._app.launch_main_menu()
 
-    def bind_exit_button(self, callback) -> None:
-        self._settings.exit.Bind(wx.EVT_BUTTON, callback)
+    def on_exit(self,event = None) -> None:
+        self._app.launch_main_menu()
 
     def set_department_options(self, options: list[str]) -> None:
         ...

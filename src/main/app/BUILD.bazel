@@ -7,11 +7,11 @@ py_binary(
     main = "driver.py",
     visibility = ["//visibility:public"],
     deps = [
-        "//src/main/app/application",
         "//src/main/app/display",
         "//src/main/app/image_viewer",
         "//src/main/app/launchers",
         "//src/main/app/main_menu",
+        "//src/main/app/root",
         "//src/main/app/settings",
     ],
 )

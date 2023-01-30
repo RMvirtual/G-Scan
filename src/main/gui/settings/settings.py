@@ -9,7 +9,6 @@ class Settings(wx.Panel):
         super().__init__(parent=window)
 
         self._initialise_widgets()
-        self._initialise_fonts()
         self._initialise_sizer()
         self.SetBackgroundColour(colour=wx.WHITE)
 
