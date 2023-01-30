@@ -13,15 +13,12 @@ class RootApplication(ApplicationInterface):
 
     def launch_main_menu(self, event = None) -> None:
         self._set_controller(MainMenuController(root_application=self))
-        self._display.frame().Layout()
 
     def launch_settings(self, event = None) -> None:
         self._set_controller(SettingsController(root_application=self))
-        self._display.frame().Layout()
 
     def launch_image_viewer(self, event = None) -> None:
         self._set_controller(ImageViewerController(self._display))
-        self._display.frame().Layout()
 
     def exit(self) -> None:
         self.close()
@@ -42,6 +39,7 @@ class RootApplication(ApplicationInterface):
         self._clear_controller()
         self._controller = controller
         self._refresh_panel()
+        self._display.frame().Layout()
 
     def _clear_controller(self) -> None:
         if self._controller:
