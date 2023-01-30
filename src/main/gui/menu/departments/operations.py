@@ -1,4 +1,5 @@
 import wx
+from src.main.gui import fonts
 
 
 class Operations(wx.Panel):
@@ -7,8 +8,7 @@ class Operations(wx.Panel):
 
         self.options = OperationsOptions(self)
         self.back = wx.Button(parent=self, label="Back")
-        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
-        self.back.SetFont(font)
+        self.back.SetFont(fonts.font(point_size=30, bold=True))
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
@@ -16,8 +16,8 @@ class Operations(wx.Panel):
             window=self.options, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)
 
         sizer.Add(
-            window=self.back, proportion=0,
-            flag=wx.ALL|wx.ALIGN_RIGHT, border=15
+            window=self.back, proportion=0, flag=wx.ALL|wx.ALIGN_RIGHT,
+            border=15
         )
 
         self.SetSizer(sizer)
@@ -34,12 +34,13 @@ class OperationsOptions(wx.Panel):
         self.cust_pwork = wx.Button(parent=self, label="Customer\nPaperwork")
         self.loading_list = wx.Button(parent=self, label="Loading\nList")
 
+        self.buttons = [self.cust_pwork, self.loading_list]
         self._initialise_fonts()
 
     def _initialise_fonts(self) -> None:
-        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
+        font = fonts.font(point_size=30, bold=True)
 
-        for button in [self.cust_pwork, self.loading_list]:
+        for button in self.buttons:
             button.SetFont(font)
 
     def _initialise_sizers(self) -> None:

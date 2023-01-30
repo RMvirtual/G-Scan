@@ -1,4 +1,5 @@
 import wx
+from src.main.gui import fonts
 
 
 class SettingsToolbar(wx.Panel):
@@ -12,8 +13,7 @@ class SettingsToolbar(wx.Panel):
         self.settings = wx.Button(parent=self, label="Settings")
         self.exit = wx.Button(parent=self, label="Exit")
 
-        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
-
+        font = fonts.font(point_size=30, bold=True)
         self.settings.SetFont(font)
         self.exit.SetFont(font)
 

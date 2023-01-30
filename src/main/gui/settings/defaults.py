@@ -1,4 +1,5 @@
 import wx
+from src.main.gui import fonts
 
 
 class Defaults(wx.Panel):
@@ -22,14 +23,22 @@ class Defaults(wx.Panel):
         self._initialise_fonts()
 
     def _initialise_fonts(self) -> None:
-        title_font = wx.Font(wx.FontInfo(pointSize=20).Bold())
-        self.title.SetFont(title_font)
+        self._initialise_title_font()
+        self._initialise_body_font()
 
-        font = wx.Font(wx.FontInfo(pointSize=12))
-        self.departments_label.SetFont(font)
-        self.paperwork_label.SetFont(font)
-        self.departments.SetFont(font)
-        self.paperwork.SetFont(font)
+    def _initialise_title_font(self) -> None:
+        self.title.SetFont(fonts.font(point_size=20, bold=True))
+
+    def _initialise_body_font(self) -> None:
+        font = fonts.font(point_size=12)
+
+        widgets = [
+            self.departments_label, self.paperwork_label,
+            self.departments, self.paperwork
+        ]
+
+        for widget in widgets:
+            widget.SetFont(font)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=15, hgap=30)
@@ -45,5 +54,6 @@ class Defaults(wx.Panel):
         self.SetSizer(sizer)
 
     def _default_combobox(self) -> wx.ComboBox:
-        return wx.ComboBox(
-            parent=self, value="NULL", choices=["NULL1", "NULL2"])
+        dummy_values = ["NULL", "NULL2"]
+
+        return wx.ComboBox(parent=self, value="NULL", choices=dummy_values)

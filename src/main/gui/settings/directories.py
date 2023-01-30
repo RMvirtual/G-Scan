@@ -1,4 +1,7 @@
 import wx
+from src.main.gui import fonts
+
+BrowseWidgets = tuple[wx.StaticText, wx.TextCtrl, wx.Button]
 
 
 class Directories(wx.Panel):
@@ -9,25 +12,24 @@ class Directories(wx.Panel):
         self._initialise_sizer()
 
     def _initialise_widgets(self) -> None:
-        self.title = wx.StaticText(parent=self, label="Folders")
+        self._initialise_title()
+        self._initialise_body_widgets()
 
-        self.scan_label = wx.StaticText(parent=self, label="Scan Directory")
-        self.scan_box = wx.TextCtrl(parent=self, value="NULL")
-        self.scan_browse = wx.Button(parent=self, label="...")
-
-        self.dest_label = wx.StaticText(
-            parent=self, label="Destination Directory")
-
-        self.dest_box = wx.TextCtrl(parent=self, value="NULL")
-        self.dest_browse = wx.Button(parent=self, label="...")
-
+    def _initialise_body_widgets(self) -> None:
+        self._initialise_scan_widgets()
+        self._initialise_dest_widgets()
         self._initialise_fonts()
 
-    def _initialise_fonts(self) -> None:
-        title_font = wx.Font(wx.FontInfo(pointSize=20).Bold())
-        self.title.SetFont(title_font)
+    def _initialise_scan_widgets(self) -> None:
+        self.scan_label, self.scan_box, self.scan_browse = \
+            self._browse_widgets("Scan Directory")
 
-        font = wx.Font(wx.FontInfo(pointSize=12))
+    def _initialise_dest_widgets(self) -> None:
+        self.dest_label, self.dest_box, self.dest_browse = \
+            self._browse_widgets("Destination Directory")
+
+    def _initialise_fonts(self) -> None:
+        font = fonts.font(point_size=12)
 
         items = [
             self.scan_label, self.scan_box, self.scan_browse,
@@ -36,6 +38,18 @@ class Directories(wx.Panel):
 
         for item in items:
             item.SetFont(font)
+
+    def _browse_widgets(
+            self, label: str, box_value: str = "NULL") -> BrowseWidgets:
+        return (
+            wx.StaticText(parent=self, label=label),
+            wx.TextCtrl(parent=self, value=box_value),
+            wx.Button(parent=self, label="...")
+        )
+
+    def _initialise_title(self) -> None:
+        self.title = wx.StaticText(parent=self, label="Folders")
+        self.title.SetFont(fonts.font(point_size=20, bold=True))
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=5, hgap=5)
