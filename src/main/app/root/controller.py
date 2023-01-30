@@ -1,8 +1,9 @@
 import wx
-from src.main.app.image_viewer.controller import ImageViewerController
-from src.main.app.settings.controller import SettingsController
-from src.main.app.display import DisplayController
-from src.main.app.main_menu import MainMenuController
+from src.main.app.controllers import (
+    ImageViewerController, SettingsController, DisplayController,
+    MainMenuController
+)
+
 from src.main.app.root.interface import ApplicationInterface
 
 

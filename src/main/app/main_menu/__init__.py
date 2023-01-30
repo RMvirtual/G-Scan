@@ -1,1 +1,0 @@
-from src.main.app.main_menu.controller import MainMenuController
