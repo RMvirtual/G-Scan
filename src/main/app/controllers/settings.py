@@ -6,19 +6,23 @@ from src.main.gui import Settings
 class SettingsController:
     def __init__(self, root_application: RootInterface):
         self._root = root_application
-        self._settings = Settings(root_application.frame())
+        self._gui = Settings(root_application.frame())
         self._initialise_callbacks()
+        self.load_directories()
 
     def _initialise_callbacks(self) -> None:
-        self._settings.save.Bind(wx.EVT_BUTTON, self.on_save)
-        self._settings.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+        self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
+        self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
     def close(self) -> None:
-        self._settings.close()
+        self._gui.close()
 
     @property
     def panel(self) -> wx.Panel:
-        return self._settings
+        return self._gui
+
+    def load_directories(self) -> None:
+        self._gui.directories.scan_directory = "\\\\test_me"
 
     def on_save(self, event = None) -> None:
         self._root.launch_main_menu()

@@ -69,3 +69,11 @@ class Directories(wx.Panel):
 
         sizer.AddGrowableCol(1)
         self.SetSizer(sizer)
+
+    @property
+    def scan_directory(self) -> str:
+        return self.scan_box.GetValue()
+
+    @scan_directory.setter
+    def scan_directory(self, directory: str) -> None:
+        self.scan_box.SetValue(directory)
