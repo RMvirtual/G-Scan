@@ -10,9 +10,9 @@ def test_resources_directory() -> str:
 def image_resources_directory() -> str:
     return _from_runfiles("gscan\\resources\\images")
 
-    r = runfiles.Create()
 
-    return r.Rlocation("gscan/resources/images")
+def config_directory() -> str:
+    return _from_runfiles("gscan\\config")
 
 
 def data_directory() -> str:

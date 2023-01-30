@@ -5,6 +5,7 @@ py_library(
     name = "file_system",
     srcs = glob(["*.py"]),
     data = [
+        "//config",
         "//data:temp",
         "//data:user_settings.dat",
         "//resources",
