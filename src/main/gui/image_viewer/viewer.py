@@ -3,7 +3,7 @@ from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.image_viewer.bitmap_canvas import BitmapViewer
 from src.main.gui.image_viewer.input import InputPanel
 from src.main.gui.image_viewer.navigation import NavigationPanel
-from src.main.gui.image_viewer.menu_bar import MenuBar
+from src.main.gui.image_viewer.files import FilesPanel
 
 
 class ImageViewer(wx.Panel):
@@ -17,25 +17,23 @@ class ImageViewer(wx.Panel):
 
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
 
-    def _initialise_menu_bar(self) -> None:
-        self._menu_bar = MenuBar()
-        file_menu = wx.Menu()
-        file_item = file_menu.Append(wx.ID_EXIT, "Quit", "Quit application")
-        self._menu_bar.Append(file_menu, "&File")
-        self.SetMenuBar(self._menu_bar)
-        self.Bind(wx.EVT_MENU, self.close, file_item)
-
     def _initialise_panels(self) -> None:
         self._top_toolbar = InputPanel(self)
         self._bitmap_viewer = BitmapViewer(self)
+        self._files = FilesPanel(self)
         self._bottom_toolbar = NavigationPanel(self)
 
     def _initialise_sizer(self) -> None:
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(window=self._top_toolbar, proportion=0, flag=wx.EXPAND)
-        sizer.Add(window=self._bitmap_viewer, proportion=1, flag=wx.EXPAND)
-        sizer.Add(window=self._bottom_toolbar, proportion=0, flag=wx.EXPAND)
-        self.SetSizer(sizer)
+        main_sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        main_sizer.Add(window=self._top_toolbar, proportion=0, flag=wx.EXPAND)
+
+        bitmap_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
+        bitmap_sizer.Add(window=self._bitmap_viewer, proportion=1, flag=wx.EXPAND)
+        bitmap_sizer.Add(window=self._files, proportion=1, flag=wx.EXPAND)
+
+        main_sizer.Add(sizer=bitmap_sizer, proportion=1, flag=wx.EXPAND)
+        main_sizer.Add(window=self._bottom_toolbar, proportion=0, flag=wx.EXPAND)
+        self.SetSizer(main_sizer)
 
     def close(self, _event: wx.Event = None) -> None:
         self.Close()
