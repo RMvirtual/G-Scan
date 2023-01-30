@@ -1,12 +1,13 @@
 import wx
-from src.main.app.controllers.display_interface import (
-    Display, DisplayController)
+from src.main.app.display import Display
+from src.main.app.main_menu.interface import RootMenu
 from src.main.gui import MainMenu
 
-
-class MainMenuController(DisplayController):
-    def __init__(self, parent_window: Display):
-        self._menu = MainMenu(parent_window.window)
+class MainMenuController:
+    def __init__(self, display: Display, application: RootMenu):
+        self._app = application
+        self._display = display
+        self._menu = MainMenu(self._display.frame())
         self._initialise_callbacks()
 
     def _initialise_callbacks(self) -> None:
@@ -15,6 +16,14 @@ class MainMenuController(DisplayController):
 
         self._menu.operations.back.Bind(
             wx.EVT_BUTTON, self._menu.view_departments)
+
+        self._bind_root_application_callbacks()
+
+    def _bind_root_application_callbacks(self) -> None:
+        self.bind_customer_paperwork(self._app.launch_image_viewer)
+        self.bind_loading_list(self._app.launch_image_viewer)
+        self.bind_settings(self._app.launch_settings)
+        self.bind_exit(self._app.exit)
 
     @property
     def panel(self) -> wx.Panel:

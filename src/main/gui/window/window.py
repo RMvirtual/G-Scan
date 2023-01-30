@@ -49,3 +49,6 @@ class Window(wx.Frame):
     @status_bar.setter
     def status_bar(self, new_status: str) -> None:
         self.SetStatusText(new_status)
+
+    def set_menu_bar(self, menu_bar: wx.MenuBar) -> None:
+        self.SetMenuBar(menu_bar)

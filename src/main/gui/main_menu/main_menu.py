@@ -10,6 +10,7 @@ class MainMenu(Frame):
     def __init__(self):
         """Constructor method."""
 
+
         self.__create_widgets()
 
     def close(self):

@@ -1,13 +1,11 @@
 import wx
-from src.main.app.controllers.display_interface import (
-    Display, DisplayController)
-
+from src.main.app.display import Display
 from src.main.gui import Settings
 
 
-class SettingsController(DisplayController):
+class SettingsController:
     def __init__(self, window: Display):
-        self._settings = Settings(window.window)
+        self._settings = Settings(window.frame())
 
     def show(self) -> None:
         self._settings.show()

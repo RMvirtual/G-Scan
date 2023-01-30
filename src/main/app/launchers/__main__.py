@@ -1,5 +1,5 @@
 import wx
-from src.main.app.controllers import ApplicationController
+from src.main.app.application.controller import ApplicationController
 
 
 def main() -> None:

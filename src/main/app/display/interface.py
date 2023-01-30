@@ -3,13 +3,10 @@ import wx
 
 
 class Display(ABC):
-    @property
     @abstractmethod
-    def window(self) -> wx.Frame:
+    def frame(self) -> wx.Frame:
         ...
 
-
-class DisplayController(ABC):
     @abstractmethod
     def close(self) -> None:
         ...
@@ -22,7 +19,14 @@ class DisplayController(ABC):
     def show(self) -> None:
         ...
 
-    @property
     @abstractmethod
     def panel(self) -> wx.Panel:
+        ...
+
+    @abstractmethod
+    def set_panel(self, panel: wx.Panel) -> None:
+        ...
+
+    @abstractmethod
+    def set_menu_bar(self, menu_bar: wx.MenuBar) -> None:
         ...

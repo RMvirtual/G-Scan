@@ -29,10 +29,12 @@ class InputPanel(wx.Panel):
             flag=wx.ALL, border=border
         )
 
-        sizer.Add(window=self.input, pos=(1, 0), flag=wx.ALL, border=border)
-        sizer.Add(window=self.submit, pos=(1, 1), flag=wx.ALL, border=border)
-        sizer.Add(window=self.skip, pos=(1, 2), flag=wx.ALL, border=border)
-        sizer.Add(window=self.split, pos=(1, 3), flag=wx.ALL, border=border)
+        sizer.Add(window=self.input, pos=(1,0), flag=wx.ALL, border=border)
+        sizer.Add(window=self.submit, pos=(1,1), flag=wx.ALL, border=border)
+        sizer.Add(window=self.skip, pos=(1,2), flag=wx.ALL, border=border)
+        sizer.Add(window=self.split, pos=(1,3), flag=wx.ALL, border=border)
+
+        sizer.Add(window=self.file_menu, pos=(1,4), flag=wx.ALL, border=border)
 
         self.SetSizer(sizer)
 

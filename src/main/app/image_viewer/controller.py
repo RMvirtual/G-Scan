@@ -1,14 +1,13 @@
 import fitz
 import wx
-from src.main.app.controllers.display_interface import (
-    DisplayController, Display)
-
+from src.main.app.display import DisplayController, Display
 from src.main.gui import ImageViewer
 
 
-class ImageViewerController(DisplayController):
-    def __init__(self, parent_window: Display) -> None:
-        self._viewer = ImageViewer(parent_window.window)
+class ImageViewerController:
+    def __init__(self, display: Display) -> None:
+        self._display = display
+        self._viewer = ImageViewer(display.frame())
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)
