@@ -22,5 +22,3 @@ class WindowController(DisplayController):
     def display(self, controller: DisplayController) -> None:
         self.window.panel = controller.panel
 
-
-
