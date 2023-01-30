@@ -4,10 +4,10 @@ from src.main.app.controllers import (
     MainMenuController
 )
 
-from src.main.app.root.interface import ApplicationInterface
+from src.main.app.root.interface import RootInterface
 
 
-class RootApplication(ApplicationInterface):
+class RootApplication(RootInterface):
     def __init__(self):
         self._display = DisplayController()
         self._controller = None

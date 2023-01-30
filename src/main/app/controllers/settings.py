@@ -1,10 +1,10 @@
 import wx
-from src.main.app.root.interface import ApplicationInterface
+from src.main.app.root.interface import RootInterface
 from src.main.gui import Settings
 
 
 class SettingsController:
-    def __init__(self, root_application: ApplicationInterface):
+    def __init__(self, root_application: RootInterface):
         self._root = root_application
         self._settings = Settings(root_application.frame())
         self._initialise_callbacks()

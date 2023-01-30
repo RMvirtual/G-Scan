@@ -1,1 +1,1 @@
-from src.main.app.root.interface.interface import ApplicationInterface
+from src.main.app.root.interface.interface import RootInterface

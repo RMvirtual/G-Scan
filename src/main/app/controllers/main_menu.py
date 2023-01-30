@@ -1,10 +1,10 @@
 import wx
-from src.main.app.root.interface import ApplicationInterface
+from src.main.app.root.interface import RootInterface
 from src.main.gui import MainMenu
 
 
 class MainMenuController:
-    def __init__(self, root_application: ApplicationInterface):
+    def __init__(self, root_application: RootInterface):
         self._app = root_application
         self._gui = MainMenu(self._app.frame())
         self._initialise_callbacks()

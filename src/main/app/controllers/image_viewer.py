@@ -1,11 +1,11 @@
 import fitz
 import wx
 from src.main.gui import ImageViewer
-from src.main.app.root.interface import ApplicationInterface
+from src.main.app.root.interface import RootInterface
 
 
 class ImageViewerController:
-    def __init__(self, root_application: ApplicationInterface) -> None:
+    def __init__(self, root_application: RootInterface) -> None:
         self._root = root_application
         self._viewer = ImageViewer(root_application.frame())
         self._initialise_callbacks()

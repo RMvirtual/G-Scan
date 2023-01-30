@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import wx
 
 
-class ApplicationInterface(ABC):
+class RootInterface(ABC):
     @abstractmethod
     def frame(self) -> wx.Frame:
         ...
