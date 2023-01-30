@@ -8,6 +8,7 @@ class ImageViewerController:
     def __init__(self, root_application: ApplicationInterface) -> None:
         self._root = root_application
         self._viewer = ImageViewer(root_application.frame())
+        self._initialise_callbacks()
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)
