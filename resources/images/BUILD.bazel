@@ -1,5 +1,5 @@
 filegroup(
-    name = "staging",
+    name = "images",
     srcs = glob(["*"]),
     visibility = ["//visibility:public"],
 )
