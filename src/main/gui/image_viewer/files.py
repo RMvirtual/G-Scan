@@ -6,13 +6,14 @@ class FilesPanel(wx.Panel):
         super(FilesPanel, self).__init__(parent=parent)
         self._initialise_widgets()
         self._initialise_sizer()
+        self._create_dummy_data()
 
     def _initialise_widgets(self) -> None:
         self._title = wx.StaticText(parent=self, label="Jobs")
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())
         self._title.SetFont(font)
 
-        self._files = wx.TreeCtrl(parent=self)
+        self._files = wx.TreeCtrl(parent=self, style=wx.TR_HIDE_ROOT)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
@@ -28,3 +29,15 @@ class FilesPanel(wx.Panel):
         )
 
         self.SetSizer(sizer)
+
+    def _create_dummy_data(self) -> None:
+        root_id = self._files.AddRoot(text="All Files")
+
+        job_1 = self._files.AppendItem(parent=root_id, text="TestJob1")
+        self._files.AppendItem(parent=job_1, text="Page 1")
+        self._files.AppendItem(parent=job_1, text="Page 2")
+
+        job_2 = self._files.AppendItem(parent=root_id, text="TestJob2")
+
+        self._files.AppendItem(parent=job_2, text="DGN")
+        self._files.AppendItem(parent=job_2, text="Customer Paperwork")
