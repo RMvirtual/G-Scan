@@ -1,3 +1,4 @@
+import wx
 from src.main.app.image_viewer.controller import ImageViewerController
 from src.main.app.settings.controller import SettingsController
 from src.main.app.display import DisplayController, Display
@@ -12,7 +13,7 @@ class ApplicationController(ApplicationInterface):
 
     def launch_main_menu(self, event = None) -> None:
         self._set_controller(
-            MainMenuController(display=self._display, application=self))
+            MainMenuController(application=self))
 
         self._display.frame().Layout()
 
@@ -28,6 +29,9 @@ class ApplicationController(ApplicationInterface):
 
     def exit(self) -> None:
         self.close()
+
+    def frame(self) -> wx.Frame:
+        return self._display.frame()
 
     def show(self) -> None:
         self._display.show()

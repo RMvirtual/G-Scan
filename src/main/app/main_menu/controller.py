@@ -4,10 +4,9 @@ from src.main.app.main_menu.interface import RootMenu
 from src.main.gui import MainMenu
 
 class MainMenuController:
-    def __init__(self, display: Display, application: RootMenu):
+    def __init__(self, application: RootMenu):
         self._app = application
-        self._display = display
-        self._menu = MainMenu(self._display.frame())
+        self._menu = MainMenu(self._app.frame())
         self._initialise_callbacks()
 
     def _initialise_callbacks(self) -> None:
