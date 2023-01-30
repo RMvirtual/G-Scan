@@ -1,11 +1,11 @@
 import wx
-from src.main.app.settings.interface import SettingsInterface
+from src.main.app.root.interface import ApplicationInterface
 from src.main.gui import Settings
 
 
 class SettingsController:
-    def __init__(self, root_application: SettingsInterface):
-        self._app = root_application
+    def __init__(self, root_application: ApplicationInterface):
+        self._root = root_application
         self._settings = Settings(root_application.frame())
         self._initialise_callbacks()
 
@@ -21,10 +21,10 @@ class SettingsController:
         return self._settings
 
     def on_save(self, event = None) -> None:
-        self._app.launch_main_menu()
+        self._root.launch_main_menu()
 
     def on_exit(self,event = None) -> None:
-        self._app.launch_main_menu()
+        self._root.launch_main_menu()
 
     def set_department_options(self, options: list[str]) -> None:
         ...

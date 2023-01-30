@@ -1,7 +1,12 @@
 from abc import ABC, abstractmethod
+import wx
 
 
-class RootMenu(ABC):
+class ApplicationInterface(ABC):
+    @abstractmethod
+    def frame(self) -> wx.Frame:
+        ...
+
     @abstractmethod
     def exit(self) -> None:
         ...

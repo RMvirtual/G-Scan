@@ -1,8 +1,8 @@
 import wx
 from src.main.app.image_viewer.controller import ImageViewerController
 from src.main.app.settings.controller import SettingsController
-from src.main.app.display import DisplayController, Display
-from src.main.app.main_menu import RootMenu, MainMenuController
+from src.main.app.display import DisplayController
+from src.main.app.main_menu import MainMenuController
 from src.main.app.root.interface import ApplicationInterface
 
 
@@ -18,7 +18,7 @@ class RootApplication(ApplicationInterface):
         self._set_controller(SettingsController(root_application=self))
 
     def launch_image_viewer(self, event = None) -> None:
-        self._set_controller(ImageViewerController(self._display))
+        self._set_controller(ImageViewerController(root_application=self))
 
     def exit(self) -> None:
         self.close()
@@ -36,12 +36,12 @@ class RootApplication(ApplicationInterface):
         self.launch_main_menu()
 
     def _set_controller(self, controller) -> None:
-        self._clear_controller()
+        self._close_controller()
         self._controller = controller
         self._refresh_panel()
         self._display.frame().Layout()
 
-    def _clear_controller(self) -> None:
+    def _close_controller(self) -> None:
         if self._controller:
             self._controller.close()
 
@@ -50,9 +50,3 @@ class RootApplication(ApplicationInterface):
 
     def set_panel(self, panel: wx.Panel) -> None:
         self._display.set_panel(panel)
-
-    def _create_image_viewer(self) -> None:
-        # result.bind_exit(self.launch_main_menu)
-
-        # return result
-        ...

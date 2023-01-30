@@ -2,12 +2,8 @@ load("@python_third_party//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library")
 
 py_library(
-    name = "settings",
+    name = "interface",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
-    deps = [
-        requirement("wxPython"),
-        "//src/main/app/root/interface",
-        "//src/main/gui",
-    ],
+    deps = [requirement("wxPython")],
 )

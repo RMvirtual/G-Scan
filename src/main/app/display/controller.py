@@ -1,9 +1,8 @@
 import wx
-from src.main.app.display.interface import Display
 from src.main.gui.window import Window
 
 
-class DisplayController(Display):
+class DisplayController:
     def __init__(self):
         self._window = Window()
 

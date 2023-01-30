@@ -1,13 +1,13 @@
 import fitz
 import wx
-from src.main.app.display import DisplayController, Display
 from src.main.gui import ImageViewer
+from src.main.app.root.interface import ApplicationInterface
 
 
 class ImageViewerController:
-    def __init__(self, display: Display) -> None:
-        self._display = display
-        self._viewer = ImageViewer(display.frame())
+    def __init__(self, root_application: ApplicationInterface) -> None:
+        self._root = root_application
+        self._viewer = ImageViewer(root_application.frame())
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)
@@ -20,6 +20,9 @@ class ImageViewerController:
 
         image = bitmap.ConvertToImage()
         self._viewer.set_image(image)
+
+    def _initialise_callbacks(self) -> None:
+        self.bind_exit(self._root.launch_main_menu)
 
     @property
     def panel(self) -> wx.Panel:

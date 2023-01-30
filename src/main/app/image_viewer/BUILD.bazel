@@ -8,6 +8,7 @@ py_library(
     deps = [
         requirement("wxPython"),
         requirement("pymupdf"),
+        "//src/main/app/root/interface",
         "//src/main/gui",
     ],
 )

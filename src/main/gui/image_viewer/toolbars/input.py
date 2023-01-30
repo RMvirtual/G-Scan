@@ -34,8 +34,6 @@ class InputPanel(wx.Panel):
         sizer.Add(window=self.skip, pos=(1,2), flag=wx.ALL, border=border)
         sizer.Add(window=self.split, pos=(1,3), flag=wx.ALL, border=border)
 
-        sizer.Add(window=self.file_menu, pos=(1,4), flag=wx.ALL, border=border)
-
         self.SetSizer(sizer)
 
     def clear_job_ref_input(self) -> None:
