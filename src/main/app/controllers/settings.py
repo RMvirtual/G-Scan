@@ -45,33 +45,3 @@ class SettingsController:
 
     def on_exit(self,event = None) -> None:
         self._root.launch_main_menu()
-
-    def set_department_options(self, options: list[str]) -> None:
-        ...
-
-    def set_paperwork_options(self, options: list[str]) -> None:
-        ...
-
-    def set_department(self, option: str) -> None:
-        ...
-
-    def set_paperwork_type(self, option: str) -> None:
-        ...
-
-    def get_department(self) -> None:
-        ...
-
-    def get_paperwork_type(self) -> None:
-        ...
-
-    def set_scan_directory(self, directory: str) -> None:
-        ...
-
-    def set_dest_directory(self, directory: str) -> None:
-        ...
-
-    def get_scan_directory(self) -> str:
-        ...
-
-    def get_dest_directory(self) -> str:
-        ...
