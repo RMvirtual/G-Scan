@@ -1,6 +1,6 @@
 import numpy
 import unittest
-import src.main.file_system.file_system as file_system
+import src.main.file_system.paths as file_system
 import src.main.pdf.reader as pdf_reader
 
 

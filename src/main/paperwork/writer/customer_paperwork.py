@@ -1,7 +1,7 @@
 import io
 
-import src.main.file_system.file_system as file_system
-from src.main.file_system.file_system import DirectoryItem
+import src.main.file_system.paths as file_system
+from src.main.file_system.paths import DirectoryItem
 from src.main.pdf.extractor import PdfExtractor
 from src.main.pdf.writer_old import PdfWriter
 

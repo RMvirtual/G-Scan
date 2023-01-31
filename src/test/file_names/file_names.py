@@ -1,6 +1,6 @@
 import unittest
 import src.main.file_names.name_scheme as file_naming
-import src.main.file_system.file_system as file_system
+import src.main.file_system.paths as file_system
 
 class TestFileNames(unittest.TestCase):
     def test_should_create_backup_file_name_with_no_page_suffix(self):        

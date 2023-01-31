@@ -1,5 +1,5 @@
 from wx.core import EVT_TEXT
-import src.main.file_system.file_system as filesystem
+import src.main.file_system.paths as filesystem
 from src.main.gui.widgets.buttons import Button
 from src.main.gui.widgets.panel import Panel
 from src.main.gui.widgets.text import TextEntryBox, TextLabel

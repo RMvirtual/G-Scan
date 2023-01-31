@@ -10,7 +10,7 @@ import user.user
 from user.user import User, UserDefaults
 import wx
 
-import src.main.file_system.file_system as file_system
+import src.main.file_system.paths as file_system
 import src.main.job_references.references as job_ref
 import date.date
 from date.date import Date

@@ -2,7 +2,7 @@ import PIL.Image
 from pyzbar.pyzbar import decode
 import re
 import wand.image
-import src.main.file_system.file_system as file_system
+import src.main.file_system.paths as file_system
 from src.main.pdf.reader import PdfReader
 import PyPDF2
 

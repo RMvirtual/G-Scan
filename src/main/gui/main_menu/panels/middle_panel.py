@@ -2,7 +2,7 @@ from src.main.gui.widgets.panel import Panel
 from src.main.gui.widgets.buttons import Button, ImageButton
 from src.main.gui.widgets.text import TextLabel
 from src.main.gui.widgets.widget import Attributes
-import src.main.file_system.file_system as file_system
+import src.main.file_system.paths as file_system
 import src.main.gui.widgets.fonts as fonts
 
 
