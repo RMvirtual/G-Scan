@@ -50,19 +50,21 @@ class SettingsController:
         self._gui.defaults.document_type = settings.document_type.full_name
 
     def on_save(self, event = None) -> None:
-        new_settings = user.UserSettings()
-        new_settings.scan_dir = self._gui.directories.scan_directory
-        new_settings.dest_dir = self._gui.directories.dest_directory
+        user.save_settings(settings=self._settings_from_gui())
+        self._root.launch_main_menu()
 
-        new_settings.department = departments.load(
+    def _settings_from_gui(self) -> user.UserSettings:
+        result = user.UserSettings()
+        result.scan_dir = self._gui.directories.scan_directory
+        result.dest_dir = self._gui.directories.dest_directory
+
+        result.department = departments.load(
             full_name=self._gui.defaults.department)
 
-        new_settings.document_type = documents.load_type(
+        result.document_type = documents.load_type(
             full_name=self._gui.defaults.document_type)
 
-        user.save_settings(new_settings)
-
-        self._root.launch_main_menu()
+        return result
 
     def on_exit(self, event = None) -> None:
         self._root.launch_main_menu()
