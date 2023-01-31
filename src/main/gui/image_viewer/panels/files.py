@@ -7,6 +7,7 @@ class FilesPanel(wx.Panel):
         self._initialise_widgets()
         self._initialise_sizer()
         self._create_dummy_data()
+        self._files.ExpandAll()
 
     def _initialise_widgets(self) -> None:
         self._title = wx.StaticText(parent=self, label="Jobs")
@@ -15,7 +16,7 @@ class FilesPanel(wx.Panel):
 
         self._files = wx.TreeCtrl(
             parent=self,
-            style=wx.TR_HIDE_ROOT|wx.TR_TWIST_BUTTONS
+            style=wx.TR_HIDE_ROOT|wx.TR_TWIST_BUTTONS|wx.TR_HAS_BUTTONS
                   |wx.TR_NO_LINES|wx.TR_MULTIPLE
         )
 
