@@ -9,7 +9,7 @@ py_binary(
     visibility = ["//visibility:public"],
     deps = [
         requirement("wxPython"),
-        "//src/main/app/root",
+        "//src/main/app/controllers",
     ],
 )
 

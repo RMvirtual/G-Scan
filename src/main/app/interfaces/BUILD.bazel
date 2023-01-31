@@ -2,8 +2,10 @@ load("@python_third_party//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library")
 
 py_library(
-    name = "interface",
+    name = "interfaces",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
-    deps = [requirement("wxPython")],
+    deps = [
+        requirement("wxPython"),
+    ],
 )
