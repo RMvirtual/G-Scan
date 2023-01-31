@@ -41,31 +41,11 @@ class Defaults(wx.Panel):
         self.doc_type_box.SetItems(new_options)
 
     def _initialise_widgets(self) -> None:
-        self.title = self._default_label("Defaults")
+        self.title = self._title_label("Defaults")
         self.departments_label = self._default_label("Departments")
         self.doc_type_label = self._default_label("Document Type")
         self.department_box = self._default_combobox()
         self.doc_type_box = self._default_combobox()
-
-        self._initialise_fonts()
-
-    def _initialise_fonts(self) -> None:
-        self._initialise_title_font()
-        self._initialise_body_font()
-
-    def _initialise_title_font(self) -> None:
-        self.title.SetFont(fonts.font(point_size=20, bold=True))
-
-    def _initialise_body_font(self) -> None:
-        font = fonts.font(point_size=12)
-
-        widgets = [
-            self.departments_label, self.doc_type_label,
-            self.department_box, self.doc_type_box
-        ]
-
-        for widget in widgets:
-            widget.SetFont(font)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=15, hgap=30)
@@ -80,9 +60,22 @@ class Defaults(wx.Panel):
 
         self.SetSizer(sizer)
 
+    def _title_label(self, value: str) -> wx.StaticText:
+        result = wx.StaticText(parent=self, label=value)
+        result.SetFont(fonts.font(point_size=20, bold=True))
+
+        return result
+
     def _default_label(self, value: str) -> wx.StaticText:
-        return wx.StaticText(parent=self, label=value)
+        result =  wx.StaticText(parent=self, label=value)
+        result.SetFont(font=fonts.font(point_size=12))
+
+        return result
 
     def _default_combobox(self) -> wx.ComboBox:
-        return wx.ComboBox(
-            parent=self, value="NULL", choices=["NULL"], style=wx.CB_READONLY)
+        result = wx.ComboBox(
+            parent=self, value="", choices=[""], style=wx.CB_READONLY)
+
+        result.SetFont(font=fonts.font(point_size=12))
+
+        return result
