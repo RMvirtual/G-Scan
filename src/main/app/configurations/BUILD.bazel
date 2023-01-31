@@ -5,7 +5,5 @@ py_library(
     name = "configurations",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
-    deps = [
-        "//src/main/app/interfaces",
-    ],
+    deps = [],
 )

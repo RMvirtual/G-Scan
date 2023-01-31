@@ -45,12 +45,13 @@ class MainMenuController:
         # Configuration needed here.
         config = ImageViewerConfiguration()
 
-        self._app.launch_image_viewer()
+        self._app.launch_image_viewer(config)
 
     def on_loading_list(self, event = None) -> None:
         # Configuration needed here.
-        self._app.launch_image_viewer()
+        config = ImageViewerConfiguration()
+
+        self._app.launch_image_viewer(config)
 
     def on_settings(self, event = None) -> None:
-        # Configuration needed here.
         self._app.launch_settings()

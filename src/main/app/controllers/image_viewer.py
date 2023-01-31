@@ -1,7 +1,8 @@
 import fitz
 import wx
+from src.main.app.configurations import ImageViewerConfiguration
+from src.main.app.interfaces import RootInterface
 from src.main.gui import ImageViewer
-from src.main.app.interfaces import ImageViewerConfiguration, RootInterface
 
 
 class ImageViewerController:
