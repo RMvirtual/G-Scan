@@ -29,7 +29,8 @@ class SettingsController:
 
         self._gui.directories.scan_directory = settings.scan_dir
         self._gui.directories.dest_directory = settings.dest_dir
-
+        self._gui.defaults.department = settings.department
+        self._gui.defaults.document_type = settings.document_type
 
     def on_save(self, event = None) -> None:
         self._root.launch_main_menu()

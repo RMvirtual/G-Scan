@@ -11,6 +11,22 @@ class Directories(wx.Panel):
         self._initialise_widgets()
         self._initialise_sizer()
 
+    @property
+    def scan_directory(self) -> str:
+        return self.scan_box.GetValue()
+
+    @scan_directory.setter
+    def scan_directory(self, directory: str) -> None:
+        self.scan_box.SetValue(directory)
+
+    @property
+    def dest_directory(self) -> str:
+        return self.scan_box.GetValue()
+
+    @dest_directory.setter
+    def dest_directory(self, directory: str) -> None:
+        self.scan_box.SetValue(directory)
+
     def _initialise_widgets(self) -> None:
         self._initialise_title()
         self._initialise_body_widgets()
@@ -70,18 +86,3 @@ class Directories(wx.Panel):
         sizer.AddGrowableCol(1)
         self.SetSizer(sizer)
 
-    @property
-    def scan_directory(self) -> str:
-        return self.scan_box.GetValue()
-
-    @scan_directory.setter
-    def scan_directory(self, directory: str) -> None:
-        self.scan_box.SetValue(directory)
-
-    @property
-    def dest_directory(self) -> str:
-        return self.scan_box.GetValue()
-
-    @dest_directory.setter
-    def dest_directory(self, directory: str) -> None:
-        self.scan_box.SetValue(directory)

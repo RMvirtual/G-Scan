@@ -8,6 +8,22 @@ class Defaults(wx.Panel):
         self._initialise_widgets()
         self._initialise_sizer()
 
+    @property
+    def department(self) -> str:
+        return self.departments.GetValue()
+
+    @department.setter
+    def department(self, new_department: str) -> None:
+        self.departments.SetValue(new_department)
+
+    @property
+    def document_type(self) -> str:
+        return self.paperwork.GetValue()
+
+    @document_type.setter
+    def document_type(self, new_document_type: str) -> None:
+        self.paperwork.SetValue(new_document_type)
+
     def _initialise_widgets(self) -> None:
         self.title = wx.StaticText(parent=self, label="Defaults")
 
