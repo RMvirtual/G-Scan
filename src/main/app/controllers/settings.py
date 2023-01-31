@@ -9,14 +9,24 @@ class SettingsController:
         self._root = root_application
         self._gui = Settings(root_application.frame())
         self._initialise_callbacks()
-        self.load_directories()
+        self._load_settings_from_file()
 
     def _initialise_callbacks(self) -> None:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
         self._gui.defaults.department_box.Bind(
-            wx.EVT_COMBOBOX, self.on_department_selection)
+            wx.EVT_COMBOBOX, self.on_department_box)
+
+    def on_save(self, event = None) -> None:
+        user.save_settings(settings=self._settings_from_gui())
+        self._root.launch_main_menu()
+
+    def on_exit(self, event = None) -> None:
+        self._root.launch_main_menu()
+
+    def on_department_box(self, event = None) -> None:
+        self._refresh_document_options()
 
     def close(self) -> None:
         self._gui.close()
@@ -25,8 +35,25 @@ class SettingsController:
     def panel(self) -> wx.Panel:
         return self._gui
 
-    def load_directories(self) -> None:
+    def _settings_from_gui(self) -> user.UserSettings:
+        result = user.UserSettings()
+        result.scan_dir = self._gui.directories.scan_directory
+        result.dest_dir = self._gui.directories.dest_directory
+
+        result.department = departments.load(
+            full_name=self._gui.defaults.department)
+
+        result.document_type = documents.load(
+            full_name=self._gui.defaults.document_type)
+
+        return result
+
+    def _load_settings_from_file(self) -> None:
         self._set_from_user_settings(settings=user.load_settings())
+
+    def _refresh_document_options(self) -> None:
+        department = departments.load(full_name=self._gui.defaults.department)
+        self._set_document_names(department)
 
     def _set_from_user_settings(self, settings: user.UserSettings) -> None:
         self._set_directories(settings)
@@ -49,36 +76,8 @@ class SettingsController:
 
         self._gui.defaults.document_type = settings.document_type.full_name
 
-    def on_save(self, event = None) -> None:
-        user.save_settings(settings=self._settings_from_gui())
-        self._root.launch_main_menu()
-
-    def _settings_from_gui(self) -> user.UserSettings:
-        result = user.UserSettings()
-        result.scan_dir = self._gui.directories.scan_directory
-        result.dest_dir = self._gui.directories.dest_directory
-
-        result.department = departments.load(
-            full_name=self._gui.defaults.department)
-
-        result.document_type = documents.load(
-            full_name=self._gui.defaults.document_type)
-
-        return result
-
-    def on_exit(self, event = None) -> None:
-        self._root.launch_main_menu()
-
-    def on_department_selection(self, event = None) -> None:
-        self.refresh_document_options()
-
-    def refresh_document_options(self) -> None:
-        department = departments.load(full_name=self._gui.defaults.department)
-        self._set_document_names(department)
-
     def _set_document_names(self, department: departments.Department) -> None:
         document_names = department.document_types.full_names()
 
         self._gui.defaults.document_options = document_names
         self._gui.defaults.document_type = document_names[0]
-
