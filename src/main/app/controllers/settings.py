@@ -29,20 +29,20 @@ class SettingsController:
 
         self._gui.directories.scan_directory = settings.scan_dir
         self._gui.directories.dest_directory = settings.dest_dir
-        self._gui.defaults.department = settings.department.short_name
-        self._gui.defaults.document_type = settings.document_type.full_name
 
         department_types = departments.load_all()
 
-        stringly_departments = [
+        self._gui.defaults.department_options = [
             department.short_name for department in department_types]
 
-        self._gui.defaults.department_options = stringly_departments
+        self._gui.defaults.department = settings.department.short_name
 
         document_types = settings.department.document_types
-        stringly_types = [document.full_name for document in document_types]
 
-        self._gui.defaults.document_options = stringly_types
+        self._gui.defaults.document_options = [
+            document.full_name for document in document_types]
+
+        self._gui.defaults.document_type = settings.document_type.full_name
 
     def on_save(self, event = None) -> None:
         self._root.launch_main_menu()
