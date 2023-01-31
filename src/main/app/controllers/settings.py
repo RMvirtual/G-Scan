@@ -15,7 +15,7 @@ class SettingsController:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
-        self._gui.defaults.departments.Bind(
+        self._gui.defaults.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_selection)
 
     def close(self) -> None:

@@ -10,47 +10,42 @@ class Defaults(wx.Panel):
 
     @property
     def department(self) -> str:
-        return self.departments.GetValue()
+        return self.department_box.GetValue()
 
     @department.setter
     def department(self, new_department: str) -> None:
-        self.departments.SetValue(new_department)
+        self.department_box.SetValue(new_department)
 
     @property
     def department_options(self) -> str:
-        return self.departments.GetItems()
+        return self.department_box.GetItems()
 
     @department_options.setter
     def department_options(self, options: list[str]) -> None:
-        self.departments.SetItems(options)
+        self.department_box.SetItems(options)
 
     @property
     def document_type(self) -> str:
-        return self.paperwork.GetValue()
+        return self.doc_type_box.GetValue()
 
     @document_type.setter
     def document_type(self, new_document_type: str) -> None:
-        self.paperwork.SetValue(new_document_type)
+        self.doc_type_box.SetValue(new_document_type)
 
     @property
     def document_options(self) -> list[str]:
-        return self.paperwork.GetItems()
+        return self.doc_type_box.GetItems()
 
     @document_options.setter
     def document_options(self, new_options: list[str]) -> None:
-        self.paperwork.SetItems(new_options)
+        self.doc_type_box.SetItems(new_options)
 
     def _initialise_widgets(self) -> None:
-        self.title = wx.StaticText(parent=self, label="Defaults")
-
-        self.departments_label = wx.StaticText(
-            parent=self, label="Department")
-
-        self.paperwork_label = wx.StaticText(
-            parent=self, label="Paperwork Type")
-
-        self.departments = self._default_combobox()
-        self.paperwork = self._default_combobox()
+        self.title = self._default_label("Defaults")
+        self.departments_label = self._default_label("Departments")
+        self.doc_type_label = self._default_label("Document Type")
+        self.department_box = self._default_combobox()
+        self.doc_type_box = self._default_combobox()
 
         self._initialise_fonts()
 
@@ -65,8 +60,8 @@ class Defaults(wx.Panel):
         font = fonts.font(point_size=12)
 
         widgets = [
-            self.departments_label, self.paperwork_label,
-            self.departments, self.paperwork
+            self.departments_label, self.doc_type_label,
+            self.department_box, self.doc_type_box
         ]
 
         for widget in widgets:
@@ -77,13 +72,16 @@ class Defaults(wx.Panel):
 
         sizer.Add(window=self.title, pos=(0,0), span=(1,2), flag=wx.ALIGN_LEFT)
         sizer.Add(window=self.departments_label, pos=(1,0), flag=wx.ALIGN_LEFT)
-        sizer.Add(window=self.paperwork_label, pos=(1,1), flag=wx.ALIGN_LEFT)
+        sizer.Add(window=self.doc_type_label, pos=(1, 1), flag=wx.ALIGN_LEFT)
 
         align_centre = wx.ALIGN_CENTRE_HORIZONTAL
-        sizer.Add(window=self.departments, pos=(2,0), flag=align_centre)
-        sizer.Add(window=self.paperwork, pos=(2,1), flag=align_centre)
+        sizer.Add(window=self.department_box, pos=(2, 0), flag=align_centre)
+        sizer.Add(window=self.doc_type_box, pos=(2, 1), flag=align_centre)
 
         self.SetSizer(sizer)
+
+    def _default_label(self, value: str) -> wx.StaticText:
+        return wx.StaticText(parent=self, label=value)
 
     def _default_combobox(self) -> wx.ComboBox:
         return wx.ComboBox(
