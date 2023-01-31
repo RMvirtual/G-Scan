@@ -4,10 +4,10 @@ from src.main import documents
 
 class Department:
     def __init__(self) -> None:
-        self.short_code = ""
-        self.full_name = ""
-        self.short_name = ""
-        self.document_types = []
+        self.short_code: str = ""
+        self.full_name: str = ""
+        self.short_name: str = ""
+        self.document_types = documents.DocumentTypes()
 
 
 class Departments:
@@ -56,11 +56,11 @@ def _department(key: str, values: dict[str, any]) -> Department:
     raw_document_types = values["document_types"]
 
     all_types = documents.load_all_types()
-    document_types = []
+    document_types = documents.DocumentTypes()
 
     for document in all_types:
         if document.short_code in raw_document_types:
-            document_types.append(document)
+            document_types.documents.append(document)
 
     result.document_types = document_types
 

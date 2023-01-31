@@ -27,21 +27,23 @@ class SettingsController:
     def load_directories(self) -> None:
         settings = user.get_settings()
 
+        self._set_directories(settings)
+        self._set_department(settings)
+        self._set_document_type(settings)
+
+    def _set_directories(self, settings: user.UserSettings) -> None:
         self._gui.directories.scan_directory = settings.scan_dir
         self._gui.directories.dest_directory = settings.dest_dir
 
-        self._gui.defaults.department_options = (
-            departments.load_all().full_names())
-
-        self._gui.defaults.document_options = self._document_list(
-            settings.department.document_types)
-
+    def _set_department(self, settings: user.UserSettings) -> None:
+        department_names = departments.load_all().full_names()
+        self._gui.defaults.department_options = department_names
         self._gui.defaults.department = settings.department.full_name
-        self._gui.defaults.document_type = settings.document_type.full_name
 
-    @staticmethod
-    def _document_list(documents_list: list[documents.Document]) -> list[str]:
-        return [document.full_name for document in documents_list]
+    def _set_document_type(self, settings: user.UserSettings) -> None:
+        document_names = settings.department.document_types.full_names()
+        self._gui.defaults.document_options = document_names
+        self._gui.defaults.document_type = settings.document_type.full_name
 
     def on_save(self, event = None) -> None:
         self._root.launch_main_menu()
