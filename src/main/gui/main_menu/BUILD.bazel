@@ -2,13 +2,13 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_third_party//:requirements.bzl", "requirement")
 
 py_library(
-    name = "menu",
+    name = "main_menu",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
         requirement("wxPython"),
         "//src/main/file_system",
-        "//src/main/gui/menu/departments",
+        "//src/main/gui/main_menu/departments",
         "//src/main/gui/metrics",
     ],
 )
