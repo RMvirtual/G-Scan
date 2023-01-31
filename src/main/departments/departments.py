@@ -15,11 +15,7 @@ class Departments:
         self.departments = []
 
     def __contains__(self, short_code: str) -> bool:
-        for department in self.departments:
-            if department.short_code == short_code:
-                return True
-
-        return False
+        return len(short_code == other for other in self.short_names())
 
     def __iter__(self):
         return self.departments.__iter__()
@@ -53,19 +49,19 @@ def _department(key: str, values: dict[str, any]) -> Department:
     result.short_code = key
     result.full_name = values["full_name"]
     result.short_name = values["short_name"]
-    raw_document_types = values["document_types"]
-
-    all_types = documents.load_all_types()
-    document_types = documents.DocumentTypes()
-
-    for document in all_types:
-        if document.short_code in raw_document_types:
-            document_types.documents.append(document)
-
-    result.document_types = document_types
+    result.document_types = _document_types(values)
 
     return result
 
+
+def _document_types(values: dict[str, any]) -> documents.DocumentTypes:
+    result = documents.DocumentTypes()
+
+    for document in documents.load_all_types():
+        if document.short_code in values["document_types"]:
+            result.documents.append(document)
+
+    return result
 
 
 def _load_json() -> dict[str, any]:

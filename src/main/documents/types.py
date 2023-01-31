@@ -32,11 +32,10 @@ def load_type(short_code: str) -> Document:
 
 def load_all_types() -> DocumentTypes:
     result = DocumentTypes()
+    key_values = _json_contents().items()
 
     result.documents = [
-        _document(key=short_code, values=values)
-        for short_code, values in _json_contents().items()
-    ]
+        _document(short_code, values) for short_code, values in key_values]
 
     return result
 
