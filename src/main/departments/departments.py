@@ -57,9 +57,10 @@ def _department(key: str, values: dict[str, any]) -> Department:
 def _document_types(values: dict[str, any]) -> documents.DocumentTypes:
     result = documents.DocumentTypes()
 
-    for document in documents.load_all_types():
-        if document.short_code in values["document_types"]:
-            result.documents.append(document)
+    result.documents = [
+        document for document in documents.load_all_types()
+        if document.short_code in values["document_types"]
+    ]
 
     return result
 
