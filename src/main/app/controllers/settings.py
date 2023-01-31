@@ -1,8 +1,8 @@
 import json
 import wx
+from src.main import file_system
 from src.main.app.root.interface import RootInterface
 from src.main.gui import Settings
-from src.main.file_system.runfiles import config_directory
 
 
 class SettingsController:
@@ -24,13 +24,8 @@ class SettingsController:
         return self._gui
 
     def load_directories(self) -> None:
-        user_exists = False
-
-        if not user_exists:
-            directory = config_directory()
-
-            with open(directory + "\\user_defaults.json", "r") as _file:
-                contents = json.loads(_file.read())
+        with open(file_system.user_settings_path(), "r") as user_settings:
+            contents = json.loads(user_settings.read())
 
         self._gui.directories.scan_directory = (
             "NULL" if not contents["scan_directory"]
