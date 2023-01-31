@@ -1,10 +1,11 @@
 import wx
+
 from src.main.app.controllers import (
     ImageViewerController, SettingsController, DisplayController,
     MainMenuController
 )
 
-from src.main.app.root.interface import RootInterface
+from src.main.app.interfaces import RootInterface, ImageViewerConfiguration
 
 
 class RootApplication(RootInterface):
@@ -18,8 +19,8 @@ class RootApplication(RootInterface):
     def launch_settings(self) -> None:
         self._set_controller(SettingsController(root_application=self))
 
-    def launch_image_viewer(self) -> None:
-        self._set_controller(ImageViewerController(root_application=self))
+    def launch_image_viewer(self, config: ImageViewerConfiguration) -> None:
+        self._set_controller(ImageViewerController(configuration=config))
 
     def exit(self) -> None:
         self.close()

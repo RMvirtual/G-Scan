@@ -1,5 +1,5 @@
 import wx
-from src.main.app.root.interface import RootInterface
+from src.main.app.interfaces import RootInterface
 from src.main.gui import MainMenu
 
 

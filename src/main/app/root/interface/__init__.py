@@ -1,1 +1,0 @@
-from src.main.app.root.interface.interface import RootInterface

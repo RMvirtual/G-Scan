@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import wx
-
+from src.main.app.interfaces.viewer_config import ImageViewerConfiguration
 
 class RootInterface(ABC):
     @abstractmethod
@@ -16,7 +16,7 @@ class RootInterface(ABC):
         ...
 
     @abstractmethod
-    def launch_image_viewer(self) -> None:
+    def launch_image_viewer(self, config: ImageViewerConfiguration) -> None:
         ...
 
     @abstractmethod

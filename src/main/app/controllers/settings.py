@@ -1,6 +1,6 @@
 import wx
 from src.main import departments, documents, file_system, user
-from src.main.app.root.interface import RootInterface
+from src.main.app.interfaces import RootInterface
 from src.main.departments import Department
 from src.main.gui import Settings
 from src.main.user import UserSettings
