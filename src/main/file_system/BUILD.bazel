@@ -6,8 +6,6 @@ py_library(
     srcs = glob(["*.py"]),
     data = [
         "//config",
-        "//data:temp",
-        "//data:user_settings.dat",
         "//resources",
     ],
     visibility = ["//visibility:public"],

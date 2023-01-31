@@ -2,13 +2,24 @@ load("@python_third_party//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary")
 
 py_binary(
-    name = "__main__",
+    name = "gui",
     srcs = glob(["*.py"]),
     data = [],
-    main = "__main__.py",
+    main = "gui.py",
     visibility = ["//visibility:public"],
     deps = [
         requirement("wxPython"),
         "//src/main/app/root",
+    ],
+)
+
+py_binary(
+    name = "installer",
+    srcs = glob(["*.py"]),
+    data = [],
+    main = "installer.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src/main/app/installer",
     ],
 )

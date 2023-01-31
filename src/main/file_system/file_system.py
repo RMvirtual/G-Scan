@@ -4,6 +4,10 @@ import src.main.file_system.runfiles
 from src.main.file_system.directory_item import DirectoryItem
 
 
+def app_data_directory():
+    return os.environ["LOCALAPPDATA"] + "\\G-Scan"
+
+
 def item_directory(path):
     directory, _ = os.path.split(path)
 

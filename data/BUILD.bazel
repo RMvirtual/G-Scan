@@ -1,6 +1,0 @@
-exports_files([
-    "user_settings.bat",
-    "user_settings.dat",
-    "user_settings.dir",
-    "temp"
-])
