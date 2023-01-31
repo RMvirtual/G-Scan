@@ -26,7 +26,7 @@ class SettingsController:
         return self._gui
 
     def load_directories(self) -> None:
-        self._set_from_user_settings(settings=user.get_settings())
+        self._set_from_user_settings(settings=user.load_settings())
 
     def _set_from_user_settings(self, settings: user.UserSettings) -> None:
         self._set_directories(settings)

@@ -10,7 +10,7 @@ class UserSettings:
         self.document_type: documents.Document or None = None
 
 
-def get_settings() -> UserSettings:
+def load_settings() -> UserSettings:
     with open(file_system.user_settings_path(), mode="r") as user_settings:
         contents = json.loads(user_settings.read())
 
