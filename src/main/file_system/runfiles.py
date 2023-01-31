@@ -1,10 +1,10 @@
-from rules_python.python.runfiles import runfiles
+from rules_python.python.runfiles import runfiles as bazel_runfiles
 
 
 def test_resources_directory() -> str:
-    r = runfiles.Create()
+    r = bazel_runfiles.Create()
 
-    return r.Rlocation("gscan/resources/test")
+    return r.Rlocation("gscan\\resources\\test")
 
 
 def image_resources_directory() -> str:
@@ -15,29 +15,11 @@ def config_directory() -> str:
     return _from_runfiles("gscan\\config")
 
 
-def data_directory() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("data/user_settings.dat")
-
-
-def user_settings_data_path() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("data/user_settings.dat")
-
-
-def temp_directory() -> str:
-    r = runfiles.Create()
-
-    return r.Rlocation("gscan/data/temp")
-
-
 def staging_area() -> str:
-    r = runfiles.Create()
+    r = bazel_runfiles.Create()
 
-    return r.Rlocation("gscan/resources/staging")
+    return r.Rlocation("gscan\\resources\\staging")
 
 
 def _from_runfiles(file_path: str):
-    return runfiles.Create().Rlocation(file_path)
+    return bazel_runfiles.Create().Rlocation(file_path)
