@@ -41,10 +41,13 @@ class MainMenuController:
         self._app.exit()
 
     def on_customer_paperwork(self, event = None) -> None:
+        # Configuration needed here.
         self._app.launch_image_viewer()
 
     def on_loading_list(self, event = None) -> None:
+        # Configuration needed here.
         self._app.launch_image_viewer()
 
     def on_settings(self, event = None) -> None:
+        # Configuration needed here.
         self._app.launch_settings()

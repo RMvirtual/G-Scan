@@ -1,11 +1,15 @@
 import fitz
 import wx
 from src.main.gui import ImageViewer
-from src.main.app.interfaces import ImageViewerConfiguration
+from src.main.app.interfaces import ImageViewerConfiguration, RootInterface
 
 
 class ImageViewerController:
-    def __init__(self, configuration: ImageViewerConfiguration) -> None:
+    def __init__(
+            self, root_application: RootInterface,
+            configuration: ImageViewerConfiguration
+    ) -> None:
+        self._root = root_application
         self._config = configuration
         self._gui = ImageViewer(root_application.frame())
         self._initialise_callbacks()
@@ -14,7 +18,7 @@ class ImageViewerController:
         self._gui.bind_exit(self.on_exit)
 
     def on_exit(self, event = None) -> None:
-        self._config.root.launch_main_menu()
+        self._root.launch_main_menu()
 
     @property
     def panel(self) -> wx.Panel:

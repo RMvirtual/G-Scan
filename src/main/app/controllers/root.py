@@ -18,7 +18,8 @@ class RootApplication(RootInterface):
         self._set_controller(SettingsController(root_application=self))
 
     def launch_image_viewer(self, config: ImageViewerConfiguration) -> None:
-        self._set_controller(ImageViewerController(configuration=config))
+        self._set_controller(
+            ImageViewerController(root_application=self, configuration=config))
 
     def exit(self) -> None:
         self.close()

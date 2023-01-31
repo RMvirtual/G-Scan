@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import wx
 from src.main.app.interfaces.viewer_config import ImageViewerConfiguration
 
+
 class RootInterface(ABC):
     @abstractmethod
     def frame(self) -> wx.Frame:
