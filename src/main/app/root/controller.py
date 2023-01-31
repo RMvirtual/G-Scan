@@ -12,13 +12,13 @@ class RootApplication(RootInterface):
         self._display = DisplayController()
         self._controller = None
 
-    def launch_main_menu(self, event = None) -> None:
+    def launch_main_menu(self) -> None:
         self._set_controller(MainMenuController(root_application=self))
 
-    def launch_settings(self, event = None) -> None:
+    def launch_settings(self) -> None:
         self._set_controller(SettingsController(root_application=self))
 
-    def launch_image_viewer(self, event = None) -> None:
+    def launch_image_viewer(self) -> None:
         self._set_controller(ImageViewerController(root_application=self))
 
     def exit(self) -> None:
