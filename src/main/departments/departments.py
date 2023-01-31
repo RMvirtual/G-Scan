@@ -31,14 +31,17 @@ class Departments:
             if department.short_code == short_code:
                 return department
 
-        raise ValueError(f"Department {short_code} does not exist.")
+        self._raise_department_invalid(short_code)
 
     def from_full_name(self, full_name) -> Department:
         for department in self.departments:
             if department.full_name == full_name:
                 return department
 
-        raise ValueError(f"Department {full_name} does not exist.")
+        self._raise_department_invalid(full_name)
+
+    def _raise_department_invalid(self, department_name: str) -> None:
+        raise ValueError(f"Department {department_name} does not exist.")
 
 
 def load(short_code: str = None, full_name: str = None) -> Department:
@@ -52,10 +55,6 @@ def load(short_code: str = None, full_name: str = None) -> Department:
 
     else:
         raise ValueError("Department parameter not selected.")
-
-    departments = _load_json()
-
-    return _department(key=short_code, values=departments[short_code])
 
 
 def load_all() -> Departments:

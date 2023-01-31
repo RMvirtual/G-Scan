@@ -86,6 +86,5 @@ class Defaults(wx.Panel):
         self.SetSizer(sizer)
 
     def _default_combobox(self) -> wx.ComboBox:
-        dummy_values = ["NULL", "NULL2"]
-
-        return wx.ComboBox(parent=self, value="NULL", choices=dummy_values)
+        return wx.ComboBox(
+            parent=self, value="NULL", choices=["NULL"], style=wx.CB_READONLY)

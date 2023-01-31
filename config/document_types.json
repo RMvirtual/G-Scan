@@ -1,8 +1,4 @@
 {
-  "customer_paperwork": {
-    "full_name": "Customer Paperwork",
-    "analysis_code": "OPSPWAT"
-  },
   "customer_paperwork_signed": {
     "full_name": "Customer Paperwork (signed)",
     "analysis_code": "PWPOD"
@@ -10,6 +6,10 @@
   "standard_delivery_note": {
     "full_name": "Signed POD",
     "analysis_code": "KPIPOD"
+  },
+  "customer_paperwork": {
+    "full_name": "Customer Paperwork",
+    "analysis_code": "OPSPWAT"
   },
   "dgn": {
     "full_name": "Dangerous Goods Note",
