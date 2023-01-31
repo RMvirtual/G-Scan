@@ -26,8 +26,33 @@ class Departments:
     def full_names(self) -> list[str]:
         return [document.full_name for document in self.departments]
 
+    def from_short_code(self, short_code) -> Department:
+        for department in self.departments:
+            if department.short_code == short_code:
+                return department
 
-def load(short_code: str) -> Department:
+        raise ValueError(f"Department {short_code} does not exist.")
+
+    def from_full_name(self, full_name) -> Department:
+        for department in self.departments:
+            if department.full_name == full_name:
+                return department
+
+        raise ValueError(f"Department {full_name} does not exist.")
+
+
+def load(short_code: str = None, full_name: str = None) -> Department:
+    departments = load_all()
+
+    if full_name:
+        return departments.from_full_name(full_name)
+
+    elif short_code:
+        return departments.from_short_code(short_code)
+
+    else:
+        raise ValueError("Department parameter not selected.")
+
     departments = _load_json()
 
     return _department(key=short_code, values=departments[short_code])

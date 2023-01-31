@@ -15,6 +15,9 @@ class SettingsController:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
+        self._gui.defaults.departments.Bind(
+            wx.EVT_COMBOBOX, self.on_department_selection)
+
     def close(self) -> None:
         self._gui.close()
 
@@ -36,15 +39,27 @@ class SettingsController:
     def _set_department(self, settings: user.UserSettings) -> None:
         department_names = departments.load_all().full_names()
         self._gui.defaults.department_options = department_names
+
         self._gui.defaults.department = settings.department.full_name
 
     def _set_document_type(self, settings: user.UserSettings) -> None:
         document_names = settings.department.document_types.full_names()
         self._gui.defaults.document_options = document_names
+
         self._gui.defaults.document_type = settings.document_type.full_name
 
     def on_save(self, event = None) -> None:
         self._root.launch_main_menu()
 
-    def on_exit(self,event = None) -> None:
+    def on_exit(self, event = None) -> None:
         self._root.launch_main_menu()
+
+    def on_department_selection(self, event = None) -> None:
+        self.refresh_documents()
+
+    def refresh_documents(self) -> None:
+        department_name = self._gui.defaults.department
+        department = departments.load(full_name=department_name)
+
+        print(department.document_types.full_names())
+
