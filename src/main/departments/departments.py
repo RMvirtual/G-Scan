@@ -1,13 +1,13 @@
 from src.main import file_system
 from src.main import documents
-
+from src.main.documents import Document, DocumentTypes
 
 class Department:
     def __init__(self) -> None:
         self.short_code: str = ""
         self.full_name: str = ""
         self.short_name: str = ""
-        self.document_types = documents.DocumentTypes()
+        self.document_types = DocumentTypes()
 
 
 class Departments:
@@ -78,8 +78,8 @@ def _department(key: str, values: dict[str, any]) -> Department:
     return result
 
 
-def _document_types(values: dict[str, any]) -> documents.DocumentTypes:
-    result = documents.DocumentTypes()
+def _document_types(values: dict[str, any]) -> DocumentTypes:
+    result = DocumentTypes()
 
     result.documents = [
         document for document in documents.load_all()

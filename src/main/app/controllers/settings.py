@@ -1,7 +1,9 @@
 import wx
 from src.main import departments, documents, file_system, user
 from src.main.app.root.interface import RootInterface
+from src.main.departments import Department
 from src.main.gui import Settings
+from src.main.user import UserSettings
 
 
 class SettingsController:
@@ -35,8 +37,8 @@ class SettingsController:
     def panel(self) -> wx.Panel:
         return self._gui
 
-    def _settings_from_gui(self) -> user.UserSettings:
-        result = user.UserSettings()
+    def _settings_from_gui(self) -> UserSettings:
+        result = UserSettings()
         result.scan_dir = self._gui.directories.scan_directory
         result.dest_dir = self._gui.directories.dest_directory
 
@@ -55,28 +57,28 @@ class SettingsController:
         department = departments.load(full_name=self._gui.defaults.department)
         self._set_document_names(department)
 
-    def _set_from_user_settings(self, settings: user.UserSettings) -> None:
+    def _set_from_user_settings(self, settings: UserSettings) -> None:
         self._set_directories(settings)
         self._set_department(settings)
         self._set_document_type(settings)
 
-    def _set_directories(self, settings: user.UserSettings) -> None:
+    def _set_directories(self, settings: UserSettings) -> None:
         self._gui.directories.scan_directory = settings.scan_dir
         self._gui.directories.dest_directory = settings.dest_dir
 
-    def _set_department(self, settings: user.UserSettings) -> None:
+    def _set_department(self, settings: UserSettings) -> None:
         department_names = departments.load_all().full_names()
         self._gui.defaults.department_options = department_names
 
         self._gui.defaults.department = settings.department.full_name
 
-    def _set_document_type(self, settings: user.UserSettings) -> None:
+    def _set_document_type(self, settings: UserSettings) -> None:
         document_names = settings.department.document_types.full_names()
         self._gui.defaults.document_options = document_names
 
         self._gui.defaults.document_type = settings.document_type.full_name
 
-    def _set_document_names(self, department: departments.Department) -> None:
+    def _set_document_names(self, department: Department) -> None:
         document_names = department.document_types.full_names()
 
         self._gui.defaults.document_options = document_names
