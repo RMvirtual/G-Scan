@@ -8,6 +8,7 @@ py_library(
     deps = [
         requirement("wxPython"),
         requirement("pymupdf"),
+        "//src/main/app/configurations",
         "//src/main/app/interfaces",
         "//src/main/departments",
         "//src/main/documents",

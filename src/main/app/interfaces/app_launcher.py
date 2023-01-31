@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import wx
-from src.main.app.interfaces.viewer_config import ImageViewerConfiguration
+from src.main.app.configurations.viewer_config import ImageViewerConfiguration
 
 
 class RootInterface(ABC):

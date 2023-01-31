@@ -1,4 +1,5 @@
 import wx
+from src.main.app.configurations import ImageViewerConfiguration
 from src.main.app.interfaces import RootInterface
 from src.main.gui import MainMenu
 
@@ -42,6 +43,8 @@ class MainMenuController:
 
     def on_customer_paperwork(self, event = None) -> None:
         # Configuration needed here.
+        config = ImageViewerConfiguration()
+
         self._app.launch_image_viewer()
 
     def on_loading_list(self, event = None) -> None:
