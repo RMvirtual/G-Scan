@@ -13,14 +13,18 @@ class FilesPanel(wx.Panel):
         font = wx.Font(wx.FontInfo(pointSize=30).Bold())
         self._title.SetFont(font)
 
-        self._files = wx.TreeCtrl(parent=self, style=wx.TR_HIDE_ROOT)
+        self._files = wx.TreeCtrl(
+            parent=self,
+            style=wx.TR_HIDE_ROOT|wx.TR_TWIST_BUTTONS
+                  |wx.TR_NO_LINES|wx.TR_MULTIPLE
+        )
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         sizer.Add(
             window=self._title, proportion=0,
-            flag=wx.ALIGN_CENTRE_HORIZONTAL, border=5
+            flag=wx.ALIGN_CENTRE_HORIZONTAL|wx.ALL, border=5
         )
 
         sizer.Add(
