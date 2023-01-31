@@ -13,16 +13,13 @@ class DocumentTypes:
         self.documents = []
 
     def __contains__(self, short_code: str) -> bool:
-        for document in self.documents:
-            if document.short_code == short_code:
-                return True
-
-        return False
+        return len(
+            document.short_code == short_code for document in self.documents)
 
     def __iter__(self):
         return self.documents.__iter__()
 
-    def short_names(self) -> list[str]:
+    def short_codes(self) -> list[str]:
         return [document.short_code for document in self.documents]
 
     def full_names(self) -> list[str]:

@@ -1,10 +1,8 @@
-import json
 import wx
-from src.main import file_system
+from src.main import departments, documents, file_system, user
 from src.main.app.root.interface import RootInterface
 from src.main.gui import Settings
-from src.main import user
-from src.main import departments, documents
+
 
 class SettingsController:
     def __init__(self, root_application: RootInterface):
