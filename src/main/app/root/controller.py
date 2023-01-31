@@ -33,9 +33,6 @@ class RootApplication(RootInterface):
     def close(self, event = None) -> None:
         self._display.close()
 
-    def save_settings(self, event = None) -> None:
-        self.launch_main_menu()
-
     def _set_controller(self, controller) -> None:
         self._close_controller()
         self._controller = controller
