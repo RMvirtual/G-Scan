@@ -4,5 +4,8 @@ py_library(
     name = "departments",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
-    deps = ["//src/main/file_system"],
+    deps = [
+        "//src/main/documents",
+        "//src/main/file_system",
+    ],
 )

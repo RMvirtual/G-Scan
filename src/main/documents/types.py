@@ -8,10 +8,20 @@ class Document:
         self.analysis_code = ""
 
 
-def load(short_code: str) -> Document:
+def load_type(short_code: str) -> Document:
     documents = _load_json()
 
     return _document_type(key=short_code, values=documents[short_code])
+
+
+def load_all_types() -> list[Document]:
+    documents = _load_json()
+    result = []
+
+    for short_code, values in documents.items():
+        result.append(_document_type(key=short_code, values=values))
+
+    return result
 
 
 def _document_type(key: str, values: dict[str, any]) -> Document:
@@ -19,16 +29,6 @@ def _document_type(key: str, values: dict[str, any]) -> Document:
     result.short_code = key
     result.full_name = values["full_name"]
     result.analysis_code = values["analysis_code"]
-
-    return result
-
-
-def load_all() -> list[Document]:
-    documents = _load_json()
-    result = []
-
-    for short_code, values in documents.items():
-        result.append(_document_type(key=short_code, values=values))
 
     return result
 

@@ -17,12 +17,28 @@ class Defaults(wx.Panel):
         self.departments.SetValue(new_department)
 
     @property
+    def department_options(self) -> str:
+        return self.departments.GetItems()
+
+    @department_options.setter
+    def department_options(self, options: list[str]) -> None:
+        self.departments.SetItems(options)
+
+    @property
     def document_type(self) -> str:
         return self.paperwork.GetValue()
 
     @document_type.setter
     def document_type(self, new_document_type: str) -> None:
         self.paperwork.SetValue(new_document_type)
+
+    @property
+    def document_options(self) -> list[str]:
+        return self.paperwork.GetItems()
+
+    @document_options.setter
+    def document_options(self, new_options: list[str]) -> None:
+        self.paperwork.SetItems(new_options)
 
     def _initialise_widgets(self) -> None:
         self.title = wx.StaticText(parent=self, label="Defaults")

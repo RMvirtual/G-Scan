@@ -4,7 +4,7 @@ from src.main import file_system
 from src.main.app.root.interface import RootInterface
 from src.main.gui import Settings
 from src.main import user
-
+from src.main import departments
 
 class SettingsController:
     def __init__(self, root_application: RootInterface):
@@ -29,8 +29,15 @@ class SettingsController:
 
         self._gui.directories.scan_directory = settings.scan_dir
         self._gui.directories.dest_directory = settings.dest_dir
-        self._gui.defaults.department = settings.department
-        self._gui.defaults.document_type = settings.document_type
+        self._gui.defaults.department = settings.department.short_name
+        self._gui.defaults.document_type = settings.document_type.full_name
+
+        document_types = settings.department.document_types
+        stringly_types = [
+            document.full_name for document in document_types
+        ]
+
+        self._gui.defaults.document_options = stringly_types
 
     def on_save(self, event = None) -> None:
         self._root.launch_main_menu()

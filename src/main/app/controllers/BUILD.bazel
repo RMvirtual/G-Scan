@@ -9,6 +9,8 @@ py_library(
         requirement("wxPython"),
         requirement("pymupdf"),
         "//src/main/app/root/interface",
+        "//src/main/departments",
+        "//src/main/documents",
         "//src/main/file_system",
         "//src/main/gui",
         "//src/main/user",
