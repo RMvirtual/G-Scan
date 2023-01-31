@@ -23,7 +23,10 @@ class ImageViewerController:
         self._gui.set_image(image)
 
     def _initialise_callbacks(self) -> None:
-        self.bind_exit(self._root.launch_main_menu)
+        self.bind_exit(self.on_exit)
+
+    def on_exit(self, event = None) -> None:
+        self._root.launch_main_menu()
 
     @property
     def panel(self) -> wx.Panel:
