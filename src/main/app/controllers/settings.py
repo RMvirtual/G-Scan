@@ -30,17 +30,14 @@ class SettingsController:
         self._gui.directories.scan_directory = settings.scan_dir
         self._gui.directories.dest_directory = settings.dest_dir
 
-        self._gui.defaults.department_options = self._department_list()
+        self._gui.defaults.department_options = (
+            departments.load_all().full_names())
 
         self._gui.defaults.document_options = self._document_list(
             settings.department.document_types)
 
-        self._gui.defaults.department = settings.department.short_name
+        self._gui.defaults.department = settings.department.full_name
         self._gui.defaults.document_type = settings.document_type.full_name
-
-    @staticmethod
-    def _department_list() -> list[str]:
-        return [department.short_name for department in departments.load_all()]
 
     @staticmethod
     def _document_list(documents_list: list[documents.Document]) -> list[str]:

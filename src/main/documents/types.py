@@ -8,23 +8,43 @@ class Document:
         self.analysis_code = ""
 
 
+class DocumentTypes:
+    def __init__(self):
+        self.documents = []
+
+    def __contains__(self, short_code: str) -> bool:
+        for document in self.documents:
+            if document.short_code == short_code:
+                return True
+
+        return False
+
+    def __iter__(self):
+        return self.documents.__iter__()
+
+    def short_names(self) -> list[str]:
+        return [document.short_code for document in self.documents]
+
+    def full_names(self) -> list[str]:
+        return [document.full_name for document in self.documents]
+
+
 def load_type(short_code: str) -> Document:
-    documents = _load_json()
-
-    return _document_type(key=short_code, values=documents[short_code])
+    return _document(key=short_code, values=_json_contents()[short_code])
 
 
-def load_all_types() -> list[Document]:
-    documents = _load_json()
-    result = []
+def load_all_types() -> DocumentTypes:
+    result = DocumentTypes()
 
-    for short_code, values in documents.items():
-        result.append(_document_type(key=short_code, values=values))
+    result.documents = [
+        _document(key=short_code, values=values)
+        for short_code, values in _json_contents().items()
+    ]
 
     return result
 
 
-def _document_type(key: str, values: dict[str, any]) -> Document:
+def _document(key: str, values: dict[str, any]) -> Document:
     result = Document()
     result.short_code = key
     result.full_name = values["full_name"]
@@ -33,5 +53,5 @@ def _document_type(key: str, values: dict[str, any]) -> Document:
     return result
 
 
-def _load_json() -> dict[str, any]:
+def _json_contents() -> dict[str, any]:
     return file_system.load_json(file_system.document_types_path())

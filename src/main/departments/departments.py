@@ -10,19 +10,40 @@ class Department:
         self.document_types = []
 
 
+class Departments:
+    def __init__(self):
+        self.departments = []
+
+    def __contains__(self, short_code: str) -> bool:
+        for department in self.departments:
+            if department.short_code == short_code:
+                return True
+
+        return False
+
+    def __iter__(self):
+        return self.departments.__iter__()
+
+    def short_names(self) -> list[str]:
+        return [document.short_code for document in self.departments]
+
+    def full_names(self) -> list[str]:
+        return [document.full_name for document in self.departments]
+
+
 def load(short_code: str) -> Department:
     departments = _load_json()
 
     return _department(key=short_code, values=departments[short_code])
 
 
-def load_all() -> list[Department]:
-    departments = _load_json()
+def load_all() -> Departments:
+    result = Departments()
 
-    result = []
-
-    for short_code, values in departments.items():
-        result.append(_department(key=short_code, values=values))
+    result.departments = [
+        _department(key=short_code, values=values)
+        for short_code, values in _load_json().items()
+    ]
 
     return result
 
