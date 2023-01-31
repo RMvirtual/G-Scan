@@ -11,14 +11,14 @@ class UserSettings:
 
 
 def get_settings() -> UserSettings:
-    with open(file_system.user_settings_path(), "r") as user_settings:
+    with open(file_system.user_settings_path(), mode="r") as user_settings:
         contents = json.loads(user_settings.read())
 
     result = UserSettings()
     result.scan_dir = contents["scan_directory"]
     result.dest_dir = contents["dest_directory"]
     result.department = departments.load(contents["department"])
-    result.document_type = documents.load_type(contents["document_type"])
+    result.document_type = documents.load(contents["document_type"])
 
     return result
 
@@ -31,5 +31,5 @@ def save_settings(settings: UserSettings) -> None:
         "document_type": settings.document_type.short_code
     }
 
-    json_content = json.dumps(values)
-    print(json_content)
+    with open(file_system.user_settings_path(), mode="w") as user_settings:
+        user_settings.write(json.dumps(values, indent=2))

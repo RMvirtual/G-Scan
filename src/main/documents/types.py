@@ -43,8 +43,8 @@ class DocumentTypes:
         raise ValueError(f"Document {document_name} does not exist.")
 
 
-def load_type(short_code: str = None, full_name: str = None) -> Document:
-    documents = load_all_types()
+def load(short_code: str = None, full_name: str = None) -> Document:
+    documents = load_all()
 
     if full_name:
         return documents.from_full_name(full_name)
@@ -56,7 +56,7 @@ def load_type(short_code: str = None, full_name: str = None) -> Document:
         raise ValueError("No Document Type selected.")
 
 
-def load_all_types() -> DocumentTypes:
+def load_all() -> DocumentTypes:
     result = DocumentTypes()
     key_values = _json_contents().items()
 

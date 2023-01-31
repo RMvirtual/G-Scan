@@ -82,7 +82,7 @@ def _document_types(values: dict[str, any]) -> documents.DocumentTypes:
     result = documents.DocumentTypes()
 
     result.documents = [
-        document for document in documents.load_all_types()
+        document for document in documents.load_all()
         if document.short_code in values["document_types"]
     ]
 

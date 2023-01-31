@@ -61,7 +61,7 @@ class SettingsController:
         result.department = departments.load(
             full_name=self._gui.defaults.department)
 
-        result.document_type = documents.load_type(
+        result.document_type = documents.load(
             full_name=self._gui.defaults.document_type)
 
         return result
