@@ -11,5 +11,6 @@ py_library(
         "//src/main/app/root/interface",
         "//src/main/file_system",
         "//src/main/gui",
+        "//src/main/user",
     ],
 )

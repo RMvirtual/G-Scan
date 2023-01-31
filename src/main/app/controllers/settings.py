@@ -3,6 +3,7 @@ import wx
 from src.main import file_system
 from src.main.app.root.interface import RootInterface
 from src.main.gui import Settings
+from src.main import user
 
 
 class SettingsController:
@@ -24,15 +25,10 @@ class SettingsController:
         return self._gui
 
     def load_directories(self) -> None:
-        with open(file_system.user_settings_path(), "r") as user_settings:
-            contents = json.loads(user_settings.read())
+        settings = user.get_settings()
 
-        self._gui.directories.scan_directory = (
-            "NULL" if not contents["scan_directory"]
-            else contents["scan_directory"]
-        )
-
-        self._gui.directories.dest_directory = contents["dest_directory"]
+        self._gui.directories.scan_directory = settings.scan_dir
+        self._gui.directories.dest_directory = settings.dest_dir
 
 
     def on_save(self, event = None) -> None:
