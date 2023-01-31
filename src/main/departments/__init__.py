@@ -1,0 +1,1 @@
+from src.main.departments.departments import *
