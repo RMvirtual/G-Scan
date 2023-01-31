@@ -24,7 +24,7 @@ class FilesPanel(wx.Panel):
         )
 
         sizer.Add(
-            window=self._files, proportion=0,
+            window=self._files, proportion=1,
             flag=wx.EXPAND|wx.ALL, border=5
         )
 
