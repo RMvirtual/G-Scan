@@ -1,14 +1,13 @@
 import json
-from src.main import file_system
-from src.main import departments
-from src.main import documents
+from src.main import departments, documents, file_system
+
 
 class UserSettings:
     def __init__(self):
-        self.scan_dir = ""
-        self.dest_dir = ""
-        self.department = None
-        self.document_type = None
+        self.scan_dir: str = ""
+        self.dest_dir:str = ""
+        self.department: departments.Department or None = None
+        self.document_type: documents.Document or None = None
 
 
 def get_settings() -> UserSettings:
@@ -22,3 +21,15 @@ def get_settings() -> UserSettings:
     result.document_type = documents.load_type(contents["document_type"])
 
     return result
+
+
+def save_settings(settings: UserSettings) -> None:
+    values = {
+        "scan_directory": settings.scan_dir,
+        "dest_directory": settings.dest_dir,
+        "department": settings.department.short_code,
+        "document_type": settings.document_type.short_code
+    }
+
+    json_content = json.dumps(values)
+    print(json_content)

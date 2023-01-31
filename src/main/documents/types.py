@@ -25,9 +25,35 @@ class DocumentTypes:
     def full_names(self) -> list[str]:
         return [document.full_name for document in self.documents]
 
+    def from_short_code(self, short_code: str) -> Document:
+        for document in self.documents:
+            if document.short_code == short_code:
+                return document
 
-def load_type(short_code: str) -> Document:
-    return _document(key=short_code, values=_json_contents()[short_code])
+        self._raise_document_invalid(short_code)
+
+    def from_full_name(self, full_name: str) -> Document:
+        for document in self.documents:
+            if document.full_name == full_name:
+                return document
+
+        self._raise_document_invalid(full_name)
+
+    def _raise_document_invalid(self, document_name: str) -> None:
+        raise ValueError(f"Document {document_name} does not exist.")
+
+
+def load_type(short_code: str = None, full_name: str = None) -> Document:
+    documents = load_all_types()
+
+    if full_name:
+        return documents.from_full_name(full_name)
+
+    elif short_code:
+        return documents.from_short_code(short_code)
+
+    else:
+        raise ValueError("No Document Type selected.")
 
 
 def load_all_types() -> DocumentTypes:

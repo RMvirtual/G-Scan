@@ -21,11 +21,11 @@ class Directories(wx.Panel):
 
     @property
     def dest_directory(self) -> str:
-        return self.scan_box.GetValue()
+        return self.dest_box.GetValue()
 
     @dest_directory.setter
     def dest_directory(self, directory: str) -> None:
-        self.scan_box.SetValue(directory)
+        self.dest_box.SetValue(directory)
 
     def _initialise_widgets(self) -> None:
         self._initialise_title()

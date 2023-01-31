@@ -50,6 +50,18 @@ class SettingsController:
         self._gui.defaults.document_type = settings.document_type.full_name
 
     def on_save(self, event = None) -> None:
+        new_settings = user.UserSettings()
+        new_settings.scan_dir = self._gui.directories.scan_directory
+        new_settings.dest_dir = self._gui.directories.dest_directory
+
+        new_settings.department = departments.load(
+            full_name=self._gui.defaults.department)
+
+        new_settings.document_type = documents.load_type(
+            full_name=self._gui.defaults.document_type)
+
+        user.save_settings(new_settings)
+
         self._root.launch_main_menu()
 
     def on_exit(self, event = None) -> None:
@@ -59,8 +71,8 @@ class SettingsController:
         self.refresh_document_options()
 
     def refresh_document_options(self) -> None:
-        self._set_document_names(department=departments.load(
-            full_name=self._gui.defaults.department))
+        department = departments.load(full_name=self._gui.defaults.department)
+        self._set_document_names(department)
 
     def _set_document_names(self, department: departments.Department) -> None:
         document_names = department.document_types.full_names()
