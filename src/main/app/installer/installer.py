@@ -1,6 +1,6 @@
 import os
 import shutil
-from src.main.file_system import runfiles
+from src.main import file_system
 
 
 def install_app_data() -> None:
@@ -8,14 +8,15 @@ def install_app_data() -> None:
     empty_app_data()
     create_default_user_settings()
 
+
 def make_app_data_directory():
-    if not os.path.exists(app_data_path()):
+    if not os.path.exists(file_system.app_data_directory()):
         os.mkdir(app_data_path)
 
 
 def empty_app_data():
-    for filename in os.listdir(app_data_path()):
-        file_path = os.path.join(app_data_path(), filename)
+    for filename in os.listdir(file_system.app_data_directory()):
+        file_path = os.path.join(file_system.app_data_directory(), filename)
         delete_file(file_path)
 
 
@@ -32,11 +33,7 @@ def delete_file(file_path):
 
 
 def create_default_user_settings():
-    defaults_path = runfiles.config_directory() + "\\user_defaults.json"
-    out_path = app_data_path() + "\\user_settings.json"
+    defaults_path = file_system.config_directory() + "\\user_defaults.json"
+    out_path = file_system.app_data_directory() + "\\user_settings.json"
 
     shutil.copyfile(src=defaults_path, dst=out_path)
-
-
-def app_data_path() -> str:
-    return os.environ["LOCALAPPDATA"] + "\\G-Scan"

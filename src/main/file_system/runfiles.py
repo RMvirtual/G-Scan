@@ -21,5 +21,9 @@ def staging_area() -> str:
     return r.Rlocation("gscan\\resources\\staging")
 
 
+def runfile_path(path: str, workspace_root: str = "gscan"):
+    return _from_runfiles(workspace_root + "\\" + path)
+
+
 def _from_runfiles(file_path: str):
     return bazel_runfiles.Create().Rlocation(file_path)
