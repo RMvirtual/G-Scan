@@ -32,10 +32,15 @@ class SettingsController:
         self._gui.defaults.department = settings.department.short_name
         self._gui.defaults.document_type = settings.document_type.full_name
 
+        department_types = departments.load_all()
+
+        stringly_departments = [
+            department.short_name for department in department_types]
+
+        self._gui.defaults.department_options = stringly_departments
+
         document_types = settings.department.document_types
-        stringly_types = [
-            document.full_name for document in document_types
-        ]
+        stringly_types = [document.full_name for document in document_types]
 
         self._gui.defaults.document_options = stringly_types
 

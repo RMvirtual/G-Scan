@@ -16,6 +16,17 @@ def load(short_code: str) -> Department:
     return _department(key=short_code, values=departments[short_code])
 
 
+def load_all() -> list[Department]:
+    departments = _load_json()
+
+    result = []
+
+    for short_code, values in departments.items():
+        result.append(_department(key=short_code, values=values))
+
+    return result
+
+
 def _department(key: str, values: dict[str, any]) -> Department:
     result = Department()
     result.short_code = key
