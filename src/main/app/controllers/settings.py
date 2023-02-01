@@ -30,12 +30,14 @@ class SettingsController:
         self._gui.defaults.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_box)
 
+        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
+
     def on_save(self, event = None) -> None:
         user.save_settings(settings=self._settings_from_gui())
-        self._root.launch_main_menu()
+        self._exit_to_main_menu()
 
     def on_exit(self, event = None) -> None:
-        self._root.launch_main_menu()
+        self._exit_to_main_menu()
 
     def on_scan_dir_browse(self, event = None) -> None:
         user_selection = self._directory_dialog()
@@ -49,23 +51,15 @@ class SettingsController:
         if user_selection:
             self._gui.directories.dest_directory = user_selection
 
-    @staticmethod
-    def _directory_dialog() -> str or None:
-        with wx.DirDialog(None) as browser:
-            if browser.ShowModal() == wx.ID_CANCEL:
-                return None
-
-            return browser.GetPath()
-
     def on_department_box(self, event = None) -> None:
         self._refresh_document_options()
 
-    def close(self) -> None:
-        self._gui.close()
+    def on_close(self, event = None) -> None:
+        self._gui.Destroy()
 
-    @property
-    def panel(self) -> wx.Panel:
-        return self._gui
+    def _exit_to_main_menu(self) -> None:
+        self._gui.Close()
+        self._root.launch_main_menu()
 
     def _settings_from_gui(self) -> UserSettings:
         result = UserSettings()
@@ -114,3 +108,11 @@ class SettingsController:
 
         self._gui.defaults.document_options = document_names
         self._gui.defaults.document_type = document_names[0]
+
+    @staticmethod
+    def _directory_dialog() -> str or None:
+        with wx.DirDialog(None) as browser:
+            if browser.ShowModal() == wx.ID_CANCEL:
+                return None
+
+            return browser.GetPath()

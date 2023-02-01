@@ -21,9 +21,6 @@ class MainMenuController:
         self._gui.operations.back.Bind(
             wx.EVT_BUTTON, self._gui.view_departments)
 
-        self._bind_root_application_callbacks()
-
-    def _bind_root_application_callbacks(self) -> None:
         self._gui.departments.toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
         self._gui.departments.toolbar.settings.Bind(
@@ -35,27 +32,33 @@ class MainMenuController:
         self._gui.operations.options.loading_list.Bind(
             wx.EVT_BUTTON, self.on_loading_list)
 
-    @property
-    def panel(self) -> wx.Panel:
-        return self._gui
-
-    def close(self) -> None:
-        self._gui.Close()
+        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
     def on_exit(self, event = None) -> None:
-        self._gui.Close()
-        self._root.exit()
+        self.launch_exit()
+
+    def on_settings(self, event = None) -> None:
+        self.launch_settings()
 
     def on_customer_paperwork(self, event = None) -> None:
         config = ImageViewerConfiguration()
-        self._gui.close()
-        self._root.launch_image_viewer(config)
+        self.launch_image_viewer(config)
 
     def on_loading_list(self, event = None) -> None:
         config = ImageViewerConfiguration()
-        self._gui.close()
+        self.launch_image_viewer(config)
+
+    def on_close(self, event = None) -> None:
+        self._gui.Destroy()
+
+    def launch_image_viewer(self, config) -> None:
+        self._gui.Close()
         self._root.launch_image_viewer(config)
 
-    def on_settings(self, event = None) -> None:
+    def launch_settings(self) -> None:
         self._gui.Close()
         self._root.launch_settings()
+
+    def launch_exit(self) -> None:
+        self._gui.Close()
+        self._root.exit()

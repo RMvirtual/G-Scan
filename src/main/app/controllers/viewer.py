@@ -21,20 +21,17 @@ class ImageViewerController:
 
     def _initialise_callbacks(self) -> None:
         self._gui.bind_exit(self.on_exit)
+        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
     def on_exit(self, event = None) -> None:
+        self._exit_to_main_menu()
+
+    def on_close(self, event = None) -> None:
+        self._gui.Destroy()
+
+    def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
-
-    @property
-    def panel(self) -> wx.Panel:
-        return self._gui
-
-    def show(self) -> None:
-        self._gui.Show()
-
-    def hide(self) -> None:
-        self._gui.Hide()
 
     def close(self, event: wx.EVT_CLOSE = None) -> None:
         self._gui.close(event)

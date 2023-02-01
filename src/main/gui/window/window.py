@@ -39,6 +39,4 @@ class Window(wx.Frame):
 
     def _replace(self, panel: wx.Panel) -> None:
         self.GetSizer().Replace(self._panel, panel)
-        self._panel.Destroy()
-
         self._panel = panel
