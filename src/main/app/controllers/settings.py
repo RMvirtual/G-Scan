@@ -34,18 +34,24 @@ class SettingsController:
         self._root.launch_main_menu()
 
     def on_scan_dir_browse(self, event = None) -> None:
-        with wx.DirDialog(None) as browser:
-            if browser.ShowModal() == wx.ID_CANCEL:
-                return
+        user_selection = self._directory_dialog()
 
-            self._gui.directories.scan_directory = browser.GetPath()
+        if user_selection:
+            self._gui.directories.scan_directory = user_selection
 
     def on_dest_dir_browse(self, event = None) -> None:
+        user_selection = self._directory_dialog()
+
+        if user_selection:
+            self._gui.directories.dest_directory = user_selection
+
+    @staticmethod
+    def _directory_dialog() -> str or None:
         with wx.DirDialog(None) as browser:
             if browser.ShowModal() == wx.ID_CANCEL:
-                return
+                return None
 
-            self._gui.directories.dest_directory = browser.GetPath()
+            return browser.GetPath()
 
     def on_department_box(self, event = None) -> None:
         self._refresh_document_options()
