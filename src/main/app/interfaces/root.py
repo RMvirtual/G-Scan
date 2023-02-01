@@ -1,11 +1,14 @@
 from abc import ABC, abstractmethod
 import wx
+
 from src.main.app.configurations import ImageViewerConfiguration
+from src.main.gui.window import Window
 
 
 class RootInterface(ABC):
+    @property
     @abstractmethod
-    def frame(self) -> wx.Frame:
+    def window(self) -> Window:
         ...
 
     @abstractmethod

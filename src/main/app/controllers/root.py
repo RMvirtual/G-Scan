@@ -5,12 +5,17 @@ from src.main.app.controllers.image_viewer import ImageViewerController
 from src.main.app.controllers.settings import SettingsController
 from src.main.app.controllers.display import DisplayController
 from src.main.app.interfaces import RootInterface
+from src.main.gui.window import Window
 
 
 class RootApplication(RootInterface):
     def __init__(self):
         self._display = DisplayController()
         self._controller = None
+
+    @property
+    def window(self) -> Window:
+        return self._display.window
 
     def launch_main_menu(self) -> None:
         self._set_controller(MainMenuController(root_application=self))
@@ -22,23 +27,21 @@ class RootApplication(RootInterface):
         self._set_controller(
             ImageViewerController(root_application=self, configuration=config))
 
-    def exit(self) -> None:
-        self.close()
-
-    def frame(self) -> wx.Frame:
-        return self._display.frame()
-
     def show(self) -> None:
         self._display.show()
 
     def close(self, event = None) -> None:
         self._display.close()
 
+    def exit(self) -> None:
+        self.close()
+
     def _set_controller(self, controller) -> None:
         self._close_controller()
         self._controller = controller
         self._refresh_panel()
-        self._display.frame().Layout()
+
+        self._display.window.Layout()
 
     def _close_controller(self) -> None:
         if self._controller:
@@ -48,4 +51,4 @@ class RootApplication(RootInterface):
         self.set_panel(self._controller.panel)
 
     def set_panel(self, panel: wx.Panel) -> None:
-        self._display.set_panel(panel)
+        self._display.window.set_panel(panel)

@@ -33,35 +33,21 @@ class Settings(wx.Panel):
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
-        sizer.Add(
-            window=self.title, proportion=0,
-            flag=wx.ALIGN_LEFT|wx.ALL, border=15
-        )
+        flags = wx.ALIGN_LEFT|wx.ALL
+        sizer.Add(window=self.title, proportion=0, flag=flags, border=15)
 
-        sizer.Add(
-            window=self.directories, proportion=0,
-            flag=wx.EXPAND|wx.ALL, border=15
-        )
+        flags = wx.EXPAND|wx.ALL
+        sizer.Add(window=self.directories, proportion=0, flag=flags, border=15)
 
-        sizer.Add(
-            window=self.defaults, proportion=0,
-            flag=wx.ALIGN_LEFT|wx.ALL, border=15
-        )
+        flags = wx.ALIGN_LEFT|wx.ALL
+        sizer.Add(window=self.defaults, proportion=0, flag=flags, border=15)
 
-        nav_aligns = wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM
-
-        sizer.Add(window=self.save, proportion=0, flag=nav_aligns, border=15)
-        sizer.Add(window=self.exit, proportion=0, flag=nav_aligns, border=15)
+        flags = wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM
+        sizer.Add(window=self.save, proportion=0, flag=flags, border=15)
+        sizer.Add(window=self.exit, proportion=0, flag=flags, border=15)
 
         sizer.AddStretchSpacer()
-
         self.SetSizer(sizer)
-
-    def show(self) -> None:
-        self.Show()
-
-    def hide(self) -> None:
-        self.Hide()
 
     def close(self) -> None:
         self.Close()

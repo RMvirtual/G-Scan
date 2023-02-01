@@ -9,7 +9,7 @@ from src.main.user import UserSettings
 class SettingsController:
     def __init__(self, root_application: RootInterface):
         self._root = root_application
-        self._gui = Settings(root_application.frame())
+        self._gui = Settings(root_application.window)
         self._initialise_callbacks()
         self._load_settings_from_file()
 

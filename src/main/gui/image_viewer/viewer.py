@@ -15,7 +15,6 @@ class ImageViewer(wx.Panel):
     def _initialise_widgets(self) -> None:
         self._initialise_panels()
         self._initialise_sizer()
-
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
 
     def _initialise_panels(self) -> None:
@@ -26,17 +25,13 @@ class ImageViewer(wx.Panel):
         self._bottom_toolbar = NavigationPanel(self)
 
     def _initialise_sizer(self) -> None:
-        main_sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        main_sizer.Add(window=self._top_toolbar, proportion=0, flag=wx.EXPAND)
-        main_sizer.Add(window=self._input_bar, proportion=0, flag=wx.EXPAND)
+        sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        sizer.Add(window=self._top_toolbar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(window=self._input_bar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(sizer=self._bitmap_sizer(), proportion=1, flag=wx.EXPAND)
+        sizer.Add(window=self._bottom_toolbar, proportion=0, flag=wx.EXPAND)
 
-        main_sizer.Add(
-            sizer=self._bitmap_sizer(), proportion=1, flag=wx.EXPAND)
-
-        main_sizer.Add(
-            window=self._bottom_toolbar, proportion=0, flag=wx.EXPAND)
-
-        self.SetSizer(main_sizer)
+        self.SetSizer(sizer)
 
     def _bitmap_sizer(self) -> wx.Sizer:
         result = wx.BoxSizer(orient=wx.HORIZONTAL)
@@ -53,15 +48,3 @@ class ImageViewer(wx.Panel):
 
     def bind_exit(self, callback) -> None:
         self._bottom_toolbar.exit.Bind(wx.EVT_BUTTON, callback)
-
-    def bind_bitmap_movement(self, callback):
-        self._bitmap_viewer.Canvas.Bind(FloatCanvas.EVT_MOTION, callback)
-
-    def bind_submit(self, callback) -> None:
-        self._input_bar.submit.Bind(wx.EVT_BUTTON, callback)
-
-    def bind_skip(self, callback) -> None:
-        self._input_bar.skip.Bind(wx.EVT_BUTTON, callback)
-
-    def bind_split(self, callback) -> None:
-        self._input_bar.split.Bind(wx.EVT_BUTTON, callback)

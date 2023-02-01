@@ -12,21 +12,21 @@ class ImageViewerController:
     ) -> None:
         self._root = root_application
         self._config = configuration
-        self._gui = ImageViewer(root_application.frame())
+        self._gui = ImageViewer(self._root.window)
         self._initialise_callbacks()
+
+        #  self._root.frame().menu_bar.Remove(0)
 
     def _initialise_callbacks(self) -> None:
         self._gui.bind_exit(self.on_exit)
 
     def on_exit(self, event = None) -> None:
+        self._gui.Close()
         self._root.launch_main_menu()
 
     @property
     def panel(self) -> wx.Panel:
         return self._gui
-
-    def bitmap_movement(self, event: "FloatCanvas.EVT_MOTION") -> None:
-        self._gui.status_bar = "%i, %i" % tuple(event.Coords)
 
     def show(self) -> None:
         self._gui.Show()
@@ -48,3 +48,5 @@ class ImageViewerController:
 
         image = bitmap.ConvertToImage()
         self._gui.set_image(image)
+
+
