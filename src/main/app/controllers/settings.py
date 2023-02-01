@@ -34,13 +34,12 @@ class SettingsController:
         self._root.launch_main_menu()
 
     def on_scan_dir_browse(self, event = None) -> None:
-        with wx.DirDialog(None, message="Please choose folder.") as browser:
+        with wx.DirDialog(None) as browser:
             if browser.ShowModal() == wx.ID_CANCEL:
                 print("Cancelled")
                 return
 
-            directory_path = browser.GetPath()
-            print(directory_path)
+            self._gui.directories.scan_directory = browser.GetPath()
 
 
     def on_dest_dir_browse(self, event = None) -> None:
