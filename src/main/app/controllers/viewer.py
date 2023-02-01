@@ -15,6 +15,9 @@ class ImageViewerController:
         self._initialise_gui()
         self._initialise_callbacks()
 
+        if self._root.window.IsFrozen():
+            self._root.window.Thaw()
+
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
         self._root.window.set_panel(self._gui)

@@ -14,6 +14,9 @@ class MainMenuController:
         self._gui = MainMenu(self._root.window)
         self._root.window.set_panel(self._gui)
 
+        if self._root.window.IsFrozen():
+            self._root.window.Thaw()
+
     def _initialise_callbacks(self) -> None:
         self._gui.departments.options.ops.Bind(
             wx.EVT_BUTTON, self._gui.view_ops)
