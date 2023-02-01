@@ -7,8 +7,12 @@ from src.main.gui import MainMenu
 class MainMenuController:
     def __init__(self, root_application: RootInterface):
         self._root = root_application
-        self._gui = MainMenu(self._root.window)
+        self._initialise_gui()
         self._initialise_callbacks()
+
+    def _initialise_gui(self) -> None:
+        self._gui = MainMenu(self._root.window)
+        self._root.window.set_panel(self._gui)
 
     def _initialise_callbacks(self) -> None:
         self._gui.departments.options.ops.Bind(
@@ -39,17 +43,19 @@ class MainMenuController:
         self._gui.Close()
 
     def on_exit(self, event = None) -> None:
+        self._gui.Close()
         self._root.exit()
 
     def on_customer_paperwork(self, event = None) -> None:
         config = ImageViewerConfiguration()
-
+        self._gui.close()
         self._root.launch_image_viewer(config)
 
     def on_loading_list(self, event = None) -> None:
         config = ImageViewerConfiguration()
-
+        self._gui.close()
         self._root.launch_image_viewer(config)
 
     def on_settings(self, event = None) -> None:
+        self._gui.Close()
         self._root.launch_settings()

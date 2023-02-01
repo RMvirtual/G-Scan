@@ -12,8 +12,12 @@ class ImageViewerController:
     ) -> None:
         self._root = root_application
         self._config = configuration
-        self._gui = ImageViewer(self._root.window)
+        self._initialise_gui()
         self._initialise_callbacks()
+
+    def _initialise_gui(self) -> None:
+        self._gui = ImageViewer(self._root.window)
+        self._root.window.set_panel(self._gui)
 
     def _initialise_callbacks(self) -> None:
         self._gui.bind_exit(self.on_exit)

@@ -9,9 +9,13 @@ from src.main.user import UserSettings
 class SettingsController:
     def __init__(self, root_application: RootInterface):
         self._root = root_application
-        self._gui = Settings(root_application.window)
+        self._initialise_gui()
         self._initialise_callbacks()
         self._load_settings_from_file()
+
+    def _initialise_gui(self) -> None:
+        self._gui = Settings(self._root.window)
+        self._root.window.set_panel(self._gui)
 
     def _initialise_callbacks(self) -> None:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
@@ -78,6 +82,7 @@ class SettingsController:
 
     def _load_settings_from_file(self) -> None:
         self._set_from_user_settings(settings=user.load_settings())
+        self._root.window.Layout()
 
     def _refresh_document_options(self) -> None:
         department = departments.load(full_name=self._gui.defaults.department)
