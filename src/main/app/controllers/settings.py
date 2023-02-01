@@ -36,14 +36,16 @@ class SettingsController:
     def on_scan_dir_browse(self, event = None) -> None:
         with wx.DirDialog(None) as browser:
             if browser.ShowModal() == wx.ID_CANCEL:
-                print("Cancelled")
                 return
 
             self._gui.directories.scan_directory = browser.GetPath()
 
-
     def on_dest_dir_browse(self, event = None) -> None:
-        print("Dest Browse")
+        with wx.DirDialog(None) as browser:
+            if browser.ShowModal() == wx.ID_CANCEL:
+                return
+
+            self._gui.directories.dest_directory = browser.GetPath()
 
     def on_department_box(self, event = None) -> None:
         self._refresh_document_options()
