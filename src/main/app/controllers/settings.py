@@ -17,6 +17,12 @@ class SettingsController:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
+        self._gui.directories.scan_browse.Bind(
+            wx.EVT_BUTTON, self.on_scan_dir_browse)
+
+        self._gui.directories.dest_browse.Bind(
+            wx.EVT_BUTTON, self.on_dest_dir_browse)
+
         self._gui.defaults.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_box)
 
@@ -26,6 +32,12 @@ class SettingsController:
 
     def on_exit(self, event = None) -> None:
         self._root.launch_main_menu()
+
+    def on_scan_dir_browse(self, event = None) -> None:
+        print("Scan Browse")
+
+    def on_dest_dir_browse(self, event = None) -> None:
+        print("Dest Browse")
 
     def on_department_box(self, event = None) -> None:
         self._refresh_document_options()

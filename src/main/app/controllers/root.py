@@ -6,6 +6,7 @@ from src.main.app.controllers.settings import SettingsController
 from src.main.app.controllers.display import DisplayController
 from src.main.app.interfaces import RootInterface
 
+
 class RootApplication(RootInterface):
     def __init__(self):
         self._display = DisplayController()
