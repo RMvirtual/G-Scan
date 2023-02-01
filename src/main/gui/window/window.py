@@ -22,6 +22,9 @@ class Window(wx.Frame):
         self.Layout()
 
     def set_panel(self, panel: wx.Panel) -> None:
+        if not self.IsFrozen():
+            self.Freeze()
+
         if self._panel:
             self._replace(panel)
 
@@ -29,6 +32,7 @@ class Window(wx.Frame):
             self._create_panel(panel)
 
         self.Layout()
+        self.Thaw()
 
     def _create_panel(self, panel: wx.Panel) -> None:
         self._panel = panel

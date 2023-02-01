@@ -10,6 +10,7 @@ from src.main.gui.window import Window
 class RootApplication(RootInterface):
     def __init__(self):
         self._window = Window()
+        self._window.Freeze()
 
     def launch_main_menu(self) -> None:
         MainMenuController(root_application=self)

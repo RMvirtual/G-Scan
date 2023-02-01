@@ -48,5 +48,3 @@ class ImageViewerController:
 
         image = bitmap.ConvertToImage()
         self._gui.set_image(image)
-
-
