@@ -21,9 +21,6 @@ class Window(wx.Frame):
         self.SetSizer(sizer)
         self.Layout()
 
-    def panel(self) -> wx.Panel:
-        return self._panel
-
     def set_panel(self, panel: wx.Panel) -> None:
         if self._panel:
             self._replace(panel)

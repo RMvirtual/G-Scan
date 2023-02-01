@@ -20,7 +20,7 @@ class ImageViewerController:
         self._root.window.set_panel(self._gui)
 
     def _initialise_callbacks(self) -> None:
-        self._gui.bind_exit(self.on_exit)
+        self._gui.bottom_toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
     def on_exit(self, event = None) -> None:
@@ -32,9 +32,6 @@ class ImageViewerController:
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
-
-    def close(self, event: wx.EVT_CLOSE = None) -> None:
-        self._gui.close(event)
 
     def load(self, image_path: str) -> None:
         document = fitz.open(image_path)

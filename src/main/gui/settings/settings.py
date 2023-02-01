@@ -48,6 +48,3 @@ class Settings(wx.Panel):
 
         sizer.AddStretchSpacer()
         self.SetSizer(sizer)
-
-    def close(self) -> None:
-        self.Close()

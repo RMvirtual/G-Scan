@@ -39,6 +39,3 @@ class MainMenu(wx.Panel):
         self.departments.Show()
 
         self.Layout()
-
-    def close(self) -> None:
-        self.Close()
