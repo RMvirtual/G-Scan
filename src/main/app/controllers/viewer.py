@@ -30,6 +30,7 @@ class ImageViewerController:
         self._exit_to_main_menu()
 
     def on_close(self, event = None) -> None:
+        self._root.window.Freeze()
         self._gui.Destroy()
 
     def _exit_to_main_menu(self) -> None:

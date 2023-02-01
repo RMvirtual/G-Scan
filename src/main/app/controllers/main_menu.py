@@ -52,6 +52,7 @@ class MainMenuController:
         self.launch_image_viewer(config)
 
     def on_close(self, event = None) -> None:
+        self._root.window.Freeze()
         self._gui.Destroy()
 
     def launch_image_viewer(self, config) -> None:
