@@ -9,7 +9,6 @@ class MainMenuController:
         self._root = root_application
         self._gui = MainMenu(self._root.window)
         self._initialise_callbacks()
-        #  self._root.frame().initialise_menu()
 
     def _initialise_callbacks(self) -> None:
         self._gui.departments.options.ops.Bind(

@@ -15,8 +15,6 @@ class ImageViewerController:
         self._gui = ImageViewer(self._root.window)
         self._initialise_callbacks()
 
-        #  self._root.frame().menu_bar.Remove(0)
-
     def _initialise_callbacks(self) -> None:
         self._gui.bind_exit(self.on_exit)
 
