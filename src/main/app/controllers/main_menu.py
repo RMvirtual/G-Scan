@@ -41,14 +41,14 @@ class MainMenuController:
 
     def _initialise_keyboard_shortcuts(self) -> None:
         f4_shortcut_id = wx.NewId()
+
         self._gui.Bind(
             event=wx.EVT_MENU, handler=self.on_f4, id=f4_shortcut_id)
 
-        shortkeys = wx.AcceleratorTable([
-            (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)
-        ])
+        shortcuts = wx.AcceleratorTable([
+            (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)])
 
-        self._gui.SetAcceleratorTable(shortkeys)
+        self._gui.SetAcceleratorTable(shortcuts)
 
     def on_f4(self, event: wx.EVT_CHAR) -> None:
         self.launch_exit()
