@@ -20,38 +20,42 @@ class MainMenuController:
             self._root.window.Thaw()
 
     def _initialise_callbacks(self) -> None:
-        self._gui.departments.options.ops.Bind(
-            wx.EVT_BUTTON, self._gui.view_ops)
-
-        self._gui.operations.back.Bind(
-            wx.EVT_BUTTON, self._gui.view_departments)
-
-        self._gui.departments.toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
-
-        self._gui.departments.toolbar.settings.Bind(
-            wx.EVT_BUTTON, self.on_settings)
-
-        self._gui.operations.options.cust_pwork.Bind(
-            wx.EVT_BUTTON, self.on_customer_paperwork)
-
-        self._gui.operations.options.loading_list.Bind(
-            wx.EVT_BUTTON, self.on_loading_list)
+        self._initialise_department_callbacks()
+        self._initialise_operations_callbacks()
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
+    def _initialise_operations_callbacks(self) -> None:
+        panel = self._gui.operations
+        btn_press = wx.EVT_BUTTON
+
+        panel.options.cust_pwork.Bind(btn_press, self.on_customer_paperwork)
+        panel.options.loading_list.Bind(btn_press, self.on_loading_list)
+        panel.back.Bind(btn_press, self._gui.view_departments)
+
+    def _initialise_department_callbacks(self) -> None:
+        panel = self._gui.departments
+        btn_press = wx.EVT_BUTTON
+
+        panel.options.ops.Bind(btn_press, self._gui.view_ops)
+        panel.toolbar.settings.Bind(btn_press, self.on_settings)
+        panel.toolbar.exit.Bind(btn_press, self.on_exit)
+
     def _initialise_keyboard_shortcuts(self) -> None:
         f4_shortcut_id = wx.NewId()
-
-        self._gui.Bind(
-            event=wx.EVT_MENU, handler=self.on_f4, id=f4_shortcut_id)
+        self._gui.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
 
         shortcuts = wx.AcceleratorTable([
             (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)])
 
         self._gui.SetAcceleratorTable(shortcuts)
 
-    def on_f4(self, event: wx.EVT_CHAR) -> None:
-        self.launch_exit()
+    def on_f4(self, event: wx.EVT_MENU) -> None:
+        if self._gui.operations.IsShown():
+            self._gui.view_departments()
+
+        else:
+            self.launch_exit()
 
     def on_exit(self, event = None) -> None:
         self.launch_exit()
