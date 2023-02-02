@@ -6,7 +6,6 @@ class NavigationPanel(wx.Panel):
         super(NavigationPanel, self).__init__(
             parent=parent
         )
-        self.SetBackgroundColour(colour=wx.GREEN)
         self.exit = wx.Button(parent=self, label="Exit")
         self._initialise_sizer()
 

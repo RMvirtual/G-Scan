@@ -9,7 +9,6 @@ class InputPanel(wx.Panel):
     def _initialise(self) -> None:
         self._initialise_widgets()
         self._initialise_sizer()
-        self.SetBackgroundColour(colour=wx.YELLOW)
 
     def _initialise_widgets(self) -> None:
         self._input_label = wx.StaticText(
