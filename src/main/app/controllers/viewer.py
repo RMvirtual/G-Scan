@@ -49,6 +49,10 @@ class ImageViewerController:
 
         else:
             # Hardcoding one image file for now.
+            root_id = self._gui.files.file_tree.GetRootItem()
+            self._gui.files.file_tree.AppendItem(
+                parent=root_id, text="Pending (1)")
+
             self.load(files[0])
 
     def _request_files_to_import(self) -> list[str]:

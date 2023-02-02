@@ -3,7 +3,7 @@ from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.image_viewer.panels.bitmap_canvas import BitmapViewer
 from src.main.gui.image_viewer.toolbars.input import InputPanel
 from src.main.gui.image_viewer.toolbars.navigation import NavigationPanel
-from src.main.gui.image_viewer.panels.files import FilesPanel
+from src.main.gui.image_viewer.panels.file_tree import FilesPanel
 from src.main.gui.image_viewer.toolbars.file_menu import FileMenu
 
 
