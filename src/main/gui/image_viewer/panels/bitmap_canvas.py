@@ -18,7 +18,7 @@ class BitmapViewer(NavCanvas):
         self.Canvas.Bind(wx.EVT_LEFT_DCLICK, self.zoom_to_fit)
 
     def load_image(self, image: wx.Image) -> None:
-        bitmap = FloatCanvas.ScaledBitmap2(
+        bitmap = FloatCanvas.ScaledBitmap(
             Bitmap=image, XY=(0,0), Height=image.GetHeight(), Position="bl")
 
         self.Canvas.AddObject(bitmap)
