@@ -18,9 +18,8 @@ class FileMenu(wx.MenuBar):
 
         self.import_prenamed_files = self.file_menu.Append(
             id=wx.ID_ANY, item="&Import Prenamed Files\tCTRL+M",
-            helpString=(
-                "Import files already named with the reference to be used")
+            helpString="Import files prenamed as the reference to be used"
         )
 
         self.quit = self.file_menu.Append(
-            id=wx.ID_SAVE, item='&Quit\tF4', helpString="Quit to Main Menu")
+            id=wx.ID_ANY, item='&Quit\tF4', helpString="Quit to Main Menu")

@@ -15,8 +15,6 @@ class ImageViewerController:
         self._initialise_gui()
         self._bind_callbacks()
 
-
-
         if self._root.window.IsFrozen():
             self._root.window.Thaw()
 
@@ -44,7 +42,22 @@ class ImageViewerController:
             wx.EVT_MENU, self.on_quit, self._gui.file_menu.quit)
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
-        print("Import File Dialog")
+        files = self._request_files_to_import()
+
+        if not files:
+            print("No files returned")
+
+        else:
+            print(files)
+
+    def _request_files_to_import(self) -> list[str]:
+        browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)
+
+        with wx.FileDialog(parent=self._gui, style=browser_style) as browser:
+            if browser.ShowModal() == wx.ID_CANCEL:
+                return []
+
+            return browser.GetPaths()
 
     def on_import_prenamed_files(self, event: wx.EVT_MENU) -> None:
         print("Michelin Mode")
