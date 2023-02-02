@@ -1,4 +1,5 @@
 import wx
+from src.main.gui import fonts
 
 
 class UserToolbar(wx.Panel):
@@ -13,6 +14,8 @@ class UserToolbar(wx.Panel):
     def _initialise_widgets(self) -> None:
         self._input_label = wx.StaticText(
             self, label="Please enter job reference:")
+
+        self._input_label.SetFont(fonts.font(point_size=11))
 
         self.input = wx.TextCtrl(self)
         self.submit = wx.Button(self, label="Submit")
