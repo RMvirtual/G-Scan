@@ -3,6 +3,7 @@ import wx
 from src.main.app.configurations import ImageViewerConfiguration
 from src.main.app.interfaces import RootInterface
 from src.main.gui import ImageViewer
+from src.main.documents import rendering
 
 
 class ImageViewerController:
@@ -81,13 +82,5 @@ class ImageViewerController:
         self._root.launch_main_menu()
 
     def load(self, image_path: str) -> None:
-        document = fitz.open(image_path)
-        _number_of_pages = document.page_count
-        page = document[0]
-        pixel_buffer = page.get_pixmap()
-
-        bitmap = wx.Bitmap.FromBuffer(
-            pixel_buffer.width, pixel_buffer.height, pixel_buffer.samples)
-
-        image = bitmap.ConvertToImage()
+        image = rendering.render(image_path)
         self._gui.set_image(image)
