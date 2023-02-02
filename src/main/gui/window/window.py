@@ -6,7 +6,6 @@ class Window(wx.Frame):
     def __init__(self):
         size, position = screen_size.recommended_metrics()
         super().__init__(parent=None, title="", size=size, pos=position)
-
         self._initialise_widgets()
 
     def _initialise_widgets(self) -> None:

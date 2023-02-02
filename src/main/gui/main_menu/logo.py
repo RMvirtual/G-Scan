@@ -7,11 +7,25 @@ from src.main.gui.metrics import aspect_ratio
 
 class Logo(wx.Panel):
     def __init__(self, parent: wx.Frame):
-        super(Logo, self).__init__(parent)
+        super().__init__(parent=parent)
+        self._initialise_two()
 
+    def _old_constructor(self) -> None:
         self._initialise_widgets()
         self._initialise_sizer()
         self.Bind(wx.EVT_SIZE, self.on_resize)
+
+    def _initialise_two(self) -> None:
+        image_dir = file_system.image_resources_directory()
+        image_path = image_dir + "\\logo.png"
+
+        self.bitmap = wx.Bitmap(name=image_path, type=wx.BITMAP_TYPE_ANY)
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+
+    def on_paint(self, event: wx.EVT_PAINT) -> None:
+        dc = wx.BufferedPaintDC(self)
+        dc.Clear()
+        dc.DrawBitmap(self.bitmap, 0, 0)
 
     def _initialise_widgets(self) -> None:
         image_dir = file_system.image_resources_directory()
