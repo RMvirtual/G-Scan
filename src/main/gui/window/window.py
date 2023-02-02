@@ -7,7 +7,6 @@ class Window(wx.Frame):
         size, position = screen_size.recommended_metrics()
         super().__init__(parent=None, title="", size=size, pos=position)
 
-        self.SetDoubleBuffered(True)
         self._initialise_widgets()
 
     def _initialise_widgets(self) -> None:
@@ -22,9 +21,6 @@ class Window(wx.Frame):
         self.Layout()
 
     def set_panel(self, panel: wx.Panel) -> None:
-        if not self.IsFrozen():
-            self.Freeze()
-
         if self._panel:
             self._replace(panel)
 
@@ -32,7 +28,6 @@ class Window(wx.Frame):
             self._create_panel(panel)
 
         self.Layout()
-        self.Thaw()
 
     def _create_panel(self, panel: wx.Panel) -> None:
         self._panel = panel
