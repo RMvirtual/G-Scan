@@ -10,6 +10,11 @@ class Logo(wx.Panel):
         super().__init__(parent=parent)
         self._initialise_two()
 
+    def _old_constructor(self) -> None:
+        self._initialise_widgets()
+        self._initialise_sizer()
+        self.Bind(wx.EVT_SIZE, self.on_resize)
+
     def _initialise_two(self) -> None:
         image_dir = file_system.image_resources_directory()
         image_path = image_dir + "\\logo.png"
@@ -17,21 +22,14 @@ class Logo(wx.Panel):
 
         self.bitmap = wx.Bitmap(name=image_path, type=wx.BITMAP_TYPE_ANY)
         self.Bind(wx.EVT_PAINT, self.on_paint)
-        # self.Bind(wx.EVT_SIZE, self.on_resize)
 
     def on_paint(self, event: wx.EVT_PAINT) -> None:
         dc = wx.BufferedPaintDC(self)
         dc.Clear()
 
-        width, height = dc.GetSize()
-        scaled_width, scaled_height = aspect_ratio.scale_with_ratio(
-            self.bitmap, width, height)
-
-        gc = wx.GraphicsContext.Create(self)
-        gc.DrawBitmap(
-            bmp=self.bitmap, x=0, y=0, w=scaled_width, h=scaled_height)
-
-        print(dc.GetSize())
+        gc = wx.GraphicsContext.Create(dc)
+        bmp = gc.CreateBitmap(self.bitmap)
+        gc.DrawBitmap(bmp=bmp, x=0, y=0, w=200, h=200)
 
     def _initialise_widgets(self) -> None:
         image_dir = file_system.image_resources_directory()
@@ -41,8 +39,17 @@ class Logo(wx.Panel):
         self.bitmap = wx.StaticBitmap(
             parent=self, bitmap = self.image.ConvertToBitmap(depth=32))
 
+    def _initialise_sizer(self) -> None:
+        sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        flags = wx.EXPAND
+
+        sizer.Add(window=self.bitmap, proportion=0, flag=flags, border=0)
+
+        self.SetSizer(sizer)
+
     def on_resize(self, _event = None) -> None:
-        pass
+        print("In resize.")
+        self.resize_logo()
 
     def resize_logo(self) -> None:
         width, height = self._scaled_image_metrics()
