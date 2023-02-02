@@ -13,7 +13,9 @@ class ImageViewerController:
         self._root = root_application
         self._config = configuration
         self._initialise_gui()
-        self._initialise_callbacks()
+        self._bind_callbacks()
+
+
 
         if self._root.window.IsFrozen():
             self._root.window.Thaw()
@@ -22,9 +24,15 @@ class ImageViewerController:
         self._gui = ImageViewer(self._root.window)
         self._root.window.set_panel(self._gui)
 
-    def _initialise_callbacks(self) -> None:
+    def _bind_callbacks(self) -> None:
         self._gui.bottom_toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
+        self._root.window.Bind(
+            wx.EVT_MENU, self.on_menu_bar, self._gui.file_menu.quit)
+
+    def on_menu_bar(self, event: wx.EVT_MENU = None) -> None:
+        print("In onMenuBar")
+        self._exit_to_main_menu()
 
     def on_exit(self, event = None) -> None:
         self._exit_to_main_menu()

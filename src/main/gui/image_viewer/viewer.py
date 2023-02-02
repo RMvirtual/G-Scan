@@ -4,7 +4,7 @@ from src.main.gui.image_viewer.panels.bitmap_canvas import BitmapViewer
 from src.main.gui.image_viewer.toolbars.input import InputPanel
 from src.main.gui.image_viewer.toolbars.navigation import NavigationPanel
 from src.main.gui.image_viewer.panels.files import FilesPanel
-from src.main.gui.image_viewer.toolbars.menu_bar import MenuBar
+from src.main.gui.image_viewer.toolbars.file_menu import FileMenu
 
 
 class ImageViewer(wx.Panel):
@@ -18,8 +18,8 @@ class ImageViewer(wx.Panel):
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
 
     def _initialise_panels(self) -> None:
-        self.menu_bar = MenuBar()
-        self.Parent.SetMenuBar(self.menu_bar)
+        self.file_menu = FileMenu()
+        self.Parent.SetMenuBar(self.file_menu)
 
         self.input_bar = InputPanel(self)
         self.bitmap_viewer = BitmapViewer(self)
