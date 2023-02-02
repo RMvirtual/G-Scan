@@ -1,4 +1,5 @@
 import wx
+from src.main.gui import fonts
 
 
 class FilesPanel(wx.Panel):
@@ -11,14 +12,16 @@ class FilesPanel(wx.Panel):
 
     def _initialise_widgets(self) -> None:
         self._title = wx.StaticText(parent=self, label="Jobs")
-        font = wx.Font(wx.FontInfo(pointSize=30).Bold())
-        self._title.SetFont(font)
+        self._title.SetFont(fonts.font(point_size=30, bold=True))
 
-        self.files = wx.TreeCtrl(
-            parent=self,
-            style=wx.TR_HIDE_ROOT|wx.TR_TWIST_BUTTONS|wx.TR_HAS_BUTTONS
-                  |wx.TR_NO_LINES|wx.TR_MULTIPLE
+        self.upload_to_fcl = wx.Button(parent=self, label="Upload to FCL")
+
+        tree_style = (
+            wx.TR_HIDE_ROOT|wx.TR_TWIST_BUTTONS|wx.TR_HAS_BUTTONS
+            |wx.TR_NO_LINES|wx.TR_MULTIPLE
         )
+
+        self.files = wx.TreeCtrl(parent=self, style=tree_style)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
@@ -26,6 +29,11 @@ class FilesPanel(wx.Panel):
         sizer.Add(
             window=self._title, proportion=0,
             flag=wx.ALIGN_CENTRE_HORIZONTAL|wx.ALL, border=5
+        )
+
+        sizer.Add(
+            window=self.upload_to_fcl, proportion=0,
+            flag=wx.ALIGN_LEFT|wx.ALL, border=5
         )
 
         sizer.Add(

@@ -1,6 +1,4 @@
 import wx
-from wx.lib.statbmp import GenStaticBitmap
-
 from src.main import file_system
 from src.main.gui.metrics import aspect_ratio
 
@@ -30,7 +28,6 @@ class Logo(wx.Panel):
         self.SetSizer(sizer)
 
     def on_resize(self, _event = None) -> None:
-        print("In resize.")
         self.resize_logo()
 
     def resize_logo(self) -> None:
