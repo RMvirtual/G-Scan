@@ -18,7 +18,6 @@ class Logo(wx.Panel):
     def _initialise_two(self) -> None:
         image_dir = file_system.image_resources_directory()
         image_path = image_dir + "\\logo.png"
-        self.SetBackgroundColour(wx.WHITE)
 
         self.bitmap = wx.Bitmap(name=image_path, type=wx.BITMAP_TYPE_ANY)
         self.Bind(wx.EVT_PAINT, self.on_paint)
@@ -26,10 +25,7 @@ class Logo(wx.Panel):
     def on_paint(self, event: wx.EVT_PAINT) -> None:
         dc = wx.BufferedPaintDC(self)
         dc.Clear()
-
-        gc = wx.GraphicsContext.Create(dc)
-        bmp = gc.CreateBitmap(self.bitmap)
-        gc.DrawBitmap(bmp=bmp, x=0, y=0, w=200, h=200)
+        dc.DrawBitmap(self.bitmap, 0, 0)
 
     def _initialise_widgets(self) -> None:
         image_dir = file_system.image_resources_directory()
