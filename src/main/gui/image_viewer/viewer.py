@@ -1,10 +1,10 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.image_viewer.panels.bitmap_canvas import BitmapViewer
-from src.main.gui.image_viewer.toolbars.new import NewToolBar
 from src.main.gui.image_viewer.toolbars.input import InputPanel
 from src.main.gui.image_viewer.toolbars.navigation import NavigationPanel
 from src.main.gui.image_viewer.panels.files import FilesPanel
+from src.main.gui.image_viewer.toolbars.menu_bar import MenuBar
 
 
 class ImageViewer(wx.Panel):
@@ -18,7 +18,9 @@ class ImageViewer(wx.Panel):
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
 
     def _initialise_panels(self) -> None:
-        self.top_toolbar = NewToolBar(self)
+        self.menu_bar = MenuBar()
+        self.Parent.SetMenuBar(self.menu_bar)
+
         self.input_bar = InputPanel(self)
         self.bitmap_viewer = BitmapViewer(self)
         self.files = FilesPanel(self)
@@ -26,7 +28,6 @@ class ImageViewer(wx.Panel):
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(window=self.top_toolbar, proportion=0, flag=wx.EXPAND)
         sizer.Add(window=self.input_bar, proportion=0, flag=wx.EXPAND)
         sizer.Add(sizer=self._bitmap_sizer(), proportion=1, flag=wx.EXPAND)
         sizer.Add(window=self.bottom_toolbar, proportion=0, flag=wx.EXPAND)
