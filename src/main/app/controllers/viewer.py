@@ -3,6 +3,7 @@ from src.main.app.configurations import ImageViewerConfiguration
 from src.main.app.interfaces import RootInterface
 from src.main.gui import ImageViewer
 from src.main.documents import rendering
+from src.main.documents.processing import DocumentToProcess, DocumentWorkload
 
 
 class ImageViewerController:
@@ -14,6 +15,7 @@ class ImageViewerController:
         self._config = configuration
         self._initialise_gui()
         self._bind_callbacks()
+        self._documents = DocumentWorkload()
 
         if self._root.window.IsFrozen():
             self._root.window.Thaw()
@@ -48,10 +50,15 @@ class ImageViewerController:
             print("No files returned")
 
         else:
-            # Hardcoding one image file for now.
+            for file in files:
+                self._documents.pending.append(file)
+
+
             root_id = self._gui.files.file_tree.GetRootItem()
             self._gui.files.file_tree.AppendItem(
-                parent=root_id, text="Pending (1)")
+                parent=root_id,
+                text=f"Pending ({len(self._documents.pending)})"
+            )
 
             self.load(files[0])
 
