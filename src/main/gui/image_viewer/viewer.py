@@ -3,7 +3,7 @@ from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.image_viewer.panels.bitmap_canvas import BitmapViewer
 from src.main.gui.image_viewer.toolbars.input import InputPanel
 from src.main.gui.image_viewer.toolbars.navigation import NavigationPanel
-from src.main.gui.image_viewer.panels.file_tree import FilesPanel
+from src.main.gui.image_viewer.panels.file_tree import FileTree
 from src.main.gui.image_viewer.toolbars.file_menu import FileMenu
 
 
@@ -23,7 +23,7 @@ class ImageViewer(wx.Panel):
 
         self.input_bar = InputPanel(self)
         self.bitmap_viewer = BitmapViewer(self)
-        self.files = FilesPanel(self)
+        self.file_tree = FileTree(self)
         self.bottom_toolbar = NavigationPanel(self)
 
     def _initialise_sizer(self) -> None:
@@ -53,7 +53,7 @@ class ImageViewer(wx.Panel):
         result.Add(
             window=self.bitmap_viewer, proportion=3, flag=flags, border=5)
 
-        result.Add(window=self.files, proportion=1, flag=flags, border=5)
+        result.Add(window=self.file_tree, proportion=1, flag=flags, border=5)
 
         return result
 

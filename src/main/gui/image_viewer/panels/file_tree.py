@@ -2,9 +2,9 @@ import wx
 from src.main.gui import fonts
 
 
-class FilesPanel(wx.Panel):
+class FileTree(wx.Panel):
     def __init__(self, parent: wx.Window):
-        super(FilesPanel, self).__init__(parent=parent)
+        super(FileTree, self).__init__(parent=parent)
         self._initialise_widgets()
         self._initialise_sizer()
         self.file_tree.ExpandAll()

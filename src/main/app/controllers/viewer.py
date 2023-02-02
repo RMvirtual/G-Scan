@@ -50,8 +50,8 @@ class ImageViewerController:
             for file in files:
                 self._documents.pending.append(file)
 
-            self._gui.files.file_tree.AppendItem(
-                parent=self._gui.files.root_id,
+            self._gui.file_tree.file_tree.AppendItem(
+                parent=self._gui.file_tree.root_id,
                 text=f"Pending ({len(self._documents.pending)})"
             )
 
