@@ -1,4 +1,3 @@
-import fitz
 import wx
 from src.main.app.configurations import ImageViewerConfiguration
 from src.main.app.interfaces import RootInterface
@@ -49,7 +48,8 @@ class ImageViewerController:
             print("No files returned")
 
         else:
-            print(files)
+            # Hardcoding one image file for now.
+            self.load(files[0])
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)

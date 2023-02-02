@@ -7,7 +7,6 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("wxPython"),
-        requirement("pymupdf"),
         "//src/main/app/configurations",
         "//src/main/app/interfaces",
         "//src/main/departments",
