@@ -9,6 +9,8 @@ class MainMenuController:
         self._root = root_application
         self._initialise_gui()
         self._initialise_callbacks()
+        self._initialise_keyboard_shortcuts()
+        self._gui.SetFocus()
 
     def _initialise_gui(self) -> None:
         self._gui = MainMenu(self._root.window)
@@ -36,6 +38,20 @@ class MainMenuController:
             wx.EVT_BUTTON, self.on_loading_list)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
+
+    def _initialise_keyboard_shortcuts(self) -> None:
+        f4_shortcut_id = wx.NewId()
+        self._gui.Bind(
+            event=wx.EVT_MENU, handler=self.on_f4, id=f4_shortcut_id)
+
+        shortkeys = wx.AcceleratorTable([
+            (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)
+        ])
+
+        self._gui.SetAcceleratorTable(shortkeys)
+
+    def on_f4(self, event: wx.EVT_CHAR) -> None:
+        self.launch_exit()
 
     def on_exit(self, event = None) -> None:
         self.launch_exit()
