@@ -7,7 +7,6 @@ class FilesPanel(wx.Panel):
         super(FilesPanel, self).__init__(parent=parent)
         self._initialise_widgets()
         self._initialise_sizer()
-        self._create_dummy_data()
         self.file_tree.ExpandAll()
 
     def _initialise_widgets(self) -> None:
@@ -22,6 +21,7 @@ class FilesPanel(wx.Panel):
         )
 
         self.file_tree = wx.TreeCtrl(parent=self, style=tree_style)
+        self.root_id = self.file_tree.AddRoot(text="All Files")
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
@@ -43,14 +43,3 @@ class FilesPanel(wx.Panel):
 
         self.SetSizer(sizer)
 
-    def _create_dummy_data(self) -> None:
-        root_id = self.file_tree.AddRoot(text="All Files")
-
-        job_1 = self.file_tree.AppendItem(parent=root_id, text="TestJob1")
-        self.file_tree.AppendItem(parent=job_1, text="Page 1")
-        self.file_tree.AppendItem(parent=job_1, text="Page 2")
-
-        job_2 = self.file_tree.AppendItem(parent=root_id, text="TestJob2")
-
-        self.file_tree.AppendItem(parent=job_2, text="DGN")
-        self.file_tree.AppendItem(parent=job_2, text="Customer Paperwork")

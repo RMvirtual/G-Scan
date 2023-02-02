@@ -13,9 +13,6 @@ class SettingsController:
         self._initialise_callbacks()
         self._load_settings_from_file()
 
-        if self._root.window.IsFrozen():
-            self._root.window.Thaw()
-
     def _initialise_gui(self) -> None:
         self._gui = Settings(self._root.window)
         self._root.window.set_panel(self._gui)
@@ -58,7 +55,6 @@ class SettingsController:
         self._refresh_document_options()
 
     def on_close(self, event = None) -> None:
-        self._root.window.Freeze()
         self._gui.Destroy()
 
     def _exit_to_main_menu(self) -> None:

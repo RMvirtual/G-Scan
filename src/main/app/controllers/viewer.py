@@ -17,9 +17,6 @@ class ImageViewerController:
         self._bind_callbacks()
         self._documents = DocumentWorkload()
 
-        if self._root.window.IsFrozen():
-            self._root.window.Thaw()
-
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
         self._root.window.set_panel(self._gui)
@@ -53,10 +50,8 @@ class ImageViewerController:
             for file in files:
                 self._documents.pending.append(file)
 
-
-            root_id = self._gui.files.file_tree.GetRootItem()
             self._gui.files.file_tree.AppendItem(
-                parent=root_id,
+                parent=self._gui.files.root_id,
                 text=f"Pending ({len(self._documents.pending)})"
             )
 
@@ -84,7 +79,6 @@ class ImageViewerController:
         self._tear_down_gui()
 
     def _tear_down_gui(self) -> None:
-        self._root.window.Freeze()
         self._gui.Destroy()
         self._root.window.SetMenuBar(wx.MenuBar())
 

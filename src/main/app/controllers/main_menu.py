@@ -16,9 +16,6 @@ class MainMenuController:
         self._gui = MainMenu(self._root.window)
         self._root.window.set_panel(self._gui)
 
-        if self._root.window.IsFrozen():
-            self._root.window.Thaw()
-
     def _initialise_callbacks(self) -> None:
         self._initialise_department_callbacks()
         self._initialise_operations_callbacks()
@@ -72,7 +69,6 @@ class MainMenuController:
         self.launch_image_viewer(config)
 
     def on_close(self, event = None) -> None:
-        self._root.window.Freeze()
         self._gui.Destroy()
 
     def launch_image_viewer(self, config) -> None:
