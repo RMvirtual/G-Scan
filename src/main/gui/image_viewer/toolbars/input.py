@@ -1,7 +1,7 @@
 import wx
 
 
-class InputPanel(wx.Panel):
+class UserToolbar(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super().__init__(parent=parent)
         self._initialise()
@@ -24,7 +24,7 @@ class InputPanel(wx.Panel):
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
 
         sizer.Add(
-            window=self._input_label, pos=(0, 0), span=(1, 4),
+            window=self._input_label, pos=(0,0), span=(1,4),
             flag=wx.ALL, border=border
         )
 

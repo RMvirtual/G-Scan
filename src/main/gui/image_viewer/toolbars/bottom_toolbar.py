@@ -1,9 +1,9 @@
 import wx
 
 
-class NavigationPanel(wx.Panel):
+class BottomToolbar(wx.Panel):
     def __init__(self, parent: wx.Frame):
-        super(NavigationPanel, self).__init__(
+        super(BottomToolbar, self).__init__(
             parent=parent
         )
         self.exit = wx.Button(parent=self, label="Exit")
