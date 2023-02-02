@@ -28,16 +28,32 @@ class ImageViewer(wx.Panel):
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(window=self.input_bar, proportion=0, flag=wx.EXPAND)
-        sizer.Add(sizer=self._bitmap_sizer(), proportion=1, flag=wx.EXPAND)
-        sizer.Add(window=self.bottom_toolbar, proportion=0, flag=wx.EXPAND)
+        flags = wx.EXPAND|wx.LEFT|wx.RIGHT
+        border = 5
+
+        sizer.Add(
+            window=self.input_bar, proportion=0, flag=flags, border=border)
+
+        sizer.Add(
+            sizer=self._bitmap_sizer(),
+            proportion=1, flag=flags, border=border
+        )
+
+        sizer.Add(
+            window=self.bottom_toolbar,
+            proportion=0, flag=flags|wx.BOTTOM, border=border
+        )
 
         self.SetSizer(sizer)
 
     def _bitmap_sizer(self) -> wx.Sizer:
         result = wx.BoxSizer(orient=wx.HORIZONTAL)
-        result.Add(window=self.bitmap_viewer, proportion=3, flag=wx.EXPAND)
-        result.Add(window=self.files, proportion=1, flag=wx.EXPAND)
+        flags = wx.EXPAND|wx.ALL
+
+        result.Add(
+            window=self.bitmap_viewer, proportion=3, flag=flags, border=5)
+
+        result.Add(window=self.files, proportion=1, flag=flags, border=5)
 
         return result
 

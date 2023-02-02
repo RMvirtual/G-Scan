@@ -38,7 +38,7 @@ class FilesPanel(wx.Panel):
 
         sizer.Add(
             window=self.file_tree, proportion=1,
-            flag=wx.EXPAND|wx.ALL, border=5
+            flag=wx.EXPAND|wx.VERTICAL, border=5
         )
 
         self.SetSizer(sizer)
