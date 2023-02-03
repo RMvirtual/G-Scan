@@ -1,5 +1,5 @@
 import wx
-from src.main.app.configurations import ViewerConfiguration
+from src.main.app.configuration import ViewerConfiguration
 from src.main.app.interfaces import RootInterface
 from src.main.gui import ImageViewer
 from src.main.documents import rendering
@@ -21,18 +21,22 @@ class ImageViewerController:
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
         self._root.window.set_panel(self._gui)
+        self._initialise_department_box()
+        self._initialise_document_box()
 
-        self._gui.input_bar.department_options = \
-            self._config.all_departments.full_names()
+    def _initialise_department_box(self):
+        department_names = self._config.all_departments.full_names()
+        self._gui.input_bar.department_options = department_names
 
-        self._gui.input_bar.department = self._config.department.full_name
+        current_department = self._config.department.full_name
+        self._gui.input_bar.department = current_department
 
-        self._gui.input_bar.document_options = \
-            self._config.department.document_types.full_names()
+    def _initialise_document_box(self) -> None:
+        document_names = self._config.department.document_types.full_names()
+        self._gui.input_bar.document_options = document_names
 
-        self._gui.input_bar.document_type = \
-            self._config.document_type.full_name
-
+        current_document = self._config.document_type.full_name
+        self._gui.input_bar.document_type = current_document
 
     def _bind_callbacks(self) -> None:
         self._gui.bottom_toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)

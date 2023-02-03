@@ -1,1 +1,0 @@
-from src.main.app.configurations.viewer import ViewerConfiguration

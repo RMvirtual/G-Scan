@@ -6,7 +6,7 @@ py_library(
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
-        "//src/main/app/configurations",
+        "//src/main/app/configuration",
         requirement("wxPython"),
     ],
 )

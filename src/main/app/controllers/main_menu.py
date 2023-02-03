@@ -1,8 +1,8 @@
 import wx
-from src.main.app.configurations import ViewerConfiguration
+from src.main import departments, documents, user
+from src.main.app import configuration
 from src.main.app.interfaces import RootInterface
 from src.main.gui import MainMenu
-from src.main import departments, documents
 
 
 class MainMenuController:
@@ -13,8 +13,7 @@ class MainMenuController:
         self._initialise_keyboard_shortcuts()
         self._gui.SetFocus()
 
-        self._viewer_config = ViewerConfiguration()
-        self._viewer_config.all_departments = departments.load_all()
+        self._config = configuration.load_default()
 
     def _initialise_gui(self) -> None:
         self._gui = MainMenu(self._root.window)
@@ -60,15 +59,11 @@ class MainMenuController:
             self.launch_exit()
 
     def on_operations(self, event: wx.EVT_BUTTON) -> None:
-        self._viewer_config.department = departments.load(
-            short_code="ops")
-
+        self._config.department = departments.load(short_code="ops")
         self._gui.view_ops()
 
     def on_pods(self, event: wx.EVT_BUTTON) -> None:
-        self._viewer_config.department = departments.load(
-            short_code="pods")
-
+        self._config.department = departments.load(short_code="pods")
         self._gui.view_ops()
 
     def on_exit(self, event: wx.EVT_BUTTON) -> None:
@@ -78,23 +73,21 @@ class MainMenuController:
         self.launch_settings()
 
     def on_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
-        self._viewer_config.document_type = documents.load(
+        self._config.document_type = documents.load(
             short_code="customer_paperwork")
 
-        self.launch_image_viewer(self._viewer_config)
+        self.launch_image_viewer(self._config)
 
     def on_loading_list(self, event: wx.EVT_BUTTON) -> None:
-        self._viewer_config.document_type = documents.load(
-            short_code="loading_list")
-
-        self.launch_image_viewer(self._viewer_config)
+        self._config.document_type = documents.load(short_code="loading_list")
+        self.launch_image_viewer(self._config)
 
     def on_close(self, event: wx.EVT_BUTTON = None) -> None:
         self._gui.Destroy()
 
     def launch_image_viewer(self, config) -> None:
         self._gui.Close()
-        self._root.launch_image_viewer(self._viewer_config)
+        self._root.launch_image_viewer(self._config)
 
     def launch_settings(self) -> None:
         self._gui.Close()

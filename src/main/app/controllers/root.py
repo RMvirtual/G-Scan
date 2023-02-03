@@ -1,5 +1,5 @@
 import wx
-from src.main.app.configurations import ViewerConfiguration
+from src.main.app.configuration import ViewerConfiguration
 from src.main.app.controllers.main_menu import MainMenuController
 from src.main.app.controllers.viewer import ImageViewerController
 from src.main.app.controllers.settings import SettingsController

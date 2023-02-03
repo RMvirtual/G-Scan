@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import wx
 
-from src.main.app.configurations import ViewerConfiguration
+from src.main.app.configuration import ViewerConfiguration
 from src.main.gui.window import Window
 
 

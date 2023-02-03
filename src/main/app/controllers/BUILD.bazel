@@ -7,7 +7,7 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("wxPython"),
-        "//src/main/app/configurations",
+        "//src/main/app/configuration",
         "//src/main/app/interfaces",
         "//src/main/departments",
         "//src/main/documents",
