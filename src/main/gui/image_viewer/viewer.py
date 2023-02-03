@@ -56,7 +56,3 @@ class ImageViewer(wx.Panel):
         result.Add(window=self.file_tree, proportion=1, flag=flags, border=5)
 
         return result
-
-    def set_image(self, image: wx.Image) -> None:
-        self.page_canvas.load_image(image)
-
