@@ -88,6 +88,7 @@ class UserToolbar(wx.Panel):
     @department_options.setter
     def department_options(self, options: list[str]) -> None:
         self.department_box.SetItems(options)
+        self.Layout()
 
     @property
     def document_type(self) -> str:
@@ -104,6 +105,7 @@ class UserToolbar(wx.Panel):
     @document_options.setter
     def document_options(self, new_options: list[str]) -> None:
         self.document_type_box.SetItems(new_options)
+        self.Layout()
 
     def _default_combobox(self) -> wx.ComboBox:
         result = wx.ComboBox(
