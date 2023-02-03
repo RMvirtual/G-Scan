@@ -12,6 +12,9 @@ class PageView(NavCanvas):
         self._initialise_toolbar_extensions()
 
     def _initialise_toolbar_extensions(self) -> None:
+        zoom_to_fit = self.ToolBar.GetToolByPos(5).GetControl()
+        zoom_to_fit.Label = "Fit To Page"
+
         self.delete_button = wx.Button(parent=self.ToolBar, label="Delete")
 
         self.page_no = wx.SpinCtrl(
