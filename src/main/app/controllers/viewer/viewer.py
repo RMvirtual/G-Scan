@@ -76,6 +76,8 @@ class ViewerController:
 
             self._page_view.load_file(files[0])
 
+            # Loading the number of files rather than page numbers
+            # of a specific document here. Needs fixing.
             self._page_view.set_total_pages(len(files))
 
 
