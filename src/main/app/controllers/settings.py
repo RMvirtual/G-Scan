@@ -67,10 +67,10 @@ class SettingsController:
         result.dest_dir = self._gui.directories.dest_directory
 
         result.department = departments.load(
-            full_name=self._gui.defaults.department)
+            full_name=self._gui.defaults.department_box)
 
         result.document_type = documents.load(
-            full_name=self._gui.defaults.department)
+            full_name=self._gui.defaults.department_box)
 
         return result
 
@@ -79,7 +79,7 @@ class SettingsController:
         self._root.window.Layout()
 
     def _refresh_document_options(self) -> None:
-        department = departments.load(full_name=self._gui.defaults.department)
+        department = departments.load(full_name=self._gui.defaults.department_box)
         self._set_document_names(department)
 
     def _set_from_user_settings(self, settings: UserSettings) -> None:
@@ -95,19 +95,19 @@ class SettingsController:
         department_names = departments.load_all().full_names()
         self._gui.defaults.department_options = department_names
 
-        self._gui.defaults.department = settings.department.full_name
+        self._gui.defaults.department_box = settings.department.full_name
 
     def _set_document_type(self, settings: UserSettings) -> None:
         document_names = settings.department.document_types.full_names()
         self._gui.defaults.document_options = document_names
 
-        self._gui.defaults.department = settings.document_type.full_name
+        self._gui.defaults.department_box = settings.document_type.full_name
 
     def _set_document_names(self, department: Department) -> None:
         document_names = department.document_types.full_names()
 
         self._gui.defaults.document_options = document_names
-        self._gui.defaults.department = document_names[0]
+        self._gui.defaults.department_box = document_names[0]
 
     @staticmethod
     def _directory_dialog() -> str or None:
