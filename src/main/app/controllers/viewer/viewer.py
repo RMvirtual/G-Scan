@@ -1,9 +1,10 @@
 import wx
 from src.main.app.configuration import ViewerConfiguration
+from src.main.app.controllers.viewer.page_canvas import PageCanvasController
 from src.main.app.interfaces import RootInterface
-from src.main.gui import ImageViewer
 from src.main.documents import rendering
 from src.main.documents.processing import DocumentToProcess, DocumentWorkload
+from src.main.gui import ImageViewer
 
 
 class ViewerController:
@@ -16,6 +17,9 @@ class ViewerController:
 
         self._initialise_gui()
         self._bind_callbacks()
+
+        self._page_controller = PageCanvasController(
+            root_application=self._root, page_canvas=self._gui.page_canvas)
 
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
@@ -104,4 +108,4 @@ class ViewerController:
 
     def load(self, image_path: str) -> None:
         image = rendering.render(image_path)
-        self._gui.set_image(image)
+        self._page_controller.load_image(image)

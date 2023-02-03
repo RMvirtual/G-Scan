@@ -22,7 +22,7 @@ class ImageViewer(wx.Panel):
         self.Parent.SetMenuBar(self.file_menu)
 
         self.input_bar = UserToolbar(self)
-        self.bitmap_viewer = PageCanvas(self)
+        self.page_canvas = PageCanvas(self)
         self.file_tree = FileTree(self)
         self.bottom_toolbar = BottomToolbar(self)
 
@@ -51,12 +51,12 @@ class ImageViewer(wx.Panel):
         flags = wx.EXPAND|wx.ALL
 
         result.Add(
-            window=self.bitmap_viewer, proportion=3, flag=flags, border=5)
+            window=self.page_canvas, proportion=3, flag=flags, border=5)
 
         result.Add(window=self.file_tree, proportion=1, flag=flags, border=5)
 
         return result
 
     def set_image(self, image: wx.Image) -> None:
-        self.bitmap_viewer.load_image(image)
+        self.page_canvas.load_image(image)
 
