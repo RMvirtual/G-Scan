@@ -1,7 +1,7 @@
+from src.main import departments, user
 from src.main.departments import Department, Departments
-from src.main import departments
 from src.main.documents import Document
-
+from src.main.user import UserSettings
 
 class ViewerConfiguration:
     def __init__(self) -> None:
@@ -43,6 +43,12 @@ def load() -> ViewerConfiguration:
     return result
 
 def load_default() -> ViewerConfiguration:
+    user_defaults = user.load_settings()
+
     result = load()
+    result.scan_directory = user_defaults.scan_dir
+    result.dest_directory = user_defaults.dest_dir
+    result.document_type = user_defaults.document_type
+    result.department = user_defaults.department
 
     return result

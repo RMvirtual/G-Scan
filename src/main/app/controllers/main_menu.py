@@ -27,12 +27,12 @@ class MainMenuController:
 
     def _initialise_department_callbacks(self) -> None:
         panel = self._gui.departments
-        btn_press = wx.EVT_BUTTON
 
-        panel.options.ops.Bind(btn_press, self.on_operations)
-        panel.options.pods.Bind(btn_press, self.on_pods)
-        panel.toolbar.settings.Bind(btn_press, self.on_settings)
-        panel.toolbar.exit.Bind(btn_press, self.on_exit)
+        panel.options.ops.Bind(wx.EVT_BUTTON, self.on_operations)
+        panel.options.pods.Bind(wx.EVT_BUTTON, self.on_pods)
+        panel.options.quick_start.Bind(wx.EVT_BUTTON, self.on_quick_start)
+        panel.toolbar.settings.Bind(wx.EVT_BUTTON, self.on_settings)
+        panel.toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
     def _initialise_operations_callbacks(self) -> None:
         panel = self._gui.operations
@@ -57,6 +57,10 @@ class MainMenuController:
 
         else:
             self.launch_exit()
+
+    def on_quick_start(self, event: wx.EVT_BUTTON) -> None:
+        self._config = configuration.load_default()
+        self.launch_image_viewer(self._config)
 
     def on_operations(self, event: wx.EVT_BUTTON) -> None:
         self._config.department = departments.load(short_code="ops")

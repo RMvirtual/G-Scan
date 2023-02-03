@@ -17,8 +17,8 @@ def load_settings() -> UserSettings:
     result = UserSettings()
     result.scan_dir = contents["scan_directory"]
     result.dest_dir = contents["dest_directory"]
-    result.department = departments.load(contents["department"])
-    result.document_type = documents.load(contents["document_type"])
+    result.department = departments.load(short_code=contents["department"])
+    result.document_type = documents.load(short_code=contents["document_type"])
 
     return result
 
