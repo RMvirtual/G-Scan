@@ -25,13 +25,10 @@ class MainMenu(wx.Panel):
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        flags = wx.EXPAND
+        sizer.Add(window=self.logo, proportion=2, flag=wx.EXPAND)
 
-        sizer.Add(window=self.logo, proportion=2, flag=flags, border=0)
-        sizer.Add(window=self.departments, proportion=3, flag=flags, border=0)
-        sizer.Add(window=self.operations, proportion=3, flag=flags, border=0)
-        sizer.Add(
-            window=self.credit_control, proportion=3, flag=flags, border=0)
+        for panel in self._subpanels:
+            sizer.Add(window=panel, proportion=3, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
 
