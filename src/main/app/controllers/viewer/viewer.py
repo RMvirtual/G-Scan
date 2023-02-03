@@ -52,8 +52,8 @@ class ViewerController:
         )
 
         self._root.window.Bind(
-            event=wx.EVT_MENU, handler=self.on_import_files,
-            source=self._gui.file_menu.import_files
+            event=wx.EVT_MENU, handler=self.on_import_prenamed_files,
+            source=self._gui.file_menu.import_prenamed_files
         )
 
         self._root.window.Bind(
