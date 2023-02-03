@@ -23,8 +23,8 @@ class UserToolbar(wx.Panel):
         self._input_label = wx.StaticText(self, label=label_text)
         self._input_label.SetFont(font)
 
-        self.reference_input = wx.TextCtrl(self)
-        self.reference_input.SetFont(font)
+        self._reference_input = wx.TextCtrl(self)
+        self._reference_input.SetFont(font)
 
     def _initialise_dropdown_boxes(self) -> None:
         font = fonts.font(point_size=9, bold=True)
@@ -65,7 +65,7 @@ class UserToolbar(wx.Panel):
 
         flags = wx.ALL
         sizer.Add(
-            window=self.reference_input, pos=(1, 0), flag=flags, border=border)
+            window=self._reference_input, pos=(1, 0), flag=flags, border=border)
 
         sizer.Add(window=self.submit, pos=(1,1), flag=flags, border=border)
         sizer.Add(window=self.skip, pos=(1,2), flag=flags, border=border)
@@ -79,11 +79,16 @@ class UserToolbar(wx.Panel):
 
         self.SetSizer(sizer)
 
-    def job_ref_input(self) -> str:
-        return self.reference_input.GetValue()
+    @property
+    def reference_input(self) -> str:
+        return self._reference_input.GetValue()
 
-    def clear_job_ref_input(self) -> None:
-        self.reference_input.Clear()
+    @reference_input.setter
+    def reference_input(self, value: str) -> None:
+        self._reference_input.SetValue(value)
+
+    def clear_reference_input(self) -> None:
+        self._reference_input.Clear()
 
     @property
     def department(self) -> str:
@@ -94,6 +99,14 @@ class UserToolbar(wx.Panel):
         self.department_box.SetValue(new_department)
 
     @property
+    def document_type(self) -> str:
+        return self.document_box.GetValue()
+
+    @document_type.setter
+    def document_type(self, new_document_type: str) -> None:
+        self.document_box.SetValue(new_document_type)
+
+    @property
     def department_options(self) -> str:
         return self.department_box.GetItems()
 
@@ -101,14 +114,6 @@ class UserToolbar(wx.Panel):
     def department_options(self, options: list[str]) -> None:
         self.department_box.SetItems(options)
         self.Layout()
-
-    @property
-    def document_type(self) -> str:
-        return self.document_box.GetValue()
-
-    @document_type.setter
-    def document_type(self, new_document_type: str) -> None:
-        self.document_box.SetValue(new_document_type)
 
     @property
     def document_options(self) -> list[str]:
