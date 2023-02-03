@@ -2,6 +2,7 @@ import wx
 from wx.lib.floatcanvas.NavCanvas import NavCanvas
 from wx.lib.floatcanvas import FloatCanvas
 
+
 class PageView(NavCanvas):
     def __init__(self, parent: wx.Panel) -> None:
         super().__init__(
@@ -35,6 +36,9 @@ class PageView(NavCanvas):
             self.ToolBar.AddControl(control=tool)
 
         self.ToolBar.Realize()
+
+    def set_total_pages(self, quantity: int or str) -> None:
+        self.page_quantity.SetValue(f"Total Pages: {quantity}")
 
     def _rename_zoom_to_fit_widget(self) -> None:
         zoom_to_fit = self.ToolBar.GetToolByPos(5).GetControl()

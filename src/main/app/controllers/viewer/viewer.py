@@ -71,10 +71,13 @@ class ViewerController:
 
             self._gui.file_tree.tree.AppendItem(
                 parent=self._gui.file_tree.root_id,
-                text=f"Pending ({len(self._documents.pending)})"
+                text=f"Pending ({len(files)})"
             )
 
             self._page_view.load_file(files[0])
+
+            self._page_view.set_total_pages(len(files))
+
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)

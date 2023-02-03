@@ -9,7 +9,7 @@ class PageViewController:
     def __init__(
             self, root_application: RootInterface, page_canvas: PageView):
         self._root = root_application
-        self._canvas_panel = page_canvas
+        self._panel = page_canvas
         self._canvas = page_canvas.canvas
 
         self._initialise_bindings()
@@ -21,6 +21,9 @@ class PageViewController:
     def load_file(self, image_path: str) -> None:
         image = rendering.render(image_path)
         self.load_image(image)
+
+    def set_total_pages(self, quantity: int or str) -> None:
+        self._panel.set_total_pages(quantity)
 
     def load_image(self, image: wx.Image) -> None:
         bitmap = FloatCanvas.ScaledBitmap(
