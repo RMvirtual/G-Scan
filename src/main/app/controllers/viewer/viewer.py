@@ -6,13 +6,12 @@ from src.main.documents import rendering
 from src.main.documents.processing import DocumentToProcess, DocumentWorkload
 
 
-class ImageViewerController:
+class ViewerController:
     def __init__(
-            self, root_application: RootInterface,
-            configuration: ViewerConfiguration
+            self, root_application: RootInterface, config: ViewerConfiguration
     ) -> None:
         self._root = root_application
-        self._config = configuration
+        self._config = config
         self._documents = DocumentWorkload()
 
         self._initialise_gui()
