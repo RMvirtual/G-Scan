@@ -8,6 +8,26 @@ class Defaults(wx.Panel):
         self._initialise_widgets()
         self._initialise_sizer()
 
+    def _initialise_widgets(self) -> None:
+        self.title = self._title_label("Defaults")
+        self.departments_label = self._default_label("Departments")
+        self.doc_type_label = self._default_label("Document Type")
+        self.department_box = self._default_combobox()
+        self.doc_type_box = self._default_combobox()
+
+    def _initialise_sizer(self) -> None:
+        sizer = wx.GridBagSizer(vgap=15, hgap=30)
+
+        sizer.Add(window=self.title, pos=(0,0), span=(1,2), flag=wx.ALIGN_LEFT)
+        sizer.Add(window=self.departments_label, pos=(1,0), flag=wx.ALIGN_LEFT)
+        sizer.Add(window=self.doc_type_label, pos=(1, 1), flag=wx.ALIGN_LEFT)
+
+        align_centre = wx.ALIGN_CENTRE_HORIZONTAL
+        sizer.Add(window=self.department_box, pos=(2, 0), flag=align_centre)
+        sizer.Add(window=self.doc_type_box, pos=(2, 1), flag=align_centre)
+
+        self.SetSizer(sizer)
+
     @property
     def department(self) -> str:
         return self.department_box.GetValue()
@@ -39,26 +59,6 @@ class Defaults(wx.Panel):
     @document_options.setter
     def document_options(self, new_options: list[str]) -> None:
         self.doc_type_box.SetItems(new_options)
-
-    def _initialise_widgets(self) -> None:
-        self.title = self._title_label("Defaults")
-        self.departments_label = self._default_label("Departments")
-        self.doc_type_label = self._default_label("Document Type")
-        self.department_box = self._default_combobox()
-        self.doc_type_box = self._default_combobox()
-
-    def _initialise_sizer(self) -> None:
-        sizer = wx.GridBagSizer(vgap=15, hgap=30)
-
-        sizer.Add(window=self.title, pos=(0,0), span=(1,2), flag=wx.ALIGN_LEFT)
-        sizer.Add(window=self.departments_label, pos=(1,0), flag=wx.ALIGN_LEFT)
-        sizer.Add(window=self.doc_type_label, pos=(1, 1), flag=wx.ALIGN_LEFT)
-
-        align_centre = wx.ALIGN_CENTRE_HORIZONTAL
-        sizer.Add(window=self.department_box, pos=(2, 0), flag=align_centre)
-        sizer.Add(window=self.doc_type_box, pos=(2, 1), flag=align_centre)
-
-        self.SetSizer(sizer)
 
     def _title_label(self, value: str) -> wx.StaticText:
         result = wx.StaticText(parent=self, label=value)

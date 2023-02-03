@@ -1,7 +1,7 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-from src.main.gui.image_viewer.panels.bitmap_canvas import BitmapViewer
-from src.main.gui.image_viewer.toolbars.input import UserToolbar
+from src.main.gui.image_viewer.panels.page_canvas import PageCanvas
+from src.main.gui.image_viewer.toolbars.user_toolbar import UserToolbar
 from src.main.gui.image_viewer.toolbars.bottom_toolbar import BottomToolbar
 from src.main.gui.image_viewer.panels.file_tree import FileTree
 from src.main.gui.image_viewer.toolbars.file_menu import FileMenu
@@ -22,7 +22,7 @@ class ImageViewer(wx.Panel):
         self.Parent.SetMenuBar(self.file_menu)
 
         self.input_bar = UserToolbar(self)
-        self.bitmap_viewer = BitmapViewer(self)
+        self.bitmap_viewer = PageCanvas(self)
         self.file_tree = FileTree(self)
         self.bottom_toolbar = BottomToolbar(self)
 

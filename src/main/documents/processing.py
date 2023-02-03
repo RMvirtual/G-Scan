@@ -1,8 +1,11 @@
 
 
+
 class DocumentToProcess:
     def __init__(self):
         self.file_path = ""
+        self.tree_item_id = None
+
 
 
 class DocumentWorkload:

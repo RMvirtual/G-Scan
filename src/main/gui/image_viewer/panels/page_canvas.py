@@ -3,7 +3,7 @@ from wx.lib.floatcanvas.NavCanvas import NavCanvas
 from wx.lib.floatcanvas import FloatCanvas
 
 
-class BitmapViewer(NavCanvas):
+class PageCanvas(NavCanvas):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(
             parent=parent,

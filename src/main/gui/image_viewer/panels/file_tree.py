@@ -7,21 +7,28 @@ class FileTree(wx.Panel):
         super(FileTree, self).__init__(parent=parent)
         self._initialise_widgets()
         self._initialise_sizer()
-        self.file_tree.ExpandAll()
+
 
     def _initialise_widgets(self) -> None:
         self._title = wx.StaticText(parent=self, label="Jobs")
         self._title.SetFont(fonts.font(point_size=30, bold=True))
 
         self.upload_to_fcl = wx.Button(parent=self, label="Upload to FCL")
+        self._initialise_tree()
 
+    def _initialise_tree(self) -> None:
         tree_style = (
             wx.TR_HIDE_ROOT|wx.TR_TWIST_BUTTONS|wx.TR_HAS_BUTTONS
             |wx.TR_NO_LINES|wx.TR_MULTIPLE
         )
 
-        self.file_tree = wx.TreeCtrl(parent=self, style=tree_style)
-        self.root_id = self.file_tree.AddRoot(text="All Files")
+        self.tree = wx.TreeCtrl(parent=self, style=tree_style)
+        self.tree.ExpandAll()
+
+        self.root_id = self.tree.AddRoot(text="All Files")
+
+        self.pending = self.tree.AppendItem(
+            parent=self.root_id, text="fPending (0)")
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
@@ -37,9 +44,11 @@ class FileTree(wx.Panel):
         )
 
         sizer.Add(
-            window=self.file_tree, proportion=1,
+            window=self.tree, proportion=1,
             flag=wx.EXPAND|wx.VERTICAL, border=5
         )
 
         self.SetSizer(sizer)
 
+    def add_to_pending(self) -> None:
+        ...

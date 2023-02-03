@@ -70,7 +70,7 @@ class SettingsController:
             full_name=self._gui.defaults.department)
 
         result.document_type = documents.load(
-            full_name=self._gui.defaults.document_type)
+            full_name=self._gui.defaults.department)
 
         return result
 
@@ -101,13 +101,13 @@ class SettingsController:
         document_names = settings.department.document_types.full_names()
         self._gui.defaults.document_options = document_names
 
-        self._gui.defaults.document_type = settings.document_type.full_name
+        self._gui.defaults.department = settings.document_type.full_name
 
     def _set_document_names(self, department: Department) -> None:
         document_names = department.document_types.full_names()
 
         self._gui.defaults.document_options = document_names
-        self._gui.defaults.document_type = document_names[0]
+        self._gui.defaults.department = document_names[0]
 
     @staticmethod
     def _directory_dialog() -> str or None:
