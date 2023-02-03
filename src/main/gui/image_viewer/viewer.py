@@ -1,6 +1,6 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-from src.main.gui.image_viewer.panels.page_canvas import PageCanvas
+from src.main.gui.image_viewer.panels.page_view import PageView
 from src.main.gui.image_viewer.toolbars.user_toolbar import UserToolbar
 from src.main.gui.image_viewer.toolbars.bottom_toolbar import BottomToolbar
 from src.main.gui.image_viewer.panels.file_tree import FileTree
@@ -22,37 +22,29 @@ class ImageViewer(wx.Panel):
         self.Parent.SetMenuBar(self.file_menu)
 
         self.input_bar = UserToolbar(self)
-        self.page_canvas = PageCanvas(self)
+        self.page_view = PageView(self)
         self.file_tree = FileTree(self)
-        self.bottom_toolbar = BottomToolbar(self)
+        self.bottom_bar = BottomToolbar(self)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         flags = wx.EXPAND|wx.LEFT|wx.RIGHT
-        border = 5
+
+        sizer.Add(window=self.input_bar, proportion=0, flag=flags, border=5)
+        sizer.Add(sizer=self._page_sizer(), proportion=1, flag=flags, border=5)
 
         sizer.Add(
-            window=self.input_bar, proportion=0, flag=flags, border=border)
-
-        sizer.Add(
-            sizer=self._bitmap_sizer(),
-            proportion=1, flag=flags, border=border
-        )
-
-        sizer.Add(
-            window=self.bottom_toolbar,
-            proportion=0, flag=flags|wx.BOTTOM, border=border
+            window=self.bottom_bar,
+            proportion=0, flag=flags|wx.BOTTOM, border=5
         )
 
         self.SetSizer(sizer)
 
-    def _bitmap_sizer(self) -> wx.Sizer:
+    def _page_sizer(self) -> wx.Sizer:
         result = wx.BoxSizer(orient=wx.HORIZONTAL)
         flags = wx.EXPAND|wx.ALL
 
-        result.Add(
-            window=self.page_canvas, proportion=3, flag=flags, border=5)
-
+        result.Add(window=self.page_view, proportion=3, flag=flags, border=5)
         result.Add(window=self.file_tree, proportion=1, flag=flags, border=5)
 
         return result

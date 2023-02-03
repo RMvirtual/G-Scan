@@ -1,6 +1,6 @@
 import wx
 from src.main.app.configuration import ViewerConfiguration
-from src.main.app.controllers.viewer.page_canvas import PageCanvasController
+from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main.app.interfaces import RootInterface
 from src.main.documents.processing import DocumentToProcess, DocumentWorkload
 from src.main.gui import ImageViewer
@@ -17,8 +17,8 @@ class ViewerController:
         self._initialise_gui()
         self._bind_callbacks()
 
-        self._page_controller = PageCanvasController(
-            root_application=self._root, page_canvas=self._gui.page_canvas)
+        self._page_view = PageViewController(
+            root_application=self._root, page_canvas=self._gui.page_view)
 
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
@@ -41,7 +41,7 @@ class ViewerController:
         self._gui.input_bar.document_type = current_document
 
     def _bind_callbacks(self) -> None:
-        self._gui.bottom_toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+        self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
         self._bind_file_menu_callbacks()
 
@@ -74,7 +74,7 @@ class ViewerController:
                 text=f"Pending ({len(self._documents.pending)})"
             )
 
-            self._page_controller.load_file(files[0])
+            self._page_view.load_file(files[0])
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)
