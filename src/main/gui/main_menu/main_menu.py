@@ -36,14 +36,16 @@ class MainMenu(wx.Panel):
         self.SetSizer(sizer)
 
     def _switch_to(self, subpanel: wx.Panel) -> None:
-        panels_to_hide = [
-            panel for panel in self._subpanels if panel is not subpanel]
-
-        for panel in panels_to_hide:
-            panel.Hide()
-
+        self._hide_complement_of(subpanel)
         subpanel.Show()
         self.Layout()
+
+    def _hide_complement_of(self, subpanel: wx.Panel) -> None:
+        for panel in self._complement_of(subpanel):
+            panel.Hide()
+
+    def _complement_of(self, subpanel) -> list[wx.Panel]:
+        return filter(lambda panel: panel is not subpanel, self._subpanels)
 
     def view_departments(self) -> None:
         self._switch_to(self.departments)
