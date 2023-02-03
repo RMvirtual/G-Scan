@@ -32,6 +32,15 @@ class MainMenu(wx.Panel):
 
         self.SetSizer(sizer)
 
+    def view_departments(self) -> None:
+        self._switch_to(self.departments)
+
+    def view_ops(self) -> None:
+        self._switch_to(self.operations)
+
+    def view_credit_control(self) -> None:
+        self._switch_to(self.credit_control)
+
     def _switch_to(self, subpanel: wx.Panel) -> None:
         self._hide_complement_of(subpanel)
         subpanel.Show()
@@ -43,12 +52,3 @@ class MainMenu(wx.Panel):
 
     def _complement_of(self, subpanel) -> list[wx.Panel]:
         return filter(lambda panel: panel is not subpanel, self._subpanels)
-
-    def view_departments(self) -> None:
-        self._switch_to(self.departments)
-
-    def view_ops(self) -> None:
-        self._switch_to(self.operations)
-
-    def view_credit_control(self) -> None:
-        self._switch_to(self.credit_control)
