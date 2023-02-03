@@ -31,10 +31,10 @@ class CreditControlOptions(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super().__init__(parent)
 
-        self._initialise_buttons()
+        self._initialise_widgets()
         self._initialise_sizers()
 
-    def _initialise_buttons(self) -> None:
+    def _initialise_widgets(self) -> None:
         self.signed_pod = wx.Button(
             parent=self, label="Standard\nDelivery Note")
 

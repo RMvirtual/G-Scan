@@ -7,6 +7,6 @@
   "pods": {
     "full_name": "Credit Control",
     "short_name": "PODs",
-    "document_types": ["customer_paperwork_signed", "standard_delivery_note", "customer_paperwork"]
+    "document_types": ["customer_paperwork_signed", "standard_delivery_note"]
   }
 }
