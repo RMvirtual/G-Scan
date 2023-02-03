@@ -1,6 +1,7 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 from src.main.app.interfaces import RootInterface
+from src.main.documents import rendering
 from src.main.gui.image_viewer.panels.page_canvas import PageCanvas
 
 
@@ -16,6 +17,10 @@ class PageCanvasController:
     def _initialise_bindings(self) -> None:
         self._canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
         self._canvas.Bind(wx.EVT_LEFT_DCLICK, self.fit_page_to_panel)
+
+    def load_file(self, image_path: str) -> None:
+        image = rendering.render(image_path)
+        self.load_image(image)
 
     def load_image(self, image: wx.Image) -> None:
         bitmap = FloatCanvas.ScaledBitmap(

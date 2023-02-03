@@ -2,7 +2,6 @@ import wx
 from src.main.app.configuration import ViewerConfiguration
 from src.main.app.controllers.viewer.page_canvas import PageCanvasController
 from src.main.app.interfaces import RootInterface
-from src.main.documents import rendering
 from src.main.documents.processing import DocumentToProcess, DocumentWorkload
 from src.main.gui import ImageViewer
 
@@ -75,7 +74,7 @@ class ViewerController:
                 text=f"Pending ({len(self._documents.pending)})"
             )
 
-            self.load(files[0])
+            self._page_controller.load_file(files[0])
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)
@@ -105,7 +104,3 @@ class ViewerController:
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
-
-    def load(self, image_path: str) -> None:
-        image = rendering.render(image_path)
-        self._page_controller.load_image(image)
