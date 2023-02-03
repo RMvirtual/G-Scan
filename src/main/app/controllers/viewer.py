@@ -13,13 +13,28 @@ class ImageViewerController:
     ) -> None:
         self._root = root_application
         self._config = configuration
+        self._documents = DocumentWorkload()
+
         self._initialise_gui()
         self._bind_callbacks()
-        self._documents = DocumentWorkload()
 
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
         self._root.window.set_panel(self._gui)
+
+        self._gui.input_bar.department_options = \
+            self._config.all_departments.full_names()
+
+        self._gui.input_bar.department = self._config.department.full_name
+
+        self._gui.input_bar.document_type = \
+            self._config.document_type.full_name
+
+        """
+        self._gui.input_bar.document_options = \
+            self._config.department.document_types
+        """
+
 
     def _bind_callbacks(self) -> None:
         self._gui.bottom_toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)

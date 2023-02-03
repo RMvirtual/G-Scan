@@ -1,1 +1,1 @@
-from src.main.app.configurations.image_viewer import ImageViewerConfiguration
+from src.main.app.configurations.viewer import ImageViewerConfiguration

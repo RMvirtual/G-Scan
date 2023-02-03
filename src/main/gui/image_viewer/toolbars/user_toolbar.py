@@ -61,7 +61,9 @@ class UserToolbar(wx.Panel):
             window=self.department_box, pos=(1, 4), flag=wx.ALL, border=border)
 
         sizer.Add(
-            window=self.document_type_box, pos=(1, 5), flag=wx.ALL, border=border)
+            window=self.document_type_box,
+            pos=(1, 5), flag=wx.ALL, border=border
+        )
 
         self.SetSizer(sizer)
 
