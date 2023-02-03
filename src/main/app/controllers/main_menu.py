@@ -1,5 +1,5 @@
 import wx
-from src.main.app.configurations import ImageViewerConfiguration
+from src.main.app.configurations import ViewerConfiguration
 from src.main.app.interfaces import RootInterface
 from src.main.gui import MainMenu
 from src.main import departments, documents
@@ -13,7 +13,7 @@ class MainMenuController:
         self._initialise_keyboard_shortcuts()
         self._gui.SetFocus()
 
-        self._viewer_config = ImageViewerConfiguration()
+        self._viewer_config = ViewerConfiguration()
         self._viewer_config.all_departments = departments.load_all()
 
     def _initialise_gui(self) -> None:

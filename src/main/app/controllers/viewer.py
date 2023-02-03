@@ -1,5 +1,5 @@
 import wx
-from src.main.app.configurations import ImageViewerConfiguration
+from src.main.app.configurations import ViewerConfiguration
 from src.main.app.interfaces import RootInterface
 from src.main.gui import ImageViewer
 from src.main.documents import rendering
@@ -9,7 +9,7 @@ from src.main.documents.processing import DocumentToProcess, DocumentWorkload
 class ImageViewerController:
     def __init__(
             self, root_application: RootInterface,
-            configuration: ImageViewerConfiguration
+            configuration: ViewerConfiguration
     ) -> None:
         self._root = root_application
         self._config = configuration
@@ -27,13 +27,11 @@ class ImageViewerController:
 
         self._gui.input_bar.department = self._config.department.full_name
 
+        self._gui.input_bar.document_options = \
+            self._config.department.document_types.full_names()
+
         self._gui.input_bar.document_type = \
             self._config.document_type.full_name
-
-        """
-        self._gui.input_bar.document_options = \
-            self._config.department.document_types
-        """
 
 
     def _bind_callbacks(self) -> None:

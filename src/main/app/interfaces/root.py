@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import wx
 
-from src.main.app.configurations import ImageViewerConfiguration
+from src.main.app.configurations import ViewerConfiguration
 from src.main.gui.window import Window
 
 
@@ -20,7 +20,7 @@ class RootInterface(ABC):
         ...
 
     @abstractmethod
-    def launch_image_viewer(self, config: ImageViewerConfiguration) -> None:
+    def launch_image_viewer(self, config: ViewerConfiguration) -> None:
         ...
 
     @abstractmethod

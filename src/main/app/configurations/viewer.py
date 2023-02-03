@@ -2,7 +2,7 @@ from src.main.departments import Department, Departments
 from src.main.documents import Document
 
 
-class ImageViewerConfiguration:
+class ViewerConfiguration:
     def __init__(self) -> None:
         self.scan_directory: str = ""
         self.dest_directory: str = ""

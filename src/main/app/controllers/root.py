@@ -1,5 +1,5 @@
 import wx
-from src.main.app.configurations import ImageViewerConfiguration
+from src.main.app.configurations import ViewerConfiguration
 from src.main.app.controllers.main_menu import MainMenuController
 from src.main.app.controllers.viewer import ImageViewerController
 from src.main.app.controllers.settings import SettingsController
@@ -17,7 +17,7 @@ class RootApplication(RootInterface):
     def launch_settings(self) -> None:
         SettingsController(root_application=self)
 
-    def launch_image_viewer(self, config: ImageViewerConfiguration) -> None:
+    def launch_image_viewer(self, config: ViewerConfiguration) -> None:
         ImageViewerController(root_application=self, configuration=config)
 
     @property
