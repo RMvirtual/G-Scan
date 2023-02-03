@@ -14,13 +14,18 @@ class PageView(NavCanvas):
     def _initialise_toolbar_extensions(self) -> None:
         self.delete_button = wx.Button(parent=self.ToolBar, label="Delete")
         self.page_no = wx.SpinCtrl(
-            parent=self.ToolBar, value="2",
+            parent=self.ToolBar, value="0",
             style=wx.SP_ARROW_KEYS|wx.SP_HORIZONTAL
         )
 
+        self.page_quantity = wx.TextCtrl(
+            parent=self.ToolBar, value="Total Pages: 0",
+            style=wx.TE_READONLY
+        )
 
-        self.ToolBar.AddControl(control=self.page_no)
-        self.ToolBar.AddControl(control=self.delete_button)
+        for tool in [self.delete_button, self.page_no, self.page_quantity]:
+            self.ToolBar.AddControl(control=tool)
+
         self.ToolBar.Realize()
 
     @property

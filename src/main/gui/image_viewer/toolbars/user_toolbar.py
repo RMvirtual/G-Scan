@@ -39,8 +39,6 @@ class UserToolbar(wx.Panel):
 
     def _initialise_buttons(self) -> None:
         self.submit = wx.Button(self, label="Submit")
-        self.skip = wx.Button(self, label="Skip")
-        self.split = wx.Button(self, label="Split")
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -50,32 +48,34 @@ class UserToolbar(wx.Panel):
 
         sizer.Add(
             window=self._input_label,
-            pos=(0,0), span=(1,4), flag=wx.TOP|label_flags, border=border
+            pos=(0,0), span=(1,2), flag=wx.TOP|label_flags, border=border
         )
 
         sizer.Add(
             window=self._department_label,
-            pos=(0,4), flag=label_flags, border=border
+            pos=(0,2), flag=label_flags, border=border
         )
 
         sizer.Add(
             window=self._document_label,
-            pos=(0,5), flag=label_flags, border=border
+            pos=(0,3), flag=label_flags, border=border
         )
 
         flags = wx.ALL
-        sizer.Add(
-            window=self._reference_input, pos=(1, 0), flag=flags, border=border)
-
-        sizer.Add(window=self.submit, pos=(1,1), flag=flags, border=border)
-        sizer.Add(window=self.skip, pos=(1,2), flag=flags, border=border)
-        sizer.Add(window=self.split, pos=(1,3), flag=flags, border=border)
 
         sizer.Add(
-            window=self.department_box, pos=(1, 4), flag=flags, border=border)
+            window=self._reference_input, pos=(1,0), flag=flags,
+            border=border
+        )
 
         sizer.Add(
-            window=self.document_box, pos=(1, 5), flag=flags, border=border)
+            window=self.submit, pos=(1,1), flag=flags, border=border)
+
+        sizer.Add(
+            window=self.department_box, pos=(1,2), flag=flags, border=border)
+
+        sizer.Add(
+            window=self.document_box, pos=(1,3), flag=flags, border=border)
 
         self.SetSizer(sizer)
 
