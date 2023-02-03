@@ -12,24 +12,32 @@ class UserToolbar(wx.Panel):
         self._initialise_sizer()
 
     def _initialise_widgets(self) -> None:
+        self._initialise_input_box()
+        self._initialise_dropdown_boxes()
+        self._initialise_buttons()
+
+    def _initialise_input_box(self) -> None:
         self._input_label = wx.StaticText(
             self, label="Please enter job reference:")
 
         self._input_label.SetFont(fonts.font(point_size=11))
+        self.reference_input = wx.TextCtrl(self)
+
+    def _initialise_dropdown_boxes(self) -> None:
+        font = fonts.font(point_size=9, bold=True)
 
         self._department_label = wx.StaticText(self, label="Department")
-        self._department_label.SetFont(fonts.font(point_size=9, bold=True))
+        self._department_label.SetFont(font)
+        self.department_box = self._default_combobox()
 
         self._document_type_label = wx.StaticText(self, label="Document Type")
-        self._document_type_label.SetFont(fonts.font(point_size=9, bold=True))
+        self._document_type_label.SetFont(font)
+        self.document_type_box = self._default_combobox()
 
-        self.input = wx.TextCtrl(self)
+    def _initialise_buttons(self) -> None:
         self.submit = wx.Button(self, label="Submit")
         self.skip = wx.Button(self, label="Skip")
         self.split = wx.Button(self, label="Split")
-        self.department_box = self._default_combobox()
-        self.document_type_box = self._default_combobox()
-
 
     def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -52,7 +60,9 @@ class UserToolbar(wx.Panel):
             flag=row_0_flags, border=border
         )
 
-        sizer.Add(window=self.input, pos=(1,0), flag=wx.ALL, border=border)
+        sizer.Add(
+            window=self.reference_input, pos=(1, 0), flag=wx.ALL, border=border)
+
         sizer.Add(window=self.submit, pos=(1,1), flag=wx.ALL, border=border)
         sizer.Add(window=self.skip, pos=(1,2), flag=wx.ALL, border=border)
         sizer.Add(window=self.split, pos=(1,3), flag=wx.ALL, border=border)
@@ -68,10 +78,10 @@ class UserToolbar(wx.Panel):
         self.SetSizer(sizer)
 
     def job_ref_input(self) -> str:
-        return self.input.GetValue()
+        return self.reference_input.GetValue()
 
     def clear_job_ref_input(self) -> None:
-        self.input.Clear()
+        self.reference_input.Clear()
 
     @property
     def department(self) -> str:
