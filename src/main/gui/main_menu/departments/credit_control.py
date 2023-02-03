@@ -35,7 +35,7 @@ class CreditControlOptions(wx.Panel):
             parent=self, label="Standard\nDelivery Note")
 
         self.customer_paperwork_pod = wx.Button(
-            parent=self, label="Customer Paperwork\nPOD")
+            parent=self, label="Customer\nPaperwork POD")
 
         self._buttons = [self.signed_pod, self.customer_paperwork_pod]
         self._initialise_fonts()
