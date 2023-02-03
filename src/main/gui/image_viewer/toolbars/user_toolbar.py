@@ -67,11 +67,11 @@ class UserToolbar(wx.Panel):
 
         self.SetSizer(sizer)
 
-    def clear_job_ref_input(self) -> None:
-        self.input.Clear()
-
     def job_ref_input(self) -> str:
         return self.input.GetValue()
+
+    def clear_job_ref_input(self) -> None:
+        self.input.Clear()
 
     @property
     def department(self) -> str:
@@ -108,9 +108,5 @@ class UserToolbar(wx.Panel):
         self.Layout()
 
     def _default_combobox(self) -> wx.ComboBox:
-        result = wx.ComboBox(
-            parent=self, value="Test1", choices=["Test1", "Test2"],
-            style=wx.CB_READONLY
-        )
-
-        return result
+        return wx.ComboBox(
+            parent=self, value="", choices=[""], style=wx.CB_READONLY)
