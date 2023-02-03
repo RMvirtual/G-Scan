@@ -22,6 +22,7 @@ class MainMenuController:
     def _initialise_callbacks(self) -> None:
         self._initialise_department_callbacks()
         self._initialise_operations_callbacks()
+        self._initialise_credit_control_callbacks()
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
@@ -29,7 +30,7 @@ class MainMenuController:
         panel = self._gui.departments
 
         panel.options.ops.Bind(wx.EVT_BUTTON, self.on_operations)
-        panel.options.pods.Bind(wx.EVT_BUTTON, self.on_pods)
+        panel.options.pods.Bind(wx.EVT_BUTTON, self.on_credit_control)
         panel.options.quick_start.Bind(wx.EVT_BUTTON, self.on_quick_start)
         panel.toolbar.settings.Bind(wx.EVT_BUTTON, self.on_settings)
         panel.toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
@@ -40,7 +41,18 @@ class MainMenuController:
 
         panel.options.cust_pwork.Bind(btn_press, self.on_customer_paperwork)
         panel.options.loading_list.Bind(btn_press, self.on_loading_list)
-        panel.back.Bind(btn_press, self._gui.view_departments)
+        panel.back.Bind(btn_press, self.on_back_to_departments)
+
+    def _initialise_credit_control_callbacks(self) -> None:
+        panel = self._gui.credit_control
+        btn_press = wx.EVT_BUTTON
+
+        panel.options.customer_paperwork_pod.Bind(
+            btn_press, self.on_signed_customer_paperwork)
+
+        panel.options.signed_pod.Bind(btn_press, self.on_signed_pod)
+
+        panel.back.Bind(btn_press, self.on_back_to_departments)
 
     def _initialise_keyboard_shortcuts(self) -> None:
         f4_shortcut_id = wx.NewId()
@@ -58,6 +70,10 @@ class MainMenuController:
         else:
             self.launch_exit()
 
+    def on_back_to_departments(self, event: wx.EVT_BUTTON) -> None:
+        self._gui.view_departments()
+        self._config.department = None
+
     def on_quick_start(self, event: wx.EVT_BUTTON) -> None:
         self._config = configuration.load_default()
         self.launch_image_viewer(self._config)
@@ -66,9 +82,9 @@ class MainMenuController:
         self._config.department = departments.load(short_code="ops")
         self._gui.view_ops()
 
-    def on_pods(self, event: wx.EVT_BUTTON) -> None:
+    def on_credit_control(self, event: wx.EVT_BUTTON) -> None:
         self._config.department = departments.load(short_code="pods")
-        self._gui.view_ops()
+        self._gui.view_credit_control()
 
     def on_exit(self, event: wx.EVT_BUTTON) -> None:
         self.launch_exit()
@@ -84,6 +100,18 @@ class MainMenuController:
 
     def on_loading_list(self, event: wx.EVT_BUTTON) -> None:
         self._config.document_type = documents.load(short_code="loading_list")
+        self.launch_image_viewer(self._config)
+
+    def on_signed_pod(self, event: wx.EVT_BUTTON) -> None:
+        self._config.document_type = documents.load(
+            short_code="standard_delivery_note")
+
+        self.launch_image_viewer(self._config)
+
+    def on_signed_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
+        self._config.document_type = documents.load(
+            short_code="customer_paperwork_signed")
+
         self.launch_image_viewer(self._config)
 
     def on_close(self, event: wx.EVT_BUTTON = None) -> None:
