@@ -12,9 +12,7 @@ class PageView(NavCanvas):
         self._initialise_toolbar_extensions()
 
     def _initialise_toolbar_extensions(self) -> None:
-        zoom_to_fit = self.ToolBar.GetToolByPos(5).GetControl()
-        zoom_to_fit.Label = "Fit To Page"
-
+        self._rename_zoom_to_fit_widget()
         self.delete_button = wx.Button(parent=self.ToolBar, label="Delete")
 
         self.page_no = wx.SpinCtrl(
@@ -23,9 +21,7 @@ class PageView(NavCanvas):
         )
 
         self.page_quantity = wx.TextCtrl(
-            parent=self.ToolBar, value="Total Pages: 0",
-            style=wx.TE_READONLY
-        )
+            parent=self.ToolBar, value="Total Pages: 0", style=wx.TE_READONLY)
 
         self.extract_pages = wx.Button(
             parent=self.ToolBar, label="Extract Pages")
@@ -39,6 +35,10 @@ class PageView(NavCanvas):
             self.ToolBar.AddControl(control=tool)
 
         self.ToolBar.Realize()
+
+    def _rename_zoom_to_fit_widget(self) -> None:
+        zoom_to_fit = self.ToolBar.GetToolByPos(5).GetControl()
+        zoom_to_fit.Label = "Fit To Page"
 
     @property
     def canvas(self) -> FloatCanvas:
