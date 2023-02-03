@@ -9,11 +9,18 @@ class PageView(NavCanvas):
             BackgroundColor="DARK SLATE BLUE"
         )
 
-        self._initialise_additional_toolbar_buttons()
+        self._initialise_toolbar_extensions()
 
-    def _initialise_additional_toolbar_buttons(self) -> None:
+    def _initialise_toolbar_extensions(self) -> None:
         self.delete_button = wx.Button(parent=self.ToolBar, label="Delete")
-        self.ToolBar.AddControl(control=self.delete_button, label="Test")
+        self.page_no = wx.SpinCtrl(
+            parent=self.ToolBar, value="2",
+            style=wx.SP_ARROW_KEYS|wx.SP_HORIZONTAL
+        )
+
+
+        self.ToolBar.AddControl(control=self.page_no)
+        self.ToolBar.AddControl(control=self.delete_button)
         self.ToolBar.Realize()
 
     @property
