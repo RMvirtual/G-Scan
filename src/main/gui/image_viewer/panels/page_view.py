@@ -23,7 +23,15 @@ class PageView(NavCanvas):
             style=wx.TE_READONLY
         )
 
-        for tool in [self.delete_button, self.page_no, self.page_quantity]:
+        self.extract_pages = wx.Button(
+            parent=self.ToolBar, label="Extract Pages")
+
+        additional_tools = [
+            self.delete_button, self.page_no, self.page_quantity,
+            self.extract_pages
+        ]
+
+        for tool in additional_tools:
             self.ToolBar.AddControl(control=tool)
 
         self.ToolBar.Realize()
