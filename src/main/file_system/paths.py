@@ -2,6 +2,12 @@ import os
 from src.main.file_system import runfiles
 
 
+def app_data_directory() -> str:
+    """Local AppData path folder for G-Scan's root data folder."""
+
+    return os.environ["LOCALAPPDATA"] + "\\G-Scan"
+
+
 def user_settings_path() -> str:
     """Local AppData path for G-Scan's user settings json file."""
 
@@ -15,11 +21,6 @@ def departments_path() -> str:
 def document_types_path() -> str:
     return config_directory() + "\\document_types.json"
 
-
-def app_data_directory() -> str:
-    """Local AppData path folder for G-Scan's root data folder."""
-
-    return os.environ["LOCALAPPDATA"] + "\\G-Scan"
 
 
 def config_directory() -> str:

@@ -11,7 +11,7 @@ def install_app_data() -> None:
 
 def make_app_data_directory():
     if not os.path.exists(file_system.app_data_directory()):
-        os.mkdir(app_data_path)
+        os.mkdir(file_system.app_data_directory())
 
 
 def empty_app_data():
