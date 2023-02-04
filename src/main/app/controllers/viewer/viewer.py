@@ -1,6 +1,7 @@
 import wx
 from src.main.app.configuration import ViewerConfiguration
 from src.main.app.controllers.viewer.page_view import PageViewController
+from src.main.app.controllers.viewer.document import DocumentController
 from src.main.app.interfaces import RootInterface
 from src.main.documents.processing import DocumentToProcess, DocumentWorkload
 from src.main.gui import ImageViewer
@@ -12,6 +13,7 @@ class ViewerController:
     ) -> None:
         self._root = root_application
         self._config = config
+        self._document_controller = DocumentController()
         self._documents = DocumentWorkload()
 
         self._initialise_gui()
