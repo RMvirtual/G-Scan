@@ -13,7 +13,6 @@ class ViewerController:
     ) -> None:
         self._root = root_application
         self._config = config
-        self._document_controller = DocumentController()
         self._documents = DocumentWorkload()
 
         self._initialise_gui()
@@ -21,6 +20,9 @@ class ViewerController:
 
         self._page_view = PageViewController(
             root_application=self._root, page_canvas=self._gui.page_view)
+
+        self._document_controller = DocumentController(gui=self._gui.file_tree)
+
 
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
@@ -68,17 +70,10 @@ class ViewerController:
             print("No files returned")
 
         else:
-            for file in files:
-                self._documents.pending.append(file)
-
-            self._gui.file_tree.tree.AppendItem(
-                parent=self._gui.file_tree.root_id,
-                text=f"Pending ({len(files)})"
-            )
-
+            self._document_controller.add_documents(file_paths=files)
             self._page_view.load_file(files[0])
 
-            # Loading the number of files rather than page numbers
+                # Loading the number of files rather than page numbers
             # of a specific document here. Needs fixing.
             self._page_view.set_total_pages(len(files))
 
