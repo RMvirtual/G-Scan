@@ -12,3 +12,4 @@ class DocumentWorkload:
     def __init__(self):
         self.pending: list[DocumentToProcess] = []
         self.processed: list[DocumentToProcess] = []
+
