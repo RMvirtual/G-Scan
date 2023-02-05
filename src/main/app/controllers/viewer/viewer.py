@@ -13,7 +13,6 @@ class ViewerController:
     ) -> None:
         self._root = root_application
         self._config = config
-        self._documents = DocumentWorkload()
 
         self._initialise_gui()
         self._bind_callbacks()
@@ -21,7 +20,7 @@ class ViewerController:
         self._page_view = PageViewController(
             root_application=self._root, page_canvas=self._gui.page_view)
 
-        self._document_controller = DocumentController(gui=self._gui.file_tree)
+        self._documents = DocumentController(gui=self._gui.file_tree)
 
 
     def _initialise_gui(self) -> None:
@@ -69,14 +68,14 @@ class ViewerController:
         if not files:
             print("No files returned")
 
-        else:
-            self._document_controller.add_documents(file_paths=files)
-            self._page_view.load_file(files[0])
+            return
 
-                # Loading the number of files rather than page numbers
-            # of a specific document here. Needs fixing.
-            self._page_view.set_total_pages(len(files))
+        self._documents.add_files(file_paths=files)
+        self._page_view.load_file(files[0])
 
+        # Loading the number of files rather than page numbers
+        # of a specific document here. Needs fixing.
+        self._page_view.set_total_pages(len(files))
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)

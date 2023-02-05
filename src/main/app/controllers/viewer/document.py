@@ -7,11 +7,25 @@ class DocumentController:
         self._gui = gui
         self._documents = DocumentWorkload()
 
-    def add_documents(self, file_paths: list[str]) -> None:
+    def add_files(self, file_paths: list[str]) -> None:
         for file_path in file_paths:
-            self._documents.pending.append(file_path)
+            self.add_file(file_path=file_path)
 
-        self._gui.tree.AppendItem(
+    def add_file(self, file_path: str) -> None:
+        self.add_pending(document=self._document(file_path))
+
+    def add_pending(self, document: DocumentToProcess) -> None:
+        self._documents.pending.append(document)
+
+        document.tree_item_id = self._gui.tree.AppendItem(
             parent=self._gui.root_id,
-            text=f"Pending ({len(file_paths)})"
+            text=f"Pending ({document.file_path})"
         )
+
+    @staticmethod
+    def _document(file_path: str) -> DocumentToProcess:
+        result = DocumentToProcess()
+        result.file_path = file_path
+        result.tree_item_id = None
+
+        return result

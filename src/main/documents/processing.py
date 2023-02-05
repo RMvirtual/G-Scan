@@ -1,11 +1,11 @@
-
+import wx
 
 
 class DocumentToProcess:
     def __init__(self):
         self.file_path = ""
-        self.tree_item_id = None
-
+        self.parent_item_id = wx.TreeItemId()
+        self.tree_item_id = wx.TreeItemId()
 
 
 class DocumentWorkload:
