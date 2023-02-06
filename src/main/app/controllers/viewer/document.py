@@ -25,6 +25,10 @@ class DocumentController:
 
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
+        self._page_view.bind_extract_pages(callback=self.on_extract_pages)
+
+    def on_extract_pages(self, event: wx.EVT_BUTTON) -> None:
+        print("Extract Pages")
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
         print("Delete")

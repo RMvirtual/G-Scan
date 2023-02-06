@@ -40,3 +40,6 @@ class PageViewController:
 
     def bind_delete(self, callback) -> None:
         self.panel.delete_button.Bind(event=wx.EVT_BUTTON, handler=callback)
+
+    def bind_extract_pages(self, callback) -> None:
+        self.panel.extract_pages.Bind(event=wx.EVT_BUTTON, handler=callback)
