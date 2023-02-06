@@ -31,7 +31,9 @@ class DocumentController:
             item = selections[0]
 
             node = self.pending_tree.node(node_id=item)
-            self._page_view.load_image(node.images[0])
+
+            if node.is_leaf_node():
+                self._page_view.load_image(node.images[0])
 
 
         elif len(selections) > 1:
