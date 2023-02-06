@@ -66,12 +66,11 @@ class ViewerController:
         files = self._request_files_to_import()
 
         if not files:
-            print("No files returned")
-
             return
 
-        self._documents.add_files(file_paths=files)
-        self._page_view.load_file(files[0])
+        self._documents.add_pending_files(file_paths=files)
+        head_document = self._documents.pending.head_document()
+        self._page_view.load_image(head_document.images[0])
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)
