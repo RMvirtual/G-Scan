@@ -27,9 +27,6 @@ class FileTree(wx.Panel):
 
         self.root_id = self.tree.AddRoot(text="All Files")
 
-        self.pending = self.tree.AppendItem(
-            parent=self.root_id, text="fPending (0)")
-
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
