@@ -14,7 +14,7 @@ class PendingTree:
 
     def _initialise_root(self) -> None:
         self.root = PendingRoot(tree=self)
-        self.absolute_root.control.Expand(item=self.root.node_id)
+        self.expand_all()
 
     def add_files(self, paths: list[str]) -> list[PendingLeaf]:
         return [self.add_file(path) for path in paths]
@@ -30,6 +30,10 @@ class PendingTree:
             item=self.root.node_id,
             text=f"Pending Items ({len(self.root.child_nodes)})"
         )
+
+    def expand_all(self) -> None:
+        self.absolute_root.control.Expand(item=self.root.node_id)
+
 
 
 class PendingRoot(AbstractNode):
@@ -50,6 +54,8 @@ class PendingRoot(AbstractNode):
             parent=self.node_id, text=leaf.file_name)
 
         self.child_nodes.append(leaf)
+        self.tree.expand_all()
+
 
 
 class PendingLeaf(AbstractNode):

@@ -41,7 +41,6 @@ class DocumentController:
 
         if files:
             results = self.pending_tree.add_files(paths=files)
-
             self._page_view.load_image(results[0].images[0])
 
     def import_as(self) -> None:
