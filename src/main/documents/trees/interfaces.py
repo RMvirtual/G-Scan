@@ -101,5 +101,9 @@ class PendingLeaf(DocumentNode):
     def __init__(self, parent_node: PendingRoot, file_path: str):
         super().__init__(parent_node=parent_node)
 
-        self.file_name = file_path
+        self.file_path = file_path
         self.images = render_images(file_path=file_path)
+
+    @property
+    def file_name(self) -> str:
+        return ntpath.basename(self.file_path)

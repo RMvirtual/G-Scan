@@ -37,7 +37,7 @@ class PdfWriter(PyPDF2.PdfFileWriter):
 
     def save_image_as_png_to_temp_directory(
             self, directory_item: DirectoryItem) -> str:
-        file_name = directory_item.file_name()
+        file_name = directory_item.file_path()
         temp_dir = file_system.temp_directory()
 
         with wand.image.Image(

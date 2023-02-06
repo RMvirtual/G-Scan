@@ -27,25 +27,9 @@ class DocumentTrees:
             parent_node=self.pending_root, file_path=file_path)
 
         new_leaf.node_id = self.tree_control.AppendItem(
-            parent=new_leaf.parent_node.node_id, text=file_path)
+            parent=new_leaf.parent_node.node_id, text=new_leaf.file_name)
 
         return new_leaf
-
-        file_name = ntpath.basename(file_path)
-        tree_item = wx.TreeItemId()
-        images = render_images(file_path)
-
-        result = PendingDocument(file_path=file_path)
-
-        result.tree_item = self.tree_control.AppendItem(
-            parent=self.pending_root.node_id,
-            text=f"{result.file_name} ({len(result)})"
-        )
-
-        self.tree_control.Expand(self.pending_root)
-        # self.pending.append(result)
-
-        return result
 
     def _refresh_count(self) -> None:
         self.tree_control.SetItemText(
