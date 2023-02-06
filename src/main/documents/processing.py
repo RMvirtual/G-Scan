@@ -43,20 +43,8 @@ class PendingDocuments:
     def tail_document(self) -> PendingDocument:
         return self.pending[-1] if self.pending else None
 
+    def from_file_name(self, file_name: str) -> PendingDocument:
+        matching_items = filter(
+            lambda x: x.original_path == file_name, self.pending)
 
-class ProcessedDocuments:
-    def __init__(self):
-        ...
-
-class DocumentToProcess:
-    def __init__(self):
-        self.file_path = ""
-        self.parent_item_id = wx.TreeItemId()
-        self.tree_item_id = wx.TreeItemId()
-
-
-class DocumentWorkload:
-    def __init__(self):
-        self.pending: list[DocumentToProcess] = []
-        self.processed: list[DocumentToProcess] = []
-
+        return next(matching_items)

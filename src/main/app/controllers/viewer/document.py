@@ -1,6 +1,4 @@
-from src.main.documents.processing import (
-    DocumentToProcess, DocumentWorkload, PendingDocument, PendingDocuments)
-
+from src.main.documents.processing import PendingDocument, PendingDocuments
 from src.main.gui.image_viewer.panels import FileTree
 
 
@@ -15,11 +13,3 @@ class DocumentController:
 
     def add_pending_file(self, file_path: str) -> None:
         self.pending.add_file(file_path=file_path)
-
-    @staticmethod
-    def _document(file_path: str) -> DocumentToProcess:
-        result = DocumentToProcess()
-        result.file_path = file_path
-        result.tree_item_id = None
-
-        return result
