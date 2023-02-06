@@ -20,11 +20,10 @@ class PendingTree:
         if node_id == self.root.node_id:
             return self.root
 
-        child_nodes = self.root.child_nodes
+        node = self.root.node(node_id)
 
-        for node in child_nodes:
-            if node_id == node.node_id:
-                return node
+        if node:
+            return node
 
         raise ValueError("Node not found.")
 
@@ -62,6 +61,13 @@ class PendingRoot(AbstractNode):
 
     def is_child_node(self) -> bool:
         return False
+
+    def node(self, node_id) -> AbstractNode or None:
+        for node in self.child_nodes:
+            if node_id == node.node_id:
+                return node
+
+        return None
 
     def append(self, leaf: PendingLeaf) -> None:
         leaf.node_id = self.tree.absolute_root.control.AppendItem(

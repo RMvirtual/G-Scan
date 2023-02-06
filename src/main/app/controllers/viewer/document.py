@@ -28,11 +28,11 @@ class DocumentController:
         selections = self._gui.file_tree.tree.GetSelections()
 
         if len(selections) == 1:
-            print("One Item Selected")
             item = selections[0]
 
             node = self.pending_tree.node(node_id=item)
-            print(node)
+            self._page_view.load_image(node.images[0])
+
 
         elif len(selections) > 1:
             print("Multiple items selected.")
