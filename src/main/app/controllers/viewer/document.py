@@ -6,12 +6,9 @@ from src.main.app.controllers.viewer.page_view import PageViewController
 
 
 class DocumentController:
-    def __init__(self, root_application, gui: ImageViewer):
+    def __init__(self, gui: ImageViewer):
         self._gui = gui
-
-        self._page_view = PageViewController(
-            root_application=root_application, page_canvas=self._gui.page_view)
-
+        self._page_view = PageViewController(page_canvas=self._gui.page_view)
         self.pending = PendingDocuments(self._gui.file_tree.tree)
         self._bind_callbacks()
 

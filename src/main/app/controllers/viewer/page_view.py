@@ -1,14 +1,11 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-from src.main.app.interfaces import RootInterface
 from src.main.documents import rendering
 from src.main.gui.image_viewer.panels.page_view import PageView
 
 
 class PageViewController:
-    def __init__(
-            self, root_application: RootInterface, page_canvas: PageView):
-        self._root = root_application
+    def __init__(self, page_canvas: PageView):
         self._panel = page_canvas
         self._canvas = page_canvas.canvas
 

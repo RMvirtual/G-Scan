@@ -15,8 +15,7 @@ class ViewerController:
         self._initialise_gui()
         self._bind_callbacks()
 
-        self._documents = DocumentController(
-            root_application=self._root, gui=self._gui)
+        self._documents = DocumentController(gui=self._gui)
 
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
@@ -78,4 +77,3 @@ class ViewerController:
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
-
