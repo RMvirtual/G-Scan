@@ -23,11 +23,11 @@ class DocumentController:
         self._gui.file_tree.tree.Bind(
             event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_file_tree_selection)
 
-        self._bind_page_view_callbacks()
+        self._page_view.bind_page_no(callback=self.on_page_no)
+        self._page_view.bind_delete(callback=self.on_delete)
 
-    def _bind_page_view_callbacks(self) -> None:
-        self._page_view.panel.page_no.Bind(
-            event=wx.EVT_SPINCTRL, handler=self.on_page_no)
+    def on_delete(self, event: wx.EVT_BUTTON) -> None:
+        print("Delete")
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
         if not self._node_to_view:

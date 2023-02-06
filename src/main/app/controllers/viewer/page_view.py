@@ -34,3 +34,9 @@ class PageViewController:
 
     def fit_page_to_panel(self, _event: wx.EVT_LEFT_DCLICK = None):
         self.canvas.ZoomToBB()
+
+    def bind_page_no(self, callback) -> None:
+        self.panel.page_no.Bind(event=wx.EVT_SPINCTRL, handler=callback)
+
+    def bind_delete(self, callback) -> None:
+        self.panel.delete_button.Bind(event=wx.EVT_BUTTON, handler=callback)
