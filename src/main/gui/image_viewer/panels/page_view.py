@@ -39,6 +39,8 @@ class PageView(NavCanvas):
 
     def set_total_pages(self, quantity: int or str) -> None:
         self.page_quantity.SetValue(f"Total Pages: {quantity}")
+        self.page_no.SetMin(1)
+        self.page_no.SetMax(quantity)
 
     def _rename_zoom_to_fit_widget(self) -> None:
         zoom_to_fit = self.ToolBar.GetToolByPos(5).GetControl()
