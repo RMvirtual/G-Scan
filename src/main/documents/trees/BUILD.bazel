@@ -2,12 +2,11 @@ load("@python_third_party//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library")
 
 py_library(
-    name = "documents",
+    name = "trees",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
-        "//src/main/documents/rendering",
-        "//src/main/documents/trees",
-        "//src/main/documents/types",
+        requirement("pymupdf"),
+        "//src/main/file_system",
     ],
 )

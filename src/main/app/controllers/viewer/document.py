@@ -1,6 +1,6 @@
 import wx
-from src.main.documents.document_tree import (
-    PendingDocument, PendingDocuments, DocumentTree)
+from src.main.documents.trees.document_tree import (
+    PendingDocument, PendingDocuments, DocumentTrees)
 
 from src.main.gui import ImageViewer
 from src.main.app.controllers.viewer.page_view import PageViewController
@@ -11,7 +11,7 @@ class DocumentController:
     def __init__(self, gui: ImageViewer):
         self._gui = gui
         self._page_view = PageViewController(page_canvas=self._gui.page_view)
-        self.document_tree = DocumentTree(self._gui.file_tree.tree)
+        self.document_tree = DocumentTrees(self._gui.file_tree.tree)
 
         self._bind_callbacks()
 
@@ -37,8 +37,10 @@ class DocumentController:
         files = file_system.request_files_to_import()
 
         if files:
-            results = self.document_tree.add_pending(file_path=path)
-            self._page_view.load_image(results[0].images[0])
+            results = self.document_tree.add_pending_files(paths=files)
+
+            # self._page_view.load_image(results[0].images[0])
+            self.document_tree.tree_control.ExpandAll()
 
     def import_as(self) -> None:
         print("Michelin Mode")
