@@ -1,6 +1,5 @@
 import wx
-from src.main.documents.trees.document_tree import (
-    PendingDocument, PendingDocuments, DocumentTrees)
+from src.main.documents.trees.document_tree import DocumentTrees
 
 from src.main.gui import ImageViewer
 from src.main.app.controllers.viewer.page_view import PageViewController
@@ -39,7 +38,7 @@ class DocumentController:
         if files:
             results = self.document_tree.add_pending_files(paths=files)
 
-            # self._page_view.load_image(results[0].images[0])
+            self._page_view.load_image(results[0].images[0])
             self.document_tree.tree_control.ExpandAll()
 
     def import_as(self) -> None:

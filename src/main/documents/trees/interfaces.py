@@ -32,6 +32,25 @@ class AbstractNode:
         return not self.child_nodes
 
 
+class PendingRoot(AbstractNode):
+    def __init__(self, tree_control: wx.TreeCtrl, text: str):
+        super().__init__(parent=None)
+        self.tree_control = tree_control
+
+        self.node_id = self.tree_control.AppendItem(
+            parent=tree_control.GetRootItem(), text=text)
+
+    def is_root(self) -> bool:
+        return True
+
+    def is_child_node(self) -> bool:
+        return False
+
+    def append_child(self, leaf: PendingLeaf) -> None:
+        self.child_nodes.append(leaf)
+
+
+
 class DocumentRoot(AbstractNode):
     def __init__(self, tree_control: wx.TreeCtrl, text: str):
         super().__init__(parent=None)
@@ -48,6 +67,7 @@ class DocumentRoot(AbstractNode):
 
     def append_child(self) -> AbstractNode:
         ...
+
 
 class DocumentNode(AbstractNode):
     def __init__(self, parent_node: AbstractNode):
@@ -78,5 +98,8 @@ class DocumentLeaf(DocumentNode):
 
 
 class PendingLeaf(DocumentNode):
-    def __init__(self, parent_node: AbstractNode):
+    def __init__(self, parent_node: PendingRoot, file_path: str):
         super().__init__(parent_node=parent_node)
+
+        self.file_name = file_path
+        self.images = render_images(file_path=file_path)
