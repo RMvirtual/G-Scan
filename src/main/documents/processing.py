@@ -1,3 +1,4 @@
+import ntpath
 import wx
 from src.main.documents.rendering import render_images
 
@@ -12,7 +13,7 @@ class PendingDocument:
         return len(self.images)
 
     def file_name(self) -> str:
-        return "foo"
+        return ntpath.basename(self.original_path)
 
 
 class PendingDocuments:
