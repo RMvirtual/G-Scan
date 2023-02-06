@@ -61,16 +61,20 @@ class ViewerController:
         self._root.window.Bind(
             wx.EVT_MENU, self.on_quit, self._gui.file_menu.quit)
 
+    def _bind_file_tree_callbacks(self) -> None:
+        ...
+
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         files = self._request_files_to_import()
 
         if not files:
             return
 
-        self._documents.add_pending_files(file_paths=files)
+        self._process_files(files)
 
-        first_appended = self._documents.pending.from_file_name(files[0])
-        self._page_view.load_image(first_appended.images[0])
+    def _process_files(self, file_paths: list[str]) -> None:
+        result = self._documents.add_pending_files(paths=file_paths)
+        self._page_view.load_image(result[0].images[0])
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)

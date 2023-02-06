@@ -5,15 +5,12 @@ from src.main.documents.rendering import render_images
 
 class PendingDocument:
     def __init__(self, file_path: str):
-        self.original_path = file_path
+        self.file_name = ntpath.basename(file_path)
         self.tree_item = wx.TreeItemId()
-        self.images = render_images(self.original_path)
+        self.images = render_images(file_path)
 
     def __len__(self) -> int:
         return len(self.images)
-
-    def file_name(self) -> str:
-        return ntpath.basename(self.original_path)
 
 
 class PendingDocuments:
@@ -24,23 +21,19 @@ class PendingDocuments:
         self.pending_category: wx.TreeItemId = self.tree.AppendItem(
             parent=self.tree.GetRootItem(), text="")
 
-    def __len__(self) -> int:
-        return len(self.pending)
-
-    def __getitem__(self, index: int) -> PendingDocument:
-        return self.pending[index]
-
-    def add_pending(self, file_path: str) -> None:
+    def add_pending(self, file_path: str) -> PendingDocument:
         result = PendingDocument(file_path=file_path)
 
         result.tree_item = self.tree.AppendItem(
             parent=self.pending_category,
-            text=result.file_name()
+            text=result.file_name
         )
 
         self.tree.Expand(self.pending_category)
         self.pending.append(result)
         self.refresh_count()
+
+        return result
 
     def refresh_count(self) -> None:
         self.tree.SetItemText(
@@ -56,6 +49,13 @@ class PendingDocuments:
 
     def from_file_name(self, file_name: str) -> PendingDocument:
         matching_items = filter(
-            lambda x: x.original_path == file_name, self.pending)
+            lambda x: x.file_name == file_name, self.pending)
 
         return next(matching_items)
+
+    def __len__(self) -> int:
+        return len(self.pending)
+
+    def __getitem__(self, index: int) -> PendingDocument:
+        return self.pending[index]
+
