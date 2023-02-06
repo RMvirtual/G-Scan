@@ -31,15 +31,8 @@ class PendingDocuments:
 
         self.tree.Expand(self.pending_category)
         self.pending.append(result)
-        self.refresh_count()
 
         return result
-
-    def refresh_count(self) -> None:
-        self.tree.SetItemText(
-            item=self.pending_category,
-            text=f"Pending Items ({len(self.pending)})"
-        )
 
     def head_document(self) -> PendingDocument:
         return self.pending[0] if self.pending else None
