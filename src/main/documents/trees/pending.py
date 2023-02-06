@@ -16,16 +16,12 @@ class PendingTree:
         self.root = PendingRoot(tree=self)
         self.expand_all()
 
-    def node(self, node_id: wx.TreeItemId) -> AbstractNode:
-        if node_id == self.root.node_id:
+    def find_node(self, node_id: wx.TreeItemId) -> AbstractNode:
+        if self.root.is_node(node_id):
             return self.root
 
-        node = self.root.node(node_id)
+        return self.root.find_node(node_id)
 
-        if node:
-            return node
-
-        raise ValueError("Node not found.")
 
     def add_files(self, paths: list[str]) -> list[PendingLeaf]:
         return [self.add_file(path) for path in paths]
@@ -47,8 +43,6 @@ class PendingTree:
         )
 
 
-
-
 class PendingRoot(AbstractNode):
     def __init__(self, tree: PendingTree):
         super().__init__(parent=None)
@@ -61,13 +55,6 @@ class PendingRoot(AbstractNode):
 
     def is_child_node(self) -> bool:
         return False
-
-    def node(self, node_id) -> AbstractNode or None:
-        for node in self.child_nodes:
-            if node_id == node.node_id:
-                return node
-
-        return None
 
     def append(self, leaf: PendingLeaf) -> None:
         leaf.node_id = self.tree.absolute_root.control.AppendItem(

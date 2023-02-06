@@ -30,7 +30,10 @@ class DocumentController:
         if len(selections) == 1:
             item = selections[0]
 
-            node = self.pending_tree.node(node_id=item)
+            node = self.pending_tree.find_node(node_id=item)
+
+            if not node:
+                raise ValueError("No matching node found.")
 
             if node.is_leaf_node():
                 self._page_view.load_image(node.images[0])

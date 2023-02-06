@@ -24,6 +24,20 @@ class AbstractNode:
     def node_id(self, new_node_id) -> None:
         self._node_id = new_node_id
 
+    def is_node(self, node_id: wx.TreeItemId) -> bool:
+        return self._node_id == node_id
+
+    def find_node(self, node_id: wx.TreeItemId) -> AbstractNode or None:
+        for child in self.child_nodes:
+            if child.is_node(node_id):
+                return child
+
+            if child.is_parent_node():
+                return child.find_node(node_id)
+
+        return None
+
+
     def is_root(self) -> bool:
         raise NotImplementedError()
 
