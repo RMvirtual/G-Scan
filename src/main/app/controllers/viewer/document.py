@@ -40,10 +40,9 @@ class DocumentController:
         files = file_system.request_files_to_import()
 
         if files:
-            results = self.pending_tree.add_pending_files(paths=files)
+            results = self.pending_tree.add_files(paths=files)
 
             self._page_view.load_image(results[0].images[0])
-            self.tree_root.control.ExpandAll()
 
     def import_as(self) -> None:
         print("Michelin Mode")

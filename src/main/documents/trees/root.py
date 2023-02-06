@@ -9,3 +9,7 @@ class TreeRoot:
     @property
     def node_id(self) -> wx.TreeItemId:
         return self._node_id
+
+    def append_subtree(self, text: str):
+        return self.control.AppendItem(parent=self._node_id, text=text)
+

@@ -10,34 +10,34 @@ from src.main.documents.trees.root import TreeRoot
 class PendingTree:
     def __init__(self, absolute_root: TreeRoot) -> None:
         self.absolute_root = absolute_root
-        self.root = PendingRoot(absolute_root=self.absolute_root)
+        self._initialise_root()
+
+    def _initialise_root(self) -> None:
+        self.root = PendingRoot(tree=self)
         self.absolute_root.control.Expand(item=self.root.node_id)
 
-    def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
-        return [self.add_pending(path) for path in paths]
+    def add_files(self, paths: list[str]) -> list[PendingLeaf]:
+        return [self.add_file(path) for path in paths]
 
-    def add_pending(self, file_path: str) -> PendingLeaf:
-        new_leaf = PendingLeaf(parent_node=self.root, file_path=file_path)
+    def add_file(self, file_path: str) -> PendingLeaf:
+        result = PendingLeaf(parent_node=self.root, file_path=file_path)
+        self._refresh_count()
 
-        new_leaf.node_id = self.absolute_root.control.AppendItem(
-            parent=new_leaf.parent_node.node_id, text=new_leaf.file_name)
-
-        return new_leaf
+        return result
 
     def _refresh_count(self) -> None:
-        self.tree_control.SetItemText(
-            item=self.pending_root,
-            text=f"Pending Items ({len(self.pending)})"
+        self.absolute_root.control.SetItemText(
+            item=self.root.node_id,
+            text=f"Pending Items ({len(self.root.child_nodes)})"
         )
 
 
 class PendingRoot(AbstractNode):
-    def __init__(self, absolute_root: TreeRoot):
+    def __init__(self, tree: PendingTree):
         super().__init__(parent=None)
-        self.absolute_root = absolute_root
 
-        self.node_id = self.absolute_root.control.AppendItem(
-            parent=self.absolute_root.node_id, text="Pending")
+        self.tree = tree
+        self.node_id = self.tree.absolute_root.append_subtree(text="Pending")
 
     def is_root(self) -> bool:
         return True
@@ -46,7 +46,7 @@ class PendingRoot(AbstractNode):
         return False
 
     def append(self, leaf: PendingLeaf) -> None:
-        leaf.node_id = self.absolute_root.control.AppendItem(
+        leaf.node_id = self.tree.absolute_root.control.AppendItem(
             parent=self.node_id, text=leaf.file_name)
 
         self.child_nodes.append(leaf)
