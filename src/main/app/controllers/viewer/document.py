@@ -43,7 +43,7 @@ class DocumentController:
         selections = self._gui.file_tree.tree.GetSelections()
 
         if len(selections) == 1:
-            self.select_single_document(selections[0])
+            self._select_single_document(selections[0])
 
         elif len(selections) > 1:
             print("Multiple items selected.")
@@ -51,7 +51,7 @@ class DocumentController:
         else:
             print("No items selected apparently.")
 
-    def select_single_document(self, node_id: wx.TreeItemId) -> None:
+    def _select_single_document(self, node_id: wx.TreeItemId) -> None:
         node = self.pending_tree.find_node(node_id=node_id)
 
         if not node:
