@@ -9,15 +9,15 @@ class PendingDocuments:
         self.tree_head = self.tree.AppendItem(
             parent=self.tree.GetRootItem(), text="Pending Items")
 
-    def update_item_count(self) -> None:
+    def add_file(self, file_name: str) -> None:
+        self.pending_files.append(file_name)
+        self.refresh_count()
+
+    def refresh_count(self) -> None:
         self.tree.SetItemText(
             item=self.tree_head,
             text=f"Pending Items ({len(self.pending_files)})"
         )
-
-    def add_file(self, file_name: str) -> None:
-        self.pending_files.append(file_name)
-        self.update_item_count()
 
 
 class PendingDocument:

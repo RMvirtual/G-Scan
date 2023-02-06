@@ -8,7 +8,6 @@ class FileTree(wx.Panel):
         self._initialise_widgets()
         self._initialise_sizer()
 
-
     def _initialise_widgets(self) -> None:
         self._title = wx.StaticText(parent=self, label="Jobs")
         self._title.SetFont(fonts.font(point_size=30, bold=True))
@@ -46,6 +45,3 @@ class FileTree(wx.Panel):
         )
 
         self.SetSizer(sizer)
-
-    def add_to_pending(self) -> None:
-        ...
