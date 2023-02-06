@@ -2,7 +2,6 @@ import ntpath
 import wx
 from src.main.documents.rendering import render_images
 
-
 class PendingDocument:
     def __init__(self, file_path: str):
         self.file_name = ntpath.basename(file_path)
@@ -51,4 +50,36 @@ class PendingDocuments:
 
     def __getitem__(self, index: int) -> PendingDocument:
         return self.pending[index]
+
+
+
+class DocumentTree:
+    def __init__(self, tree_control: wx.TreeCtrl) -> None:
+        self.tree_control = tree_control
+        self.root_id = self.tree.AddRoot(text="")
+
+        self.pending_root = self.tree.AppendItem(
+            parent=self.root_id, text="Pending")
+
+        self.tree.ExpandAll()
+
+    def add_pending(self, file_path: str) -> PendingDocument:
+        result = PendingDocument(file_path=file_path)
+
+        result.tree_item = self.tree.AppendItem(
+            parent=self.pending_category,
+            text=f"{result.file_name} ({len(result)})"
+        )
+
+        self.tree.Expand(self.pending_category)
+        self.pending.append(result)
+
+        return result
+
+    def _refresh_count(self) -> None:
+        self.tree_control.SetItemText(
+            item=self.pending_root,
+            text=f"Pending Items ({len(self.pending)})"
+        )
+
 

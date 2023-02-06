@@ -1,4 +1,4 @@
-from src.main.gui.image_viewer.panels import FileTree
+from src.main.gui.image_viewer.panels import DocumentTree
 
 
 class FileTreeController:

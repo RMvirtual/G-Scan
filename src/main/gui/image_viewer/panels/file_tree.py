@@ -2,9 +2,9 @@ import wx
 from src.main.gui import fonts
 
 
-class FileTree(wx.Panel):
+class DocumentTree(wx.Panel):
     def __init__(self, parent: wx.Window):
-        super(FileTree, self).__init__(parent=parent)
+        super(DocumentTree, self).__init__(parent=parent)
         self._initialise_widgets()
         self._initialise_sizer()
 
@@ -22,9 +22,6 @@ class FileTree(wx.Panel):
         )
 
         self.tree = wx.TreeCtrl(parent=self, style=tree_style)
-        self.tree.ExpandAll()
-
-        self.root_id = self.tree.AddRoot(text="All Files")
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)

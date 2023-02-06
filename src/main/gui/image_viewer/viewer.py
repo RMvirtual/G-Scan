@@ -3,7 +3,7 @@ from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.image_viewer.panels.page_view import PageView
 from src.main.gui.image_viewer.toolbars.user_toolbar import UserToolbar
 from src.main.gui.image_viewer.toolbars.bottom_toolbar import BottomToolbar
-from src.main.gui.image_viewer.panels.file_tree import FileTree
+from src.main.gui.image_viewer.panels.file_tree import DocumentTree
 from src.main.gui.image_viewer.toolbars.file_menu import FileMenu
 
 
@@ -23,7 +23,7 @@ class ImageViewer(wx.Panel):
 
         self.input_bar = UserToolbar(self)
         self.page_view = PageView(self)
-        self.file_tree = FileTree(self)
+        self.file_tree = DocumentTree(self)
         self.bottom_bar = BottomToolbar(self)
 
     def _initialise_sizer(self) -> None:

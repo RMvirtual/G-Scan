@@ -1,8 +1,11 @@
 import wx
-from src.main.documents.processing import PendingDocument, PendingDocuments
-from src.main.gui.image_viewer.panels import FileTree
+from src.main.documents.document_tree import (
+    PendingDocument, PendingDocuments, DocumentTree)
+
+from src.main.gui.image_viewer.panels import DocumentTree
 from src.main.gui import ImageViewer
 from src.main.app.controllers.viewer.page_view import PageViewController
+from src.main import file_system
 
 
 class DocumentController:
@@ -10,6 +13,8 @@ class DocumentController:
         self._gui = gui
         self._page_view = PageViewController(page_canvas=self._gui.page_view)
         self.pending = PendingDocuments(self._gui.file_tree.tree)
+        self.document_tree = DocumentTree(self._gui.file_tree.tree)
+
         self._bind_callbacks()
 
     def _bind_callbacks(self) -> None:
@@ -31,7 +36,7 @@ class DocumentController:
             print("No items selected apparently.")
 
     def import_files(self):
-        files = self._request_files_to_import()
+        files = file_system.request_files_to_import()
 
         if not files:
             return
@@ -48,23 +53,8 @@ class DocumentController:
         return result
 
     def add_pending_file(self, path: str) -> PendingDocument:
-        return self.pending.add_pending(file_path=path)
-
-    def _refresh_count(self) -> None:
-        self._gui.file_tree.tree.SetItemText(
-            item=self.pending.pending_category,
-            text=f"Pending Items ({len(self.pending)})"
-        )
+        return self.document_tree.add_pending(file_path=path)
 
     def _process_files(self, file_paths: list[str]) -> None:
         result = self.add_pending_files(paths=file_paths)
         self._page_view.load_image(result[0].images[0])
-
-    def _request_files_to_import(self) -> list[str]:
-        browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)
-
-        with wx.FileDialog(parent=self._gui, style=browser_style) as browser:
-            if browser.ShowModal() == wx.ID_CANCEL:
-                return []
-
-            return browser.GetPaths()

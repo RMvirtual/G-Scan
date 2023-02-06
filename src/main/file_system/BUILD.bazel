@@ -9,5 +9,8 @@ py_library(
         "//resources",
     ],
     visibility = ["//visibility:public"],
-    deps = ["@rules_python//python/runfiles"],
+    deps = [
+        requirement("wxpython"),
+        "@rules_python//python/runfiles",
+    ],
 )
