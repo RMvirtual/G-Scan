@@ -56,23 +56,23 @@ class PendingDocuments:
 class DocumentTree:
     def __init__(self, tree_control: wx.TreeCtrl) -> None:
         self.tree_control = tree_control
-        self.root_id = self.tree.AddRoot(text="")
+        self.root_id = self.tree_control.AddRoot(text="All Files")
 
-        self.pending_root = self.tree.AppendItem(
+        self.pending_root = self.tree_control.AppendItem(
             parent=self.root_id, text="Pending")
 
-        self.tree.ExpandAll()
+        self.tree_control.ExpandAll()
 
     def add_pending(self, file_path: str) -> PendingDocument:
         result = PendingDocument(file_path=file_path)
 
-        result.tree_item = self.tree.AppendItem(
-            parent=self.pending_category,
+        result.tree_item = self.tree_control.AppendItem(
+            parent=self.pending_root,
             text=f"{result.file_name} ({len(result)})"
         )
 
-        self.tree.Expand(self.pending_category)
-        self.pending.append(result)
+        self.tree_control.Expand(self.pending_root)
+        # self.pending.append(result)
 
         return result
 

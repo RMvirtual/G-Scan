@@ -2,7 +2,6 @@ import wx
 from src.main.documents.document_tree import (
     PendingDocument, PendingDocuments, DocumentTree)
 
-from src.main.gui.image_viewer.panels import DocumentTree
 from src.main.gui import ImageViewer
 from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main import file_system
@@ -48,7 +47,6 @@ class DocumentController:
 
     def add_pending_files(self, paths: list[str]) -> list[PendingDocument]:
         result = [self.add_pending_file(path) for path in paths]
-        self._refresh_count()
 
         return result
 
