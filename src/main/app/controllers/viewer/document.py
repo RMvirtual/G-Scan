@@ -29,6 +29,10 @@ class DocumentController:
 
         if len(selections) == 1:
             print("One Item Selected")
+            item = selections[0]
+
+            node = self.pending_tree.node(node_id=item)
+            print(node)
 
         elif len(selections) > 1:
             print("Multiple items selected.")
