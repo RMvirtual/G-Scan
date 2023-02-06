@@ -37,17 +37,8 @@ class DocumentController:
         files = file_system.request_files_to_import()
 
         if files:
-            self._process_files(files)
+            results = self.document_tree.add_pending(file_path=path)
+            self._page_view.load_image(results[0].images[0])
 
     def import_as(self) -> None:
         print("Michelin Mode")
-
-    def add_pending_files(self, paths: list[str]) -> list[PendingDocument]:
-        return [self.add_pending_file(path) for path in paths]
-
-    def add_pending_file(self, path: str) -> PendingDocument:
-        return self.document_tree.add_pending(file_path=path)
-
-    def _process_files(self, file_paths: list[str]) -> None:
-        result = self.add_pending_files(paths=file_paths)
-        self._page_view.load_image(result[0].images[0])

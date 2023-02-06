@@ -63,6 +63,9 @@ class DocumentTree:
 
         self.tree_control.ExpandAll()
 
+    def add_pending_files(self, paths: list[str]) -> list[PendingDocument]:
+        return [self.add_pending_file(path) for path in paths]
+
     def add_pending(self, file_path: str) -> PendingDocument:
         result = PendingDocument(file_path=file_path)
 
