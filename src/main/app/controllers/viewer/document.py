@@ -33,12 +33,6 @@ class DocumentController:
         else:
             print("No items selected apparently.")
 
-    def refresh_count(self) -> None:
-        self._gui.file_tree.tree.SetItemText(
-            item=self.pending.pending_category,
-            text=f"Pending Items ({len(self.pending)})"
-        )
-
     def import_files(self):
         files = self._request_files_to_import()
 
@@ -47,14 +41,23 @@ class DocumentController:
 
         self._process_files(files)
 
+    def import_as(self) -> None:
+        print("Michelin Mode")
+
     def add_pending_files(self, paths: list[str]) -> list[PendingDocument]:
         result = [self.add_pending_file(path) for path in paths]
-        self.refresh_count()
+        self._refresh_count()
 
         return result
 
     def add_pending_file(self, path: str) -> PendingDocument:
         return self.pending.add_pending(file_path=path)
+
+    def _refresh_count(self) -> None:
+        self._gui.file_tree.tree.SetItemText(
+            item=self.pending.pending_category,
+            text=f"Pending Items ({len(self.pending)})"
+        )
 
     def _process_files(self, file_paths: list[str]) -> None:
         result = self.add_pending_files(paths=file_paths)

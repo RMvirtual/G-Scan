@@ -39,29 +39,31 @@ class ViewerController:
         self._gui.input_bar.document_type = current_document
 
     def _bind_callbacks(self) -> None:
-        self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
-        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
         self._bind_file_menu_callbacks()
+        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
+        self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
     def _bind_file_menu_callbacks(self) -> None:
-        self._root.window.Bind(
+        window = self._root.window
+        file_menu = self._gui.file_menu
+
+        window.Bind(
             event=wx.EVT_MENU, handler=self.on_import_files,
-            source=self._gui.file_menu.import_files
+            source=file_menu.import_files
         )
 
-        self._root.window.Bind(
-            event=wx.EVT_MENU, handler=self.on_import_prenamed_files,
-            source=self._gui.file_menu.import_prenamed_files
+        window.Bind(
+            event=wx.EVT_MENU, handler=self.on_import_as,
+            source=file_menu.import_prenamed_files
         )
 
-        self._root.window.Bind(
-            wx.EVT_MENU, self.on_quit, self._gui.file_menu.quit)
+        window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         self._documents.import_files()
 
-    def on_import_prenamed_files(self, event: wx.EVT_MENU) -> None:
-        print("Michelin Mode")
+    def on_import_as(self, event: wx.EVT_MENU) -> None:
+        self._documents.import_as()
 
     def on_quit(self, event: wx.EVT_MENU = None) -> None:
         self._exit_to_main_menu()
