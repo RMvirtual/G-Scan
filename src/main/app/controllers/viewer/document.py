@@ -13,9 +13,25 @@ class DocumentController:
             root_application=root_application, page_canvas=self._gui.page_view)
 
         self.pending = PendingDocuments(self._gui.file_tree.tree)
+        self._bind_callbacks()
 
-    def on_tree_item(self, event = None) -> None:
-        ...
+    def _bind_callbacks(self) -> None:
+        self._gui.file_tree.tree.Bind(
+            event=wx.EVT_TREE_SEL_CHANGED,
+            handler=self.on_file_tree_selection
+        )
+
+    def on_file_tree_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
+        selections = self._gui.file_tree.tree.GetSelections()
+
+        if len(selections) == 1:
+            print("One Item Selected")
+
+        elif len(selections) > 1:
+            print("Multiple items selected.")
+
+        else:
+            print("No items selected apparently.")
 
     def import_files(self):
         files = self._request_files_to_import()
@@ -30,22 +46,6 @@ class DocumentController:
 
     def add_pending_file(self, path: str) -> PendingDocument:
         return self.pending.add_pending(file_path=path)
-
-    def _bind_file_tree_callbacks(self) -> None:
-        self._gui.tree.Bind(
-            event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_file_tree_selection)
-
-    def on_file_tree_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        selections = self._gui.file_tree.tree.GetSelections()
-
-        if len(selections) == 1:
-            print("One Item Selected")
-
-        elif len(selections) > 1:
-            print("Multiple items selected.")
-
-        else:
-            print("No items selected apparently.")
 
     def _process_files(self, file_paths: list[str]) -> None:
         result = self.add_pending_files(paths=file_paths)
