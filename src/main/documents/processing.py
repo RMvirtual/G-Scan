@@ -26,7 +26,7 @@ class PendingDocuments:
 
         result.tree_item = self.tree.AppendItem(
             parent=self.pending_category,
-            text=result.file_name
+            text=f"{result.file_name} ({len(result)})"
         )
 
         self.tree.Expand(self.pending_category)

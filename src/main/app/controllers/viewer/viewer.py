@@ -46,6 +46,7 @@ class ViewerController:
         self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
         self._bind_file_menu_callbacks()
+        self._bind_file_tree_callbacks()
 
     def _bind_file_menu_callbacks(self) -> None:
         self._root.window.Bind(
@@ -62,7 +63,21 @@ class ViewerController:
             wx.EVT_MENU, self.on_quit, self._gui.file_menu.quit)
 
     def _bind_file_tree_callbacks(self) -> None:
-        ...
+        self._gui.file_tree.Bind(
+            event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_file_tree_selection)
+
+    def on_file_tree_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
+        selections = self._gui.file_tree.tree.GetSelections()
+
+        if len(selections) == 1:
+            print("One Item Selected")
+
+        elif len(selections) > 1:
+            print("Multiple items selected.")
+
+        else:
+            print("No items selected apparently.")
+
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         files = self._request_files_to_import()
@@ -71,6 +86,18 @@ class ViewerController:
             return
 
         self._process_files(files)
+
+    def on_import_prenamed_files(self, event: wx.EVT_MENU) -> None:
+        print("Michelin Mode")
+
+    def on_quit(self, event: wx.EVT_MENU = None) -> None:
+        self._exit_to_main_menu()
+
+    def on_exit(self, event = None) -> None:
+        self._exit_to_main_menu()
+
+    def on_close(self, event = None) -> None:
+        self._tear_down_gui()
 
     def _process_files(self, file_paths: list[str]) -> None:
         result = self._documents.add_pending_files(paths=file_paths)
@@ -85,18 +112,6 @@ class ViewerController:
 
             return browser.GetPaths()
 
-    def on_import_prenamed_files(self, event: wx.EVT_MENU) -> None:
-        print("Michelin Mode")
-
-    def on_quit(self, event: wx.EVT_MENU = None) -> None:
-        self._exit_to_main_menu()
-
-    def on_exit(self, event = None) -> None:
-        self._exit_to_main_menu()
-
-    def on_close(self, event = None) -> None:
-        self._tear_down_gui()
-
     def _tear_down_gui(self) -> None:
         self._gui.Destroy()
         self._root.window.SetMenuBar(wx.MenuBar())
@@ -104,3 +119,4 @@ class ViewerController:
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
+
