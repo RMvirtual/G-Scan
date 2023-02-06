@@ -5,20 +5,21 @@ from src.main.documents.rendering import render_images
 class PendingDocument:
     def __init__(self, file_path: str):
         self.original_path = file_path
-        self.file_name = ""
         self.tree_item = wx.TreeItemId()
         self.images = render_images(self.original_path)
 
     def __len__(self) -> int:
         return len(self.images)
 
+    def file_name(self) -> str:
+        return "foo"
 
 class PendingDocuments:
     def __init__(self, tree: wx.TreeCtrl):
         self.tree = tree
         self.pending: list[PendingDocument] = []
 
-        self.tree_head = self.tree.AppendItem(
+        self.pending_category: wx.TreeItemId = self.tree.AppendItem(
             parent=self.tree.GetRootItem(), text="")
 
     def __len__(self) -> int:
@@ -27,13 +28,21 @@ class PendingDocuments:
     def __getitem__(self, index: int) -> PendingDocument:
         return self.pending[index]
 
-    def add_file(self, file_path: str) -> None:
-        self.pending.append(PendingDocument(file_path=file_path))
+    def add_pending(self, file_path: str) -> None:
+        result = PendingDocument(file_path=file_path)
+
+        result.tree_item = self.tree.AppendItem(
+            parent=self.pending_category,
+            text=result.file_name()
+        )
+
+        self.tree.Expand(self.pending_category)
+        self.pending.append(result)
         self.refresh_count()
 
     def refresh_count(self) -> None:
         self.tree.SetItemText(
-            item=self.tree_head,
+            item=self.pending_category,
             text=f"Pending Items ({len(self.pending)})"
         )
 

@@ -69,10 +69,8 @@ class ViewerController:
 
         self._documents.add_pending_files(file_paths=files)
 
-        first_document_added = self._documents.pending.from_file_name(
-            file_name=files[0])
-
-        self._page_view.load_image(first_document_added.images[0])
+        first_appended = self._documents.pending.from_file_name(files[0])
+        self._page_view.load_image(first_appended.images[0])
 
     def _request_files_to_import(self) -> list[str]:
         browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)
