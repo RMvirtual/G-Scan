@@ -22,6 +22,7 @@ class PageViewController:
         bitmap = FloatCanvas.ScaledBitmap(
             Bitmap=image, XY=(0,0), Height=image.GetHeight(), Position="bl")
 
+        self._canvas.ClearAll()
         self._canvas.AddObject(bitmap)
         self._canvas.ZoomToBB()
 

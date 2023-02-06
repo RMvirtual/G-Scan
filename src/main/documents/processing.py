@@ -14,6 +14,7 @@ class PendingDocument:
     def file_name(self) -> str:
         return "foo"
 
+
 class PendingDocuments:
     def __init__(self, tree: wx.TreeCtrl):
         self.tree = tree
