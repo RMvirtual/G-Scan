@@ -66,7 +66,8 @@ class DocumentController:
 
         if files:
             results = self.pending_tree.add_files(paths=files)
-            self._page_view.load_image(results[0].images[0])
+            self._current_node = results[0]
+            self.set_document()
 
     def import_as(self) -> None:
         print("Michelin Mode")
