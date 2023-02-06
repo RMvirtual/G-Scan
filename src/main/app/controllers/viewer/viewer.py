@@ -1,6 +1,5 @@
 import wx
 from src.main.app.configuration import ViewerConfiguration
-from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main.app.controllers.viewer.document import DocumentController
 from src.main.app.interfaces import RootInterface
 from src.main.gui import ImageViewer
@@ -16,11 +15,8 @@ class ViewerController:
         self._initialise_gui()
         self._bind_callbacks()
 
-        self._page_view = PageViewController(
-            root_application=self._root, page_canvas=self._gui.page_view)
-
-        self._documents = DocumentController(gui=self._gui.file_tree)
-
+        self._documents = DocumentController(
+            root_application=self._root, gui=self._gui)
 
     def _initialise_gui(self) -> None:
         self._gui = ImageViewer(self._root.window)
@@ -46,7 +42,6 @@ class ViewerController:
         self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
         self._bind_file_menu_callbacks()
-        self._bind_file_tree_callbacks()
 
     def _bind_file_menu_callbacks(self) -> None:
         self._root.window.Bind(
@@ -62,30 +57,8 @@ class ViewerController:
         self._root.window.Bind(
             wx.EVT_MENU, self.on_quit, self._gui.file_menu.quit)
 
-    def _bind_file_tree_callbacks(self) -> None:
-        self._gui.file_tree.Bind(
-            event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_file_tree_selection)
-
-    def on_file_tree_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        selections = self._gui.file_tree.tree.GetSelections()
-
-        if len(selections) == 1:
-            print("One Item Selected")
-
-        elif len(selections) > 1:
-            print("Multiple items selected.")
-
-        else:
-            print("No items selected apparently.")
-
-
     def on_import_files(self, event: wx.EVT_MENU) -> None:
-        files = self._request_files_to_import()
-
-        if not files:
-            return
-
-        self._process_files(files)
+        self._documents.import_files()
 
     def on_import_prenamed_files(self, event: wx.EVT_MENU) -> None:
         print("Michelin Mode")
@@ -97,22 +70,6 @@ class ViewerController:
         self._exit_to_main_menu()
 
     def on_close(self, event = None) -> None:
-        self._tear_down_gui()
-
-    def _process_files(self, file_paths: list[str]) -> None:
-        result = self._documents.add_pending_files(paths=file_paths)
-        self._page_view.load_image(result[0].images[0])
-
-    def _request_files_to_import(self) -> list[str]:
-        browser_style = (wx.FD_MULTIPLE|wx.FD_OPEN|wx.FD_FILE_MUST_EXIST)
-
-        with wx.FileDialog(parent=self._gui, style=browser_style) as browser:
-            if browser.ShowModal() == wx.ID_CANCEL:
-                return []
-
-            return browser.GetPaths()
-
-    def _tear_down_gui(self) -> None:
         self._gui.Destroy()
         self._root.window.SetMenuBar(wx.MenuBar())
 
