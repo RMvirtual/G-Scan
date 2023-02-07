@@ -9,5 +9,3 @@ from src.main.documents.trees.interfaces import *
 class PendingBranch(AbstractBranch):
     def __init__(self, root: AbstractDocumentRoot) -> None:
         super().__init__(root=root)
-
-        self.parent.add(node=self)
