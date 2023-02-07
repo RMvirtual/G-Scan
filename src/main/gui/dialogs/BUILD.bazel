@@ -2,16 +2,10 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_third_party//:requirements.bzl", "requirement")
 
 py_library(
-    name = "gui",
+    name = "dialogs",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
-        "//src/main/gui/dialogs",
-        "//src/main/gui/image_viewer",
-        "//src/main/gui/main_menu",
-        "//src/main/gui/metrics",
-        "//src/main/gui/settings",
-        "//src/main/gui/window",
         requirement("wxPython"),
     ],
 )
