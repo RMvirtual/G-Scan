@@ -22,7 +22,6 @@ class PendingTree:
 
         return self.root.find_node(node_id)
 
-
     def add_files(self, paths: list[str]) -> list[PendingLeaf]:
         return [self.add_file(path) for path in paths]
 
@@ -31,7 +30,6 @@ class PendingTree:
         self._refresh_count()
 
         return result
-
 
     def expand_all(self) -> None:
         self.absolute_root.control.Expand(item=self.root.node_id)

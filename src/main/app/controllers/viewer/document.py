@@ -31,7 +31,9 @@ class DocumentController:
         print("Extract Pages")
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
-        print("Delete")
+        if self._node_to_view:
+            self._gui.file_tree.tree.Delete(
+                item=self._node_to_view.node_id)
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
         if not self._node_to_view:

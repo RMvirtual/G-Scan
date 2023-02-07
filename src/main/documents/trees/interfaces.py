@@ -37,7 +37,6 @@ class AbstractNode:
 
         return None
 
-
     def is_root(self) -> bool:
         raise NotImplementedError()
 
