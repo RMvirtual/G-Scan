@@ -25,19 +25,23 @@ class DocumentSplitDialog(wx.Dialog):
         self.split_all_button = wx.Button(parent=self, label="Split All")
 
         self.split_all_button.Bind(
-            wx.EVT_BUTTON, handler=lambda _evt: self.EndModal(self.SPLIT_ALL))
+            event=wx.EVT_BUTTON,
+            handler=lambda _evt: self.EndModal(self.SPLIT_ALL)
+        )
 
         self.split_range_button = wx.Button(parent=self, label="Split Range")
 
         self.split_range_button.Bind(
-            wx.EVT_BUTTON,
+            event=wx.EVT_BUTTON,
             handler=lambda _evt: self.EndModal(self.SPLIT_RANGE)
         )
 
         self.cancel_button = wx.Button(parent=self, label="Cancel")
 
         self.cancel_button.Bind(
-            wx.EVT_BUTTON, handler=lambda _evt: self.EndModal(self.CANCEL))
+            event=wx.EVT_BUTTON,
+            handler=lambda _evt: self.EndModal(self.CANCEL)
+        )
 
     def _initialise_sizer(self) -> None:
         border = 5
