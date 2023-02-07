@@ -9,13 +9,15 @@ class AbstractNode:
         self._label = label
 
         if parent:
-            self.node_id = self.root.control.AppendItem(
-                parent=self._parent.node_id, text=self._label)
+            parent.add(self)
 
         else:
             self._node_id = None
 
     def add(self, node: AbstractNode) -> AbstractNode:
+        node.node_id = self.root.control.AppendItem(
+            parent=self.node_id, text=node.label)
+
         node.parent = self
         self.children.append(node)
 
@@ -26,6 +28,14 @@ class AbstractNode:
         self.children.remove(node)
 
         return node
+
+    @property
+    def label(self) -> str:
+        return self._label
+
+    @label.setter
+    def label(self, new_label: str) -> None:
+        self._label = new_label
 
     @property
     def root(self) -> AbstractDocumentRoot:
@@ -75,10 +85,11 @@ class AbstractNode:
 
     def find_node_by_id(self, node_id: wx.TreeItemId) -> AbstractNode or None:
         for child in self.children:
+
             if child.is_node(node_id):
                 return child
 
-            if child.has_parent():
+            if child.has_children():
                 return child.find_node_by_id(node_id)
 
         return None
@@ -96,17 +107,6 @@ class AbstractDocumentRoot(AbstractNode):
     @property
     def root(self) -> AbstractDocumentRoot:
         return self
-
-    def add(self, node: AbstractNode) -> AbstractNode:
-        if node.is_branch():
-            node.parent = self
-
-            node.node_id = self.control.AppendItem(
-                parent=self.node_id, text="ROOT_ITEM")
-
-            self.children.append(node)
-
-            return node
 
     def remove(self, node: AbstractNode) -> AbstractNode:
         if node.parent is self:

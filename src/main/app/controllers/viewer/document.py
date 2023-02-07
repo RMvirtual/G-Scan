@@ -17,7 +17,7 @@ class DocumentController:
         self._bind_callbacks()
 
     def _bind_callbacks(self) -> None:
-        self._document_tree.bind_item_selection(self.on_file_tree_selection)
+        self._document_tree.bind_item_selection(self.on_item_selection)
 
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
@@ -37,8 +37,8 @@ class DocumentController:
 
         self._display_node_to_view(page_no=event.Position - 1)
 
-    def on_file_tree_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        selections = self._document_tree.selected_items()
+    def on_item_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
+        selections = self._document_tree.selected_node_ids()
 
         if len(selections) == 1:
             self._select_single_document(selections[0])
@@ -55,10 +55,10 @@ class DocumentController:
         if not node:
             raise ValueError("No matching node found.")
 
-        if node.is_leaf_node():
+        if node.is_paperwork_container():
             self._set_node_to_view(node)
 
-    def _set_node_to_view(self, node: AbstractNode) -> None:
+    def _set_node_to_view(self, node: AbstractLeaf) -> None:
         self._node_to_view = node
         self._page_view.set_total_pages(len(self._node_to_view.images))
         self._display_node_to_view()

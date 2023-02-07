@@ -10,7 +10,7 @@ class DocumentTreeController:
         self._gui = gui
         self._document_tree = DocumentTree(tree_control=self._gui.tree)
 
-    def selected_items(self) -> list[wx.TreeItemId]:
+    def selected_node_ids(self) -> list[wx.TreeItemId]:
         return self._gui.tree.GetSelections()
 
     def node_by_id(self, node_id) -> any:
