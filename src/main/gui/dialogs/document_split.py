@@ -40,20 +40,20 @@ class DocumentSplitDialog(wx.Dialog):
             wx.EVT_BUTTON, handler=lambda _evt: self.EndModal(self.CANCEL))
 
     def _initialise_sizer(self) -> None:
-        horizontal_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-
         border = 5
         flags = wx.ALL
-        horizontal_sizer.Add(
+
+        top_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
+        top_sizer.Add(
             window=self.from_label, proportion=1, flag=flags, border=border)
 
-        horizontal_sizer.Add(
+        top_sizer.Add(
             window=self.from_entry, proportion=1,flag=flags, border=border)
 
-        horizontal_sizer.Add(
+        top_sizer.Add(
             window=self.to_label, proportion=1, flag=flags, border=border)
 
-        horizontal_sizer.Add(
+        top_sizer.Add(
             window=self.to_entry, proportion=1, flag=flags, border=border)
 
         button_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
@@ -65,17 +65,11 @@ class DocumentSplitDialog(wx.Dialog):
             window=self.split_range_button, proportion=1, flag=flags, border=border)
 
         button_sizer.Add(
-            window=self.cancel_button, proportion=1,
-            flag=flags, border=border
-        )
+            window=self.cancel_button, proportion=1, flag=flags, border=border)
 
         vertical_sizer = wx.BoxSizer(orient=wx.VERTICAL)
-
-        vertical_sizer.Add(
-            sizer=horizontal_sizer, flag=wx.ALIGN_CENTRE_HORIZONTAL)
-
-        vertical_sizer.Add(
-            sizer=button_sizer, flag=wx.ALIGN_CENTRE_HORIZONTAL)
+        vertical_sizer.Add(sizer=top_sizer, flag=wx.ALIGN_CENTRE_HORIZONTAL)
+        vertical_sizer.Add(sizer=button_sizer, flag=wx.ALIGN_CENTRE_HORIZONTAL)
 
         self.SetSizer(vertical_sizer)
 
