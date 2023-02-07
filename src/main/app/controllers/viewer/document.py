@@ -27,9 +27,14 @@ class DocumentController:
         print("Extract Pages")
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
-        if self._node_to_view:
-            self._document_tree.remove(self._node_to_view)
-            self._node_to_view = None
+        selections = self._document_tree.selected_node_ids()
+
+        if selections:
+            for selection in selections:
+                node = self._document_tree.node_by_id(node_id=selection)
+                self._document_tree.remove(node=node)
+                self._page_view.clear_display()
+
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
         if not self._node_to_view:

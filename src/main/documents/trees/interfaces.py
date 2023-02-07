@@ -26,8 +26,8 @@ class AbstractNode:
 
     def remove(self, node: AbstractNode) -> AbstractNode:
         node.parent.children.remove(node)
-        self.root.control.Delete(item=node.node_id)
         node.parent = None
+        self.root.control.Delete(item=node.node_id)
 
         return node
 

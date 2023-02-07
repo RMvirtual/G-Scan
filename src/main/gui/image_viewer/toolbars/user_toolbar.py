@@ -23,8 +23,8 @@ class UserToolbar(wx.Panel):
         self._input_label = wx.StaticText(self, label=label_text)
         self._input_label.SetFont(font)
 
-        self._reference_input = wx.TextCtrl(self)
-        self._reference_input.SetFont(font)
+        self.reference_box = wx.TextCtrl(self)
+        self.reference_box.SetFont(font)
 
     def _initialise_dropdown_boxes(self) -> None:
         font = fonts.font(point_size=9, bold=True)
@@ -64,7 +64,7 @@ class UserToolbar(wx.Panel):
         flags = wx.ALL
 
         sizer.Add(
-            window=self._reference_input, pos=(1,0), flag=flags,
+            window=self.reference_box, pos=(1, 0), flag=flags,
             border=border
         )
 
@@ -81,14 +81,14 @@ class UserToolbar(wx.Panel):
 
     @property
     def reference_input(self) -> str:
-        return self._reference_input.GetValue()
+        return self.reference_box.GetValue()
 
     @reference_input.setter
     def reference_input(self, value: str) -> None:
-        self._reference_input.SetValue(value)
+        self.reference_box.SetValue(value)
 
     def clear_reference_input(self) -> None:
-        self._reference_input.Clear()
+        self.reference_box.Clear()
 
     @property
     def department(self) -> str:

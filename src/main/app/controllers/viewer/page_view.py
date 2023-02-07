@@ -15,11 +15,14 @@ class PageViewController:
         self.canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
         self.canvas.Bind(wx.EVT_LEFT_DCLICK, self.fit_page_to_panel)
 
+    def clear_display(self) -> None:
+        self.canvas.ClearAll()
+
     def load_image(self, image: wx.Image) -> None:
         bitmap = FloatCanvas.ScaledBitmap(
             Bitmap=image, XY=(0,0), Height=image.GetHeight(), Position="bl")
 
-        self.canvas.ClearAll()
+        self.clear_display()
         self.canvas.AddObject(bitmap)
         self.canvas.ZoomToBB()
 
