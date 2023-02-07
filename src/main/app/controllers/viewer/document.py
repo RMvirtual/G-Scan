@@ -1,7 +1,6 @@
 import wx
-from src.main.documents.trees.interfaces import AbstractNode
-from src.main.documents.trees.pending import PendingTree
-from src.main.documents.trees import TreeRoot
+from src.main.documents.trees.interfaces import *
+from src.main.documents.trees.document import *
 from src.main.gui import ImageViewer
 from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main import file_system
@@ -11,13 +10,12 @@ class DocumentController:
     def __init__(self, gui: ImageViewer):
         self._gui = gui
         self._page_view = PageViewController(page_canvas=self._gui.page_view)
-        self._initialise_document_trees()
+
+        self.document_tree = DocumentTree(
+            tree_control=self._gui.file_tree.tree)
+
         self._bind_callbacks()
         self._node_to_view = None
-
-    def _initialise_document_trees(self) -> None:
-        self.tree_root = TreeRoot(tree_control=self._gui.file_tree.tree)
-        self.pending_tree = PendingTree(absolute_root=self.tree_root)
 
     def _bind_callbacks(self) -> None:
         self._gui.file_tree.tree.Bind(
@@ -32,8 +30,9 @@ class DocumentController:
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
         if self._node_to_view:
-            self._gui.file_tree.tree.Delete(
-                item=self._node_to_view.node_id)
+            self.document_tree.remove(self._node_to_view)
+            self._gui.file_tree.tree.Delete(item=self._node_to_view.node_id)
+            self._node_to_view = None
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
         if not self._node_to_view:
@@ -54,7 +53,7 @@ class DocumentController:
             print("No items selected apparently.")
 
     def _select_single_document(self, node_id: wx.TreeItemId) -> None:
-        node = self.pending_tree.find_node(node_id=node_id)
+        node = self.document_tree.find_node_by_id(node_id=node_id)
 
         if not node:
             raise ValueError("No matching node found.")
@@ -75,7 +74,7 @@ class DocumentController:
         files = file_system.request_files_to_import()
 
         if files:
-            results = self.pending_tree.add_files(paths=files)
+            results = self.document_tree.add_pending(paths=files)
             self._set_node_to_view(results[0])
 
     def import_as(self) -> None:
