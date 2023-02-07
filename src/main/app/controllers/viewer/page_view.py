@@ -5,9 +5,9 @@ from src.main.gui.image_viewer.panels.page_view import PageView
 
 
 class PageViewController:
-    def __init__(self, page_canvas: PageView):
-        self.panel = page_canvas
-        self.canvas = page_canvas.canvas
+    def __init__(self, gui: PageView):
+        self.gui = gui
+        self.canvas = gui.canvas
 
         self._initialise_bindings()
 
@@ -24,7 +24,7 @@ class PageViewController:
         self.canvas.ZoomToBB()
 
     def set_total_pages(self, quantity: int or str) -> None:
-        self.panel.set_total_pages(quantity)
+        self.gui.set_total_pages(quantity)
 
     def on_wheel(self, event: wx.EVT_MOUSEWHEEL):
         zoom_factor = (1 / 1.2) if event.GetWheelRotation() < 0 else 1.2
@@ -36,10 +36,10 @@ class PageViewController:
         self.canvas.ZoomToBB()
 
     def bind_page_no(self, callback) -> None:
-        self.panel.page_no.Bind(event=wx.EVT_SPINCTRL, handler=callback)
+        self.gui.page_no.Bind(event=wx.EVT_SPINCTRL, handler=callback)
 
     def bind_delete(self, callback) -> None:
-        self.panel.delete_button.Bind(event=wx.EVT_BUTTON, handler=callback)
+        self.gui.delete_button.Bind(event=wx.EVT_BUTTON, handler=callback)
 
     def bind_extract_pages(self, callback) -> None:
-        self.panel.extract_pages.Bind(event=wx.EVT_BUTTON, handler=callback)
+        self.gui.extract_pages.Bind(event=wx.EVT_BUTTON, handler=callback)

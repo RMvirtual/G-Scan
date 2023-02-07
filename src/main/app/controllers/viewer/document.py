@@ -4,22 +4,20 @@ from src.main.documents.trees.document import *
 from src.main.gui import ImageViewer
 from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main import file_system
+from src.main.app.controllers.viewer.tree import DocumentTreeController
 
 
 class DocumentController:
     def __init__(self, gui: ImageViewer):
         self._gui = gui
-        self._page_view = PageViewController(page_canvas=self._gui.page_view)
-
-        self.document_tree = DocumentTree(
-            tree_control=self._gui.file_tree.tree)
+        self._page_view = PageViewController(gui=self._gui.page_view)
+        self._document_tree = DocumentTreeController(gui=self._gui.file_tree)
 
         self._bind_callbacks()
         self._node_to_view = None
 
     def _bind_callbacks(self) -> None:
-        self._gui.file_tree.tree.Bind(
-            event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_file_tree_selection)
+        self._document_tree.bind_item_selection(self.on_file_tree_selection)
 
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
@@ -30,8 +28,7 @@ class DocumentController:
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
         if self._node_to_view:
-            self.document_tree.remove(self._node_to_view)
-            self._gui.file_tree.tree.Delete(item=self._node_to_view.node_id)
+            self._document_tree.remove(self._node_to_view)
             self._node_to_view = None
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
@@ -41,7 +38,7 @@ class DocumentController:
         self._display_node_to_view(page_no=event.Position - 1)
 
     def on_file_tree_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        selections = self._gui.file_tree.tree.GetSelections()
+        selections = self._document_tree.selected_items()
 
         if len(selections) == 1:
             self._select_single_document(selections[0])
@@ -53,7 +50,7 @@ class DocumentController:
             print("No items selected apparently.")
 
     def _select_single_document(self, node_id: wx.TreeItemId) -> None:
-        node = self.document_tree.find_node_by_id(node_id=node_id)
+        node = self._document_tree.node_by_id(node_id=node_id)
 
         if not node:
             raise ValueError("No matching node found.")
@@ -68,14 +65,14 @@ class DocumentController:
 
     def _display_node_to_view(self, page_no: int = 0) -> None:
         self._page_view.load_image(self._node_to_view.images[page_no])
-        self._page_view.panel.page_no.SetValue(page_no + 1)
+        self._page_view.gui.page_no.SetValue(page_no + 1)
 
     def import_files(self):
         files = file_system.request_files_to_import()
 
         if files:
-            results = self.document_tree.add_pending(paths=files)
-            self._set_node_to_view(results[0])
+            self._document_tree.add_pending(paths=files)
+            # self._set_node_to_view(results[0])
 
     def import_as(self) -> None:
         print("Michelin Mode")
