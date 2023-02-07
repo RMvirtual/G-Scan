@@ -17,6 +17,7 @@ class PageViewController:
 
     def clear_display(self) -> None:
         self.canvas.ClearAll()
+        self.fit_page_to_panel()
 
     def load_image(self, image: wx.Image) -> None:
         bitmap = FloatCanvas.ScaledBitmap(

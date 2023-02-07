@@ -20,6 +20,10 @@ class DocumentTreeController:
     def bind_item_selection(self, callback) -> None:
         self._gui.tree.Bind(event=wx.EVT_TREE_SEL_CHANGED, handler=callback)
 
+        self._gui.tree.Bind(
+            event=wx.EVT_TREE_ITEM_ACTIVATED, handler=callback)
+
+
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         result = []
 

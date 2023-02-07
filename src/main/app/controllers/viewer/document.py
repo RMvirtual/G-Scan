@@ -33,7 +33,9 @@ class DocumentController:
             for selection in selections:
                 node = self._document_tree.node_by_id(node_id=selection)
                 self._document_tree.remove(node=node)
-                self._page_view.clear_display()
+
+            self._node_to_view = None
+            self._page_view.clear_display()
 
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
