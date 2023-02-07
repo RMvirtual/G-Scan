@@ -3,10 +3,17 @@ import wx
 
 
 class AbstractNode:
-    def __init__(self, parent: AbstractNode = None):
+    def __init__(self, parent: AbstractNode = None, label: str = ""):
         self._parent = parent
         self._children = []
-        self._node_id = None
+        self._label = label
+
+        if parent:
+            self.node_id = self.root.control.AppendItem(
+                parent=self._parent.node_id, text=self._label)
+
+        else:
+            self._node_id = None
 
     def add(self, node: AbstractNode) -> AbstractNode:
         node.parent = self
@@ -19,6 +26,10 @@ class AbstractNode:
         self.children.remove(node)
 
         return node
+
+    @property
+    def root(self) -> AbstractDocumentRoot:
+        return self.parent.root
 
     @property
     def parent(self) -> AbstractNode:
@@ -82,6 +93,10 @@ class AbstractDocumentRoot(AbstractNode):
         self._control = tree_control
         self.node_id = self._control.AddRoot(text="Document Root")
 
+    @property
+    def root(self) -> AbstractDocumentRoot:
+        return self
+
     def add(self, node: AbstractNode) -> AbstractNode:
         if node.is_branch():
             node.parent = self
@@ -120,11 +135,8 @@ class AbstractDocumentRoot(AbstractNode):
 
 
 class AbstractBranch(AbstractNode):
-    def __init__(self, root: AbstractDocumentRoot) -> None:
-        super().__init__(parent=root)
-
-        self.node_id = self.parent.control.AppendItem(
-            parent=self.parent.node_id, text="TEST")
+    def __init__(self, root: AbstractDocumentRoot, label: str = "") -> None:
+        super().__init__(parent=root, label=label)
 
     def is_root(self) -> bool:
         return False
@@ -137,8 +149,9 @@ class AbstractBranch(AbstractNode):
 
 
 class AbstractLeaf(AbstractNode):
-    def __init__(self, parent) -> None:
-        super().__init__()
+    def __init__(self, parent: AbstractNode, label: str = "") -> None:
+        super().__init__(parent=parent, label=label)
+        self.images = []
 
     def is_root(self) -> bool:
         return False

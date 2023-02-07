@@ -1,10 +1,10 @@
 import wx
+from src.main import file_system
+from src.main.app.controllers.viewer.page_view import PageViewController
+from src.main.app.controllers.viewer.tree import DocumentTreeController
 from src.main.documents.trees.interfaces import *
 from src.main.documents.trees.document import *
 from src.main.gui import ImageViewer
-from src.main.app.controllers.viewer.page_view import PageViewController
-from src.main import file_system
-from src.main.app.controllers.viewer.tree import DocumentTreeController
 
 
 class DocumentController:
@@ -12,9 +12,9 @@ class DocumentController:
         self._gui = gui
         self._page_view = PageViewController(gui=self._gui.page_view)
         self._document_tree = DocumentTreeController(gui=self._gui.file_tree)
+        self._node_to_view = None
 
         self._bind_callbacks()
-        self._node_to_view = None
 
     def _bind_callbacks(self) -> None:
         self._document_tree.bind_item_selection(self.on_file_tree_selection)
@@ -65,14 +65,14 @@ class DocumentController:
 
     def _display_node_to_view(self, page_no: int = 0) -> None:
         self._page_view.load_image(self._node_to_view.images[page_no])
-        self._page_view.gui.page_no.SetValue(page_no + 1)
+        self._page_view.set_page_no(page_no + 1)
 
     def import_files(self):
         files = file_system.request_files_to_import()
 
         if files:
-            self._document_tree.add_pending(paths=files)
-            # self._set_node_to_view(results[0])
+            results = self._document_tree.add_pending_files(paths=files)
+            self._set_node_to_view(results[0])
 
     def import_as(self) -> None:
         print("Michelin Mode")
