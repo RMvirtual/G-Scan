@@ -1,6 +1,6 @@
 import wx
-from src.main.documents.trees.pending import *
-from src.main.documents.trees.interfaces import *
+from src.main.documents.trees.interfaces import AbstractDocumentRoot
+from src.main.documents.trees.pending import PendingBranch
 
 
 class DocumentTree(AbstractDocumentRoot):

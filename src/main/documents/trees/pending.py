@@ -1,7 +1,5 @@
-import ntpath
-import wx
-from src.main.documents.rendering.rendering import render_images
-from src.main.documents.trees.interfaces import *
+from src.main.documents.trees.interfaces import (
+    AbstractBranch, AbstractDocumentRoot, AbstractLeaf)
 
 
 class PendingBranch(AbstractBranch):
