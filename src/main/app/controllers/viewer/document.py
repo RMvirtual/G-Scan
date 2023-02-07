@@ -35,8 +35,17 @@ class DocumentController:
     def on_extract_pages(self, event: wx.EVT_BUTTON) -> None:
         with DocumentSplitDialog(5) as dialog:
             option = dialog.ShowModal()
-            print(option)
 
+            if option == DocumentSplitDialog.SPLIT_ALL:
+                print("Split All")
+
+            elif option == DocumentSplitDialog.SPLIT_RANGE:
+                range = dialog.page_range()
+                print("Split Range")
+                print(range)
+
+            elif option == DocumentSplitDialog.CANCEL:
+                print("Cancel")
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
         selections = self._document_tree.selected_node_ids()
