@@ -10,5 +10,5 @@ class DocumentTree(AbstractDocumentRoot):
     def __init__(self, tree_control: wx.TreeCtrl) -> None:
         super().__init__(tree_control=tree_control)
 
-        self.pending_branch = PendingBranch(root=self)
+        self.pending_branch = PendingBranch(parent=self)
         self.processed_branches = []

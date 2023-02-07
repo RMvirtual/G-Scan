@@ -135,8 +135,8 @@ class AbstractDocumentRoot(AbstractNode):
 
 
 class AbstractBranch(AbstractNode):
-    def __init__(self, root: AbstractDocumentRoot, label: str = "") -> None:
-        super().__init__(parent=root, label=label)
+    def __init__(self, parent: AbstractNode, label: str = "") -> None:
+        super().__init__(parent=parent, label=label)
 
     def is_root(self) -> bool:
         return False
@@ -145,7 +145,7 @@ class AbstractBranch(AbstractNode):
         return True
 
     def is_paperwork_container(self) -> bool:
-        raise NotImplementedError
+        return False
 
 
 class AbstractLeaf(AbstractNode):

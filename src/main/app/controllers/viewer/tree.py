@@ -24,7 +24,7 @@ class DocumentTreeController:
 
         for path in paths:
             new_item = PendingLeaf(
-                parent=self._document_tree.pending_branch, label=path)
+                parent=self._document_tree.pending_branch, file_name=path)
 
             new_item.images = rendering.render_images(file_path=path)
             result.append(new_item)
