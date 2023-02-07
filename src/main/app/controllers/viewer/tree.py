@@ -3,6 +3,7 @@ from src.main.gui.image_viewer.panels import DocumentTreeView
 from src.main.documents.trees import DocumentTree
 from src.main.documents.trees.pending import PendingLeaf
 from src.main.documents.rendering import rendering
+from src.main.documents.trees.interfaces import AbstractNode
 
 
 class DocumentTreeController:
@@ -32,3 +33,6 @@ class DocumentTreeController:
         self._gui.tree.ExpandAll()
 
         return result
+
+    def remove(self, node: AbstractNode) -> None:
+        self._document_tree.remove(node=node)

@@ -4,7 +4,7 @@ import wx
 
 class AbstractNode:
     def __init__(self, parent: AbstractNode = None, label: str = ""):
-        self._parent = parent
+        self._parent = None
         self._children = []
         self._label = label
 
@@ -23,11 +23,23 @@ class AbstractNode:
 
         return node
 
+
     def remove(self, node: AbstractNode) -> AbstractNode:
+        node.parent.children.remove(node)
+        self.root.control.Delete(item=node.node_id)
         node.parent = None
-        self.children.remove(node)
 
         return node
+
+    def find_node_by_id(self, node_id: wx.TreeItemId) -> AbstractNode or None:
+        for child in self.children:
+            if child.is_node(node_id):
+                return child
+
+            if child.has_children():
+                return child.find_node_by_id(node_id)
+
+        return None
 
     @property
     def label(self) -> str:
@@ -83,17 +95,6 @@ class AbstractNode:
     def is_node(self, node_id: wx.TreeItemId) -> bool:
         return self._node_id == node_id
 
-    def find_node_by_id(self, node_id: wx.TreeItemId) -> AbstractNode or None:
-        for child in self.children:
-
-            if child.is_node(node_id):
-                return child
-
-            if child.has_children():
-                return child.find_node_by_id(node_id)
-
-        return None
-
 
 class AbstractDocumentRoot(AbstractNode):
     """Requires a wx.TreeCtrl object to plug into to create the node
@@ -108,21 +109,9 @@ class AbstractDocumentRoot(AbstractNode):
     def root(self) -> AbstractDocumentRoot:
         return self
 
-    def remove(self, node: AbstractNode) -> AbstractNode:
-        if node.parent is self:
-            node.parent = None
-
-            self.children.remove(node)
-
-            return node
-
     @property
     def control(self) -> wx.TreeCtrl:
         return self._control
-
-    @property
-    def root_id(self) -> wx.TreeItemId:
-        return self._root_id
 
     def is_root(self) -> bool:
         return True
