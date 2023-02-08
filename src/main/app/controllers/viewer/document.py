@@ -35,7 +35,7 @@ class DocumentController:
         print("Michelin Mode")
 
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
-        with DocumentSplitDialog(5) as dialog:
+        with DocumentSplitDialog(len(self._currently_viewed.data)) as dialog:
             option = dialog.ShowModal()
 
             if option == DocumentSplitDialog.SPLIT_ALL:

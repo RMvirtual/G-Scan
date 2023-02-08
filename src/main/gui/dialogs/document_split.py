@@ -51,16 +51,22 @@ class DocumentSplitDialog(wx.Dialog):
 
     def _initialise_callbacks(self) -> None:
         self.from_entry.Bind(
-            event=wx.EVT_SPINCTRL, handler=self._process_from_value_change)
+            event=wx.EVT_SPINCTRL,
+            handler=lambda _evt: self.to_entry.SetMin(
+                self.from_entry.GetValue()+1)
+        )
 
         self.to_entry.Bind(
-            event=wx.EVT_SPINCTRL, handler=self._process_to_value_change)
+            event=wx.EVT_SPINCTRL,
+            handler=lambda _evt: self.from_entry.SetMax(
+                self.to_entry.GetValue()-1)
+        )
 
     def _process_from_value_change(self, event: wx.EVT_SPINCTRL) -> None:
-        ...
+        self.to_entry.SetMin(self.from_entry.GetValue() + 1)
 
     def _process_to_value_change(self, event: wx.EVT_SPINCTRL) -> None:
-        ...
+        self.from_entry.SetMax(self.to_entry.GetValue() - 1)
 
     def _initialise_sizer(self) -> None:
         border = 5
