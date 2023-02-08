@@ -67,8 +67,7 @@ class ViewerController:
         job_ref = self._gui.input_bar.reference_input
         doc_type = documents.load(full_name=self._gui.input_bar.document_type)
 
-        print(job_ref, doc_type.short_code)
-
+        self._documents.submit_selection(job_ref, doc_type)
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         self._documents.import_files()
