@@ -78,4 +78,4 @@ class DocumentSplitDialog(wx.Dialog):
         self.SetSizer(vertical_sizer)
 
     def page_range(self) -> tuple[int, int]:
-        return self.from_entry.GetValue(), self.to_entry.GetValue()
+        return int(self.from_entry.GetValue()), int(self.to_entry.GetValue())
