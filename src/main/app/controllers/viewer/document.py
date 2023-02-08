@@ -1,18 +1,17 @@
 import ntpath
 import wx
+
 from src.main import file_system
 from src.main.app.controllers.viewer.page_view import PageViewController
-from src.main.documents.trees.interfaces import *
-from src.main.documents.trees.document import *
-from src.main.documents.trees.pending import *
+from src.main.data_structures.tree import *
+from src.main.documents import (
+    Document, DocumentBranch, DocumentLeaf, DocumentTree, JobBranch,
+    PendingBranch, PendingLeaf, rendering
+)
+
 from src.main.gui import ImageViewer
 from src.main.gui.dialogs.document_split import DocumentSplitDialog
-from src.main.documents import Document
 from src.main.gui.image_viewer.panels import DocumentTreeView
-from src.main.documents.trees import DocumentTree
-from src.main.documents.trees.pending import PendingLeaf
-from src.main.documents.rendering import rendering
-from src.main.documents.trees.interfaces import AbstractNode
 
 
 class DocumentController:

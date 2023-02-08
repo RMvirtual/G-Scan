@@ -1,5 +1,6 @@
 from __future__ import annotations
-from src.main.documents.trees.interfaces import (
+
+from src.main.data_structures import (
     AbstractBranch, AbstractLeaf, AbstractRoot)
 
 from src.main.documents.types import Document

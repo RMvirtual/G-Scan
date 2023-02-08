@@ -1,4 +1,4 @@
-from src.main.documents.trees.interfaces import (
+from src.main.data_structures import (
     AbstractBranch, AbstractRoot, AbstractLeaf)
 
 
