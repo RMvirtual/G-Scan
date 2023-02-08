@@ -155,12 +155,6 @@ class AbstractLeaf(AbstractNode):
             self.split_range(start=1, stop=2)
 
     def split_range(self, start: int, stop: int) -> None:
-        for item_no in range(start, stop):
-            print(item_no)
-            new_leaf = AbstractLeaf(
-                parent=self.parent, label=f"{self.label}_{item_no}")
-
-            new_leaf.data.append(self.data[item_no])
-
+        new_leaf = AbstractLeaf(parent=self.parent, label=self.label)
+        new_leaf.data = self.data[start:stop]
         del self.data[start:stop]
-
