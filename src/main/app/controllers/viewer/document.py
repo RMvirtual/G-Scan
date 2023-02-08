@@ -82,7 +82,7 @@ class DocumentController:
 
         if selections:
             for selection in selections:
-                node = self._document_tree.node_by_id(node_id=selection)
+                node = self._document_tree.child_by_id(node_id=selection)
                 node.detach()
 
             self._page_view.clear_display()
@@ -95,8 +95,8 @@ class DocumentController:
 
         if len(selections) == 1:
             print("One item selected.")
-            print(f"Selections: {selections}")
-            node = self._document_tree.node_by_id(node_id=selections[0])
+            print(f"Selections: {selections[0].GetID()}")
+            node = self._document_tree.child_by_id(node_id=selections[0])
 
             if node.is_leaf():
                 self._set_currently_viewed(node)

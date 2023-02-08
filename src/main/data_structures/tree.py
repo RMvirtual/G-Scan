@@ -7,12 +7,10 @@ class AbstractNode:
         self._parent = None
         self._children = []
         self._label = label
+        self._node_id = None
 
         if parent:
             parent.add(self)
-
-        else:
-            self._node_id = None
 
     def add(self, node: AbstractNode) -> AbstractNode:
         if node.has_parent():
@@ -36,13 +34,13 @@ class AbstractNode:
 
         return self
 
-    def node_by_id(self, node_id: wx.TreeItemId) -> AbstractNode or None:
+    def child_by_id(self, node_id: wx.TreeItemId) -> AbstractNode or None:
         for child in self.children:
             if child.is_node(node_id):
                 return child
 
             if child.has_children():
-                return child.node_by_id(node_id)
+                return child.child_by_id(node_id)
 
         return None
 
