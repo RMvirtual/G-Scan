@@ -14,6 +14,7 @@ class DocumentController:
         self._page_view = PageViewController(gui=self._gui.page_view)
         self._document_tree = DocumentTreeController(gui=self._gui.file_tree)
         self._page_view.hide_all_widgets()
+        self._currently_viewed = None
         self._bind_callbacks()
 
     def _bind_callbacks(self) -> None:
@@ -21,24 +22,25 @@ class DocumentController:
 
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
-        self._page_view.bind_extract_pages(callback=self.on_extract_pages)
+        self._page_view.bind_extract_pages(callback=self.on_split_pages)
 
     def import_files(self):
         files = file_system.file_import_dialog()
 
         if files:
             results = self._document_tree.add_pending_files(paths=files)
-            self._set_node_to_view(results[0])
+            self._set_currently_viewed(results[0])
 
     def import_as(self) -> None:
         print("Michelin Mode")
 
-    def on_extract_pages(self, event: wx.EVT_BUTTON) -> None:
+    def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
         with DocumentSplitDialog(5) as dialog:
             option = dialog.ShowModal()
 
             if option == DocumentSplitDialog.SPLIT_ALL:
                 print("Split All")
+                self._currently_viewed.split_all()
 
             elif option == DocumentSplitDialog.SPLIT_RANGE:
                 range = dialog.page_range()
@@ -69,7 +71,7 @@ class DocumentController:
             node = self._document_tree.node_by_id(node_id=selections[0])
 
             if node.is_leaf():
-                self._set_node_to_view(node)
+                self._set_currently_viewed(node)
 
             elif node.is_branch():
                 self._page_view.hide_all_widgets()
@@ -84,11 +86,16 @@ class DocumentController:
             self._page_view.hide_all_widgets()
             self._clear_node_to_view()
 
-    def _set_node_to_view(self, node: AbstractLeaf) -> None:
-        self._page_view.show_all_widgets()
+    def _set_currently_viewed(self, node: AbstractLeaf) -> None:
+        if not node.is_leaf():
+            raise ValueError("Node is not viewable leaf.")
+
         self._currently_viewed = node
+
+        self._page_view.show_all_widgets()
         self._page_view.show_all_widgets()
         self._page_view.set_total_pages(len(self._currently_viewed.data))
+
         self._display_node_to_view()
 
     def _clear_node_to_view(self) -> None:
