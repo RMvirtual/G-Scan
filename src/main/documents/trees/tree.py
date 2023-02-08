@@ -32,5 +32,3 @@ class DocumentTree(AbstractRoot):
             branch for branch in self.job_branches
             if branch.reference == reference
         ]
-
-
