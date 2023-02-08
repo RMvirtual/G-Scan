@@ -8,5 +8,8 @@ class PendingBranch(AbstractBranch):
 
 
 class PendingLeaf(AbstractLeaf):
-    def __init__(self, parent: PendingBranch, file_name: str = "") -> None:
-        super().__init__(parent=parent, label=file_name)
+    def __init__(
+            self, parent: PendingBranch, file_name: str = "",
+            data: list[any] = None
+    ) -> None:
+        super().__init__(parent=parent, label=file_name, data=data)

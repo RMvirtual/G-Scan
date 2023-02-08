@@ -137,9 +137,13 @@ class AbstractBranch(AbstractNode):
 
 
 class AbstractLeaf(AbstractNode):
-    def __init__(self, parent: AbstractNode, label: str = "") -> None:
+    def __init__(
+            self, parent: AbstractNode, label: str = "",
+            data: list[any] = None
+    ) -> None:
         super().__init__(parent=parent, label=label)
-        self.data = []
+
+        self.data = data if data else []
 
     def is_root(self) -> bool:
         return False

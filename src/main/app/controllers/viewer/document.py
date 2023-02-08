@@ -1,3 +1,4 @@
+import ntpath
 import wx
 from src.main import file_system
 from src.main.app.controllers.viewer.page_view import PageViewController
@@ -126,18 +127,17 @@ class DocumentController:
         return self._gui.file_tree.tree.GetSelections()
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
-        result = []
-
-        for path in paths:
-            new_item = PendingLeaf(
-                parent=self._document_tree.pending_branch, file_name=path)
-
-            new_item.data = rendering.render_images(file_path=path)
-            result.append(new_item)
-
+        result = [self._create_pending_leaf(file_path=path) for path in paths]
         self._gui.file_tree.tree.ExpandAll()
 
         return result
+
+    def _create_pending_leaf(self, file_path: str) -> PendingLeaf:
+        return PendingLeaf(
+            parent=self._document_tree.pending_branch,
+            file_name=ntpath.basename(file_path),
+            data=rendering.render_images(file_path=file_path)
+        )
 
     def remove(self, node: AbstractNode) -> None:
         self._document_tree.remove(node=node)
