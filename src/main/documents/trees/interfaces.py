@@ -23,7 +23,6 @@ class AbstractNode:
 
         return node
 
-
     def remove(self, node: AbstractNode) -> AbstractNode:
         node.parent.children.remove(node)
         node.parent = None
@@ -50,7 +49,7 @@ class AbstractNode:
         self._label = new_label
 
     @property
-    def root(self) -> AbstractDocumentRoot:
+    def root(self) -> AbstractRoot:
         return self.parent.root
 
     @property
@@ -83,7 +82,7 @@ class AbstractNode:
     def is_branch(self) -> bool:
         raise NotImplementedError
 
-    def is_paperwork_container(self) -> bool:
+    def is_leaf(self) -> bool:
         raise NotImplementedError
 
     def has_children(self) -> bool:
@@ -96,8 +95,8 @@ class AbstractNode:
         return self._node_id == node_id
 
 
-class AbstractDocumentRoot(AbstractNode):
-    """Requires a wx.TreeCtrl object to plug into to create the node
+class AbstractRoot(AbstractNode):
+    """Requires a wx.TreeCtrl object to plug into to create node ID
     references.
     """
     def __init__(self, tree_control: wx.TreeCtrl) -> None:
@@ -106,7 +105,7 @@ class AbstractDocumentRoot(AbstractNode):
         self.node_id = self._control.AddRoot(text="Document Root")
 
     @property
-    def root(self) -> AbstractDocumentRoot:
+    def root(self) -> AbstractRoot:
         return self
 
     @property
@@ -119,7 +118,7 @@ class AbstractDocumentRoot(AbstractNode):
     def is_branch(self) -> bool:
         return False
 
-    def is_paperwork_container(self) -> bool:
+    def is_leaf(self) -> bool:
         return False
 
 
@@ -133,14 +132,14 @@ class AbstractBranch(AbstractNode):
     def is_branch(self) -> bool:
         return True
 
-    def is_paperwork_container(self) -> bool:
+    def is_leaf(self) -> bool:
         return False
 
 
 class AbstractLeaf(AbstractNode):
     def __init__(self, parent: AbstractNode, label: str = "") -> None:
         super().__init__(parent=parent, label=label)
-        self.images = []
+        self.data = []
 
     def is_root(self) -> bool:
         return False
@@ -148,6 +147,5 @@ class AbstractLeaf(AbstractNode):
     def is_branch(self) -> bool:
         return False
 
-    def is_paperwork_container(self) -> bool:
+    def is_leaf(self) -> bool:
         return True
-

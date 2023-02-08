@@ -31,7 +31,7 @@ class DocumentTreeController:
             new_item = PendingLeaf(
                 parent=self._document_tree.pending_branch, file_name=path)
 
-            new_item.images = rendering.render_images(file_path=path)
+            new_item.data = rendering.render_images(file_path=path)
             result.append(new_item)
 
         self._gui.tree.ExpandAll()

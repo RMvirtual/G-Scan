@@ -13,6 +13,7 @@ class DocumentController:
         self._gui = gui
         self._page_view = PageViewController(gui=self._gui.page_view)
         self._document_tree = DocumentTreeController(gui=self._gui.file_tree)
+        self._page_view.hide_all_widgets()
         self._bind_callbacks()
 
     def _bind_callbacks(self) -> None:
@@ -23,7 +24,7 @@ class DocumentController:
         self._page_view.bind_extract_pages(callback=self.on_extract_pages)
 
     def import_files(self):
-        files = file_system.request_files_to_import()
+        files = file_system.file_import_dialog()
 
         if files:
             results = self._document_tree.add_pending_files(paths=files)
@@ -57,7 +58,6 @@ class DocumentController:
 
             self._page_view.clear_display()
 
-
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
         self._display_node_to_view(page_no=event.Position - 1)
 
@@ -65,8 +65,14 @@ class DocumentController:
         selections = self._document_tree.selected_node_ids()
 
         if len(selections) == 1:
-            self._page_view.show_split_button()
-            self._select_single_document(selections[0])
+            print("One item selected.")
+            node = self._document_tree.node_by_id(node_id=selections[0])
+
+            if node.is_leaf():
+                self._set_node_to_view(node)
+
+            elif node.is_branch():
+                self._clear_node_to_view()
 
         elif len(selections) > 1:
             print("Multiple items selected.")
@@ -74,21 +80,20 @@ class DocumentController:
 
         else:
             print("No items selected apparently.")
-
-    def _select_single_document(self, node_id: wx.TreeItemId) -> None:
-        node = self._document_tree.node_by_id(node_id=node_id)
-
-        if not node:
-            raise ValueError("No matching node found.")
-
-        if node.is_paperwork_container():
-            self._set_node_to_view(node)
+            self._page_view.hide_all_widgets()
+            self._clear_node_to_view()
 
     def _set_node_to_view(self, node: AbstractLeaf) -> None:
-        self._node_to_view = node
-        self._page_view.set_total_pages(len(self._node_to_view.images))
+        self._page_view.show_all_widgets()
+        self._currently_viewed = node
+        self._page_view.show_all_widgets()
+        self._page_view.set_total_pages(len(self._currently_viewed.data))
         self._display_node_to_view()
 
+    def _clear_node_to_view(self) -> None:
+        self._currently_viewed = None
+        self._page_view.clear_display()
+
     def _display_node_to_view(self, page_no: int = 0) -> None:
-        self._page_view.load_image(self._node_to_view.images[page_no])
+        self._page_view.load_image(self._currently_viewed.data[page_no])
         self._page_view.set_page_no(page_no + 1)

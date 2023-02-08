@@ -17,7 +17,7 @@ class PageViewController:
 
     def clear_display(self) -> None:
         self.canvas.ClearAll()
-        self.fit_page_to_panel()
+        self.canvas.ZoomToBB()
 
     def load_image(self, image: wx.Image) -> None:
         bitmap = FloatCanvas.ScaledBitmap(
@@ -50,6 +50,18 @@ class PageViewController:
 
     def bind_extract_pages(self, callback) -> None:
         self._gui.split_button.Bind(event=wx.EVT_BUTTON, handler=callback)
+
+    def show_all_widgets(self) -> None:
+        self._gui.delete_button.Show()
+        self._gui.split_button.Show()
+        self._gui.page_no.Show()
+        self._gui.page_quantity.Show()
+
+    def hide_all_widgets(self) -> None:
+        self._gui.delete_button.Hide()
+        self._gui.split_button.Hide()
+        self._gui.page_no.Hide()
+        self._gui.page_quantity.Hide()
 
     def show_split_button(self) -> None:
         self._gui.split_button.Show()

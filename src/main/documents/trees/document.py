@@ -1,9 +1,9 @@
 import wx
-from src.main.documents.trees.interfaces import AbstractDocumentRoot
+from src.main.documents.trees.interfaces import AbstractRoot
 from src.main.documents.trees.pending import PendingBranch
 
 
-class DocumentTree(AbstractDocumentRoot):
+class DocumentTree(AbstractRoot):
     """Requires a wx.TreeCtrl object to plug into to create the node
     references.
     """

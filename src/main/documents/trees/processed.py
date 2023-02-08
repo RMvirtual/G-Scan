@@ -1,9 +1,9 @@
 from src.main.documents.trees.interfaces import (
-    AbstractBranch, AbstractLeaf, AbstractDocumentRoot)
+    AbstractBranch, AbstractLeaf, AbstractRoot)
 
 
 class JobBranch(AbstractBranch):
-    def __init__(self, parent: AbstractDocumentRoot, job_ref: str) -> None:
+    def __init__(self, parent: AbstractRoot, job_ref: str) -> None:
         super().__init__(parent=parent, label=job_ref)
 
 
