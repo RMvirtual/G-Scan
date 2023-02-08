@@ -150,11 +150,23 @@ class AbstractLeaf(AbstractNode):
     def is_leaf(self) -> bool:
         return True
 
+    def can_split(self) -> bool:
+        return len(self.data) > 1
+
     def split_all(self) -> None:
-        while len(self.data) > 1:
+        while self.can_split():
             self.split_range(start=1, stop=2)
 
     def split_range(self, start: int, stop: int) -> None:
+        if not self.is_valid_range(start, stop):
+            raise ValueError(f"Invalid range: {start}, {stop}.")
+
         new_leaf = AbstractLeaf(parent=self.parent, label=self.label)
         new_leaf.data = self.data[start:stop]
         del self.data[start:stop]
+
+    def is_valid_range(self, start: int, stop: int) -> bool:
+        start_invalid = start < 0 or start > len(self.data) - 1
+        stop_invalid = stop < start or stop > len(self.data)
+
+        return not start_invalid or stop_invalid
