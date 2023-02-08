@@ -95,7 +95,7 @@ class DocumentController:
 
         if len(selections) == 1:
             print("One item selected.")
-            print(f"Selections: {selections[0].GetID()}")
+            print(f"Selected: {selections[0].GetID()}")
             node = self._document_tree.child_by_id(node_id=selections[0])
 
             if node.is_leaf():
