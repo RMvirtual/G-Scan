@@ -13,6 +13,7 @@ from src.main.documents.trees.pending import PendingLeaf
 from src.main.documents.rendering import rendering
 from src.main.documents.trees.interfaces import AbstractNode
 
+
 class DocumentController:
     def __init__(self, gui: ImageViewer):
         self._gui = gui
@@ -24,7 +25,11 @@ class DocumentController:
         self._bind_callbacks()
 
     def _bind_callbacks(self) -> None:
-        self.bind_item_selection(self.on_item_selection)
+        self._gui.file_tree.tree.Bind(
+            event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_item_selection)
+
+        self._gui.file_tree.tree.Bind(
+            event=wx.EVT_TREE_ITEM_ACTIVATED, handler=self.on_item_selection)
 
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
@@ -122,13 +127,6 @@ class DocumentController:
 
     def node_by_id(self, node_id) -> any:
         return self._document_tree.find_node_by_id(node_id=node_id)
-
-    def bind_item_selection(self, callback) -> None:
-        self._gui.file_tree.tree.Bind(
-            event=wx.EVT_TREE_SEL_CHANGED, handler=callback)
-
-        self._gui.file_tree.tree.Bind(
-            event=wx.EVT_TREE_ITEM_ACTIVATED, handler=callback)
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         result = []
