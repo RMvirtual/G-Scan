@@ -46,15 +46,20 @@ class DocumentController:
     def import_as(self) -> None:
         print("Michelin Mode")
 
-    def submit_selection(
-            self, job_reference: str, document_type: Document) -> None:
-        if self._document_tree.contains_branch(job_reference):
-            print("Contains reference.")
+    def submit(self, reference: str, document_type: Document) -> None:
+        if self._document_tree.contains_branch(reference):
+            job_branch = self._document_tree.branch(reference)
+
+            if job_branch.contains_branch(document_type):
+                print(f"Contains {document_type.short_code}")
+
+            else:
+                print(f"Does not contain {document_type.short_code}")
 
         else:
             print("Does not contain reference.")
             job_branch = self._document_tree.create_job_branch(
-                reference=job_reference)
+                reference=reference)
 
             document_branch = job_branch.create_branch(
                 document_type=document_type)

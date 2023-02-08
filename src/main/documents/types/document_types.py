@@ -1,3 +1,4 @@
+from __future__ import annotations
 from src.main import file_system
 
 
@@ -6,6 +7,9 @@ class Document:
         self.short_code = ""
         self.full_name = ""
         self.analysis_code = ""
+
+    def __eq__(self, other: Document) -> bool:
+        return self.short_code == other.short_code
 
 
 class DocumentTypes:
