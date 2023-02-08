@@ -39,8 +39,13 @@ class ViewerController:
 
     def _bind_callbacks(self) -> None:
         self._bind_file_menu_callbacks()
+        self._bind_user_input_callbacks()
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
         self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+
+    def _bind_user_input_callbacks(self) -> None:
+        self._gui.input_bar.submit.Bind(
+            event=wx.EVT_BUTTON, handler=self.on_submit)
 
     def _bind_file_menu_callbacks(self) -> None:
         window = self._root.window
@@ -57,6 +62,9 @@ class ViewerController:
         )
 
         window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
+
+    def on_submit(self, event: wx.EVT_BUTTON) -> None:
+        print("Submit pressed.")
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         self._documents.import_files()
