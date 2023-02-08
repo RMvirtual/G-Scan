@@ -70,7 +70,7 @@ class DocumentController:
 
         if selections:
             for selection in selections:
-                node = self._document_tree.node_by_id(node_id=selection)
+                node = self._document_tree.find_node_by_id(node_id=selection)
                 self._document_tree.remove(node=node)
 
             self._page_view.clear_display()
@@ -124,9 +124,6 @@ class DocumentController:
     ##########################################################
     def selected_node_ids(self) -> list[wx.TreeItemId]:
         return self._gui.file_tree.tree.GetSelections()
-
-    def node_by_id(self, node_id) -> any:
-        return self._document_tree.find_node_by_id(node_id=node_id)
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         result = []
