@@ -64,12 +64,9 @@ class UserToolbar(wx.Panel):
         flags = wx.ALL
 
         sizer.Add(
-            window=self.reference_box, pos=(1, 0), flag=flags,
-            border=border
-        )
+            window=self.reference_box, pos=(1, 0), flag=flags, border=border)
 
-        sizer.Add(
-            window=self.submit, pos=(1,1), flag=flags, border=border)
+        sizer.Add(window=self.submit, pos=(1,1), flag=flags, border=border)
 
         sizer.Add(
             window=self.department_box, pos=(1,2), flag=flags, border=border)
