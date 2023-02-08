@@ -151,7 +151,8 @@ class AbstractLeaf(AbstractNode):
         return True
 
     def split_all(self) -> None:
-        self.split_range(start=1, stop=len(self.data))
+        while len(self.data) > 1:
+            self.split_range(start=1, stop=2)
 
     def split_range(self, start: int, stop: int) -> None:
         for item_no in range(start, stop):

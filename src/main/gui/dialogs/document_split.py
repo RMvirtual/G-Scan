@@ -17,7 +17,7 @@ class DocumentSplitDialog(wx.Dialog):
 
     def _initialise_widgets(self) -> None:
         self.from_label = wx.StaticText(parent=self, label="From")
-        self.from_entry = wx.TextCtrl(parent=self, value="0")
+        self.from_entry = wx.TextCtrl(parent=self, value="1")
 
         self.to_label = wx.StaticText(parent=self, label="to")
         self.to_entry = wx.TextCtrl(parent=self, value=f"{self.total_pages}")
