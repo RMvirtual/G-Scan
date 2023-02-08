@@ -22,10 +22,10 @@ class PageView(NavCanvas):
         )
 
         self.page_quantity = wx.TextCtrl(
-            parent=self.ToolBar, value="Total Pages: 0", style=wx.TE_READONLY)
+            parent=self.ToolBar, value="Pages: 0", style=wx.TE_READONLY)
 
         self.split_button = wx.Button(
-            parent=self.ToolBar, label="Extract Pages")
+            parent=self.ToolBar, label="Split Pages")
 
         additional_tools = [
             self.page_no, self.page_quantity, self.delete_button,
