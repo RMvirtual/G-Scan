@@ -79,11 +79,11 @@ class DocumentController:
                     start=range[0] - 1, stop=range[1])
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
-        selections = self.selected_node_ids()
+        selections = self._gui.file_tree.tree.GetSelections()
 
         if selections:
             for selection in selections:
-                node = self._document_tree.find_node_by_id(node_id=selection)
+                node = self._document_tree.node_by_id(node_id=selection)
                 node.detach()
 
             self._page_view.clear_display()
@@ -92,11 +92,12 @@ class DocumentController:
         self._display_node_to_view(page_no=event.Position - 1)
 
     def on_item_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        selections = self.selected_node_ids()
+        selections = self._gui.file_tree.tree.GetSelections()
 
         if len(selections) == 1:
             print("One item selected.")
-            node = self._document_tree.find_node_by_id(node_id=selections[0])
+            print(f"Selections: {selections}")
+            node = self._document_tree.node_by_id(node_id=selections[0])
 
             if node.is_leaf():
                 self._set_currently_viewed(node)
@@ -134,10 +135,6 @@ class DocumentController:
     def _display_node_to_view(self, page_no: int = 0) -> None:
         self._page_view.load_image(self._currently_viewed.data[page_no])
         self._page_view.set_page_no(page_no + 1)
-
-    ##########################################################
-    def selected_node_ids(self) -> list[wx.TreeItemId]:
-        return self._gui.file_tree.tree.GetSelections()
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         result = [self._create_pending_leaf(file_path=path) for path in paths]
