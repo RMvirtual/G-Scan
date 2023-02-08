@@ -150,14 +150,16 @@ class AbstractLeaf(AbstractNode):
     def is_leaf(self) -> bool:
         return True
 
-    def split_all(self):
-        no_of_items = len(self.data)
+    def split_all(self) -> None:
+        self.split_range(start=1, stop=len(self.data))
 
-        for item_no in range(1, no_of_items):
+    def split_range(self, start: int, stop: int) -> None:
+        for item_no in range(start, stop):
             print(item_no)
             new_leaf = AbstractLeaf(
                 parent=self.parent, label=f"{self.label}_{item_no}")
 
             new_leaf.data.append(self.data[item_no])
 
-        del self.data[1:no_of_items]
+        del self.data[start:stop]
+

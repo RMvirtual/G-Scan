@@ -44,8 +44,9 @@ class DocumentController:
 
             elif option == DocumentSplitDialog.SPLIT_RANGE:
                 range = dialog.page_range()
-                print("Split Range")
-                print(range)
+                print(f"Split Range: {range[0]}, {range[1]}")
+                self._currently_viewed.split_range(
+                    start=range[0] - 1, stop=range[1] - 1)
 
             elif option == DocumentSplitDialog.CANCEL:
                 print("Cancel")
