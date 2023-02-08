@@ -65,10 +65,12 @@ class DocumentController:
         selections = self._document_tree.selected_node_ids()
 
         if len(selections) == 1:
+            self._page_view.show_split_button()
             self._select_single_document(selections[0])
 
         elif len(selections) > 1:
             print("Multiple items selected.")
+            self._page_view.hide_split_button()
 
         else:
             print("No items selected apparently.")

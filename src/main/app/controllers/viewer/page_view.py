@@ -49,4 +49,10 @@ class PageViewController:
         self._gui.delete_button.Bind(event=wx.EVT_BUTTON, handler=callback)
 
     def bind_extract_pages(self, callback) -> None:
-        self._gui.extract_pages.Bind(event=wx.EVT_BUTTON, handler=callback)
+        self._gui.split_button.Bind(event=wx.EVT_BUTTON, handler=callback)
+
+    def show_split_button(self) -> None:
+        self._gui.split_button.Show()
+
+    def hide_split_button(self) -> None:
+        self._gui.split_button.Hide()

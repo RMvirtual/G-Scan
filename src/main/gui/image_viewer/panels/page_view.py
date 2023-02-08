@@ -24,12 +24,12 @@ class PageView(NavCanvas):
         self.page_quantity = wx.TextCtrl(
             parent=self.ToolBar, value="Total Pages: 0", style=wx.TE_READONLY)
 
-        self.extract_pages = wx.Button(
+        self.split_button = wx.Button(
             parent=self.ToolBar, label="Extract Pages")
 
         additional_tools = [
             self.page_no, self.page_quantity, self.delete_button,
-            self.extract_pages
+            self.split_button
         ]
 
         for tool in additional_tools:
