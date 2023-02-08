@@ -15,6 +15,9 @@ class AbstractNode:
             self._node_id = None
 
     def add(self, node: AbstractNode) -> AbstractNode:
+        if node.has_parent():
+            node.detach()
+
         node.node_id = self.root.control.AppendItem(
             parent=self.node_id, text=node.label)
 
@@ -23,10 +26,18 @@ class AbstractNode:
 
         return node
 
+    def detach(self) -> AbstractNode:
+        if self.parent:
+            self.parent.children.remove(self)
+
+        self.root.control.Delete(item=self.node_id)
+        self.parent = None
+        self.node_id = None
+
+        return self
+
     def remove(self, node: AbstractNode) -> AbstractNode:
-        node.parent.children.remove(node)
-        node.parent = None
-        self.root.control.Delete(item=node.node_id)
+        node.detach()
 
         return node
 

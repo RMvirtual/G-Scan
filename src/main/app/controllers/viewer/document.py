@@ -29,9 +29,11 @@ class DocumentController:
         self._gui.file_tree.tree.Bind(
             event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_item_selection)
 
+        """
         self._gui.file_tree.tree.Bind(
             event=wx.EVT_TREE_ITEM_ACTIVATED, handler=self.on_item_selection)
 
+        """
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
         self._page_view.bind_extract_pages(callback=self.on_split_pages)
