@@ -72,6 +72,7 @@ class DocumentController:
                 self._set_node_to_view(node)
 
             elif node.is_branch():
+                self._page_view.hide_all_widgets()
                 self._clear_node_to_view()
 
         elif len(selections) > 1:
