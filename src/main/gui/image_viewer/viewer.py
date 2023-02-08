@@ -1,7 +1,7 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 from src.main.gui.image_viewer.panels.page_view import PageView
-from src.main.gui.image_viewer.toolbars.user_toolbar import UserToolbar
+from src.main.gui.image_viewer.toolbars.user_input import UserToolbar
 from src.main.gui.image_viewer.toolbars.bottom_toolbar import BottomToolbar
 from src.main.gui.image_viewer.panels.document_tree import DocumentTreeView
 from src.main.gui.image_viewer.toolbars.file_menu import FileMenu

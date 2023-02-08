@@ -4,6 +4,7 @@ from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main.app.controllers.viewer.tree import DocumentTreeController
 from src.main.documents.trees.interfaces import *
 from src.main.documents.trees.document import *
+from src.main.documents.trees.pending import *
 from src.main.gui import ImageViewer
 from src.main.gui.dialogs.document_split import DocumentSplitDialog
 
@@ -33,6 +34,9 @@ class DocumentController:
 
     def import_as(self) -> None:
         print("Michelin Mode")
+
+    def current_selection(self) -> PendingLeaf:
+        return self._currently_viewed
 
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
         with DocumentSplitDialog(len(self._currently_viewed.data)) as dialog:

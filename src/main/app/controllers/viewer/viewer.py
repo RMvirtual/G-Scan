@@ -3,6 +3,7 @@ from src.main.app.configuration import ViewerConfiguration
 from src.main.app.controllers.viewer.document import DocumentController
 from src.main.app.interfaces import RootInterface
 from src.main.gui import ImageViewer
+from src.main import documents
 
 
 class ViewerController:
@@ -48,23 +49,26 @@ class ViewerController:
             event=wx.EVT_BUTTON, handler=self.on_submit)
 
     def _bind_file_menu_callbacks(self) -> None:
-        window = self._root.window
         file_menu = self._gui.file_menu
 
-        window.Bind(
+        self._root.window.Bind(
             event=wx.EVT_MENU, handler=self.on_import_files,
             source=file_menu.import_files
         )
 
-        window.Bind(
+        self._root.window.Bind(
             event=wx.EVT_MENU, handler=self.on_import_as,
             source=file_menu.import_prenamed_files
         )
 
-        window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
+        self._root.window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
 
     def on_submit(self, event: wx.EVT_BUTTON) -> None:
-        print("Submit pressed.")
+        job_ref = self._gui.input_bar.reference_input
+        doc_type = documents.load(full_name=self._gui.input_bar.document_type)
+
+        print(job_ref, doc_type.short_code)
+
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         self._documents.import_files()
