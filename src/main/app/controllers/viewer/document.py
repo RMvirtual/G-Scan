@@ -53,6 +53,13 @@ class DocumentController:
 
         else:
             print("Does not contain reference.")
+            job_branch = self._document_tree.create_job_branch(
+                reference=job_reference)
+
+            document_branch = job_branch.create_branch(
+                document_type=document_type)
+
+            document_branch.add(self._currently_viewed)
 
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
         with DocumentSplitDialog(len(self._currently_viewed.data)) as dialog:

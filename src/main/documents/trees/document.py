@@ -15,8 +15,11 @@ class DocumentTree(AbstractRoot):
         self.pending_branch = PendingBranch(parent=self)
         self.job_branches: list[JobBranch] = []
 
-    def create_job_branch(self, reference: str) -> None:
-        self.job_branches.append(JobBranch(parent=self, reference=reference))
+    def create_job_branch(self, reference: str) -> JobBranch:
+        result = JobBranch(parent=self, reference=reference)
+        self.job_branches.append(result)
+
+        return result
 
     def branch(self, reference: str) -> JobBranch:
         return self.matching_branches(reference)[0]

@@ -9,15 +9,17 @@ class JobBranch(AbstractBranch):
     def __init__(self, parent: AbstractRoot, reference: str) -> None:
         super().__init__(parent=parent, label=reference)
         self.reference = reference
-        self.document_branches: list[DocumentBranch] = None
+        self.document_branches: list[DocumentBranch] = []
 
     def set_reference(self, new_reference) -> None:
         self.reference = new_reference
         self.label = new_reference
 
-    def create_branch(self, document_type: Document) -> None:
-        self.job_branches.append(
-            DocumentBranch(parent=self, document_type=document_type))
+    def create_branch(self, document_type: Document) -> DocumentBranch:
+        result = DocumentBranch(parent=self, document_type=document_type)
+        self.document_branches.append(result)
+
+        return result
 
     def branch(self, document_type: Document) -> DocumentBranch:
         if not self.contains_branch(document_type):
