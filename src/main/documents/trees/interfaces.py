@@ -36,11 +36,6 @@ class AbstractNode:
 
         return self
 
-    def remove(self, node: AbstractNode) -> AbstractNode:
-        node.detach()
-
-        return node
-
     def find_node_by_id(self, node_id: wx.TreeItemId) -> AbstractNode or None:
         for child in self.children:
             if child.is_node(node_id):

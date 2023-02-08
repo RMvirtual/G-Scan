@@ -74,12 +74,12 @@ class DocumentController:
                     start=range[0] - 1, stop=range[1])
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
-        selections = self._document_tree.selected_node_ids()
+        selections = self.selected_node_ids()
 
         if selections:
             for selection in selections:
                 node = self._document_tree.find_node_by_id(node_id=selection)
-                self._document_tree.remove(node=node)
+                node.detach()
 
             self._page_view.clear_display()
 
@@ -146,6 +146,3 @@ class DocumentController:
             file_name=ntpath.basename(file_path),
             data=rendering.render_images(file_path=file_path)
         )
-
-    def remove(self, node: AbstractNode) -> None:
-        self._document_tree.remove(node=node)
