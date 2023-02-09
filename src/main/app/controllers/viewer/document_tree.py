@@ -7,7 +7,7 @@ from src.main.documents import (
     PendingBranch, PendingLeaf, rendering
 )
 
-from src.main.gui.dialogs.document_split import DocumentSplitDialog
+from src.main.gui.dialogs.page_range import PageRangeDialog
 from src.main.gui.viewer.document_tree import DocumentTreeCtrl
 
 
@@ -28,34 +28,12 @@ class DocumentTreeController:
     def selected_items(self) -> list[AbstractNode]:
         return [
             self._node_from_handle(handle=selection)
-            for selection in self._gui.GetSelections()
-            if selection is not None
+            for selection in self._gui.GetSelections() if selection is not None
         ]
 
     def split_pages(self, node: AbstractLeaf) -> None:
-        with DocumentSplitDialog(max_pages=len(node.data)) as dialog:
-            self.on_split_dialog(dialog, node)
-
-    def on_split_dialog(
-            self, dialog: DocumentSplitDialog, node: AbstractLeaf) -> None:
-        option = dialog.ShowModal()
-
-        if option == DocumentSplitDialog.SPLIT_ALL:
-            self.split_all(node)
-
-        elif option == DocumentSplitDialog.SPLIT_RANGE:
-            self.split_range(node, range=dialog.page_range())
-
-    def split_all(self, node: AbstractNode) -> None:
-        for split_node in node.split_all():
-            self._append_to_gui(split_node)
-
-    def split_range(self, node: AbstractNode, range: tuple[int, int]) -> None:
-        if range == (1, len(node.data)):
-            return
-
-        self._append_to_gui(
-            node.split_range(start=range[0]-1, stop=range[1]))
+        with PageRangeDialog(max_pages=len(node.data)) as dialog:
+            self._on_split_dialog(dialog, node)
 
     def delete_selected(self) -> None:
         for node in self.selected_items():
@@ -120,6 +98,28 @@ class DocumentTreeController:
 
         else:
             print(f"Does not contain {document_type.short_code}")
+
+    def _on_split_dialog(
+            self, dialog: PageRangeDialog, node: AbstractLeaf) -> None:
+        option = dialog.ShowModal()
+
+        if option == PageRangeDialog.SPLIT_ALL:
+            self._split_all(node)
+
+        elif option == PageRangeDialog.SPLIT_RANGE:
+            self._split_range(node, range=dialog.page_range())
+
+    def _split_all(self, node: AbstractNode) -> None:
+        for split_node in node.split_all():
+            self._append_to_gui(split_node)
+
+    def _split_range(self, node: AbstractNode, range: tuple[int, int]) -> None:
+        is_full_range = range == (1, len(node.data))
+
+        if is_full_range:
+            return
+
+        self._append_to_gui(node.split_range(start=range[0]-1, stop=range[1]))
 
     def _root_tree_handle(self) -> wx.TreeItemId:
         return self._handle_from_node(self._document_tree.root)

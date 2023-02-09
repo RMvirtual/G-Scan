@@ -1,13 +1,13 @@
 import wx
 
 
-class DocumentSplitDialog(wx.Dialog):
+class PageRangeDialog(wx.Dialog):
     CANCEL = 0
     SPLIT_RANGE = 1
     SPLIT_ALL = 2
 
     def __init__(self, max_pages: int):
-        super().__init__(parent=None, title="Split Document")
+        super().__init__(parent=None, title="Split Page Range")
         self.max_pages = max_pages
         self._initialise_widgets()
         self._initialise_callbacks()
