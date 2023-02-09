@@ -32,7 +32,7 @@ class DocumentTreeCtrl(wx.TreeCtrl):
 
         while item.IsOk():
             data = self.GetItemData(item)
-            print(data)
+
             if data == node_id:
                 return item
 
