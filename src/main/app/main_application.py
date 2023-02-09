@@ -535,7 +535,7 @@ class Controller():
         file_name = app.file_system.get_file_name(current_file)
         file_extension = app.file_system.get_file_ext(current_file)
 
-        job_reference = app.user_input_validation.create_job_reference(
+        job_reference = app.user_input_validation.job_reference(
             self.__main_menu,
             barcode_reference,
             "Normal"
@@ -644,7 +644,7 @@ class Controller():
             else:
                 self.__main_menu.clear_user_input()
                 
-                full_job_ref = app.user_input_validation.create_job_reference(
+                full_job_ref = app.user_input_validation.job_reference(
                     self.__main_menu,
                     user_input,
                     input_mode
@@ -686,7 +686,7 @@ class Controller():
                 and manual_submission):
             self.__main_menu.clear_user_input()
             
-            full_job_ref = app.user_input_validation.create_job_reference(
+            full_job_ref = app.user_input_validation.job_reference(
                 self.__main_menu,
                 user_input,
                 input_mode

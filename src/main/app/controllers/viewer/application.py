@@ -1,12 +1,14 @@
 import wx
+from src.main import documents
 from src.main.app.configuration import ViewerConfiguration
 from src.main.app.controllers.viewer.document import DocumentController
 from src.main.app.interfaces import RootInterface
-from src.main.gui import Viewer
-from src.main import documents
 from src.main.documents.references import JobReference
+from src.main.gui import Viewer
+from src.main.app.controllers.viewer.user_input import UserInputController
 
-class ViewerController:
+
+class ViewerApplicationController:
     def __init__(
             self, root_application: RootInterface, config: ViewerConfiguration
     ) -> None:
@@ -17,6 +19,7 @@ class ViewerController:
         self._bind_callbacks()
 
         self._documents = DocumentController(gui=self._gui)
+        self._user_input = UserInputController(gui=self._gui)
 
     def _initialise_gui(self) -> None:
         self._gui = Viewer(self._root.window)
@@ -64,31 +67,12 @@ class ViewerController:
         self._root.window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
 
     def on_submit(self, _event: wx.EVT_BUTTON) -> None:
-        document_type = documents.load(
-            full_name=self._gui.input_bar.document_type)
-
-        job_reference = self._create_job_reference(
-            self._gui.input_bar.reference_input)
+        document_type = self._user_input.document_type()
+        job_reference = self._user_input.job_reference()
 
         if job_reference:
             self._documents.submit(
                 reference=job_reference, document_type=document_type)
-
-    @staticmethod
-    def _create_job_reference(reference: str) -> JobReference or None:
-        try:
-            return JobReference(reference)
-
-        except ValueError:
-            message_box = wx.MessageDialog(
-                parent=None, message=f"Job reference {reference} is invalid.",
-                caption="Invalid Job Reference"
-            )
-
-            with message_box:
-                message_box.ShowModal()
-
-            return None
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         self._documents.import_files()
@@ -109,3 +93,4 @@ class ViewerController:
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
+

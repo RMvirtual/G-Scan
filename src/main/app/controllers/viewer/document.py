@@ -7,9 +7,10 @@ from src.main.app.controllers.viewer.document_tree import (
 from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main.data_structures import AbstractNode, AbstractLeaf
 from src.main.documents import Document
+from src.main.documents.references import JobReference
 from src.main.documents.trees import PendingLeaf
 from src.main.gui import Viewer
-from src.main.documents.references import JobReference
+
 
 class DocumentController:
     def __init__(self, gui: Viewer):
