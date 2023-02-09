@@ -19,17 +19,58 @@ class DocumentTreeController:
         root = self._document_tree.root
         self._gui.AddRoot(text=root.label, data=root.node_id)
 
-        self.append_to_gui(self._document_tree.root.pending_branch)
+        self._append_to_gui(self._document_tree.root.pending_branch)
 
     def bind_selection(self, callback) -> None:
         self._gui.Bind(event=wx.EVT_TREE_SEL_CHANGED, handler=callback)
         # self._gui.Bind(event=wx.EVT_TREE_ITEM_ACTIVATED, handler=callback)
 
+    def selected_items(self) -> list[AbstractNode]:
+        return [
+            self._node_from_handle(handle=selection)
+            for selection in self._gui.GetSelections()
+            if selection is not None
+        ]
+
+    def split_pages(self, node: AbstractLeaf) -> None:
+        with DocumentSplitDialog(max_pages=len(node.data)) as dialog:
+            self.on_split_dialog(dialog, node)
+
+    def on_split_dialog(
+            self, dialog: DocumentSplitDialog, node: AbstractLeaf) -> None:
+        option = dialog.ShowModal()
+
+        if option == DocumentSplitDialog.SPLIT_ALL:
+            self.split_all(node)
+
+        elif option == DocumentSplitDialog.SPLIT_RANGE:
+            self.split_range(node, range=dialog.page_range())
+
+    def split_all(self, node: AbstractNode) -> None:
+        for split_node in node.split_all():
+            self._append_to_gui(split_node)
+
+    def split_range(self, node: AbstractNode, range: tuple[int, int]) -> None:
+        if range == (1, len(node.data)):
+            return
+
+        self._append_to_gui(
+            node.split_range(start=range[0]-1, stop=range[1]))
+
+    def delete_selected(self) -> None:
+        for node in self.selected_items():
+            node.detach()
+            self._gui.Delete(item=self._handle_from_node(node))
+
+    def expand(self, node: AbstractNode) -> None:
+        tree_handle = self._gui.get_item_handle(node_id=node.node_id)
+        self._gui.Expand(item=tree_handle)
+
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         result = self.pending_leaves_from_files(paths)
 
         for pending_leaf in result:
-            self.append_to_gui(pending_leaf)
+            self._append_to_gui(pending_leaf)
 
         self.expand(self._document_tree.pending_branch)
 
@@ -54,12 +95,19 @@ class DocumentTreeController:
 
             document_branch.add(leaf)
 
-            self.remove_from_gui(node=leaf)
-            self.append_to_gui(leaf)
+            self._remove_from_gui(node=leaf)
+            self._append_to_gui(leaf)
 
         self._gui.ExpandAll()
 
-    def remove_from_gui(self, node: AbstractNode) -> None:
+    def _append_to_gui(self, node: AbstractNode) -> None:
+        self._gui.AppendItem(
+            parent=self._handle_from_node(node.parent),
+            text=node.label,
+            data=node.node_id
+        )
+
+    def _remove_from_gui(self, node: AbstractNode) -> None:
         self._gui.Delete(self._gui.get_item_handle(node_id=node.node_id))
 
     def _append_existing(
@@ -77,9 +125,8 @@ class DocumentTreeController:
         return self._handle_from_node(self._document_tree.root)
 
     def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
-        node_id = self._gui.get_node_id(tree_handle=handle)
-
-        return self._document_tree.child_by_id(node_id=node_id)
+        return self._document_tree.child_by_id(
+            node_id=self._gui.get_node_id(tree_handle=handle))
 
     def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
         return self._gui.get_item_handle(node.node_id)
@@ -88,20 +135,13 @@ class DocumentTreeController:
             self, job_branch: JobBranch, document_type: Document
     ) -> DocumentBranch:
         result = job_branch.create_branch(document_type=document_type)
-        self.append_to_gui(result)
+        self._append_to_gui(result)
 
         return result
 
-    def append_to_gui(self, node: AbstractNode) -> None:
-        self._gui.AppendItem(
-            parent=self._handle_from_node(node.parent),
-            text=node.label,
-            data=node.node_id
-        )
-
     def _new_job_branch(self, reference: str) -> JobBranch:
         result = self._document_tree.create_job_branch(reference)
-        self.append_to_gui(result)
+        self._append_to_gui(result)
 
         return result
 
@@ -112,41 +152,3 @@ class DocumentTreeController:
             data=rendering.render_images(file_path=file_path)
         )
 
-    def selected_items(self) -> list[AbstractNode]:
-        return [
-            self._node_from_handle(handle=selection)
-            for selection in self._gui.GetSelections()
-            if selection is not None
-        ]
-
-    def split_pages(self, node: AbstractLeaf) -> None:
-        no_of_pages = len(node.data)
-
-        with DocumentSplitDialog(max_pages=no_of_pages) as dialog:
-            option = dialog.ShowModal()
-
-            if option == DocumentSplitDialog.SPLIT_ALL:
-                split_nodes = node.split_all()
-
-                for split_node in split_nodes:
-                    self.append_to_gui(split_node)
-
-            elif option == DocumentSplitDialog.SPLIT_RANGE:
-                range = dialog.page_range()
-
-                if range == (1, no_of_pages):
-                    return
-
-                split_node = node.split_range(
-                    start=range[0] - 1, stop=range[1])
-
-                self.append_to_gui(split_node)
-
-    def delete_selected(self) -> None:
-        for node in self.selected_items():
-            node.detach()
-            self._gui.Delete(item=self._handle_from_node(node))
-
-    def expand(self, node: AbstractNode) -> None:
-        tree_handle = self._gui.get_item_handle(node_id=node.node_id)
-        self._gui.Expand(item=tree_handle)
