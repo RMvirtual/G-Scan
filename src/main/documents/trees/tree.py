@@ -1,8 +1,8 @@
 import wx
 from src.main.data_structures import AbstractRoot
+from src.main.documents.references import AbstractReference
 from src.main.documents.trees.pending import PendingBranch
 from src.main.documents.trees.processed import JobBranch
-from src.main.documents.references import AbstractReference
 
 
 class DocumentTree(AbstractRoot):
