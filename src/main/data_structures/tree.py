@@ -27,7 +27,7 @@ class AbstractNode:
 
         return self
 
-    def child_by_id(self, node_id: wx.TreeItemId) -> AbstractNode or None:
+    def child_by_id(self, node_id: int) -> AbstractNode or None:
         for child in self.children:
             if child.is_node(node_id):
                 return child
@@ -66,7 +66,7 @@ class AbstractNode:
         self._children = new_children
 
     @property
-    def node_id(self) -> wx.TreeItemId:
+    def node_id(self) -> int:
         return id(self)
 
     def is_root(self) -> bool:
@@ -156,4 +156,4 @@ class AbstractLeaf(AbstractNode):
         start_invalid = start < 0 or start > len(self.data) - 1
         stop_invalid = stop < start or stop > len(self.data)
 
-        return not start_invalid or stop_invalid
+        return not (start_invalid or stop_invalid)
