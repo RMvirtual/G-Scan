@@ -29,13 +29,22 @@ class DocumentTreeController:
         # self._gui.Bind(event=wx.EVT_TREE_ITEM_ACTIVATED, handler=callback)
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
-        result = [self._create_pending_leaf(file_path=path) for path in paths]
+        leaves = [self._create_pending_leaf(file_path=path) for path in paths]
+
+        pending_branch_handle = self._gui.get_item_handle(
+            node_id=self._document_tree.pending_branch.node_id)
 
         # Need to pass results to the document tree ctrl here.
+        for pending_leaf in leaves:
+            self._gui.AppendItem(
+                parent=pending_branch_handle,
+                text=pending_leaf.label,
+                data=pending_leaf.node_id
+            )
 
         self._gui.ExpandAll()
 
-        return result
+        return leaves
 
     def submit(self, reference: str, document_type: Document) -> None:
         if self._document_tree.contains_branch(reference):
@@ -91,7 +100,7 @@ class DocumentTreeController:
                 node.split_range(start=range[0] - 1, stop=range[1])
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
-        selections = self._gui.file_tree.tree.GetSelections()
+        selections = self._gui.GetSelections()
 
         if selections:
             for selection in selections:
