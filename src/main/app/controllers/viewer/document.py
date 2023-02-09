@@ -61,17 +61,21 @@ class DocumentController:
         selections = self._document_tree.get_selected_items()
 
         if len(selections) == 1:
-            print(f"Raw Item: {selections[0]}")
             print(f"One item selected ({selections[0].label}).")
             node = selections[0]
 
             if node.is_leaf():
+                print("Viewing leaf node.")
                 self._set_currently_viewed(node)
 
             elif node.is_branch():
+                print("Viewing branch.")
                 self._document_tree.expand(node)
                 self._page_view.hide_all_widgets()
                 self._clear_node_to_view()
+
+            else:
+                print("Not sure what I'm viewing.")
 
         elif len(selections) > 1:
             print("Multiple selections")

@@ -28,13 +28,13 @@ class AbstractNode:
         return self
 
     def child_by_id(self, node_id: int) -> AbstractNode or None:
-        child_names = [child.label for child in self.children]
+        # Logic not working in here for some reason.
 
-        print(f"All children in {self.label}: {child_names}")
+        children_names = [child.label for child in self.children]
+        print(f"All children: {children_names}")
 
         for child in self.children:
-            print(f"Inspecting child {child.node_id} {child.label}")
-
+            print(f"Current Child: {child} {child.node_id}")
             if child.node_id == node_id:
                 return child
 

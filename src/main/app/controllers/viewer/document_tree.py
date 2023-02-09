@@ -53,9 +53,14 @@ class DocumentTreeController:
                 job_branch, document_type)
 
             document_branch.add(leaf)
+
+            self.remove_from_gui(node=leaf)
             self.append_to_gui(leaf)
 
         self._gui.ExpandAll()
+
+    def remove_from_gui(self, node: AbstractNode) -> None:
+        self._gui.Delete(self._gui.get_item_handle(node_id=node.node_id))
 
     def _append_existing(
             self, reference: str, document_type: Document, leaf: AbstractLeaf
@@ -89,7 +94,6 @@ class DocumentTreeController:
             data=node.node_id
         )
 
-
     def _new_job_branch(self, reference: str) -> JobBranch:
         result = self._document_tree.create_job_branch(reference)
         self.append_to_gui(result)
@@ -105,7 +109,7 @@ class DocumentTreeController:
 
     def get_selected_items(self) -> list[AbstractNode]:
         selections = self._gui.GetSelections()
-
+        print(f"Selections {selections}")
         result = []
 
         for selection in selections:
@@ -113,7 +117,11 @@ class DocumentTreeController:
             node = self._document_tree.child_by_id(node_id=node_id)
 
             if node:
+                print(f"Appending node {node.label}")
                 result.append(node)
+
+            else:
+                print(f"Could not find node for {selection}")
 
         return result
 
