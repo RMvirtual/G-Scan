@@ -120,7 +120,9 @@ class DocumentTreeController:
         ]
 
     def split_pages(self, node: AbstractLeaf) -> None:
-        with DocumentSplitDialog(len(node.data)) as dialog:
+        no_of_pages = len(node.data)
+
+        with DocumentSplitDialog(max_pages=no_of_pages) as dialog:
             option = dialog.ShowModal()
 
             if option == DocumentSplitDialog.SPLIT_ALL:
@@ -131,6 +133,9 @@ class DocumentTreeController:
 
             elif option == DocumentSplitDialog.SPLIT_RANGE:
                 range = dialog.page_range()
+
+                if range == (1, no_of_pages):
+                    return
 
                 split_node = node.split_range(
                     start=range[0] - 1, stop=range[1])
