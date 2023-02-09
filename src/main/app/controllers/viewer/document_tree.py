@@ -124,11 +124,18 @@ class DocumentTreeController:
             option = dialog.ShowModal()
 
             if option == DocumentSplitDialog.SPLIT_ALL:
-                node.split_all()
+                split_nodes = node.split_all()
+
+                for split_node in split_nodes:
+                    self.append_to_gui(split_node)
 
             elif option == DocumentSplitDialog.SPLIT_RANGE:
                 range = dialog.page_range()
-                node.split_range(start=range[0] - 1, stop=range[1])
+
+                split_node = node.split_range(
+                    start=range[0] - 1, stop=range[1])
+
+                self.append_to_gui(split_node)
 
     def delete_selected(self) -> None:
         for node in self.selected_items():
