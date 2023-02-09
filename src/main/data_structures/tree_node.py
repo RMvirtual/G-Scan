@@ -34,12 +34,21 @@ class AbstractNode:
         print(f"All children: {children_names}")
 
         for child in self.children:
-            print(f"Current Child: {child} {child.node_id}")
-            if child.node_id == node_id:
-                return child
+            print(f"Current Child: {child.label} {child.node_id}")
 
             if not child.is_empty():
+                print(f"Entering children of {child.label}")
+
                 return child.child_by_id(node_id)
+
+            if child.node_id == node_id:
+                print(f"Found child {node_id} as {child.label}")
+
+                return child
+
+            print(f"Bailing from inner loop of {child.label}")
+
+        print(f"Bailing from outer loop of {self.label}")
 
         return None
 
