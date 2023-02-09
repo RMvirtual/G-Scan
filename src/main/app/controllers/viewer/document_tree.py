@@ -62,23 +62,41 @@ class DocumentTreeController:
             print("Does not contain reference.")
             job_branch = self._new_job_branch(reference)
 
-            document_branch = job_branch.create_branch(
-                document_type=document_type)
+            document_branch = self._new_document_branch(
+                job_branch, document_type)
 
             document_branch.add(leaf)
+            self.append_to_gui(leaf)
 
         self._gui.ExpandAll()
 
-    def _root_tree_id(self) -> wx.TreeItemId:
-        print(f"Searching for root ID {self._document_tree.root.node_id}.")
+    def _root_tree_handle(self) -> wx.TreeItemId:
+        return self._handle_from_node(self._document_tree.root)
 
-        return self._gui.get_item_handle(self._document_tree.root.node_id)
+    def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
+        return self._gui.get_item_handle(node.node_id)
+
+    def _new_document_branch(
+            self, job_branch: JobBranch, document_type: Document
+    ) -> DocumentBranch:
+        result = job_branch.create_branch(document_type=document_type)
+        self.append_to_gui(result)
+
+        return result
+
+    def append_to_gui(self, node: AbstractNode) -> None:
+        self._gui.AppendItem(
+            parent=self._handle_from_node(node.parent),
+            text=node.label,
+            data=node.node_id
+        )
+
 
     def _new_job_branch(self, reference: str) -> JobBranch:
         result = self._document_tree.create_job_branch(reference)
 
         self._gui.AppendItem(
-            parent=self._root_tree_id(),
+            parent=self._root_tree_handle(),
             text=result.label,
             data=result.node_id
         )
