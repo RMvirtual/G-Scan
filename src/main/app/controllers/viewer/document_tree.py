@@ -76,6 +76,11 @@ class DocumentTreeController:
     def _root_tree_handle(self) -> wx.TreeItemId:
         return self._handle_from_node(self._document_tree.root)
 
+    def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
+        node_id = self._gui.get_node_id(tree_handle=handle)
+
+        return self._document_tree.child_by_id(node_id=node_id)
+
     def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
         return self._gui.get_item_handle(node.node_id)
 
@@ -108,22 +113,11 @@ class DocumentTreeController:
         )
 
     def get_selected_items(self) -> list[AbstractNode]:
-        selections = self._gui.GetSelections()
-        print(f"Selections {selections}")
-        result = []
-
-        for selection in selections:
-            node_id = self._gui.get_node_id(tree_handle=selection)
-            node = self._document_tree.child_by_id(node_id=node_id)
-
-            if node:
-                print(f"Appending node {node.label}")
-                result.append(node)
-
-            else:
-                print(f"Could not find node for {selection}")
-
-        return result
+        return [
+            self._node_from_handle(handle=selection)
+            for selection in self._gui.GetSelections()
+            if selection is not None
+        ]
 
     def split_pages(self, node: AbstractLeaf) -> None:
         with DocumentSplitDialog(len(node.data)) as dialog:

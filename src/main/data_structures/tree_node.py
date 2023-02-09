@@ -32,11 +32,11 @@ class AbstractNode:
             if child.node_id == node_id:
                 return child
 
-            if not child.is_empty():
-                sub_child = child.child_by_id(node_id)
+            if child.has_children():
+                grandchild = child.child_by_id(node_id)
 
-                if sub_child and sub_child.node_id == node_id:
-                    return sub_child
+                if grandchild and grandchild.node_id == node_id:
+                    return grandchild
 
         return None
 
@@ -86,6 +86,9 @@ class AbstractNode:
 
     def has_parent(self) -> bool:
         return self._parent is not None
+
+    def has_children(self) -> bool:
+        return len(self._children) > 0
 
     def __eq__(self, other: AbstractNode) -> bool:
         return self.node_id == other.node_id
