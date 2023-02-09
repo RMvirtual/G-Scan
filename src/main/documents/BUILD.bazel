@@ -6,6 +6,7 @@ py_library(
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
+        "//src/main/documents/references",
         "//src/main/documents/rendering",
         "//src/main/documents/trees",
         "//src/main/documents/types",

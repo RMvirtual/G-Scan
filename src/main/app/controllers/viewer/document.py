@@ -9,6 +9,7 @@ from src.main.data_structures import AbstractLeaf
 from src.main.documents import Document
 from src.main.documents.trees import PendingLeaf
 from src.main.gui import Viewer
+from src.main.documents.references import JobReference
 
 
 class DocumentController:
@@ -38,10 +39,19 @@ class DocumentController:
         print("Michelin Mode")
 
     def submit(self, reference: str, document_type: Document) -> None:
-        self._document_tree.submit(
-            reference=reference, document_type=document_type,
-            leaf=self._currently_viewed
-        )
+        job_reference = None
+
+        try:
+            job_reference = JobReference(reference)
+
+        except ValueError:
+            print(f"Reference {reference} is invalid.")
+
+        if job_reference:
+            self._document_tree.submit(
+                reference=reference, document_type=document_type,
+                leaf=self._currently_viewed
+            )
 
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
         self._document_tree.split_pages(self._currently_viewed)
