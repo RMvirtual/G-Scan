@@ -1,6 +1,6 @@
 import ntpath
 import wx
-from src.main.data_structures import *
+from src.main.data_structures import AbstractNode, AbstractLeaf
 
 from src.main.documents import (
     Document, DocumentBranch, DocumentLeaf, DocumentTree, JobBranch,
@@ -15,11 +15,12 @@ class DocumentTreeController:
     def __init__(self, gui: DocumentTreeCtrl):
         self._gui = gui
         self._document_tree = DocumentTree()
+        self._initialise_root_node()
+        self._append_to_gui(self._document_tree.root.pending_branch)
 
+    def _initialise_root_node(self) -> None:
         root = self._document_tree.root
         self._gui.AddRoot(text=root.label, data=root.node_id)
-
-        self._append_to_gui(self._document_tree.root.pending_branch)
 
     def bind_selection(self, callback) -> None:
         self._gui.Bind(event=wx.EVT_TREE_SEL_CHANGED, handler=callback)
@@ -118,15 +119,11 @@ class DocumentTreeController:
 
         self._append_to_gui(node.split_range(start=range[0]-1, stop=range[1]))
 
-    def _root_tree_handle(self) -> wx.TreeItemId:
-        return self._handle_from_node(self._document_tree.root)
+    def _new_job_branch(self, reference: str) -> JobBranch:
+        result = self._document_tree.create_job_branch(reference)
+        self._append_to_gui(result)
 
-    def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
-        return self._document_tree.child_by_id(
-            node_id=self._gui.get_node_id(tree_handle=handle))
-
-    def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
-        return self._gui.get_item_handle(node.node_id)
+        return result
 
     def _new_document_branch(
             self, job_branch: JobBranch, document_type: Document
@@ -136,11 +133,12 @@ class DocumentTreeController:
 
         return result
 
-    def _new_job_branch(self, reference: str) -> JobBranch:
-        result = self._document_tree.create_job_branch(reference)
-        self._append_to_gui(result)
+    def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
+        return self._document_tree.child_by_id(
+            node_id=self._gui.get_node_id(tree_handle=handle))
 
-        return result
+    def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
+        return self._gui.get_item_handle(node.node_id)
 
     def _pending_leaves(self, file_paths: list[str]) -> list[PendingLeaf]:
         return [self._pending_leaf(file_path=path) for path in file_paths]
