@@ -50,5 +50,8 @@ class DocumentBranch(AbstractBranch):
 
 
 class DocumentLeaf(AbstractLeaf):
-    def __init__(self, parent: DocumentBranch, file_name: str = "") -> None:
-        super().__init__(parent=parent, label=file_name)
+    def __init__(
+            self, parent: DocumentBranch, file_name: str = "",
+            data: list[any] = None
+     ) -> None:
+        super().__init__(parent=parent, label=file_name, data=data)

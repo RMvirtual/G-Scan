@@ -1,6 +1,6 @@
 import ntpath
 import wx
-from src.main.data_structures.tree import *
+from src.main.data_structures import *
 
 from src.main.gui.viewer.document_tree import (
     DocumentTreePanel, DocumentTreeCtrl)
@@ -17,46 +17,33 @@ class DocumentTreeController:
         self._document_tree = DocumentTree()
 
         root = self._document_tree.root
-        root_id = self._gui.AddRoot(text=root.label, data=root.node_id)
+        self._gui.AddRoot(text=root.label, data=root.node_id)
 
-        pending = self._document_tree.pending_branch
-
-        self._gui.AppendItem(
-            parent=root_id, text=pending.label, data=pending.node_id)
+        self.append_to_gui(self._document_tree.root.pending_branch)
 
     def bind_selection(self, callback) -> None:
         self._gui.Bind(event=wx.EVT_TREE_SEL_CHANGED, handler=callback)
         # self._gui.Bind(event=wx.EVT_TREE_ITEM_ACTIVATED, handler=callback)
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
-        leaves = [self._create_pending_leaf(file_path=path) for path in paths]
+        result = self.pending_leaves_from_files(paths)
 
-        pending_branch_handle = self._gui.get_item_handle(
-            node_id=self._document_tree.pending_branch.node_id)
+        for pending_leaf in result:
+            self.append_to_gui(pending_leaf)
 
-        for pending_leaf in leaves:
-            self._gui.AppendItem(
-                parent=pending_branch_handle,
-                text=pending_leaf.label,
-                data=pending_leaf.node_id
-            )
+        self.expand(self._document_tree.pending_branch)
 
-        self._gui.ExpandAll()
+        return result
 
-        return leaves
+    def pending_leaves_from_files(self, paths: list[str]) -> list[PendingLeaf]:
+        return [self._create_pending_leaf(file_path=path) for path in paths]
 
     def submit(
             self, reference: str, document_type: Document,
             leaf: AbstractLeaf
     ) -> None:
         if self._document_tree.contains_branch(reference):
-            job_branch = self._document_tree.branch(reference)
-
-            if job_branch.contains_branch(document_type):
-                print(f"Contains {document_type.short_code}")
-
-            else:
-                print(f"Does not contain {document_type.short_code}")
+            self._append_existing(reference, document_type, leaf)
 
         else:
             print("Does not contain reference.")
@@ -69,6 +56,17 @@ class DocumentTreeController:
             self.append_to_gui(leaf)
 
         self._gui.ExpandAll()
+
+    def _append_existing(
+            self, reference: str, document_type: Document, leaf: AbstractLeaf
+    ) -> None:
+        job_branch = self._document_tree.branch(reference)
+
+        if job_branch.contains_branch(document_type):
+            print(f"Contains {document_type.short_code}")
+
+        else:
+            print(f"Does not contain {document_type.short_code}")
 
     def _root_tree_handle(self) -> wx.TreeItemId:
         return self._handle_from_node(self._document_tree.root)
@@ -94,12 +92,7 @@ class DocumentTreeController:
 
     def _new_job_branch(self, reference: str) -> JobBranch:
         result = self._document_tree.create_job_branch(reference)
-
-        self._gui.AppendItem(
-            parent=self._root_tree_handle(),
-            text=result.label,
-            data=result.node_id
-        )
+        self.append_to_gui(result)
 
         return result
 
@@ -119,7 +112,8 @@ class DocumentTreeController:
             node_id = self._gui.get_node_id(tree_handle=selection)
             node = self._document_tree.child_by_id(node_id=node_id)
 
-            result.append(node)
+            if node:
+                result.append(node)
 
         return result
 

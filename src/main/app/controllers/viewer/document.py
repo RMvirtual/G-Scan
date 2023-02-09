@@ -3,7 +3,7 @@ import wx
 
 from src.main import file_system
 from src.main.app.controllers.viewer.page_view import PageViewController
-from src.main.data_structures.tree import *
+from src.main.data_structures import *
 from src.main.documents import (
     Document, DocumentBranch, DocumentLeaf, DocumentTree, JobBranch,
     PendingBranch, PendingLeaf, rendering
@@ -61,6 +61,7 @@ class DocumentController:
         selections = self._document_tree.get_selected_items()
 
         if len(selections) == 1:
+            print(f"Raw Item: {selections[0]}")
             print(f"One item selected ({selections[0].label}).")
             node = selections[0]
 
