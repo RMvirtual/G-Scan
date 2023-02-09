@@ -39,19 +39,29 @@ class DocumentController:
         print("Michelin Mode")
 
     def submit(self, reference: str, document_type: Document) -> None:
-        job_reference = None
-
-        try:
-            job_reference = JobReference(reference)
-
-        except ValueError:
-            print(f"Reference {reference} is invalid.")
+        job_reference = self._create_job_reference(reference)
 
         if job_reference:
             self._document_tree.submit(
                 reference=reference, document_type=document_type,
                 leaf=self._currently_viewed
             )
+
+    @staticmethod
+    def _create_job_reference(reference: str) -> JobReference or None:
+        try:
+            return JobReference(reference)
+
+        except ValueError:
+            message_box = wx.MessageDialog(
+                parent=None, message=f"Job reference {reference} is invalid.",
+                caption="Invalid Job Reference"
+            )
+
+            with message_box:
+                message_box.ShowModal()
+
+            return None
 
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
         self._document_tree.split_pages(self._currently_viewed)
