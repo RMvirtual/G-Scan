@@ -27,7 +27,7 @@ class DocumentTreeCtrl(wx.TreeCtrl):
         item, cookie = self.GetFirstChild(item=root_id)
 
         while item.IsOk():
-            data = tree.GetItemData(item)
+            data = self.GetItemData(item)
 
             if data == node_id:
                 return item

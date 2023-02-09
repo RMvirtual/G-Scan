@@ -24,16 +24,9 @@ class DocumentTreeController:
         self._gui.AppendItem(
             parent=root_id, text=pending.label, data=pending.node_id)
 
-        self._bind_callbacks()
-
-    def _bind_callbacks(self) -> None:
-        self._gui.Bind(
-            event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_item_selection)
-
-        """
-        self._gui.file_tree.tree.Bind(
-            event=wx.EVT_TREE_ITEM_ACTIVATED, handler=self.on_item_selection)
-        """
+    def bind_selection(self, callback) -> None:
+        self._gui.Bind(event=wx.EVT_TREE_SEL_CHANGED, handler=callback)
+        # self._gui.Bind(event=wx.EVT_TREE_ITEM_ACTIVATED, handler=callback)
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         result = [self._create_pending_leaf(file_path=path) for path in paths]
@@ -73,32 +66,18 @@ class DocumentTreeController:
             data=rendering.render_images(file_path=file_path)
         )
 
-    def on_item_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        # Issues here.
-
+    def get_selected_items(self) -> list[AbstractNode]:
         selections = self._gui.GetSelections()
 
-        if len(selections) == 1:
-            print("One item selected.")
-            node_id = self._gui.get_node_id(tree_handle=selections[0])
+        result = []
+
+        for selection in selections:
+            node_id = self._gui.get_node_id(tree_handle=selection)
             node = self._document_tree.child_by_id(node_id=node_id)
 
-            if node.is_leaf():
-                self._set_currently_viewed(node)
+            result.append(node)
 
-            elif node.is_branch():
-                self._gui.Expand(item=selections[0])
-                # self._page_view.hide_all_widgets()
-                # self._clear_node_to_view()
-
-        elif len(selections) > 1:
-            print("Multiple selections")
-            # self._page_view.hide_split_button()
-
-        else:
-            print("No selections")
-            # self._page_view.hide_all_widgets()
-            # self._clear_node_to_view()
+        return result
 
     def split_pages(self, node: AbstractLeaf) -> None:
         with DocumentSplitDialog(len(node.data)) as dialog:
@@ -120,3 +99,7 @@ class DocumentTreeController:
                 node.detach()
 
             self._page_view.clear_display()
+
+    def expand(self, node: AbstractNode) -> None:
+        tree_handle = self._gui.get_item_handle(node_id=node.node_id)
+        self._gui.Expand(item=tree_handle)

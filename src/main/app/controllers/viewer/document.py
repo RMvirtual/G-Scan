@@ -30,6 +30,7 @@ class DocumentController:
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
         self._page_view.bind_split_pages(callback=self.on_split_pages)
+        self._document_tree.bind_selection(callback=self.on_item_selection)
 
     def import_files(self):
         files = file_system.file_import_dialog()
@@ -55,7 +56,29 @@ class DocumentController:
         self._display_node_to_view(page_no=event.Position - 1)
 
     def on_item_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        self._document_tree.on_item_selection(event)
+        selections = self._document_tree.get_selected_items()
+
+        if len(selections) == 1:
+            print("One item selected.")
+            node = selections[0]
+
+            if node.is_leaf():
+                self._set_currently_viewed(node)
+
+            elif node.is_branch():
+                self._document_tree.expand(node)
+                self._page_view.hide_all_widgets()
+                self._clear_node_to_view()
+
+        elif len(selections) > 1:
+            print("Multiple selections")
+            self._page_view.hide_split_button()
+
+        else:
+            print("No selections")
+            self._page_view.hide_all_widgets()
+            self._clear_node_to_view()
+
 
     def _set_currently_viewed(self, node: AbstractLeaf) -> None:
         if not node.is_leaf():
