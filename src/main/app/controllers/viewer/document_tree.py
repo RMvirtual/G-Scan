@@ -70,6 +70,8 @@ class DocumentTreeController:
         self._gui.ExpandAll()
 
     def _root_tree_id(self) -> wx.TreeItemId:
+        print(f"Searching for root ID {self._document_tree.root.node_id}.")
+
         return self._gui.get_item_handle(self._document_tree.root.node_id)
 
     def _new_job_branch(self, reference: str) -> JobBranch:

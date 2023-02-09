@@ -61,7 +61,7 @@ class DocumentController:
         selections = self._document_tree.get_selected_items()
 
         if len(selections) == 1:
-            print("One item selected.")
+            print(f"One item selected ({selections[0].label}).")
             node = selections[0]
 
             if node.is_leaf():

@@ -14,7 +14,13 @@ class DocumentTreeCtrl(wx.TreeCtrl):
         return self.GetItemData(item=tree_handle)
 
     def get_item_handle(self, node_id: int) -> wx.TreeItemId:
-        result = self._find_item_handle(
+        root_item = self.GetRootItem()
+        root_node_id = self.GetItemData(item=root_item)
+
+        if root_node_id == node_id:
+            return root_item
+
+        result = self._find_child_handle(
             node_id=node_id, root_id=self.GetRootItem())
 
         if not result.IsOk():
@@ -22,18 +28,18 @@ class DocumentTreeCtrl(wx.TreeCtrl):
 
         return result
 
-    def _find_item_handle(
+    def _find_child_handle(
             self, node_id: int, root_id: wx.TreeItemId) -> wx.TreeItemId:
         item, cookie = self.GetFirstChild(item=root_id)
 
         while item.IsOk():
             data = self.GetItemData(item)
-
+            print(data)
             if data == node_id:
                 return item
 
             if self.ItemHasChildren(item):
-                match = self._find_item_handle(node_id=node_id, root_id=item)
+                match = self._find_child_handle(node_id=node_id, root_id=item)
 
                 if match.IsOk():
                     return match
