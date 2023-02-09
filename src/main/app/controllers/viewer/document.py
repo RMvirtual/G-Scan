@@ -44,7 +44,9 @@ class DocumentController:
 
     def submit(self, reference: str, document_type: Document) -> None:
         self._document_tree.submit(
-            reference=reference, document_type=document_type)
+            reference=reference, document_type=document_type,
+            leaf=self._currently_viewed
+        )
 
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
         self._document_tree.split_pages(event)
@@ -86,7 +88,6 @@ class DocumentController:
 
         self._currently_viewed = node
 
-        self._page_view.show_all_widgets()
         self._page_view.show_all_widgets()
         self._page_view.set_total_pages(len(self._currently_viewed.data))
 

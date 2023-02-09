@@ -34,7 +34,6 @@ class DocumentTreeController:
         pending_branch_handle = self._gui.get_item_handle(
             node_id=self._document_tree.pending_branch.node_id)
 
-        # Need to pass results to the document tree ctrl here.
         for pending_leaf in leaves:
             self._gui.AppendItem(
                 parent=pending_branch_handle,
@@ -46,7 +45,10 @@ class DocumentTreeController:
 
         return leaves
 
-    def submit(self, reference: str, document_type: Document) -> None:
+    def submit(
+            self, reference: str, document_type: Document,
+            leaf: AbstractLeaf
+    ) -> None:
         if self._document_tree.contains_branch(reference):
             job_branch = self._document_tree.branch(reference)
 
@@ -58,15 +60,28 @@ class DocumentTreeController:
 
         else:
             print("Does not contain reference.")
-            job_branch = self._document_tree.create_job_branch(
-                reference=reference)
+            job_branch = self._new_job_branch(reference)
 
             document_branch = job_branch.create_branch(
                 document_type=document_type)
 
-            document_branch.add(self._currently_viewed)
+            document_branch.add(leaf)
 
         self._gui.ExpandAll()
+
+    def _root_tree_id(self) -> wx.TreeItemId:
+        return self._gui.get_item_handle(self._document_tree.root.node_id)
+
+    def _new_job_branch(self, reference: str) -> JobBranch:
+        result = self._document_tree.create_job_branch(reference)
+
+        self._gui.AppendItem(
+            parent=self._root_tree_id(),
+            text=result.label,
+            data=result.node_id
+        )
+
+        return result
 
     def _create_pending_leaf(self, file_path: str) -> PendingLeaf:
         return PendingLeaf(
