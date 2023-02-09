@@ -39,11 +39,10 @@ class DocumentTreeController:
     def delete_selected(self) -> None:
         for node in self.selected_items():
             node.detach()
-            self._gui.Delete(item=self._handle_from_node(node))
+            self._remove_from_gui(node)
 
     def expand(self, node: AbstractNode) -> None:
-        tree_handle = self._gui.get_item_handle(node_id=node.node_id)
-        self._gui.Expand(item=tree_handle)
+        self._gui.Expand(item=self._handle_from_node(node))
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         result = self._pending_leaves(paths)
@@ -75,16 +74,6 @@ class DocumentTreeController:
             self._append_to_gui(leaf)
 
         self._gui.ExpandAll()
-
-    def _append_to_gui(self, node: AbstractNode) -> None:
-        self._gui.AppendItem(
-            parent=self._handle_from_node(node.parent),
-            text=node.label,
-            data=node.node_id
-        )
-
-    def _remove_from_gui(self, node: AbstractNode) -> None:
-        self._gui.Delete(self._gui.get_item_handle(node_id=node.node_id))
 
     def _append_existing(
             self, reference: str, document_type: Document, leaf: AbstractLeaf
@@ -132,6 +121,16 @@ class DocumentTreeController:
         self._append_to_gui(result)
 
         return result
+
+    def _append_to_gui(self, node: AbstractNode) -> None:
+        self._gui.AppendItem(
+            parent=self._handle_from_node(node.parent),
+            text=node.label,
+            data=node.node_id
+        )
+
+    def _remove_from_gui(self, node: AbstractNode) -> None:
+        self._gui.Delete(self._gui.get_item_handle(node_id=node.node_id))
 
     def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
         return self._document_tree.child_by_id(
