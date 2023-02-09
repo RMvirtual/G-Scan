@@ -45,7 +45,7 @@ class DocumentTreeController:
         self._gui.Expand(item=tree_handle)
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
-        result = self.pending_leaves_from_files(paths)
+        result = self._pending_leaves(paths)
 
         for pending_leaf in result:
             self._append_to_gui(pending_leaf)
@@ -53,9 +53,6 @@ class DocumentTreeController:
         self.expand(self._document_tree.pending_branch)
 
         return result
-
-    def pending_leaves_from_files(self, paths: list[str]) -> list[PendingLeaf]:
-        return [self._create_pending_leaf(file_path=path) for path in paths]
 
     def submit(
             self, reference: str, document_type: Document,
@@ -145,10 +142,12 @@ class DocumentTreeController:
 
         return result
 
-    def _create_pending_leaf(self, file_path: str) -> PendingLeaf:
+    def _pending_leaves(self, file_paths: list[str]) -> list[PendingLeaf]:
+        return [self._pending_leaf(file_path=path) for path in file_paths]
+
+    def _pending_leaf(self, file_path: str) -> PendingLeaf:
         return PendingLeaf(
             parent=self._document_tree.pending_branch,
             file_name=ntpath.basename(file_path),
             data=rendering.render_images(file_path=file_path)
         )
-
