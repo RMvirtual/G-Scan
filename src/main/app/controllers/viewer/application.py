@@ -19,27 +19,12 @@ class ViewerApplicationController:
         self._bind_callbacks()
 
         self._documents = DocumentController(gui=self._gui)
-        self._user_input = UserInputController(gui=self._gui)
+        self._user_input = UserInputController(
+            gui=self._gui, config=self._config)
 
     def _initialise_gui(self) -> None:
         self._gui = Viewer(self._root.window)
         self._root.window.set_panel(self._gui)
-        self._initialise_department_box()
-        self._initialise_document_box()
-
-    def _initialise_department_box(self):
-        department_names = self._config.all_departments.full_names()
-        self._gui.input_bar.department_options = department_names
-
-        current_department = self._config.department.full_name
-        self._gui.input_bar.department = current_department
-
-    def _initialise_document_box(self) -> None:
-        document_names = self._config.department.document_types.full_names()
-        self._gui.input_bar.document_options = document_names
-
-        current_document = self._config.document_type.full_name
-        self._gui.input_bar.document_type = current_document
 
     def _bind_callbacks(self) -> None:
         self._bind_file_menu_callbacks()
