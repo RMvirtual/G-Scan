@@ -1,5 +1,4 @@
 from __future__ import annotations
-import wx
 
 
 class AbstractNode:
@@ -15,9 +14,6 @@ class AbstractNode:
         if node.has_parent():
             node.detach()
 
-        self.root.control.AppendItem(
-            parent=self.node_id, text=node.label, data=node.node_id)
-
         node.parent = self
         self.children.append(node)
 
@@ -27,9 +23,7 @@ class AbstractNode:
         if self._parent:
             self._parent.children.remove(self)
 
-        self.root.control.Delete(item=self._node_id)
         self._parent = None
-        self._node_id = None
 
         return self
 
@@ -90,26 +84,16 @@ class AbstractNode:
     def has_parent(self) -> bool:
         return self._parent is not None
 
-    def is_node(self, node_id: wx.TreeItemId) -> bool:
-        return self._node_id == node_id
-
+    def __eq__(self, other: AbstractNode) -> bool:
+        return self.node_id == other.node_id
 
 class AbstractRoot(AbstractNode):
-    """Requires a wx.TreeCtrl object to plug into to create node ID
-    references.
-    """
-    def __init__(self, tree_control: wx.TreeCtrl, label: str = "") -> None:
+    def __init__(self, label: str = "") -> None:
         super().__init__(parent=None, label=label)
-        self._control = tree_control
-        self._node_id = self._control.AddRoot(text="Document Root")
 
     @property
     def root(self) -> AbstractRoot:
         return self
-
-    @property
-    def control(self) -> wx.TreeCtrl:
-        return self._control
 
     def is_root(self) -> bool:
         return True

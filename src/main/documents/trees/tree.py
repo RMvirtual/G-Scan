@@ -5,11 +5,8 @@ from src.main.documents.trees.processed import JobBranch
 
 
 class DocumentTree(AbstractRoot):
-    def __init__(self, tree_control: wx.TreeCtrl) -> None:
-        """Requires a wx.TreeCtrl object to plug into to create the node
-        references.
-        """
-        super().__init__(tree_control=tree_control, label="All Files")
+    def __init__(self) -> None:
+        super().__init__(label="All Files")
 
         self.pending_branch = PendingBranch(parent=self)
         self.job_branches: list[JobBranch] = []

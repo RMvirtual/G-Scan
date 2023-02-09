@@ -32,11 +32,10 @@ class JobBranch(AbstractBranch):
     def contains_branch(self, document_type: Document) -> bool:
         return bool(self.matching_branches(document_type))
 
-    def matching_branches(
-            self, document_type: Document) -> list[DocumentBranch]:
+    def matching_branches(self, document: Document) -> list[DocumentBranch]:
         return [
             branch for branch in self.document_branches
-            if branch.document_type == document_type
+            if branch.document_type == document
         ]
 
 
