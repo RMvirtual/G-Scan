@@ -1,11 +1,15 @@
 import wx
 from src.main import documents
 from src.main.app.configuration import ViewerConfiguration
-from src.main.app.controllers.viewer.document import DocumentController
-from src.main.app.interfaces import RootInterface
 from src.main.documents import Document
-from src.main.documents.references import JobReference
+from src.main.documents.references import AbstractReference, JobReference
 from src.main.gui import Viewer
+
+
+class SubmissionDocument:
+    def __init__(self, reference: AbstractReference, document_type: Document):
+        self.reference = reference
+        self.document_type = document_type
 
 
 class UserInputController:
@@ -30,6 +34,12 @@ class UserInputController:
 
         current_document = self._config.document_type.full_name
         self._input_bar.document_type = current_document
+
+    def submission_document(self) -> SubmissionDocument:
+        return SubmissionDocument(
+            reference=self.job_reference(),
+            document_type=self.document_type()
+        )
 
     def job_reference(self) -> JobReference or None:
         reference = self._input_bar.reference_input

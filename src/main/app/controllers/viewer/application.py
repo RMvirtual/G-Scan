@@ -5,7 +5,8 @@ from src.main.app.controllers.viewer.document import DocumentController
 from src.main.app.interfaces import RootInterface
 from src.main.documents.references import JobReference
 from src.main.gui import Viewer
-from src.main.app.controllers.viewer.user_input import UserInputController
+from src.main.app.controllers.viewer.user_input import (
+    UserInputController, SubmissionDocument)
 
 
 class ViewerApplicationController:
@@ -52,12 +53,10 @@ class ViewerApplicationController:
         self._root.window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
 
     def on_submit(self, _event: wx.EVT_BUTTON) -> None:
-        document_type = self._user_input.document_type()
-        job_reference = self._user_input.job_reference()
+        submission_document = self._user_input.submission_document()
 
-        if job_reference:
-            self._documents.submit(
-                reference=job_reference, document_type=document_type)
+        if submission_document.reference:
+            self._documents.submit(submission_document)
 
     def on_import_files(self, event: wx.EVT_MENU) -> None:
         self._documents.import_files()

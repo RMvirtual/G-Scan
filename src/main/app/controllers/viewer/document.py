@@ -4,6 +4,7 @@ from src.main import file_system
 from src.main.app.controllers.viewer.document_tree import (
     DocumentTreeController)
 
+from src.main.app.controllers.viewer.user_input import SubmissionDocument
 from src.main.app.controllers.viewer.page_view import PageViewController
 from src.main.data_structures import AbstractNode, AbstractLeaf
 from src.main.documents import Document
@@ -38,10 +39,10 @@ class DocumentController:
     def import_as(self) -> None:
         print("Michelin Mode")
 
-    def submit(self, reference: JobReference, document_type: Document) -> None:
+    def submit(self, submission: SubmissionDocument) -> None:
         self._document_tree.create_job_node(
-            reference=reference,
-            document_type=document_type,
+            reference=submission.reference,
+            document_type=submission.document_type,
             leaf=self._currently_viewed
         )
 

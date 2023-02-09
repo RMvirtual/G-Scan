@@ -9,7 +9,7 @@ from src.main.documents import (
 
 from src.main.gui.dialogs.page_range import PageRangeDialog
 from src.main.gui.viewer.document_tree import DocumentTreeCtrl
-from src.main.documents.references import JobReference
+from src.main.documents.references import AbstractReference
 
 
 class DocumentTreeController:
@@ -56,7 +56,7 @@ class DocumentTreeController:
         return result
 
     def create_job_node(
-            self, reference: JobReference, document_type: Document,
+            self, reference: AbstractReference, document_type: Document,
             leaf: AbstractLeaf
     ) -> None:
         reference_label = str(reference)
