@@ -112,7 +112,7 @@ class DocumentTreeController:
             data=rendering.render_images(file_path=file_path)
         )
 
-    def get_selected_items(self) -> list[AbstractNode]:
+    def selected_items(self) -> list[AbstractNode]:
         return [
             self._node_from_handle(handle=selection)
             for selection in self._gui.GetSelections()
@@ -131,14 +131,9 @@ class DocumentTreeController:
                 node.split_range(start=range[0] - 1, stop=range[1])
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
-        selections = self._gui.GetSelections()
-
-        if selections:
-            for selection in selections:
-                node = self._document_tree.child_by_id(node_id=selection)
-                node.detach()
-
-            self._page_view.clear_display()
+        for node in self.selected_items():
+            node.detach()
+            self._gui.Delete(item=self._handle_from_node(node))
 
     def expand(self, node: AbstractNode) -> None:
         tree_handle = self._gui.get_item_handle(node_id=node.node_id)

@@ -48,12 +48,13 @@ class DocumentController:
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
         self._document_tree.on_delete(event)
+        self._page_view.clear_display()
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
         self._display_node_to_view(page_no=event.Position - 1)
 
     def on_item_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
-        selections = self._document_tree.get_selected_items()
+        selections = self._document_tree.selected_items()
 
         if len(selections) == 1:
             print(f"One item selected ({selections[0].label}).")
