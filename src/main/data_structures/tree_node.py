@@ -30,25 +30,15 @@ class AbstractNode:
     def child_by_id(self, node_id: int) -> AbstractNode or None:
         # Logic not working in here for some reason.
 
-        children_names = [child.label for child in self.children]
-        print(f"All children: {children_names}")
-
         for child in self.children:
-            print(f"Current Child: {child.label} {child.node_id}")
-
-            if not child.is_empty():
-                print(f"Entering children of {child.label}")
-
-                return child.child_by_id(node_id)
-
             if child.node_id == node_id:
-                print(f"Found child {node_id} as {child.label}")
-
                 return child
 
-            print(f"Bailing from inner loop of {child.label}")
+            if not child.is_empty():
+                match = child.child_by_id(node_id)
 
-        print(f"Bailing from outer loop of {self.label}")
+                if match:
+                    return match
 
         return None
 
