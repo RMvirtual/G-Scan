@@ -29,7 +29,7 @@ class AbstractNode:
 
     def child_by_id(self, node_id: int) -> AbstractNode or None:
         for child in self.children:
-            if child.is_node(node_id):
+            if child.node_id == node_id:
                 return child
 
             if child.has_children():

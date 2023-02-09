@@ -1,3 +1,4 @@
+import ntpath
 import wx
 from src.main.data_structures.tree import *
 
@@ -19,6 +20,7 @@ class DocumentTreeController:
         root_id = self._gui.AddRoot(text=root.label, data=root.node_id)
 
         pending = self._document_tree.pending_branch
+
         self._gui.AppendItem(
             parent=root_id, text=pending.label, data=pending.node_id)
 
@@ -74,7 +76,7 @@ class DocumentTreeController:
     def on_item_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
         # Issues here.
 
-        selections = self._gui.file_tree.tree.GetSelections()
+        selections = self._gui.GetSelections()
 
         if len(selections) == 1:
             print("One item selected.")
@@ -85,18 +87,18 @@ class DocumentTreeController:
                 self._set_currently_viewed(node)
 
             elif node.is_branch():
-                self._gui.Expand(item=node.node_id)
-                self._page_view.hide_all_widgets()
-                self._clear_node_to_view()
+                self._gui.Expand(item=selections[0])
+                # self._page_view.hide_all_widgets()
+                # self._clear_node_to_view()
 
         elif len(selections) > 1:
             print("Multiple selections")
-            self._page_view.hide_split_button()
+            # self._page_view.hide_split_button()
 
         else:
             print("No selections")
-            self._page_view.hide_all_widgets()
-            self._clear_node_to_view()
+            # self._page_view.hide_all_widgets()
+            # self._clear_node_to_view()
 
     def split_pages(self, node: AbstractLeaf) -> None:
         with DocumentSplitDialog(len(node.data)) as dialog:
