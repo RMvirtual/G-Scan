@@ -2,13 +2,13 @@ import ntpath
 import wx
 from src.main.data_structures import *
 
-from src.main.gui.viewer.document_tree import (
-    DocumentTreePanel, DocumentTreeCtrl)
-
 from src.main.documents import (
     Document, DocumentBranch, DocumentLeaf, DocumentTree, JobBranch,
     PendingBranch, PendingLeaf, rendering
 )
+
+from src.main.gui.dialogs.document_split import DocumentSplitDialog
+from src.main.gui.viewer.document_tree import DocumentTreeCtrl
 
 
 class DocumentTreeController:
@@ -130,7 +130,7 @@ class DocumentTreeController:
                 range = dialog.page_range()
                 node.split_range(start=range[0] - 1, stop=range[1])
 
-    def on_delete(self, event: wx.EVT_BUTTON) -> None:
+    def delete_selected(self) -> None:
         for node in self.selected_items():
             node.detach()
             self._gui.Delete(item=self._handle_from_node(node))

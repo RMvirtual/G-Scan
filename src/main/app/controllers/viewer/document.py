@@ -1,14 +1,14 @@
 import wx
 
 from src.main import file_system
-from src.main.app.controllers.viewer.page_view import PageViewController
-from src.main.data_structures import AbstractLeaf
-from src.main.gui import Viewer
 from src.main.app.controllers.viewer.document_tree import (
     DocumentTreeController)
 
+from src.main.app.controllers.viewer.page_view import PageViewController
+from src.main.data_structures import AbstractLeaf
 from src.main.documents import Document
 from src.main.documents.trees import PendingLeaf
+from src.main.gui import Viewer
 
 
 class DocumentController:
@@ -44,10 +44,10 @@ class DocumentController:
         )
 
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
-        self._document_tree.split_pages(event)
+        self._document_tree.split_pages(self._currently_viewed)
 
     def on_delete(self, event: wx.EVT_BUTTON) -> None:
-        self._document_tree.on_delete(event)
+        self._document_tree.delete_selected()
         self._page_view.clear_display()
 
     def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
@@ -57,15 +57,12 @@ class DocumentController:
         selections = self._document_tree.selected_items()
 
         if len(selections) == 1:
-            print(f"One item selected ({selections[0].label}).")
             node = selections[0]
 
             if node.is_leaf():
-                print("Viewing leaf node.")
                 self._set_currently_viewed(node)
 
             elif node.is_branch():
-                print("Viewing branch.")
                 self._document_tree.expand(node)
                 self._page_view.hide_all_widgets()
                 self._clear_node_to_view()
