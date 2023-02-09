@@ -28,17 +28,15 @@ class AbstractNode:
         return self
 
     def child_by_id(self, node_id: int) -> AbstractNode or None:
-        # Logic not working in here for some reason.
-
         for child in self.children:
             if child.node_id == node_id:
                 return child
 
             if not child.is_empty():
-                match = child.child_by_id(node_id)
+                sub_child = child.child_by_id(node_id)
 
-                if match:
-                    return match
+                if sub_child and sub_child.node_id == node_id:
+                    return sub_child
 
         return None
 
