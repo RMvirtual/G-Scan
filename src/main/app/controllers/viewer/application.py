@@ -5,8 +5,7 @@ from src.main.app.controllers.viewer.document import DocumentController
 from src.main.app.interfaces import RootInterface
 from src.main.documents.references import JobReference
 from src.main.gui import Viewer
-from src.main.app.controllers.viewer.user_input import (
-    UserInputController, SubmissionDocument)
+from src.main.app.controllers.viewer.user_input import UserInputController
 
 
 class ViewerApplicationController:
