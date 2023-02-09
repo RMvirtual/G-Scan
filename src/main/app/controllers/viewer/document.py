@@ -43,7 +43,8 @@ class DocumentController:
 
         if job_reference:
             self._document_tree.submit(
-                reference=reference, document_type=document_type,
+                reference=job_reference,
+                document_type=document_type,
                 leaf=self._currently_viewed
             )
 

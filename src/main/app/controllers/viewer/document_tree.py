@@ -9,6 +9,7 @@ from src.main.documents import (
 
 from src.main.gui.dialogs.page_range import PageRangeDialog
 from src.main.gui.viewer.document_tree import DocumentTreeCtrl
+from src.main.documents.references import JobReference
 
 
 class DocumentTreeController:
@@ -55,15 +56,17 @@ class DocumentTreeController:
         return result
 
     def submit(
-            self, reference: str, document_type: Document,
+            self, reference: JobReference, document_type: Document,
             leaf: AbstractLeaf
     ) -> None:
-        if self._document_tree.contains_branch(reference):
-            self._append_existing(reference, document_type, leaf)
+        reference_label = str(reference)
+
+        if self._document_tree.contains_branch(reference_label):
+            self._append_existing(reference_label, document_type, leaf)
 
         else:
             print("Does not contain reference.")
-            job_branch = self._new_job_branch(reference)
+            job_branch = self._new_job_branch(reference_label)
 
             document_branch = self._new_document_branch(
                 job_branch, document_type)

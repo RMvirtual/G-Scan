@@ -17,6 +17,9 @@ class AbstractReference:
         if not self._is_number_valid():
             raise ValueError(f"Invalid number of {self._number}")
 
+    def __str__(self) -> str:
+        return self._format.prefix + self._number
+
     def _is_number_valid(self) -> bool:
         return bool(re.fullmatch(
             pattern=self._format.regex_format,
