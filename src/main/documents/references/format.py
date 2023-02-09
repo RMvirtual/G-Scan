@@ -1,3 +1,4 @@
+from __future__ import annotations
 import re
 
 
@@ -19,6 +20,9 @@ class AbstractReference:
 
     def __str__(self) -> str:
         return self._format.prefix + self._number
+
+    def __eq__(self, other: AbstractReference) -> bool:
+        return str(self) == str(other)
 
     def _is_number_valid(self) -> bool:
         return bool(re.fullmatch(

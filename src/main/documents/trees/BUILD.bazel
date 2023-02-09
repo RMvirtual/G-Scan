@@ -8,6 +8,7 @@ py_library(
     deps = [
         requirement("pymupdf"),
         "//src/main/data_structures",
+        "//src/main/documents/references",
         "//src/main/file_system",
     ],
 )
