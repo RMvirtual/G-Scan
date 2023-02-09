@@ -10,13 +10,13 @@ from src.main.documents.types import Document
 class JobBranch(AbstractBranch):
     def __init__(
             self, parent: AbstractRoot, reference: AbstractReference) -> None:
-        super().__init__(parent=parent, label=reference)
+        super().__init__(parent=parent, label=str(reference))
         self.reference = reference
         self.document_branches: list[DocumentBranch] = []
 
     def set_reference(self, new_reference: AbstractReference) -> None:
         self.reference = new_reference
-        self.label = new_reference
+        self.label = str(new_reference)
 
     def create_branch(self, document_type: Document) -> DocumentBranch:
         result = DocumentBranch(parent=self, document_type=document_type)

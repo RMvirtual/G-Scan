@@ -65,7 +65,6 @@ class DocumentTreeController:
             self._append_existing(reference_label, document_type, leaf)
 
         else:
-            print("Does not contain reference.")
             job_branch = self._new_job_branch(reference_label)
 
             document_branch = self._new_document_branch(

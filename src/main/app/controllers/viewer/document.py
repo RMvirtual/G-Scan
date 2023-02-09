@@ -5,12 +5,11 @@ from src.main.app.controllers.viewer.document_tree import (
     DocumentTreeController)
 
 from src.main.app.controllers.viewer.page_view import PageViewController
-from src.main.data_structures import AbstractLeaf
+from src.main.data_structures import AbstractNode, AbstractLeaf
 from src.main.documents import Document
 from src.main.documents.trees import PendingLeaf
 from src.main.gui import Viewer
 from src.main.documents.references import JobReference
-
 
 class DocumentController:
     def __init__(self, gui: Viewer):
@@ -78,30 +77,28 @@ class DocumentController:
         selections = self._document_tree.selected_items()
 
         if len(selections) == 1:
-            node = selections[0]
-
-            if node.is_leaf():
-                self._set_currently_viewed(node)
-
-            elif node.is_branch():
-                self._document_tree.expand(node)
-                self._page_view.hide_all_widgets()
-                self._clear_node_to_view()
-
-            else:
-                print("Not sure what I'm viewing.")
+            self._on_single_item_selection(node=selections[0])
 
         elif len(selections) > 1:
-            print("Multiple selections")
-            self._page_view.hide_split_button()
+            self._on_multiple_item_selections(nodes=selections)
 
         else:
-            print("No selections")
             self._page_view.hide_all_widgets()
             self._clear_node_to_view()
 
+    def _on_single_item_selection(self, node: AbstractNode) -> None:
+        if node.is_leaf():
+            self._set_currently_viewed(node)
 
-    def _set_currently_viewed(self, node: AbstractLeaf) -> None:
+        elif node.is_branch():
+            self._document_tree.expand(node)
+            self._page_view.hide_all_widgets()
+            self._clear_node_to_view()
+
+    def _on_multiple_item_selections(self, nodes: list[AbstractNode]) -> None:
+        self._page_view.hide_split_button()
+
+    def _set_currently_viewed(self, node: AbstractNode) -> None:
         if not node.is_leaf():
             raise ValueError("Node is not viewable leaf.")
 
