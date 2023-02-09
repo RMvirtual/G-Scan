@@ -14,6 +14,10 @@ def user_settings_path() -> str:
     return app_data_directory() + "\\user_settings.json"
 
 
+def config_directory() -> str:
+    return runfiles.runfile_path("config")
+
+
 def departments_path() -> str:
     return config_directory() + "\\departments.json"
 
@@ -22,14 +26,10 @@ def document_types_path() -> str:
     return config_directory() + "\\document_types.json"
 
 
-
-def config_directory() -> str:
-    return runfiles.runfile_path("config")
+def resources_directory() -> str:
+    return runfiles.runfile_path("resources")
 
 
 def image_resources_directory() -> str:
     return runfiles.runfile_path("resources\\images")
 
-
-def test_resources_directory() -> str:
-    return runfiles.runfile_path("resources\\test")

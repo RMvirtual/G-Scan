@@ -55,7 +55,7 @@ class DocumentTreeController:
 
         return result
 
-    def submit(
+    def create_job_node(
             self, reference: JobReference, document_type: Document,
             leaf: AbstractLeaf
     ) -> None:

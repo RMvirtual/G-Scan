@@ -42,7 +42,7 @@ class DocumentController:
         job_reference = self._create_job_reference(reference)
 
         if job_reference:
-            self._document_tree.submit(
+            self._document_tree.create_job_node(
                 reference=job_reference,
                 document_type=document_type,
                 leaf=self._currently_viewed

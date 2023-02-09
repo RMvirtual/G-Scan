@@ -153,5 +153,4 @@ cython_debug/
 .bazelversion
 # User-specific .bazelrc
 user.bazelrc
-/resources/test/output/
-/resources/staging/
+

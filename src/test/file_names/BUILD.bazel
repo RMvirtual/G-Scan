@@ -1,9 +1,0 @@
-load("@rules_python//python:defs.bzl", "py_test")
-
-py_test(
-    name = "file_names",
-    srcs = glob(["*.py"]),
-    deps = [
-        "//src/main/file_names",
-    ],
-)
