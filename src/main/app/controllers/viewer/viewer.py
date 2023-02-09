@@ -2,7 +2,7 @@ import wx
 from src.main.app.configuration import ViewerConfiguration
 from src.main.app.controllers.viewer.document import DocumentController
 from src.main.app.interfaces import RootInterface
-from src.main.gui import ImageViewer
+from src.main.gui import Viewer
 from src.main import documents
 
 
@@ -19,7 +19,7 @@ class ViewerController:
         self._documents = DocumentController(gui=self._gui)
 
     def _initialise_gui(self) -> None:
-        self._gui = ImageViewer(self._root.window)
+        self._gui = Viewer(self._root.window)
         self._root.window.set_panel(self._gui)
         self._initialise_department_box()
         self._initialise_document_box()

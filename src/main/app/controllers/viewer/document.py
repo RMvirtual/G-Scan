@@ -9,15 +9,16 @@ from src.main.documents import (
     PendingBranch, PendingLeaf, rendering
 )
 
-from src.main.gui import ImageViewer
+from src.main.gui import Viewer
 from src.main.gui.dialogs.document_split import DocumentSplitDialog
-from src.main.gui.image_viewer.panels import DocumentTreeView
+from src.main.gui.viewer.document_tree import DocumentTreePanel
 
 
 class DocumentController:
-    def __init__(self, gui: ImageViewer):
+    def __init__(self, gui: Viewer):
         self._gui = gui
         self._page_view = PageViewController(gui=self._gui.page_view)
+
         self._document_tree = DocumentTree(
             tree_control=self._gui.file_tree.tree)
         self._page_view.hide_all_widgets()
@@ -28,8 +29,10 @@ class DocumentController:
         self._gui.file_tree.tree.Bind(
             event=wx.EVT_TREE_SEL_CHANGED, handler=self.on_item_selection)
 
+        """
         self._gui.file_tree.tree.Bind(
             event=wx.EVT_TREE_ITEM_ACTIVATED, handler=self.on_item_selection)
+        """
 
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
@@ -65,6 +68,8 @@ class DocumentController:
 
             document_branch.add(self._currently_viewed)
 
+        self._gui.file_tree.tree.ExpandAll()
+
     def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
         with DocumentSplitDialog(len(self._currently_viewed.data)) as dialog:
             option = dialog.ShowModal()
@@ -95,7 +100,6 @@ class DocumentController:
 
         if len(selections) == 1:
             print("One item selected.")
-            print(f"Selected: {selections[0].GetID()}")
             node = self._document_tree.child_by_id(node_id=selections[0])
 
             if node.is_leaf():
@@ -107,11 +111,9 @@ class DocumentController:
                 self._clear_node_to_view()
 
         elif len(selections) > 1:
-            print("Multiple items selected.")
             self._page_view.hide_split_button()
 
         else:
-            print("No items selected apparently.")
             self._page_view.hide_all_widgets()
             self._clear_node_to_view()
 

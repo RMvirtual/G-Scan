@@ -1,13 +1,13 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-from src.main.gui.image_viewer.panels.page_view import PageView
-from src.main.gui.image_viewer.toolbars.user_input import UserToolbar
-from src.main.gui.image_viewer.toolbars.bottom_toolbar import BottomToolbar
-from src.main.gui.image_viewer.panels.document_tree import DocumentTreeView
-from src.main.gui.image_viewer.toolbars.file_menu import FileMenu
+from src.main.gui.viewer.panels.page_view import PageView
+from src.main.gui.viewer.toolbars.user_input import UserToolbar
+from src.main.gui.viewer.toolbars.bottom_toolbar import BottomToolbar
+from src.main.gui.viewer.document_tree.panel import DocumentTreePanel
+from src.main.gui.viewer.toolbars.file_menu import FileMenu
 
 
-class ImageViewer(wx.Panel):
+class Viewer(wx.Panel):
     def __init__(self, parent_window: wx.Frame):
         super().__init__(parent=parent_window)
         self._initialise_widgets()
@@ -23,7 +23,7 @@ class ImageViewer(wx.Panel):
 
         self.input_bar = UserToolbar(self)
         self.page_view = PageView(self)
-        self.file_tree = DocumentTreeView(self)
+        self.file_tree = DocumentTreePanel(self)
         self.bottom_bar = BottomToolbar(self)
 
     def _initialise_sizer(self) -> None:

@@ -1,8 +1,9 @@
 import wx
 from src.main.gui import fonts
+from src.main.gui.viewer.document_tree.tree import DocumentTreeCtrl
 
 
-class DocumentTreeView(wx.Panel):
+class DocumentTreePanel(wx.Panel):
     def __init__(self, parent: wx.Window):
         super().__init__(parent=parent)
         self._initialise_widgets()
@@ -13,15 +14,7 @@ class DocumentTreeView(wx.Panel):
         self._title.SetFont(fonts.font(point_size=30, bold=True))
 
         self.upload_to_fcl = wx.Button(parent=self, label="Upload to FCL")
-        self._initialise_tree()
-
-    def _initialise_tree(self) -> None:
-        tree_style = (
-            wx.TR_HIDE_ROOT|wx.TR_TWIST_BUTTONS|wx.TR_HAS_BUTTONS
-            |wx.TR_NO_LINES|wx.TR_MULTIPLE
-        )
-
-        self.tree = wx.TreeCtrl(parent=self, style=tree_style)
+        self.tree = DocumentTreeCtrl(parent=self)
 
     def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)

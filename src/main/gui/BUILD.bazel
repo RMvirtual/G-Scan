@@ -7,10 +7,10 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/gui/dialogs",
-        "//src/main/gui/image_viewer",
         "//src/main/gui/main_menu",
         "//src/main/gui/metrics",
         "//src/main/gui/settings",
+        "//src/main/gui/viewer",
         "//src/main/gui/window",
         requirement("wxPython"),
     ],

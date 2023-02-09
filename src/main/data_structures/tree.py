@@ -7,7 +7,6 @@ class AbstractNode:
         self._parent = None
         self._children = []
         self._label = label
-        self._node_id = None
 
         if parent:
             parent.add(self)
@@ -16,8 +15,8 @@ class AbstractNode:
         if node.has_parent():
             node.detach()
 
-        node.node_id = self.root.control.AppendItem(
-            parent=self.node_id, text=node.label)
+        self.root.control.AppendItem(
+            parent=self.node_id, text=node.label, data=node.node_id)
 
         node.parent = self
         self.children.append(node)
@@ -25,12 +24,12 @@ class AbstractNode:
         return node
 
     def detach(self) -> AbstractNode:
-        if self.parent:
-            self.parent.children.remove(self)
+        if self._parent:
+            self._parent.children.remove(self)
 
-        self.root.control.Delete(item=self.node_id)
-        self.parent = None
-        self.node_id = None
+        self.root.control.Delete(item=self._node_id)
+        self._parent = None
+        self._node_id = None
 
         return self
 
@@ -74,11 +73,7 @@ class AbstractNode:
 
     @property
     def node_id(self) -> wx.TreeItemId:
-        return self._node_id
-
-    @node_id.setter
-    def node_id(self, new_node_id: wx.TreeItemId) -> None:
-        self._node_id = new_node_id
+        return id(self)
 
     def is_root(self) -> bool:
         raise NotImplementedError
@@ -103,10 +98,10 @@ class AbstractRoot(AbstractNode):
     """Requires a wx.TreeCtrl object to plug into to create node ID
     references.
     """
-    def __init__(self, tree_control: wx.TreeCtrl) -> None:
-        super().__init__()
+    def __init__(self, tree_control: wx.TreeCtrl, label: str = "") -> None:
+        super().__init__(parent=None, label=label)
         self._control = tree_control
-        self.node_id = self._control.AddRoot(text="Document Root")
+        self._node_id = self._control.AddRoot(text="Document Root")
 
     @property
     def root(self) -> AbstractRoot:

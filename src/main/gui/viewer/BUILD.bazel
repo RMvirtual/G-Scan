@@ -2,12 +2,13 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@python_third_party//:requirements.bzl", "requirement")
 
 py_library(
-    name = "image_viewer",
+    name = "viewer",
     srcs = glob(["*.py"]),
     visibility = ["//visibility:public"],
     deps = [
         requirement("wxPython"),
-        "//src/main/gui/image_viewer/panels",
-        "//src/main/gui/image_viewer/toolbars",
+        "//src/main/gui/viewer/document_tree",
+        "//src/main/gui/viewer/panels",
+        "//src/main/gui/viewer/toolbars",
     ],
 )

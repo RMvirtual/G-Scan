@@ -9,7 +9,7 @@ class DocumentTree(AbstractRoot):
         """Requires a wx.TreeCtrl object to plug into to create the node
         references.
         """
-        super().__init__(tree_control=tree_control)
+        super().__init__(tree_control=tree_control, label="All Files")
 
         self.pending_branch = PendingBranch(parent=self)
         self.job_branches: list[JobBranch] = []
