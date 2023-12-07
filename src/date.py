@@ -31,6 +31,18 @@ class Calendar:
             11: "November", 12: "December"
         }
 
+    def date(self, month: int, year: int) -> Date:
+        return self.months(year)[month - 1]
+
+    def date_from_month_name_and_number(
+            self, month_name_and_number: str, year) -> Date:
+        month_names_and_numbers = self.months_as_xxx_mm_to_number()
+
+        month_number = month_names_and_numbers[month_name_and_number]
+        month_name = self.month_name_from_number(month_number)
+
+        return Date(month_number, month_name, year)
+
     def months(self, year: int) -> list[Date]:        
         return [
             Date(number, name, year)
@@ -97,15 +109,3 @@ class Calendar:
             month_number += 1
 
         return months_dictionary
-
-    def date(self, month: int, year: int) -> Date:
-        return self.months(year)[month - 1]
-
-    def date_from_month_name_and_number(
-            self, month_name_and_number: str, year) -> Date:
-        month_names_and_numbers = self.months_as_xxx_mm_to_number()
-
-        month_number = month_names_and_numbers[month_name_and_number]
-        month_name = self.month_name_from_number(month_number)
-
-        return Date(month_number, month_name, year)
