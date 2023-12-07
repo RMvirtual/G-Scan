@@ -1,15 +1,12 @@
-import re
 import date as calendar
-
 from date import Date
 
 
 class GrReference:
-    """
-    GR + 9 digits. First 4 digits are yymm; last 5 are the job number.
-    """
+    """GR + 9 digits. First 4 digits: yymm; last 5 digits: job no."""
+
     def __init__(self, date: Date = None, job_number: str = None):
-        self._company_prefix = "GR"
+        self.prefix = "GR"
 
         if job_number:
             if date:
@@ -27,48 +24,31 @@ class GrReference:
 
             self._job_number = "00000"
 
+    def __str__(self) -> str:
+        return self.prefix + self._date.format("yymm") + self._job_number
+
     def _set_full_job_number(self, job_number: str) -> None:
-        digits = self._extract_digits_from_string(job_number)
+        digits = self._clean_job_number_candidate(job_number)
 
-        if not self._digits_are_valid_full_reference(digits):
-            raise ValueError("Incorrect number of digits.")
+        if not len(digits) == 9 and digits.isnumeric():
+            raise ValueError(f"Incorrect number of digits in {digits}.")
 
-        self._set_date_from_digits(digits)
+        self._date = calendar.date(int(digits[2:4]), int(digits[0:2]))
         self._job_number = digits[-5:]
 
     @property
-    def job_number(self):
+    def job_number(self) -> str:
         return self._job_number
 
     @job_number.setter
-    def job_number(self, job_number: str):
-        digits = self._extract_digits_from_string(job_number)
+    def job_number(self, job_number: str) -> None:
+        digits = self._clean_job_number_candidate(job_number)
+        digits_valid = 1 <= len(digits) <= 5 and digits.isnumeric()
 
-        if not self._digits_are_valid_job_number(digits):
+        if not digits_valid:
             raise ValueError("Incorrect number of digits.")
 
         self._job_number = "0" * (5-len(digits)) + digits
 
-    def _set_date_from_digits(self, digits: str) -> None:
-        year_digits = int(digits[0:2])
-        month_digits = int(digits[2:4])
-
-        self._date = calendar.date(month=month_digits, year=year_digits)
-
-    @staticmethod
-    def _digits_are_valid_full_reference(digits: str):
-        return len(digits) == 9 and digits.isnumeric()
-
-    @staticmethod
-    def _digits_are_valid_job_number(digits: str):
-        return 1 <= len(digits) <= 5 and digits.isnumeric()
-
-    @staticmethod
-    def _extract_digits_from_string(string: str):
-        return re.sub("\\D", "", string)
-
-    def __str__(self) -> str:
-        return self.to_string()
-        
-    def to_string(self) -> str:
-        return self._company_prefix + self._date.format("yymm") + self._job_number
+    def _clean_job_number_candidate(self, job_number: str) -> str:
+        return job_number.lower().removeprefix(self.prefix.lower()).strip()
