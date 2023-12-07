@@ -1,6 +1,7 @@
 import re
-from date.date import Date
 import date.calendar as calendar
+
+from date.date import Date
 
 
 class GrReference:
@@ -10,7 +11,7 @@ class GrReference:
     def __init__(self, date: Date = None, job_number: str = None):
         self._company_prefix = "GR"
 
-        if len(job_number) == 5 and date:
+        if job_number:
             if date:
                 pass  # Not thought this out when both params used.
 
@@ -71,5 +72,8 @@ class GrReference:
     def _extract_digits_from_string(string: str):
         return re.sub("\\D", "", string)
 
+    def __str__(self) -> str:
+        return self.to_string()
+        
     def to_string(self) -> str:
         return self._company_prefix + self._date.yymm() + self._job_number
