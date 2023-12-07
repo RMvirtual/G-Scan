@@ -6,7 +6,7 @@ from date.date import Date
 
 class GrReference:
     """
-    GR + 9 digits. First 4 digits are yymm, last 5 are the job number.
+    GR + 9 digits. First 4 digits are yymm; last 5 are the job number.
     """
     def __init__(self, date: Date = None, job_number: str = None):
         self._company_prefix = "GR"

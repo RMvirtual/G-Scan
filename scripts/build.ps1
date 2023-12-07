@@ -5,6 +5,7 @@ if ($LASTEXITCODE) {Write-Host "Build failed."; exit 1}
 $BUILD = "$env:DEVENV\build"
 $RELEASE = "$BUILD\release\gscan"
 $CONFIG = "$env:DEVENV\config"
+$RESOURCES = "$env:DEVENV\resources"
 $SRC = "$env:DEVENV\src"
 $TEST_BUILD = "$BUILD\tests"
 $TESTS = "$env:DEVENV\tests"
@@ -20,6 +21,7 @@ New-Item $RELEASE -ItemType Directory > $null
 
 Copy-Item $SRC "$RELEASE/bin" -Recurse > $null
 Copy-Item $CONFIG $RELEASE -Recurse > $null
+Copy-Item $RESOURCES $RELEASE -Recurse > $null
 Write-Host "Release build complete."
 
 # Tests.

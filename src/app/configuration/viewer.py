@@ -1,7 +1,9 @@
 import departments, user
+
 from departments import Department, Departments
 from documents import Document
 from user import UserSettings
+
 
 class ViewerConfiguration:
     def __init__(self) -> None:
@@ -41,6 +43,7 @@ def load() -> ViewerConfiguration:
     result.all_departments = departments.load_all()
 
     return result
+
 
 def load_default() -> ViewerConfiguration:
     user_defaults = user.load_settings()

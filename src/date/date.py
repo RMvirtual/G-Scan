@@ -1,29 +1,19 @@
-class Date(object):
-    def __init__(self, month_number: int, month_name: str, year: int):
-        self._month_number = month_number
-        self._month_name = month_name
-        self._year = year
+class Date:
+    def __init__(self, month_number: int, month_name: str, year: int) -> None:
+        self.month_no = month_number
+        self.month_name = month_name
+        self.year = year
 
-    def month_number(self) -> int:
-        return self._month_number
-
-    def mm(self) -> str:
-        return str(self._month_number).zfill(2)
-
-    def month_name(self) -> str:
-        return self._month_name
-
-    def year(self) -> int:
-        return self._year
-
-    def yy(self) -> str:
-        return str(self._year)[-2:]
-
-    def yymm(self) -> str:
-        return self.yy() + self.mm()
+    def format(self, format: str) -> str:
+        """Accepts formats of a combination of yy, yyyy, mm, mmm."""
+        return format.lower() \
+            .replace("mmm", self.month_name) \
+            .replace("yyyy", str(self.year)) \
+            .replace("mm", self._two_digit_month_no()) \
+            .replace("yy", str(self.year)[-2:])
 
     def month_name_hyphen_number(self) -> str:
-        month_name = self.month_name()
-        month_number = self.mm()
-        
-        return month_name + " - " + month_number
+        return self.month_name + " - " + self._two_digit_month_no()
+
+    def _two_digit_month_no(self) -> str:
+        return str(self.month_no).zfill(2)

@@ -1,6 +1,5 @@
-import file_system.backup as backup
 from datetime import datetime
-from gui.mainmenu.main_menu import MainMenu
+from gui.main_menu import MainMenu
 from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
 from pdf.viewer import PDFViewer
