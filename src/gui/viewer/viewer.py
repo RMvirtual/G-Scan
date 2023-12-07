@@ -1,10 +1,10 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
-from src.main.gui.viewer.panels.page_view import PageView
-from src.main.gui.viewer.toolbars.user_input import UserToolbar
-from src.main.gui.viewer.toolbars.bottom_toolbar import BottomToolbar
-from src.main.gui.viewer.document_tree.panel import DocumentTreePanel
-from src.main.gui.viewer.toolbars.file_menu import FileMenu
+from .gui.viewer.panels.page_view import PageView
+from .gui.viewer.toolbars.user_input import UserToolbar
+from .gui.viewer.toolbars.bottom_toolbar import BottomToolbar
+from .gui.viewer.document_tree.panel import DocumentTreePanel
+from .gui.viewer.toolbars.file_menu import FileMenu
 
 
 class Viewer(wx.Panel):

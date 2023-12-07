@@ -1,5 +1,5 @@
 import wx
-from src.main.gui import fonts
+from .gui import fonts
 
 
 class UserToolbar(wx.Panel):

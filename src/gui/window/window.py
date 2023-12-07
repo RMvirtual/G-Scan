@@ -1,5 +1,5 @@
 import wx
-from src.main.gui.metrics import screen_size
+from .gui.metrics import screen_size
 
 
 class Window(wx.Frame):

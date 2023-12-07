@@ -1,9 +1,9 @@
 import wx
-from src.main import departments, documents, file_system, user
-from src.main.app.interfaces import RootInterface
-from src.main.departments import Department
-from src.main.gui import Settings
-from src.main.user import UserSettings
+from  import departments, documents, file_system, user
+from .app.interfaces import RootInterface
+from .departments import Department
+from .gui import Settings
+from .user import UserSettings
 
 
 class SettingsController:

@@ -1,4 +1,4 @@
-import src.main.pdf.page
+import .pdf.page
 
 class Pdf:
     def __init__(self, page_images: list = None):

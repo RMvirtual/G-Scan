@@ -1,6 +1,6 @@
 import wx
-from src.main.gui import fonts
-from src.main.gui.viewer.document_tree.tree import DocumentTreeCtrl
+from .gui import fonts
+from .gui.viewer.document_tree.tree import DocumentTreeCtrl
 
 
 class DocumentTreePanel(wx.Panel):

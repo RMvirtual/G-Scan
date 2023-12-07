@@ -1,2 +1,2 @@
-from src.main.documents.references.format import (
+from .documents.references.format import (
     AbstractReference, JobReference, ReferenceFormat)

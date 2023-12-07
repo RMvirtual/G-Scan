@@ -1,2 +1,2 @@
-from src.main.departments.departments import (
+from .departments.departments import (
     Department, Departments, load, load_all)

@@ -1,5 +1,5 @@
 import wx
-from src.main.gui.metrics.aspect_ratio import scale_with_ratio
+from .gui.metrics.aspect_ratio import scale_with_ratio
 
 
 def toBitmap(image_path: str) -> wx.Bitmap:

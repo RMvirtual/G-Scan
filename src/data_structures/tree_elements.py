@@ -1,5 +1,5 @@
 from __future__ import annotations
-from src.main.data_structures.tree_node import AbstractNode
+from .data_structures.tree_node import AbstractNode
 
 
 class AbstractRoot(AbstractNode):

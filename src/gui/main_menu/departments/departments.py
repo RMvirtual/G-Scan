@@ -1,6 +1,6 @@
 import wx
-from src.main.gui.main_menu.departments.bottom_toolbar import SettingsToolbar
-from src.main.gui import fonts
+from .gui.main_menu.departments.bottom_toolbar import SettingsToolbar
+from .gui import fonts
 
 class Departments(wx.Panel):
     def __init__(self, parent: wx.Frame):

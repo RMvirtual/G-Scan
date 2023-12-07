@@ -1,3 +1,3 @@
-from src.main.documents.trees import *
-from src.main.documents.types import *
-from src.main.documents.rendering import rendering
+from .documents.trees import *
+from .documents.types import *
+from .documents.rendering import rendering

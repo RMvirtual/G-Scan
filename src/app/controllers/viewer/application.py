@@ -1,11 +1,11 @@
 import wx
-from src.main import documents
-from src.main.app.configuration import ViewerConfiguration
-from src.main.app.controllers.viewer.document import DocumentController
-from src.main.app.interfaces import RootInterface
-from src.main.documents.references import JobReference
-from src.main.gui import Viewer
-from src.main.app.controllers.viewer.user_input import UserInputController
+from  import documents
+from .app.configuration import ViewerConfiguration
+from .app.controllers.viewer.document import DocumentController
+from .app.interfaces import RootInterface
+from .documents.references import JobReference
+from .gui import Viewer
+from .app.controllers.viewer.user_input import UserInputController
 
 
 class ViewerApplicationController:

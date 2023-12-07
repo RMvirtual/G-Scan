@@ -1,10 +1,10 @@
 import wx
-from src.main.app.configuration import ViewerConfiguration
-from src.main.app.controllers.main_menu import MainMenuController
-from src.main.app.controllers.viewer.application import ViewerApplicationController
-from src.main.app.controllers.settings import SettingsController
-from src.main.app.interfaces import RootInterface
-from src.main.gui.window import Window
+from .app.configuration import ViewerConfiguration
+from .app.controllers.main_menu import MainMenuController
+from .app.controllers.viewer.application import ViewerApplicationController
+from .app.controllers.settings import SettingsController
+from .app.interfaces import RootInterface
+from .gui.window import Window
 
 
 class RootApplication(RootInterface):

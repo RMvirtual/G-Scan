@@ -1,6 +1,6 @@
 import wx
-from src.main import file_system
-from src.main.gui.metrics import aspect_ratio
+from  import file_system
+from .gui.metrics import aspect_ratio
 
 
 class Logo(wx.Panel):

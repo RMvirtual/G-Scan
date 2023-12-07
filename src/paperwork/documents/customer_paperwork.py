@@ -1,4 +1,4 @@
-from src.main.paperwork.documents.a4 import A4Document
+from .paperwork.documents.a4 import A4Document
 from reportlab.graphics.barcode import code128
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from src.main import file_system
+from  import file_system
 
 
 class Document:

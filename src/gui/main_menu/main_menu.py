@@ -1,8 +1,8 @@
 import wx
-from src.main.gui.main_menu.departments import (
+from .gui.main_menu.departments import (
     Departments, Operations, CreditControl)
 
-from src.main.gui.main_menu.logo import Logo
+from .gui.main_menu.logo import Logo
 
 
 class MainMenu(wx.Panel):

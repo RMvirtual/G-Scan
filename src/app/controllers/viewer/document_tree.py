@@ -1,15 +1,15 @@
 import ntpath
 import wx
-from src.main.data_structures import AbstractNode, AbstractLeaf
+from .data_structures import AbstractNode, AbstractLeaf
 
-from src.main.documents import (
+from .documents import (
     Document, DocumentBranch, DocumentLeaf, DocumentTree, JobBranch,
     PendingBranch, PendingLeaf, rendering
 )
 
-from src.main.gui.dialogs.page_range import PageRangeDialog
-from src.main.gui.viewer.document_tree import DocumentTreeCtrl
-from src.main.documents.references import AbstractReference
+from .gui.dialogs.page_range import PageRangeDialog
+from .gui.viewer.document_tree import DocumentTreeCtrl
+from .documents.references import AbstractReference
 
 
 class DocumentTreeController:

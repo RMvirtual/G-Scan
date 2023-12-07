@@ -1,7 +1,7 @@
 import wx
-from src.main.gui import fonts
-from src.main.gui.settings.directories import Directories
-from src.main.gui.settings.defaults import Defaults
+from .gui import fonts
+from .gui.settings.directories import Directories
+from .gui.settings.defaults import Defaults
 
 
 class Settings(wx.Panel):

@@ -1,6 +1,6 @@
 import fitz
-import src.main.pdf.pdf as pdf
-import src.main.pdf.page as pdf_page
+import .pdf.pdf as pdf
+import .pdf.page as pdf_page
 
 
 def read_pdf(source: str):

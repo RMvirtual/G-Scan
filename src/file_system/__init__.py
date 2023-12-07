@@ -1,3 +1,3 @@
-from src.main.file_system.paths import *
-from src.main.file_system.json import *
-from src.main.file_system.dialogs import *
+from .file_system.paths import *
+from .file_system.json import *
+from .file_system.dialogs import *

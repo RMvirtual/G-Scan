@@ -1,6 +1,6 @@
 import wand.image
 import PIL
-import src.main.pdf.extractor
+import .pdf.extractor
 
 
 class Image:
@@ -19,4 +19,4 @@ def rotate_to_portrait(source: str, output: str) -> None:
 
 
 def from_pdf(source: str) -> PIL.Image:
-    extractor = src.main.pdf.extractor.PdfExtractor()
+    extractor = .pdf.extractor.PdfExtractor()

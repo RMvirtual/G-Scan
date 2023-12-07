@@ -1,1 +1,1 @@
-from src.main.gui.settings.settings import Settings
+from .gui.settings.settings import Settings

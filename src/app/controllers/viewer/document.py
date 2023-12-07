@@ -1,16 +1,16 @@
 import wx
 
-from src.main import file_system
-from src.main.app.controllers.viewer.document_tree import (
+from  import file_system
+from .app.controllers.viewer.document_tree import (
     DocumentTreeController)
 
-from src.main.app.controllers.viewer.user_input import SubmissionDocument
-from src.main.app.controllers.viewer.page_view import PageViewController
-from src.main.data_structures import AbstractNode, AbstractLeaf
-from src.main.documents import Document
-from src.main.documents.references import JobReference
-from src.main.documents.trees import PendingLeaf
-from src.main.gui import Viewer
+from .app.controllers.viewer.user_input import SubmissionDocument
+from .app.controllers.viewer.page_view import PageViewController
+from .data_structures import AbstractNode, AbstractLeaf
+from .documents import Document
+from .documents.references import JobReference
+from .documents.trees import PendingLeaf
+from .gui import Viewer
 
 
 class DocumentController:

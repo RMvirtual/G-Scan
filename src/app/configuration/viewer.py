@@ -1,7 +1,7 @@
-from src.main import departments, user
-from src.main.departments import Department, Departments
-from src.main.documents import Document
-from src.main.user import UserSettings
+import departments, user
+from departments import Department, Departments
+from documents import Document
+from user import UserSettings
 
 class ViewerConfiguration:
     def __init__(self) -> None:
