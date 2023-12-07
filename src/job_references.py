@@ -1,5 +1,4 @@
-import date as calendar
-from date import Date
+from date import Calendar, Date
 
 
 class GrReference:
@@ -41,7 +40,7 @@ class GrReference:
         if not len(digits) == 9 and digits.isnumeric():
             raise ValueError(f"Incorrect job reference format: {job_number}.")
 
-        self._date = calendar.date(int(digits[2:4]), int(digits[0:2]))
+        self._date = Calendar().date(int(digits[2:4]), int(digits[0:2]))
         self._job_number = digits[-5:]
 
     def _clean_job_number_candidate(self, job_number: str) -> str:
