@@ -1,1 +1,1 @@
-from .gui.fonts.fonts import font
+from gui.fonts.fonts import font

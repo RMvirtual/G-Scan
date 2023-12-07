@@ -1,5 +1,5 @@
 import wx
-from .gui import fonts
+from gui import fonts
 
 
 class Operations(wx.Panel):

@@ -4,5 +4,8 @@
 			"path": ".."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"powershell.buttons.showPanelMovementButtons": true,
+		"python.defaultInterpreterPath": "${workspaceFolder}/devenv/python/Scripts/python.exe"
+	}
 }

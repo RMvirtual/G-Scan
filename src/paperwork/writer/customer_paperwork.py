@@ -1,9 +1,9 @@
 import io
 
-import .file_system.paths as file_system
-from .file_system.paths import DirectoryItem
-from .pdf.extractor import PdfExtractor
-from .pdf.writer_old import PdfWriter
+import file_system.paths as file_system
+from file_system.paths import DirectoryItem
+from pdf.extractor import PdfExtractor
+from pdf.writer_old import PdfWriter
 
 
 class CustomerPaperworkPDFWriter(PdfWriter):

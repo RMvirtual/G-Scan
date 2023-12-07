@@ -1,8 +1,8 @@
 import wx
-from  import departments, documents, user
-from .app import configuration
-from .app.interfaces import RootInterface
-from .gui import MainMenu
+import departments, documents, user
+from app import configuration
+from app.interfaces import RootInterface
+from gui import MainMenu
 
 
 class MainMenuController:

@@ -1,7 +1,7 @@
 import io
 
-import .file_system.paths as file_system
-from .file_system.paths import DirectoryItem
+import file_system.paths as file_system
+from file_system.paths import DirectoryItem
 import os
 import PyPDF2
 import shutil

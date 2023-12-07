@@ -1,5 +1,5 @@
 import os
-from .file_system import runfiles
+from file_system import runfiles
 
 
 def app_data_directory() -> str:

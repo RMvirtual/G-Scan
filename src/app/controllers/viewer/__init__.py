@@ -1,2 +1,2 @@
-from .app.controllers.viewer.application import (
+from app.controllers.viewer.application import (
     ViewerApplicationController)

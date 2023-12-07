@@ -1,6 +1,6 @@
 import os
 import shutil
-from  import file_system
+import file_system
 
 
 def install_app_data() -> None:

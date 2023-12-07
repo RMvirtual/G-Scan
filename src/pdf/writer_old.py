@@ -1,7 +1,7 @@
 import io
 
-import .file_system.paths as file_system
-from .file_system.paths import DirectoryItem
+import file_system.paths as file_system
+from file_system.paths import DirectoryItem
 import os
 import PyPDF2
 import shutil
@@ -13,7 +13,7 @@ from reportlab.graphics.barcode import code128
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import wand.image
-import .images.image as image
+import images.image as image
 
 
 class PdfWriter(PyPDF2.PdfFileWriter):

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from .data_structures import (
+from data_structures import (
     AbstractBranch, AbstractLeaf, AbstractRoot)
 
-from .documents.references import AbstractReference
-from .documents.types import Document
+from documents.references import AbstractReference
+from documents.types import Document
 
 
 class JobBranch(AbstractBranch):

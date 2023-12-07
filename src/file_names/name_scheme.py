@@ -1,5 +1,5 @@
-import .file_system.paths as file_system
-from .file_names.naming_attributes import FileNamingAttributes
+import file_system.paths as file_system
+from file_names.naming_attributes import FileNamingAttributes
 
 
 def file_names(

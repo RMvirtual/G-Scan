@@ -4,6 +4,7 @@ Wand==0.6.13
 PyPDF2==3.0.1
 PyMuPDF==1.23.7
 pypiwin32==223
+pytest==7.4.3
 pyzbar==0.1.9
 numpy==1.26.2
 wxPython==4.2.1

@@ -1,5 +1,5 @@
 import json
-from  import departments, documents, file_system
+import departments, documents, file_system
 
 
 class UserSettings:

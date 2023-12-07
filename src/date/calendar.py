@@ -1,5 +1,5 @@
 from datetime import datetime
-from .date.date import Date
+from date.date import Date
 
 
 def months(year: int) -> list[Date]:

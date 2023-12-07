@@ -1,6 +1,6 @@
 import re
-from .date.date import Date
-import .date.calendar as calendar
+from date.date import Date
+import date.calendar as calendar
 
 
 class GrReference:

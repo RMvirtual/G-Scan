@@ -1,1 +1,1 @@
-from .gui.viewer.panels.page_view import PageView
+from gui.viewer.panels.page_view import PageView

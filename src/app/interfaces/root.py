@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import wx
 
-from .app.configuration import ViewerConfiguration
-from .gui.window import Window
+from app.configuration import ViewerConfiguration
+from gui.window import Window
 
 
 class RootInterface(ABC):

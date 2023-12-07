@@ -1,6 +1,6 @@
-from  import file_system
-from  import documents
-from .documents import Document, DocumentTypes
+import file_system
+import documents
+from documents import Document, DocumentTypes
 
 class Department:
     def __init__(self) -> None:

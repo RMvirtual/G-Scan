@@ -1,6 +1,6 @@
 import wand.image
 import PIL
-import .pdf.extractor
+import pdf.extractor
 
 
 class Image:

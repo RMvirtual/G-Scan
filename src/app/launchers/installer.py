@@ -1,4 +1,4 @@
-from .app.installer import installer
+from app.installer import installer
 
 def main() -> None:
     installer.install_app_data()

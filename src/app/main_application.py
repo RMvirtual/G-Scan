@@ -1,17 +1,17 @@
-import .file_system.backup as backup
+import file_system.backup as backup
 from datetime import datetime
 from gui.mainmenu.main_menu import MainMenu
 from gui.popupbox import PopupBox
 from gui.settings.settings_menu import SettingsMenu
-from .pdf.viewer import PDFViewer
-import .pdf.reader
-import .pdf.writer_old
+from pdf.viewer import PDFViewer
+import pdf.reader
+import pdf.writer_old
 import user.user
 from user.user import User, UserDefaults
 import wx
 
-import .file_system.paths as file_system
-import .job_references.references as job_ref
+import file_system.paths as file_system
+import job_references.references as job_ref
 import date.date
 from date.date import Date
 import os

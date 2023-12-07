@@ -2,8 +2,8 @@ import PIL.Image
 from pyzbar.pyzbar import decode
 import re
 import wand.image
-import .file_system.paths as file_system
-from .pdf.reader import PdfReader
+import file_system.paths as file_system
+from pdf.reader import PdfReader
 import PyPDF2
 
 

@@ -1,4 +1,4 @@
-from .data_structures import (
+from data_structures import (
     AbstractBranch, AbstractRoot, AbstractLeaf)
 
 

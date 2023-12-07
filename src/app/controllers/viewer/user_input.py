@@ -1,9 +1,9 @@
 import wx
-from  import documents
-from .app.configuration import ViewerConfiguration
-from .documents import Document
-from .documents.references import AbstractReference, JobReference
-from .gui import Viewer
+import documents
+from app.configuration import ViewerConfiguration
+from documents import Document
+from documents.references import AbstractReference, JobReference
+from gui import Viewer
 
 
 class SubmissionDocument:
