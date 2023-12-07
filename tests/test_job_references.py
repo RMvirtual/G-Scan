@@ -1,5 +1,5 @@
 from date import Date
-from job_references.references import GrReference
+from job_references import GrReference
 
 
 def test_should_produce_full_gr_representation() -> None:
