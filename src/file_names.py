@@ -1,5 +1,13 @@
 import file_system.paths as file_system
-from file_names.naming_attributes import FileNamingAttributes
+
+
+class FileNamingAttributes:
+    def __init__(self):
+        self.job_reference = ""
+        self.paperwork_type = ""
+        self.page_number = None
+        self.input_mode = ""
+        self.file_extension = ""
 
 
 def file_names(

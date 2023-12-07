@@ -1,5 +1,22 @@
+import wand.image
 import wx
+
 from gui.metrics.aspect_ratio import scale_with_ratio
+
+
+class Image:
+    def __init__(self, img):
+        self.img = img
+
+
+def rotate_to_portrait(source: str, output: str) -> None:
+    with wand.image.Image(filename=source, resolution=300) as image_stream:
+        is_landscape = image_stream.width > image_stream.height
+
+        if is_landscape:
+            image_stream.rotate(270)
+
+        image_stream.save(filename=output)
 
 
 def toBitmap(image_path: str) -> wx.Bitmap:
