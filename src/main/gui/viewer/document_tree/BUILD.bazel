@@ -1,9 +1,0 @@
-load("@rules_python//python:defs.bzl", "py_library")
-load("@python_third_party//:requirements.bzl", "requirement")
-
-py_library(
-    name = "document_tree",
-    srcs = glob(["*.py"]),
-    visibility = ["//visibility:public"],
-    deps = [requirement("wxPython")],
-)

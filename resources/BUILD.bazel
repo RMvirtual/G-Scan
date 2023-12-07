@@ -1,9 +1,0 @@
-filegroup(
-    name = "resources",
-    srcs = [
-        "//resources/images",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-exports_files(glob(["*"]))
