@@ -76,4 +76,4 @@ class GrReference:
         return self.to_string()
         
     def to_string(self) -> str:
-        return self._company_prefix + self._date.yymm() + self._job_number
+        return self._company_prefix + self._date.format("yymm") + self._job_number
