@@ -10,7 +10,7 @@ class GrReference:
     def __init__(self, date: Date = None, job_number: str = None):
         self._company_prefix = "GR"
 
-        if job_number:
+        if len(job_number) == 5 and date:
             if date:
                 pass  # Not thought this out when both params used.
 
