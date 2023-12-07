@@ -4,6 +4,7 @@ if ($LASTEXITCODE) {Write-Host "Test environment setup failed."; exit 1}
 $TESTS = "$env:DEVENV\build\tests"
 $PYTHON_VENV = "$env:DEVENV\tools\python.ps1"
 
+
 Clear-Host; Write-Host "Starting tests."
 
 Push-Location $TESTS
