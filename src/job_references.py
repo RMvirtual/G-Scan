@@ -47,12 +47,7 @@ class GrReference:
         if not self._digits_are_valid_job_number(digits):
             raise ValueError("Incorrect number of digits.")
 
-        self._pad_job_number(digits)
-
-    def _pad_job_number(self, brief_reference: str):
-        # Needs edge case where date should be overwritten.
-        self._job_number = (
-            "0" * (5-len(brief_reference)) + brief_reference)
+        self._job_number = "0" * (5-len(digits)) + digits
 
     def _set_date_from_digits(self, digits: str) -> None:
         year_digits = int(digits[0:2])
