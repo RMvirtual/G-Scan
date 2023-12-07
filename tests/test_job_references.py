@@ -1,4 +1,4 @@
-from date.date import Date
+from date import Date
 from job_references.references import GrReference
 
 

@@ -1,7 +1,7 @@
 import re
-import date.calendar as calendar
+import date as calendar
 
-from date.date import Date
+from date import Date
 
 
 class GrReference:

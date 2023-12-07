@@ -1,4 +1,4 @@
-from date.date import Date
+from date import Date
 
 
 def test_should_format_date_correctly() -> None:
