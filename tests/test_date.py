@@ -1,4 +1,4 @@
-from date import Date
+from date import Calendar, Date
 
 
 def test_should_format_date_correctly() -> None:
@@ -14,3 +14,13 @@ def test_should_format_date_correctly() -> None:
 
     for format, correct_result in correct_results.items():
         assert date.format(format) == correct_result
+
+
+def test_should_get_months_from_calendar() -> None:
+    calendar = Calendar()
+    months = calendar.months(2023)
+
+    assert len(months) == 12
+    assert months[0].month_no == 1
+    assert months[2].year == 2023
+    

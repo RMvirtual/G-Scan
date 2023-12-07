@@ -25,18 +25,16 @@ class Date:
 
 class Calendar:
     def __init__(self) -> None:
-        pass
-
-    def months(self, year: int) -> list[Date]:
-        names_and_numbers = {
+        self._numbers_to_names = {
             1: "January", 2: "February", 3: "March", 4: "April", 5: "May",
             6: "June", 7: "July", 8: "August", 9: "September", 10: "October",
             11: "November", 12: "December"
         }
 
+    def months(self, year: int) -> list[Date]:
         return [
             Date(number, name, year)
-            for number, name in names_and_numbers.items()
+            for number, name in self._numbers_to_names.items()
         ]
 
     def month_name_from_number(self, number: int) -> str:
