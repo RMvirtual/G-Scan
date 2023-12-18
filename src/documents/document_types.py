@@ -1,22 +1,23 @@
 from __future__ import annotations
 
+import dataclasses
 import json
 import file_system
 
 
+@dataclasses.dataclass
 class Document:
-    def __init__(self) -> None:
-        self.short_code = ""
-        self.full_name = ""
-        self.analysis_code = ""
-
-    def __eq__(self, other: Document) -> bool:
-        return self.short_code == other.short_code
+    short_code: str = ""
+    full_name: str = ""
+    analysis_code: str = ""
 
 
 class DocumentTypes:
-    def __init__(self):
-        self.documents = []
+    def __init__(self, documents: list[Document] = None):
+        if not documents:
+            documents = []
+
+        self.documents = documents
 
     def __contains__(self, short_code: str) -> bool:
         return len(
@@ -71,17 +72,8 @@ def load_all() -> DocumentTypes:
     result = DocumentTypes()
     
     result.documents = [
-        _document(short_code, values)
+        Document(short_code, values["full_name"], values["analysis_code"])
         for short_code, values in json_contents.items()
     ]
-
-    return result
-
-
-def _document(key: str, values: dict[str, any]) -> Document:
-    result = Document()
-    result.short_code = key
-    result.full_name = values["full_name"]
-    result.analysis_code = values["analysis_code"]
 
     return result
