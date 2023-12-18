@@ -1,15 +1,14 @@
 import wx
 
 import file_system
-from app.controllers.viewer.document_tree import (
-    DocumentTreeController)
+from app.document_tree import DocumentTreeController
 
-from app.controllers.viewer.user_input import SubmissionDocument
-from app.controllers.viewer.page_view import PageViewController
+from app.user_input import SubmissionDocument
+from app.page_view import PageViewController
 from data_structures import AbstractNode, AbstractLeaf
 from documents import Document
-from documents.references import JobReference
-from documents.trees import PendingLeaf
+from documents.format import JobReference
+from documents.pending import PendingLeaf
 from gui import Viewer
 
 

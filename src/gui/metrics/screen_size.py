@@ -10,4 +10,4 @@ def recommended_metrics() -> tuple[tuple[int, int], wx.Point]:
 def scaled_sizes() -> tuple[int, int]:
     width, height = wx.DisplaySize()
 
-    return width/2, height/1.1
+    return int(width/2), int(height/1.1)

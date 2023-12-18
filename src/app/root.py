@@ -1,9 +1,9 @@
 import wx
-from app.configuration import ViewerConfiguration
-from app.controllers.main_menu import MainMenuController
-from app.controllers.viewer.application import ViewerApplicationController
-from app.controllers.settings import SettingsController
-from app.interfaces import RootInterface
+from app.viewer_config import ViewerConfiguration
+from app.main_menu import MainMenuController
+from app.application import ViewerApplicationController
+from app.settings import SettingsController
+from app.abstract_root import RootInterface
 from gui.window import Window
 
 

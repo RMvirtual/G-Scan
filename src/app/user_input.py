@@ -1,8 +1,8 @@
 import wx
 import documents
-from app.configuration import ViewerConfiguration
+from app.viewer_config import ViewerConfiguration
 from documents import Document
-from documents.references import AbstractReference, JobReference
+from documents.format import AbstractReference, JobReference
 from gui import Viewer
 
 

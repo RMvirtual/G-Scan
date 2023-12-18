@@ -3,8 +3,8 @@ from __future__ import annotations
 from data_structures import (
     AbstractBranch, AbstractLeaf, AbstractRoot)
 
-from documents.references import AbstractReference
-from documents.types import Document
+from documents.format import AbstractReference
+from documents.document_types import Document
 
 
 class JobBranch(AbstractBranch):

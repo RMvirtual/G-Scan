@@ -1,5 +1,8 @@
-if (-not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
-if ($LASTEXITCODE) {Write-Host "Build failed."; exit 1}
+if (-Not $env:DEVENV) {
+    & "$PSScriptRoot\setup.ps1"
+
+    if ($LASTEXITCODE) {Write-Host "Build failed."}
+}
 
 
 $BUILD = "$env:DEVENV\build"
@@ -30,3 +33,5 @@ Copy-Item "$TESTS/*" $TEST_BUILD -Recurse > $null
 
 Write-Host "Tests build complete."
 Write-Host "Build complete."
+
+exit 0

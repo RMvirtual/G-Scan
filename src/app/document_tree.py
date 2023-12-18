@@ -9,7 +9,7 @@ from documents import (
 
 from gui.dialogs.page_range import PageRangeDialog
 from gui.viewer.document_tree import DocumentTreeCtrl
-from documents.references import AbstractReference
+from documents.format import AbstractReference
 
 
 class DocumentTreeController:
