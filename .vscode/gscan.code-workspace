@@ -8,6 +8,6 @@
 		"powershell.buttons.showPanelMovementButtons": true,
 		"python.defaultInterpreterPath": "${workspaceFolder}/devenv/python/Scripts/python.exe",
 		"python.analysis.extraPaths": ["${workspaceFolder}/src"],
-		"python.analysis.ignore": ["${workspaceFolder}/build/**"]
+		"python.analysis.exclude": ["${workspaceFolder}/build/**"]
 	}
 }
