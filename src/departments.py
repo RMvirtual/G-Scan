@@ -1,3 +1,4 @@
+import dataclasses
 import json
 import file_system
 import documents
@@ -5,12 +6,12 @@ import documents
 from documents import DocumentTypes
 
 
+@dataclasses.dataclass
 class Department:
-    def __init__(self) -> None:
-        self.short_code: str = ""
-        self.full_name: str = ""
-        self.short_name: str = ""
-        self.document_types = DocumentTypes()
+    short_code: str = ""
+    full_name: str = ""
+    short_name: str = ""
+    document_types: DocumentTypes = DocumentTypes()
 
 
 class Departments:
@@ -72,13 +73,12 @@ def load_all() -> Departments:
 
 
 def _department(key: str, values: dict[str, any]) -> Department:
-    result = Department()
-    result.short_code = key
-    result.full_name = values["full_name"]
-    result.short_name = values["short_name"]
-    result.document_types = _document_types(values)
-
-    return result
+    return Department(
+        key,
+        values["full_name"],
+        values["short_name"], 
+        _document_types(values)
+    )
 
 
 def _document_types(values: dict[str, any]) -> DocumentTypes:
