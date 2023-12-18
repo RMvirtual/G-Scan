@@ -80,4 +80,5 @@ def _document(key: str, values: dict[str, any]) -> Document:
 
 
 def _json_contents() -> dict[str, any]:
-    return file_system.load_json(file_system.document_types_path())
+    return file_system.load_json(
+        file_system.config_directory().joinpath("document_types.json"))

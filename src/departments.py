@@ -1,6 +1,8 @@
 import file_system
 import documents
-from documents import Document, DocumentTypes
+
+from documents import DocumentTypes
+
 
 class Department:
     def __init__(self) -> None:
@@ -12,7 +14,7 @@ class Department:
 
 class Departments:
     def __init__(self):
-        self.departments = []
+        self.departments: list[Department] = []
 
     def __contains__(self, short_code: str) -> bool:
         return len(short_code == other for other in self.short_names())
@@ -90,4 +92,5 @@ def _document_types(values: dict[str, any]) -> DocumentTypes:
 
 
 def _load_json() -> dict[str, any]:
-    return file_system.load_json(file_system.departments_path())
+    return file_system.load_json(
+        file_system.config_directory().joinpath("departments.json"))

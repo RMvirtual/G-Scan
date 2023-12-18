@@ -1,6 +1,7 @@
-import os
 import json
 import wx
+
+from pathlib import Path
 
 
 def file_import_dialog() -> list[str]:
@@ -13,18 +14,24 @@ def file_import_dialog() -> list[str]:
         return browser.GetPaths()
 
 
-def load_json(path: str) -> dict[str, any]:
+def load_json(path: str) -> any:
     with open(path, "r") as file_stream:
         return json.loads(file_stream.read())
 
 
-def app_data_directory() -> str:
-    """Local AppData path folder for G-Scan's root data folder."""
+def root_directory() -> Path:
+    """Assumes structure of gscan/bin/file_system.py"""
 
-    return os.environ["LOCALAPPDATA"] + "\\G-Scan"
+    return Path(__file__).parent.parent
 
 
-def user_settings_path() -> str:
-    """Local AppData path for G-Scan's user settings json file."""
+def image_resources_directory() -> Path:
+    return root_directory().joinpath("resources", "images")
 
-    return app_data_directory() + "\\user_settings.json"
+
+def config_directory() -> Path:
+    return root_directory().joinpath("config")
+
+
+def user_settings_path() -> Path:
+    return config_directory().joinpath("user_settings.json")

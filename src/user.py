@@ -11,7 +11,15 @@ class UserSettings:
 
 
 def load_settings() -> UserSettings:
-    with open(file_system.user_settings_path(), mode="r") as user_settings:
+    user_settings = file_system.user_settings_path()
+
+    if not user_settings.exists():
+        json_file = file_system.config_directory().joinpath("user_defaults.json")
+
+    else:
+        json_file = user_settings
+    
+    with open(json_file, mode="r") as user_settings:
         contents = json.loads(user_settings.read())
 
     result = UserSettings()
