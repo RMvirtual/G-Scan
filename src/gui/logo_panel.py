@@ -1,7 +1,7 @@
 import wx
 import file_system
 
-from gui.metrics import aspect_ratio
+from gui.metrics import aspect_ratio, scale_with_ratio
 
 
 class Logo(wx.Panel):
@@ -41,4 +41,4 @@ class Logo(wx.Panel):
     def _scaled_image_metrics(self) -> tuple[int, int]:
         width, height = self.Size
 
-        return aspect_ratio.scale_with_ratio(self.image, width, height)
+        return scale_with_ratio(self.image, width, height)

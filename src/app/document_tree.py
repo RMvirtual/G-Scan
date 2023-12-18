@@ -7,7 +7,7 @@ from documents import (
     PendingBranch, PendingLeaf, rendering
 )
 
-from gui.dialogs.page_range import PageRangeDialog
+from gui.page_range_dialog import PageRangeDialog
 from gui.viewer.document_tree import DocumentTreeCtrl
 from documents.format import AbstractReference
 

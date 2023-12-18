@@ -1,10 +1,11 @@
 import wx
-from gui.metrics import screen_size
+
+from gui.metrics import recommended_metrics
 
 
 class Window(wx.Frame):
     def __init__(self):
-        size, position = screen_size.recommended_metrics()
+        size, position = recommended_metrics()
         super().__init__(parent=None, title="", size=size, pos=position)
 
         self._initialise_widgets()

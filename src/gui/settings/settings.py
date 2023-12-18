@@ -1,4 +1,5 @@
 import wx
+
 from gui import fonts
 from gui.settings.directories import Directories
 from gui.settings.defaults import Defaults
