@@ -62,11 +62,16 @@ def load(short_code: str = None, full_name: str = None) -> Department:
 
 
 def load_all() -> Departments:
+    json_file = file_system.config_directory().joinpath("departments.json") 
+    
+    with open(json_file) as file_stream:
+        json_contents = json.load(file_stream)
+    
     result = Departments()
 
     result.departments = [
         _department(key=short_code, values=values)
-        for short_code, values in _load_json().items()
+        for short_code, values in json_contents.items()
     ]
 
     return result
@@ -90,10 +95,3 @@ def _document_types(values: dict[str, any]) -> DocumentTypes:
     ]
 
     return result
-
-
-def _load_json() -> dict[str, any]:
-    json_file = file_system.config_directory().joinpath("departments.json") 
-    
-    with open(json_file) as file_stream:
-        return json.load(file_stream)
