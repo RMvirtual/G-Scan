@@ -5,6 +5,8 @@ import documents
 
 from documents import DocumentTypes
 
+ExpectedJsonFormat = dict[str, dict[str, str|list[str]]]
+
 
 @dataclasses.dataclass
 class Department:
@@ -15,8 +17,9 @@ class Department:
 
 
 class Departments:
-    def __init__(self):
-        self.departments: list[Department] = []
+    def __init__(self, departments: list[Department] = None):
+        if not departments:
+            self.departments: list[Department] = []
 
     def __contains__(self, short_code: str) -> bool:
         return len(short_code == other for other in self.short_names())
@@ -49,41 +52,35 @@ class Departments:
 
 
 def load(short_code: str = None, full_name: str = None) -> Department:
+    if not (short_code or full_name):
+        raise ValueError("Department parameter not selected.")
+
     departments = load_all()
 
-    if full_name:
-        return departments.from_full_name(full_name)
-
-    elif short_code:
-        return departments.from_short_code(short_code)
-
-    else:
-        raise ValueError("Department parameter not selected.")
+    return (
+        departments.from_full_name(full_name) if full_name
+        else departments.from_short_code(short_code)
+    )
 
 
 def load_all() -> Departments:
     json_file = file_system.config_directory().joinpath("departments.json") 
     
     with open(json_file) as file_stream:
-        json_contents = json.load(file_stream)
+        json_contents: ExpectedJsonFormat = json.load(file_stream)
     
     result = Departments()
 
     result.departments = [
-        _department(key=short_code, values=values)
-        for short_code, values in json_contents.items()
+        Department(
+            short_code,
+            values["full_name"],
+            values["short_name"], 
+            _document_types(values)
+        ) for short_code, values in json_contents.items()
     ]
 
     return result
-
-
-def _department(key: str, values: dict[str, any]) -> Department:
-    return Department(
-        key,
-        values["full_name"],
-        values["short_name"], 
-        _document_types(values)
-    )
 
 
 def _document_types(values: dict[str, any]) -> DocumentTypes:
