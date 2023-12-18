@@ -13,7 +13,7 @@ def main() -> None:
 
     print("Test run", "failed." if retcode else "successful.")
 
-    
+
 
 if __name__ == "__main__":
     main()

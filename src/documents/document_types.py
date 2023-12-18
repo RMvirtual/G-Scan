@@ -63,11 +63,17 @@ def load(short_code: str = None, full_name: str = None) -> Document:
 
 
 def load_all() -> DocumentTypes:
+    json_file = file_system.config_directory().joinpath("document_types.json") 
+    
+    with open(json_file) as file_stream:
+        json_contents = json.load(file_stream)
+    
     result = DocumentTypes()
-    key_values = _json_contents().items()
-
+    
     result.documents = [
-        _document(short_code, values) for short_code, values in key_values]
+        _document(short_code, values)
+        for short_code, values in json_contents.items()
+    ]
 
     return result
 
@@ -79,10 +85,3 @@ def _document(key: str, values: dict[str, any]) -> Document:
     result.analysis_code = values["analysis_code"]
 
     return result
-
-
-def _json_contents() -> dict[str, any]:
-    json_file = file_system.config_directory().joinpath("document_types.json") 
-    
-    with open(json_file) as file_stream:
-        return json.load(file_stream)
