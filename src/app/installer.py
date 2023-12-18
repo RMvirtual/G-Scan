@@ -37,3 +37,7 @@ def create_default_user_settings():
     out_path = file_system.app_data_directory() + "\\user_settings.json"
 
     shutil.copyfile(src=defaults_path, dst=out_path)
+    
+
+if __name__ == '__main__':
+    install_app_data()
