@@ -1,10 +1,11 @@
-import PIL.Image
-from pyzbar.pyzbar import decode
 import re
+import PIL.Image
+import file_system
 import wand.image
-import file_system.paths as file_system
-from pdf.reader import PdfReader
 import PyPDF2
+
+from pyzbar.pyzbar import decode
+from pdf.reader import PdfReader
 
 
 def read_job_references(source: str) -> list[str]:

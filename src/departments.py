@@ -1,3 +1,4 @@
+import json
 import file_system
 import documents
 
@@ -92,5 +93,7 @@ def _document_types(values: dict[str, any]) -> DocumentTypes:
 
 
 def _load_json() -> dict[str, any]:
-    return file_system.load_json(
-        file_system.config_directory().joinpath("departments.json"))
+    json_file = file_system.config_directory().joinpath("departments.json") 
+    
+    with open(json_file) as file_stream:
+        return json.load(file_stream)

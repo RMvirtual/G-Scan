@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import json
 import file_system
 
 
@@ -80,5 +82,7 @@ def _document(key: str, values: dict[str, any]) -> Document:
 
 
 def _json_contents() -> dict[str, any]:
-    return file_system.load_json(
-        file_system.config_directory().joinpath("document_types.json"))
+    json_file = file_system.config_directory().joinpath("document_types.json") 
+    
+    with open(json_file) as file_stream:
+        return json.load(file_stream)
