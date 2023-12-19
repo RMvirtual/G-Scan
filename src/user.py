@@ -1,5 +1,9 @@
 import json
-import departments, documents, file_system
+import database
+import departments
+import documents
+import file_system
+
 
 
 class UserSettings:
@@ -25,7 +29,9 @@ def load_settings() -> UserSettings:
     result = UserSettings()
     result.scan_dir = contents["scan_directory"]
     result.dest_dir = contents["dest_directory"]
-    result.department = departments.load(short_code=contents["department"])
+    result.department = database.load_department(
+        short_code=contents["department"])
+    
     result.document_type = documents.load(short_code=contents["document_type"])
 
     return result

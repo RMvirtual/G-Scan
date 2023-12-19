@@ -1,5 +1,9 @@
 import wx
-import departments, documents, file_system, user
+import database
+import departments
+import documents
+import user
+
 from app.abstract_root import RootInterface
 from departments import Department
 from gui import Settings
@@ -85,7 +89,7 @@ class SettingsController:
         self._gui.directories.dest_directory = settings.dest_dir
 
     def _set_department(self, settings: UserSettings) -> None:
-        department_names = departments.load_all().full_names()
+        department_names = database.load_all_departments().full_names()
         self._gui.defaults.department_options = department_names
 
         self._gui.defaults.department = settings.department.full_name
@@ -114,7 +118,7 @@ class SettingsController:
         result.dest_dir = self._gui.directories.dest_directory
 
         department_name = self._gui.defaults.department
-        result.department = departments.load(full_name=department_name)
+        result.department = database.load_department(full_name=department_name)
 
         document_name = self._gui.defaults.document_type
         result.document_type = documents.load(full_name=document_name)

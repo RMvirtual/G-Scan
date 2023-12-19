@@ -1,4 +1,6 @@
-import departments, user
+import database
+import departments
+import user
 
 from departments import Department, Departments
 from documents import Document
@@ -11,7 +13,7 @@ class ViewerConfiguration:
         self.dest_directory: str = ""
         self.department: Department = None
         self.document_type: Document = None
-        self.all_departments: Departments = departments.load_all()
+        self.all_departments: Departments = database.load_all_departments()
 
     def set_department(
             self, short_code: str = None, full_name: str = None) -> None:
@@ -40,7 +42,7 @@ class ViewerConfiguration:
 
 def load() -> ViewerConfiguration:
     result = ViewerConfiguration()
-    result.all_departments = departments.load_all()
+    result.all_departments = database.load_all_departments()
 
     return result
 

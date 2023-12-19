@@ -1,5 +1,7 @@
 import wx
-import departments, documents, user
+import database
+import documents
+
 from app import viewer_config
 from app.abstract_root import RootInterface
 from gui import MainMenu
@@ -79,11 +81,11 @@ class MainMenuController:
         self.launch_image_viewer(self._config)
 
     def on_operations(self, event: wx.EVT_BUTTON) -> None:
-        self._config.department = departments.load(short_code="ops")
+        self._config.department = database.load_department(short_code="ops")
         self._gui.view_ops()
 
     def on_credit_control(self, event: wx.EVT_BUTTON) -> None:
-        self._config.department = departments.load(short_code="pods")
+        self._config.department = database.load_department(short_code="pods")
         self._gui.view_credit_control()
 
     def on_exit(self, event: wx.EVT_BUTTON) -> None:
