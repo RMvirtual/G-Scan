@@ -1,4 +1,3 @@
-import wx
 from app.viewer_config import ViewerConfiguration
 from app.main_menu import MainMenuController
 from app.application import ViewerApplicationController

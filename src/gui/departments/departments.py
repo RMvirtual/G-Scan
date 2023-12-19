@@ -27,7 +27,7 @@ class Departments(wx.Panel):
 
 class DepartmentOptions(wx.Panel):
     def __init__(self, parent: wx.Frame):
-        super(DepartmentOptions, self).__init__(parent)
+        super().__init__(parent)
 
         self._initialise_buttons()
         self._initialise_sizer()
