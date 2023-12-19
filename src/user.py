@@ -32,7 +32,8 @@ def load_settings() -> UserSettings:
     result.department = database.load_department(
         short_code=contents["department"])
     
-    result.document_type = documents.load(short_code=contents["document_type"])
+    result.document_type = database.load_document(
+        short_code=contents["document_type"])
 
     return result
 

@@ -1,6 +1,5 @@
 import wx
 import database
-import documents
 
 from app import viewer_config
 from app.abstract_root import RootInterface
@@ -95,23 +94,25 @@ class MainMenuController:
         self.launch_settings()
 
     def on_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = documents.load(
+        self._config.document_type = database.load_document(
             short_code="customer_paperwork")
 
         self.launch_image_viewer(self._config)
 
     def on_loading_list(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = documents.load(short_code="loading_list")
+        self._config.document_type = database.load_document(
+            short_code="loading_list")
+        
         self.launch_image_viewer(self._config)
 
     def on_signed_pod(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = documents.load(
+        self._config.document_type = database.load_document(
             short_code="standard_delivery_note")
 
         self.launch_image_viewer(self._config)
 
     def on_signed_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = documents.load(
+        self._config.document_type = database.load_document(
             short_code="customer_paperwork_signed")
 
         self.launch_image_viewer(self._config)

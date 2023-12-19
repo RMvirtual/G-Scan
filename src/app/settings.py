@@ -1,7 +1,5 @@
 import wx
 import database
-import departments
-import documents
 import user
 
 from app.abstract_root import RootInterface
@@ -76,7 +74,7 @@ class SettingsController:
 
     def _refresh_document_options(self) -> None:
         department_name = self._gui.defaults.department
-        department = departments.load(full_name=department_name)
+        department = database.load_department(full_name=department_name)
         self._set_document(department=department)
 
     def _set_from_user_settings(self, settings: UserSettings) -> None:
@@ -121,7 +119,7 @@ class SettingsController:
         result.department = database.load_department(full_name=department_name)
 
         document_name = self._gui.defaults.document_type
-        result.document_type = documents.load(full_name=document_name)
+        result.document_type = database.load_document(full_name=document_name)
 
         return result
 

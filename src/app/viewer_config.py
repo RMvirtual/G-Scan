@@ -1,10 +1,8 @@
 import database
-import departments
 import user
 
 from departments import Department, Departments
 from documents import Document
-from user import UserSettings
 
 
 class ViewerConfiguration:
