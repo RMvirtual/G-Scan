@@ -8,8 +8,7 @@ from user import UserSettings
 ExpectedJsonFormat = dict[str, dict[str, str|list[str]]]
 
 
-def load_department(
-        short_code: str = None, full_name: str = None) -> Department:
+def load_department(short_code: str = "", full_name: str = "") -> Department:
     if not (short_code or full_name):
         raise ValueError("Department parameter not selected.")
 
@@ -93,13 +92,12 @@ def load_user_settings() -> UserSettings:
     with open(json_file, mode="r") as user_settings:
         contents = json.loads(user_settings.read())
 
-    result = UserSettings()
-    result.scan_dir = contents["scan_directory"]
-    result.dest_dir = contents["dest_directory"]
-    result.department = load_department(short_code=contents["department"])
-    result.document_type = load_document(short_code=contents["document_type"])
-
-    return result
+    return UserSettings(
+        contents["scan_directory"],
+        contents["dest_directory"],
+        load_department(short_code=contents["department"]),
+        load_document(short_code=contents["document_type"])
+    )
 
 
 def save_user_settings(settings: UserSettings) -> None:
