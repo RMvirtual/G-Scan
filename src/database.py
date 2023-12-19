@@ -3,7 +3,7 @@ import file_system
 
 from departments import Department, Departments
 from documents import DocumentTypes, Document
-
+from user import UserSettings
 
 ExpectedJsonFormat = dict[str, dict[str, str|list[str]]]
 
@@ -79,3 +79,36 @@ def load_all_documents() -> DocumentTypes:
     ]
 
     return result
+
+
+def load_user_settings() -> UserSettings:
+    user_settings = file_system.user_settings_path()
+
+    if not user_settings.exists():
+        json_file = file_system.config_directory().joinpath("user_defaults.json")
+
+    else:
+        json_file = user_settings
+    
+    with open(json_file, mode="r") as user_settings:
+        contents = json.loads(user_settings.read())
+
+    result = UserSettings()
+    result.scan_dir = contents["scan_directory"]
+    result.dest_dir = contents["dest_directory"]
+    result.department = load_department(short_code=contents["department"])
+    result.document_type = load_document(short_code=contents["document_type"])
+
+    return result
+
+
+def save_user_settings(settings: UserSettings) -> None:
+    values = {
+        "scan_directory": settings.scan_dir,
+        "dest_directory": settings.dest_dir,
+        "department": settings.department.short_code,
+        "document_type": settings.document_type.short_code
+    }
+
+    with open(file_system.user_settings_path(), mode="w") as user_settings:
+        user_settings.write(json.dumps(values, indent=2))

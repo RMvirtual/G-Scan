@@ -1,6 +1,5 @@
 import wx
 import database
-import user
 
 from app.abstract_root import RootInterface
 from departments import Department
@@ -40,7 +39,7 @@ class SettingsController:
         panel.department_box.Bind(wx.EVT_COMBOBOX, self.on_department_box)
 
     def on_save(self, event = None) -> None:
-        user.save_settings(settings=self._settings_from_gui())
+        database.save_user_settings(settings=self._settings_from_gui())
         self._exit_to_main_menu()
 
     def on_exit(self, event = None) -> None:
@@ -69,7 +68,7 @@ class SettingsController:
         self._root.launch_main_menu()
 
     def _load_settings_from_file(self) -> None:
-        self._set_from_user_settings(settings=user.load_settings())
+        self._set_from_user_settings(settings=database.load_user_settings())
         self._root.window.Layout()
 
     def _refresh_document_options(self) -> None:

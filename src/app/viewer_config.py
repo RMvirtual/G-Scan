@@ -1,5 +1,4 @@
 import database
-import user
 
 from departments import Department, Departments
 from documents import Document
@@ -46,7 +45,7 @@ def load() -> ViewerConfiguration:
 
 
 def load_default() -> ViewerConfiguration:
-    user_defaults = user.load_settings()
+    user_defaults = database.load_user_settings()
 
     result = load()
     result.scan_directory = user_defaults.scan_dir
