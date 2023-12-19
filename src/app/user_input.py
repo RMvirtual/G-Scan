@@ -22,7 +22,9 @@ class UserInputController:
         self._load_document()
 
     def _load_department(self):
-        names = self._config.all_departments.full_names()
+        names = list(map(
+            lambda dept: dept.full_name, self._config.departments))
+        
         self._input_bar.department_options = names
 
         current_department = self._config.department.full_name

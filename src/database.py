@@ -1,7 +1,7 @@
 import json
 import file_system
 
-from departments import Department, Departments
+from departments import Department 
 from documents import DocumentTypes, Document
 from user import UserSettings
 
@@ -14,21 +14,32 @@ def load_department(short_code: str = "", full_name: str = "") -> Department:
 
     departments = load_all_departments()
 
-    return (
-        departments.from_full_name(full_name) if full_name
-        else departments.from_short_code(short_code)
-    )
+    if full_name:
+        filtered = [
+            dept for dept in departments if dept.full_name == full_name]
+    
+        if not filtered:
+            raise ValueError(f"Invalid department: {full_name}")
+
+        return filtered[0]
+
+    else:
+        filtered = [
+            dept for dept in departments if dept.short_code == short_code]
+
+        if not filtered:
+            raise ValueError(f"Invalid department: {short_code}")
+
+        return filtered[0]
 
 
-def load_all_departments() -> Departments:
+def load_all_departments() -> list[Department]:
     json_file = file_system.config_directory().joinpath("departments.json") 
     
     with open(json_file) as file_stream:
         json_contents: ExpectedJsonFormat = json.load(file_stream)
     
-    result = Departments()
-
-    result.departments = [
+    return [
         Department(
             short_code,
             values["full_name"],
@@ -36,8 +47,6 @@ def load_all_departments() -> Departments:
             _document_types(values)
         ) for short_code, values in json_contents.items()
     ]
-
-    return result
 
 
 def _document_types(values: dict[str, any]) -> DocumentTypes:

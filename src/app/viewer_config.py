@@ -1,6 +1,6 @@
 import database
 
-from departments import Department, Departments
+from departments import Department
 from documents import Document
 
 
@@ -10,15 +10,15 @@ class ViewerConfiguration:
         self.dest_directory: str = ""
         self.department: Department = None
         self.document_type: Document = None
-        self.all_departments: Departments = database.load_all_departments()
+        self.departments: list[Department] = database.load_all_departments()
 
     def set_department(
             self, short_code: str = None, full_name: str = None) -> None:
         if short_code:
-            self.department = self.all_departments.from_short_code(short_code)
+            self.department = database.load_department(short_code=short_code)
 
         elif full_name:
-            self.department = self.all_departments.from_full_name(full_name)
+            self.department = database.load_department(full_name=full_name)
 
         else:
             raise ValueError("No department parameter provided.")
@@ -39,7 +39,7 @@ class ViewerConfiguration:
 
 def load() -> ViewerConfiguration:
     result = ViewerConfiguration()
-    result.all_departments = database.load_all_departments()
+    result.departments = database.load_all_departments()
 
     return result
 

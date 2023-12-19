@@ -86,9 +86,10 @@ class SettingsController:
         self._gui.directories.dest_directory = settings.dest_dir
 
     def _set_department(self, settings: UserSettings) -> None:
-        department_names = database.load_all_departments().full_names()
+        department_names = list(map(
+            lambda dept: dept.full_name, database.load_all_departments()))
+        
         self._gui.defaults.department_options = department_names
-
         self._gui.defaults.department = settings.department.full_name
 
     def _set_document(
