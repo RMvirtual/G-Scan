@@ -60,3 +60,4 @@ class UserInputController:
 
     def document_type(self) -> Document:
         return documents.load(full_name=self._input_bar.document_type)
+    
