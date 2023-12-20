@@ -3,9 +3,54 @@ import file_system
 
 from departments import Department 
 from documents import DocumentTypes, Document
+from file_system import DatabaseFiles
 from user import UserSettings
 
+
 ExpectedJsonFormat = dict[str, dict[str, str|list[str]]]
+
+
+class Database:
+    def __init__(self, files: DatabaseFiles) -> None:
+        self.files = files
+
+    def department(
+            self, short_code: str = "", full_name: str = "") -> Department:
+        if not (short_code or full_name):
+            raise ValueError("Department parameter not selected.")
+
+        departments = load_all_departments()
+
+        if full_name:
+            filtered = [
+                dept for dept in departments if dept.full_name == full_name]
+        
+            if not filtered:
+                raise ValueError(f"Invalid department: {full_name}")
+
+            return filtered[0]
+
+        else:
+            filtered = [
+                dept for dept in departments if dept.short_code == short_code]
+
+            if not filtered:
+                raise ValueError(f"Invalid department: {short_code}")
+
+            return filtered[0]
+
+    def all_departments(self) -> list[Department]:
+        with open(self.files.departments) as file_stream:
+            json_contents: ExpectedJsonFormat = json.load(file_stream)
+        
+        return [
+            Department(
+                short_code,
+                values["full_name"],
+                values["short_name"], 
+                _document_types(values)
+            ) for short_code, values in json_contents.items()
+        ]
 
 
 def load_department(short_code: str = "", full_name: str = "") -> Department:

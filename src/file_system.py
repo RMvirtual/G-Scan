@@ -1,4 +1,13 @@
+import dataclasses
+
 from pathlib import Path
+
+
+@dataclasses.dataclass
+class DatabaseFiles:
+    departments: Path
+    document_types: Path
+    user_defaults: Path
 
 
 def root_directory() -> Path:
