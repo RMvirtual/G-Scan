@@ -37,3 +37,9 @@ def test_should_load_document_types() -> None:
     }
 
     assert short_codes == correct_short_codes
+
+
+def test_should_load_user_settings() -> None:
+    database = JSONDatabase(database_files())
+
+

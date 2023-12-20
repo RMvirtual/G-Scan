@@ -19,7 +19,7 @@ class JSONDatabase:
         if not (short_code or full_name):
             raise ValueError("Department parameter not selected.")
 
-        departments = load_all_departments()
+        departments = self.all_departments()
 
         if full_name:
             filtered = [
@@ -48,32 +48,37 @@ class JSONDatabase:
                 short_code,
                 values["full_name"],
                 values["short_name"], 
-                self._document_types(values)
+                list(filter(
+                    lambda doc: doc.short_code in values["document_types"], 
+                    self.all_documents())
+                )
             ) for short_code, values in json_contents.items()
         ]
 
-    def _document_types(self, values: dict[str, any]) -> DocumentTypes:
-        result = DocumentTypes()
-
-        result.documents = [
-            document for document in load_all_documents()
-            if document.short_code in values["document_types"]
-        ]
-
-        return result
-
     def document(
             self, short_code: str = None, full_name: str = None) -> Document:
-        documents = load_all_documents()
+        documents = self.all_documents()
+
+        if not (short_code or full_name):
+            raise ValueError("Document Type parameter not selected.")
 
         if full_name:
-            return documents.from_full_name(full_name)
+            filtered = [
+                doc for doc in documents if doc.full_name == full_name]
+        
+            if not filtered:
+                raise ValueError(f"Invalid Document Type: {full_name}")
 
-        elif short_code:
-            return documents.from_short_code(short_code)
+            return filtered[0]
 
         else:
-            raise ValueError("No Document Type selected.")
+            filtered = [
+                dept for dept in documents if dept.short_code == short_code]
+
+            if not filtered:
+                raise ValueError(f"Invalid Document Type: {short_code}")
+
+            return filtered[0]
 
     def all_documents(self) -> list[Document]:
         with open(self.files.document_types) as file_stream:
@@ -84,6 +89,39 @@ class JSONDatabase:
             for short_code, values in json_contents.items()
         ]
 
+    def load_user_settings() -> UserSettings:
+        user_settings = file_system.user_settings_path()
+
+        if not user_settings.exists():
+            json_file = file_system.config_directory().joinpath("user_defaults.json")
+
+        else:
+            json_file = user_settings
+        
+        with open(json_file, mode="r") as user_settings:
+            contents = json.loads(user_settings.read())
+
+        return UserSettings(
+            contents["scan_directory"],
+            contents["dest_directory"],
+            load_department(short_code=contents["department"]),
+            load_document(short_code=contents["document_type"])
+        )
+
+
+    def save_user_settings(settings: UserSettings) -> None:
+        values = {
+            "scan_directory": settings.scan_dir,
+            "dest_directory": settings.dest_dir,
+            "department": settings.department.short_code,
+            "document_type": settings.document_type.short_code
+        }
+
+        with open(file_system.user_settings_path(), mode="w") as user_settings:
+            user_settings.write(json.dumps(values, indent=2))
+
+
+### Aiming to remove from here down. ###
 
 def load_department(short_code: str = "", full_name: str = "") -> Department:
     if not (short_code or full_name):
