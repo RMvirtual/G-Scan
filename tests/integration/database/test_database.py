@@ -25,7 +25,15 @@ def test_should_load_departments() -> None:
 
 def test_should_load_document_types() -> None:
     database = JSONDatabase(database_files())
-    document_types = database.load_all_documents()
+    document_types = database.all_documents()
 
     assert len(document_types) == 6
 
+    short_codes = set(doc_type.short_code for doc_type in document_types)
+
+    correct_short_codes = {
+        "customer_paperwork_signed",  "standard_delivery_note",
+        "customer_paperwork", "dgn", "loading_list", "commercial_invoice"
+    }
+
+    assert short_codes == correct_short_codes

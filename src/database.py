@@ -7,7 +7,7 @@ from file_system import JSONDatabaseFiles
 from user import UserSettings
 
 
-ExpectedJsonFormat = dict[str, dict[str, str|list[str]]]
+JSONFormat = dict[str, dict[str, str|list[str]]]
 
 
 class JSONDatabase:
@@ -41,7 +41,7 @@ class JSONDatabase:
 
     def all_departments(self) -> list[Department]:
         with open(self.files.departments) as file_stream:
-            json_contents: ExpectedJsonFormat = json.load(file_stream)
+            json_contents: JSONFormat = json.load(file_stream)
         
         return [
             Department(
@@ -62,7 +62,7 @@ class JSONDatabase:
 
         return result
 
-    def load_document(
+    def document(
             self, short_code: str = None, full_name: str = None) -> Document:
         documents = load_all_documents()
 
@@ -75,19 +75,14 @@ class JSONDatabase:
         else:
             raise ValueError("No Document Type selected.")
 
-
-    def load_all_documents(self) -> DocumentTypes:
+    def all_documents(self) -> list[Document]:
         with open(self.files.document_types) as file_stream:
-            json_contents = json.load(file_stream)
+            json_contents: JSONFormat = json.load(file_stream)
         
-        result = DocumentTypes()
-        
-        result.documents = [
+        return [
             Document(short_code, values["full_name"], values["analysis_code"])
             for short_code, values in json_contents.items()
         ]
-
-        return result
 
 
 def load_department(short_code: str = "", full_name: str = "") -> Department:
@@ -119,7 +114,7 @@ def load_all_departments() -> list[Department]:
     json_file = file_system.config_directory().joinpath("departments.json") 
     
     with open(json_file) as file_stream:
-        json_contents: ExpectedJsonFormat = json.load(file_stream)
+        json_contents: JSONFormat = json.load(file_stream)
     
     return [
         Department(
