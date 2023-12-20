@@ -89,34 +89,32 @@ class JSONDatabase:
             for short_code, values in json_contents.items()
         ]
 
-    def load_user_settings(self) -> UserSettings:
-        user_settings = file_system.user_settings_path()
+    def load_user_settings(self, username: str) -> UserSettings:        
+        with open(self.files.user_settings, mode="r") as file_stream:
+            contents = json.loads(file_stream.read())
 
-        if not user_settings.exists():
-            json_file = file_system.config_directory().joinpath("user_defaults.json")
+        if username not in contents:
+            raise ValueError(f"Could not find settings for user {username}.")
 
-        else:
-            json_file = user_settings
-        
-        with open(json_file, mode="r") as user_settings:
-            contents = json.loads(user_settings.read())
+        user_entry = contents[username]
 
         return UserSettings(
-            contents["scan_directory"],
-            contents["dest_directory"],
-            load_department(short_code=contents["department"]),
-            load_document(short_code=contents["document_type"])
+            username,
+            user_entry["scan_directory"],
+            user_entry["dest_directory"],
+            load_department(short_code=user_entry["department"]),
+            load_document(short_code=user_entry["document_type"])
         )
 
     def save_user_settings(self, settings: UserSettings) -> None:
-        values = {
+        values = {settings.username: {
             "scan_directory": settings.scan_dir,
             "dest_directory": settings.dest_dir,
             "department": settings.department.short_code,
             "document_type": settings.document_type.short_code
-        }
+        }}
 
-        with open(file_system.user_settings_path(), mode="w") as user_settings:
+        with open(self.files.user_settings, mode="w") as user_settings:
             user_settings.write(json.dumps(values, indent=2))
 
 

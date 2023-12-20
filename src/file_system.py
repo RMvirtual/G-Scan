@@ -7,7 +7,7 @@ from pathlib import Path
 class JSONDatabaseFiles:
     departments: Path
     document_types: Path
-    user_defaults: Path
+    user_settings: Path
 
 
 def root_directory() -> Path:
