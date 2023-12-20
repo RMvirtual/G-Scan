@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 @dataclasses.dataclass
-class DatabaseFiles:
+class JSONDatabaseFiles:
     departments: Path
     document_types: Path
     user_defaults: Path
