@@ -1,0 +1,6 @@
+{
+    "scan_directory": "myshare/lol",
+    "dest_directory": "//does_not_matter/share",
+    "department": "ops",
+    "document_type": "customer_paperwork"
+}

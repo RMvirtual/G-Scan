@@ -89,7 +89,7 @@ class JSONDatabase:
             for short_code, values in json_contents.items()
         ]
 
-    def load_user_settings() -> UserSettings:
+    def load_user_settings(self) -> UserSettings:
         user_settings = file_system.user_settings_path()
 
         if not user_settings.exists():
@@ -108,8 +108,7 @@ class JSONDatabase:
             load_document(short_code=contents["document_type"])
         )
 
-
-    def save_user_settings(settings: UserSettings) -> None:
+    def save_user_settings(self, settings: UserSettings) -> None:
         values = {
             "scan_directory": settings.scan_dir,
             "dest_directory": settings.dest_dir,
