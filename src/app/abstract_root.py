@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.viewer_config import ViewerConfiguration
+from app.configuration import AppConfiguration
 from gui.window import Window
 
 
@@ -18,7 +18,7 @@ class RootInterface(ABC):
         ...
 
     @abstractmethod
-    def launch_image_viewer(self, config: ViewerConfiguration) -> None:
+    def launch_image_viewer(self, config: AppConfiguration) -> None:
         ...
 
     @abstractmethod

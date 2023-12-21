@@ -1,6 +1,5 @@
 import wx
-import documents
-from app.viewer_config import ViewerConfiguration
+from app.configuration import AppConfiguration
 from app.document import DocumentController
 from app.abstract_root import RootInterface
 from documents.format import JobReference
@@ -10,7 +9,7 @@ from app.user_input import UserInputController
 
 class ViewerApplicationController:
     def __init__(
-            self, root_application: RootInterface, config: ViewerConfiguration
+            self, root_application: RootInterface, config: AppConfiguration
     ) -> None:
         self._root = root_application
         self._config = config

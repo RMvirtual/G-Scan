@@ -1,6 +1,6 @@
 import wx
 import documents
-from app.viewer_config import ViewerConfiguration
+from app.configuration import AppConfiguration
 from documents import Document
 from documents.format import AbstractReference, JobReference
 from gui import Viewer
@@ -13,7 +13,7 @@ class SubmissionDocument:
 
 
 class UserInputController:
-    def __init__(self, gui: Viewer, config: ViewerConfiguration) -> None:
+    def __init__(self, gui: Viewer, config: AppConfiguration) -> None:
         self._gui = gui
         self._config = config
         self._input_bar = self._gui.input_bar

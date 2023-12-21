@@ -4,7 +4,7 @@ from departments import Department
 from documents import Document
 
 
-class ViewerConfiguration:
+class AppConfiguration:
     def __init__(self) -> None:
         self.scan_directory: str = ""
         self.dest_directory: str = ""
@@ -37,14 +37,14 @@ class ViewerConfiguration:
             raise ValueError("No document type paremeter provided.")
 
 
-def load() -> ViewerConfiguration:
-    result = ViewerConfiguration()
+def load() -> AppConfiguration:
+    result = AppConfiguration()
     result.departments = database.load_all_departments()
 
     return result
 
 
-def load_default() -> ViewerConfiguration:
+def load_default() -> AppConfiguration:
     user_defaults = database.load_user_settings()
 
     result = load()

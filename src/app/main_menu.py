@@ -1,7 +1,7 @@
 import wx
 import database
 
-from app import viewer_config
+from app import configuration
 from app.abstract_root import RootInterface
 from gui import MainMenu
 
@@ -14,7 +14,7 @@ class MainMenuController:
         self._initialise_keyboard_shortcuts()
         self._gui.SetFocus()
 
-        self._config = viewer_config.load_default()
+        self._config = configuration.load_default()
 
     def _initialise_gui(self) -> None:
         self._gui = MainMenu(self._root.window)
@@ -76,7 +76,7 @@ class MainMenuController:
         self._config.department = None
 
     def on_quick_start(self, event: wx.EVT_BUTTON) -> None:
-        self._config = viewer_config.load_default()
+        self._config = configuration.load_default()
         self.launch_image_viewer(self._config)
 
     def on_operations(self, event: wx.EVT_BUTTON) -> None:

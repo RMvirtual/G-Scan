@@ -1,26 +1,26 @@
 {
-  "customer_paperwork_signed": {
-    "full_name": "Customer Paperwork (signed)",
-    "analysis_code": "PWPOD"
-  },
-  "standard_delivery_note": {
-    "full_name": "Standard Delivery Note (signed)",
-    "analysis_code": "KPIPOD"
-  },
-  "customer_paperwork": {
-    "full_name": "Customer Paperwork",
-    "analysis_code": "OPSPWAT"
-  },
-  "dgn": {
-    "full_name": "Dangerous Goods Note",
-    "analysis_code": "DGN"
-  },
-  "loading_list": {
-    "full_name": "Loading List",
-    "analysis_code": "OPSLDLST"
-  },
-  "commercial_invoice": {
-    "full_name": "Commercial Invoice",
-    "analysis_code": "COM_INV"
-  }
+    "customer_paperwork_signed": {
+        "full_name": "Customer Paperwork (signed)",
+        "analysis_code": "PWPOD"
+    },
+    "standard_delivery_note": {
+        "full_name": "Standard Delivery Note (signed)",
+        "analysis_code": "KPIPOD"
+    },
+    "customer_paperwork": {
+        "full_name": "Customer Paperwork",
+        "analysis_code": "OPSPWAT"
+    },
+    "dgn": {
+        "full_name": "Dangerous Goods Note",
+        "analysis_code": "DGN"
+    },
+    "loading_list": {
+        "full_name": "Loading List",
+        "analysis_code": "OPSLDLST"
+    },
+    "commercial_invoice": {
+        "full_name": "Commercial Invoice",
+        "analysis_code": "COM_INV"
+    }
 }

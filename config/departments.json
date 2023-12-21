@@ -1,12 +1,20 @@
 {
-  "ops": {
-    "full_name": "Operations",
-    "short_name": "Ops",
-    "document_types": ["customer_paperwork", "dgn", "commercial_invoice", "loading_list"]
-  },
-  "pods": {
-    "full_name": "Credit Control",
-    "short_name": "PODs",
-    "document_types": ["customer_paperwork_signed", "standard_delivery_note"]
-  }
+    "ops": {
+        "full_name": "Operations",
+        "short_name": "Ops",
+        "document_types": [
+            "customer_paperwork",
+            "dgn",
+            "commercial_invoice",
+            "loading_list"
+        ]
+    },
+    "pods": {
+        "full_name": "Credit Control",
+        "short_name": "PODs",
+        "document_types": [
+            "customer_paperwork_signed",
+            "standard_delivery_note"
+        ]
+    }
 }
