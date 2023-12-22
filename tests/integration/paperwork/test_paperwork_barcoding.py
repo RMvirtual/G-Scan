@@ -1,8 +1,10 @@
 import shutil
 import tempfile
 import pytest
+import pdf.pdf
 
 from pathlib import Path
+from paperwork_types import A4Document
 
 
 class TestPaperworkBarcoding:
@@ -15,10 +17,29 @@ class TestPaperworkBarcoding:
 
         yield
 
-        # shutil.rmtree(self.temp_directory)
+        shutil.rmtree(self.temp_directory)
 
 
-    def test_should_barcode_page(self, setup_teardown) -> None:
+    def test_should_read_page(self, setup_teardown) -> None:
         one_page_file = self.temp_directory.joinpath("one_page_A4.pdf")
+        page_images = pdf.pdf.read_pdf(str(one_page_file))
 
-        
+        assert len(page_images) == 1
+
+        page = page_images[0]
+        assert (page.w, page.h) == (2481, 3508)
+
+    def test_should_write_page(self, setup_teardown) -> None:
+        test_data_folder = Path(__file__).parent.joinpath("data")
+
+        one_page_file = self.temp_directory.joinpath("one_page_A4.pdf")
+        page_images = pdf.pdf.read_pdf(str(one_page_file))
+
+        out_file = test_data_folder.joinpath("attempt.pdf")
+        doc = A4Document(str(out_file))
+
+        page_image = page_images[0]
+        page_image.save(test_data_folder.joinpath("attempt.png"))
+
+        doc.draw_page(str(test_data_folder.joinpath("attempt.png")))
+        doc.save()

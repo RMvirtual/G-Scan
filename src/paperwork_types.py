@@ -1,9 +1,10 @@
 from reportlab.graphics.barcode import code128
-from reportlab.lib.units import mm
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
+from reportlab.pdfgen.canvas import Canvas
+
 
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
 pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
@@ -11,14 +12,8 @@ pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
 class A4Document:
     def __init__(self, file_name: str) -> None:
-        self._initialise_canvas(file_name)
-
-    def _initialise_canvas(self, file_name):
-        self.canvas = canvas.Canvas(
-            filename=file_name,
-            pagesize=A4,
-            pageCompression=1
-        )
+        self.canvas = Canvas(
+            filename=file_name, pagesize=A4, pageCompression=1)
 
         self.canvas.setFillColorRGB(0, 0, 0)
 

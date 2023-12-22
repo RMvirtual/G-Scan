@@ -1,16 +1,14 @@
 import io
-
-import file_system
-from pdf.writer_old import PdfWriter
-import io
-import file_system
 import os
-import PyPDF2
 import shutil
 import PIL
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4, A3
+import PyPDF2
 import wand.image
+import file_system
+
+from pdf.writer_old import PdfWriter
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 
 
 class CustomerPaperworkPDFWriter(PdfWriter):

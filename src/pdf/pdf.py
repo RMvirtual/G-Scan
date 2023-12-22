@@ -1,41 +1,27 @@
-import fitz
+import fitz.utils
 
 
-class Page:
-    def __init__(self, pixmap: fitz.Pixmap):
-        self._pixmap = pixmap
-
-    def width(self):
-        return self._width
-
-    def height(self):
-        return self._height
-
-    def to_pil_bytes(self):
-        return self._pixmap.pil_tobytes(output="png")
-
-    def save(self, output_path: str):
-        self._pixmap.pil_save(output_path)
+from pathlib import Path
+from fitz import Document, DocumentWriter, Page, Pixmap
 
 
-class Pdf:
-    def __init__(self, page_images: list = None):
-        self._initialise_pages(page_images)
+def read_pdf(source: Path) -> list[Pixmap]:
+    document = fitz.Document(source)
 
-    def _initialise_pages(self, page_images: list):
-        if not page_images:
-            page_images = []
+    result = []
 
-        self._page_images = page_images
+    for page in document:
+        result.insert(0, fitz.utils.get_pixmap(page, dpi=300))
 
-    def number_of_pages(self) -> int:
-        return len(self._page_images)
+    return result
 
-    def page(self, page_no: int):
-        return self._page_images[page_no]
 
-    def pages(self):
-        return self._page_images
+def write_pdf(pdf_images: list[Pixmap], output_path: Path) -> None:
+    document = fitz.Document()
 
-    def append(self, pixmap):
-        self._page_images.append(pixmap)
+    for page_image in pdf_images:
+        page = fitz.utils.new_page(
+            document, width=page_image.w, height=page_image.h)
+
+
+    document.save(output_path)
