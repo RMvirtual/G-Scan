@@ -1,5 +1,4 @@
 import wx
-import documents
 
 from app.configuration import AppConfiguration
 from documents import Document
@@ -61,5 +60,6 @@ class UserInputController:
             return None
 
     def document_type(self) -> Document:
-        return documents.load(full_name=self._input_bar.document_type)
+        return self._config.database.document(
+            full_name=self._input_bar.document_type)
     
