@@ -89,9 +89,8 @@ class JSONDatabase:
             for short_code, values in json_contents.items()
         ]
 
-    def load_user_settings(self, username: str) -> UserSettings:        
-        with open(self.files.user_settings, mode="r") as file_stream:
-            contents = json.loads(file_stream.read())
+    def load_user_settings(self, username: str) -> UserSettings:
+        contents = self.user_settings_json()
 
         if username not in contents:
             raise ValueError(f"Could not find settings for user {username}.")
@@ -107,19 +106,21 @@ class JSONDatabase:
         )
 
     def user_settings_json(self) -> JSONFormat:
-        with open(self.files.user_settings, mode="r") as file_stream:
+        with open(self.files.user_settings) as file_stream:
             return json.load(file_stream)
 
     def save_user_settings(self, settings: UserSettings) -> None:
-        json_entry = {settings.username: {
+        json_contents = self.user_settings_json()
+
+        json_contents[settings.username] = {
             "scan_directory": settings.scan_dir,
             "dest_directory": settings.dest_dir,
             "department": settings.department.short_code,
             "document_type": settings.document_type.short_code
-        }}
+        }
 
         with open(self.files.user_settings, mode="w") as user_settings:
-            user_settings.write(json.dumps(json_entry, indent=2))
+            user_settings.write(json.dumps(json_contents, indent=2))
 
 
 ### Aiming to remove from here down. ###

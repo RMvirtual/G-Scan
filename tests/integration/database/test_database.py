@@ -1,82 +1,88 @@
+import shutil
+import tempfile
+import pytest
+
 from pathlib import Path
 from database import JSONDatabase
 from file_system import JSONDatabaseFiles
   
 
-def database_files() -> JSONDatabaseFiles:
-    # Could do with a setup method here to create a temp folder
-    # for the data files each test.
-    data_files_folder = Path(__file__).parent.joinpath("data")
+class TestJSONDatabase:
+    @pytest.fixture
+    def setup_teardown(self) -> None:
+        test_data_folder = Path(__file__).parent.joinpath("data")
 
-    return JSONDatabaseFiles(
-        data_files_folder.joinpath("departments.json"),
-        data_files_folder.joinpath("document_types.json"),
-        data_files_folder.joinpath("user_settings.json")
-    )
+        self.temp_directory = Path(tempfile.TemporaryDirectory().name)
+        shutil.copytree(test_data_folder, self.temp_directory)
 
+        self.database_files = JSONDatabaseFiles(
+            self.temp_directory.joinpath("departments.json"),
+            self.temp_directory.joinpath("document_types.json"),
+            self.temp_directory.joinpath("user_settings.json")
+        )
 
-def test_should_load_departments() -> None:
-    database = JSONDatabase(database_files())
-    departments = database.all_departments()
+        yield
 
-    assert len(departments) == 2
+        shutil.rmtree(self.temp_directory)
 
-    short_codes = set(department.short_code for department in  departments)
-    assert short_codes == {"ops", "pods"}
+    def test_should_load_departments(self, setup_teardown) -> None:
+        database = JSONDatabase(self.database_files)
+        departments = database.all_departments()
 
+        assert len(departments) == 2
 
-def test_should_load_document_types() -> None:
-    database = JSONDatabase(database_files())
-    document_types = database.all_documents()
+        short_codes = set(department.short_code for department in  departments)
+        assert short_codes == {"ops", "pods"}
 
-    assert len(document_types) == 6
+    def test_should_load_document_types(self, setup_teardown) -> None:
+        database = JSONDatabase(self.database_files)
+        document_types = database.all_documents()
 
-    short_codes = set(doc_type.short_code for doc_type in document_types)
+        assert len(document_types) == 6
 
-    correct_short_codes = {
-        "customer_paperwork_signed", "standard_delivery_note",
-        "customer_paperwork", "dgn", "loading_list", "commercial_invoice"
-    }
+        short_codes = set(doc_type.short_code for doc_type in document_types)
 
-    assert short_codes == correct_short_codes
-
-
-def test_should_load_all_user_settings_json() -> None:
-    database = JSONDatabase(database_files())
-   
-    correct_settings = {
-        "GSCAN_DEFAULT": {
-            "scan_directory": "",
-            "dest_directory": "//office/edocs",
-            "department": "ops",
-            "document_type": "customer_paperwork"
-        },
-        "rmvir": {
-            "scan_directory": "myshare/lol",
-            "dest_directory": "//does_not_matter/share",
-            "department": "ops",
-            "document_type": "customer_paperwork"
+        correct_short_codes = {
+            "customer_paperwork_signed", "standard_delivery_note",
+            "customer_paperwork", "dgn", "loading_list", "commercial_invoice"
         }
-    }
 
-    assert database.user_settings_json() == correct_settings
+        assert short_codes == correct_short_codes
 
-
-def test_should_load_user_settings() -> None:
-    database = JSONDatabase(database_files())
-    settings = database.load_user_settings(username="rmvir")
-
-    assert settings.username == "rmvir"
-    assert settings.department.short_code == "ops"
-
-
-def test_should_overwrite_user_settings() -> None:
-    database = JSONDatabase(database_files())
-
-    settings = database.load_user_settings(username="rmvir")
-    settings.department = database.department(short_code="pods")
+    def test_should_load_all_user_settings_json(self, setup_teardown) -> None:
+        database = JSONDatabase(self.database_files)
     
-    database.save_user_settings(settings)
+        correct_settings = {
+            "GSCAN_DEFAULT": {
+                "scan_directory": "",
+                "dest_directory": "//office/edocs",
+                "department": "ops",
+                "document_type": "customer_paperwork"
+            },
+            "rmvir": {
+                "scan_directory": "myshare/lol",
+                "dest_directory": "//does_not_matter/share",
+                "department": "ops",
+                "document_type": "customer_paperwork"
+            }
+        }
 
-    updated_settings = database.load_user_settings(username="rmvir")
-    assert updated_settings.department.short_code == "pods"
+        assert database.user_settings_json() == correct_settings
+
+    def test_should_load_user_settings(self, setup_teardown) -> None:
+        database = JSONDatabase(self.database_files)
+        settings = database.load_user_settings(username="rmvir")
+
+        assert settings.username == "rmvir"
+        assert settings.department.short_code == "ops"
+
+    def test_should_overwrite_user_settings(self, setup_teardown) -> None:
+        database = JSONDatabase(self.database_files)
+
+        settings = database.load_user_settings(username="rmvir")
+        settings.department = database.department(short_code="pods")
+        
+        database.save_user_settings(settings)
+
+        updated_settings = database.load_user_settings(username="rmvir")
+        assert updated_settings.department.short_code == "pods"
