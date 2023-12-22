@@ -1,6 +1,6 @@
 import wx
 
-from gui.departments import Departments, Operations, CreditControl
+from gui.departments import CreditControl, Departments, Operations
 from gui.logo_panel import Logo
 
 
