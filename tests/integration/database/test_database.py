@@ -41,6 +41,27 @@ def test_should_load_document_types() -> None:
     assert short_codes == correct_short_codes
 
 
+def test_should_load_all_user_settings_json() -> None:
+    database = JSONDatabase(database_files())
+   
+    correct_settings = {
+        "GSCAN_DEFAULT": {
+            "scan_directory": "",
+            "dest_directory": "//office/edocs",
+            "department": "ops",
+            "document_type": "customer_paperwork"
+        },
+        "rmvir": {
+            "scan_directory": "myshare/lol",
+            "dest_directory": "//does_not_matter/share",
+            "department": "ops",
+            "document_type": "customer_paperwork"
+        }
+    }
+
+    assert database.user_settings_json() == correct_settings
+
+
 def test_should_load_user_settings() -> None:
     database = JSONDatabase(database_files())
     settings = database.load_user_settings(username="rmvir")

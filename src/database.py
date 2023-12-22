@@ -106,8 +106,12 @@ class JSONDatabase:
             load_document(short_code=user_entry["document_type"])
         )
 
+    def user_settings_json(self) -> JSONFormat:
+        with open(self.files.user_settings, mode="r") as file_stream:
+            return json.load(file_stream)
+
     def save_user_settings(self, settings: UserSettings) -> None:
-        values = {settings.username: {
+        json_entry = {settings.username: {
             "scan_directory": settings.scan_dir,
             "dest_directory": settings.dest_dir,
             "department": settings.department.short_code,
@@ -115,7 +119,7 @@ class JSONDatabase:
         }}
 
         with open(self.files.user_settings, mode="w") as user_settings:
-            user_settings.write(json.dumps(values, indent=2))
+            user_settings.write(json.dumps(json_entry, indent=2))
 
 
 ### Aiming to remove from here down. ###
@@ -202,15 +206,8 @@ def load_all_documents() -> DocumentTypes:
 
 
 def load_user_settings() -> UserSettings:
-    user_settings = file_system.user_settings_path()
-
-    if not user_settings.exists():
-        json_file = file_system.config_directory().joinpath("user_defaults.json")
-
-    else:
-        json_file = user_settings
-    
-    with open(json_file, mode="r") as user_settings:
+    # Need option here for when user does not exist.
+    with open(file_system.user_settings_path()) as user_settings:
         contents = json.loads(user_settings.read())
 
     return UserSettings(
@@ -222,12 +219,15 @@ def load_user_settings() -> UserSettings:
 
 
 def save_user_settings(settings: UserSettings) -> None:
-    values = {
-        "scan_directory": settings.scan_dir,
-        "dest_directory": settings.dest_dir,
-        "department": settings.department.short_code,
-        "document_type": settings.document_type.short_code
+
+    json_entry = {
+        settings.username: {
+            "scan_directory": settings.scan_dir,
+            "dest_directory": settings.dest_dir,
+            "department": settings.department.short_code,
+            "document_type": settings.document_type.short_code
+        }
     }
 
     with open(file_system.user_settings_path(), mode="w") as user_settings:
-        user_settings.write(json.dumps(values, indent=2))
+        user_settings.write(json.dumps(json_entry, indent=2))
