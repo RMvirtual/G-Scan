@@ -22,11 +22,6 @@ class Settings(wx.Panel):
         self.save.SetFont(font)
         self.exit.SetFont(font)
 
-        self._initialise_sizer()
-
-        self.SetBackgroundColour(colour=wx.WHITE)
-
-    def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         widget_to_flags = {
@@ -37,26 +32,10 @@ class Settings(wx.Panel):
             self.exit: wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM
         }
 
-        sizer.Add(
-            window=self.title, proportion=0, flag=wx.ALIGN_LEFT|wx.ALL, 
-            border=15
-        )
-
-        sizer.Add(
-            window=self.directories, proportion=0, flag=wx.EXPAND|wx.ALL, 
-            border=15
-        )
-
-        sizer.Add(
-            window=self.defaults, proportion=0, flag=wx.ALIGN_LEFT|wx.ALL,
-            border=15
-        )
-
-        for button in (self.save, self.exit):
-            sizer.Add(
-                window=button, proportion=0, 
-                flag=wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM, border=15
-            )
+        for widget, flags in widget_to_flags.items():
+            sizer.Add(window=widget, proportion=0, flag=flags, border=15)
 
         sizer.AddStretchSpacer()
         self.SetSizer(sizer)
+
+        self.SetBackgroundColour(colour=wx.WHITE)
