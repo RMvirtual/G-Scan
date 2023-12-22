@@ -14,7 +14,7 @@ from file_system import JSONDatabaseFiles
 
 class RootApplication(RootInterface):
     def __init__(self, database: JSONDatabase, app_config: AppConfiguration):
-        self._window = Window()
+        self.window = Window()
         self._database = database
         self._config = app_config
 
@@ -27,22 +27,18 @@ class RootApplication(RootInterface):
     def launch_image_viewer(self, config: AppConfiguration) -> None:
         ViewerApplicationController(self, config)
 
-    @property
-    def window(self) -> Window:
-        return self._window
-
     def show(self) -> None:
-        self._window.Show()
+        self.window.Show()
 
     def close(self, event = None) -> None:
-        self._window.Close()
+        self.window.Close()
 
     def exit(self) -> None:
         self.close()
 
 
 def main() -> None:
-    """Default entry point."""
+    """Default entry point using current OS username logged in."""
 
     gui_runtime = wx.App()
     
