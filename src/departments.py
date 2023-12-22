@@ -1,11 +1,10 @@
 import dataclasses
-from documents import DocumentTypes
+from document_type import DocumentType
 
 
 @dataclasses.dataclass
 class Department:
-    short_code: str = ""
-    full_name: str = ""
-    short_name: str = ""
-    document_types: DocumentTypes = DocumentTypes()
-
+    short_code: str
+    full_name: str
+    short_name: str
+    document_types: list[DocumentType]

@@ -1,7 +1,7 @@
 import dataclasses
 
 from departments import Department
-from documents import Document
+from document_type import DocumentType
 
 
 @dataclasses.dataclass
@@ -10,4 +10,4 @@ class UserSettings:
     scan_dir: str = ""
     dest_dir: str = ""
     department: Department|None = None
-    document_type: Document|None = None
+    document_type: DocumentType|None = None

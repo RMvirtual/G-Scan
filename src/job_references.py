@@ -1,7 +1,7 @@
 from date import Calendar, Date
 
 
-class GrReference:
+class JobReference:
     def __init__(self, date: Date = None, job_number: str = None) -> None:
         """GR + 9 digits. First 4 digits: yymm; last 5 digits: job no."""
 

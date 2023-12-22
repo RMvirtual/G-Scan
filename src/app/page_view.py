@@ -1,6 +1,6 @@
 import wx
+
 from wx.lib.floatcanvas import FloatCanvas
-from documents import rendering
 from gui.viewer.panels.page_view import PageView
 
 

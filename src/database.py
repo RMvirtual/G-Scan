@@ -1,7 +1,7 @@
 import json
 
 from departments import Department 
-from documents import Document
+from document_type import DocumentType
 from file_system import JSONDatabaseFiles
 from user import UserSettings
 
@@ -55,7 +55,7 @@ class JSONDatabase:
         ]
 
     def document(
-            self, short_code: str = None, full_name: str = None) -> Document:
+            self, short_code: str = None, full_name: str = None) -> DocumentType:
         documents = self.all_documents()
 
         if not (short_code or full_name):
@@ -79,12 +79,12 @@ class JSONDatabase:
 
             return filtered[0]
 
-    def all_documents(self) -> list[Document]:
+    def all_documents(self) -> list[DocumentType]:
         with open(self.files.document_types) as file_stream:
             json_contents: JSONFormat = json.load(file_stream)
         
         return [
-            Document(short_code, values["full_name"], values["analysis_code"])
+            DocumentType(short_code, values["full_name"], values["analysis_code"])
             for short_code, values in json_contents.items()
         ]
 

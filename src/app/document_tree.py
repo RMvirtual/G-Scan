@@ -1,15 +1,13 @@
 import ntpath
 import wx
+import rendering
+
 from data_structures import AbstractNode, AbstractLeaf
-
-from documents import (
-    Document, DocumentBranch, DocumentTree, JobBranch,
-    PendingLeaf, rendering
-)
-
+from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
+from document_type import DocumentType
 from gui.page_range_dialog import PageRangeDialog
 from gui.viewer.document_tree import DocumentTreeCtrl
-from job_references import GrReference
+from job_references import JobReference
 
 
 class DocumentTreeController:
@@ -56,7 +54,7 @@ class DocumentTreeController:
         return result
 
     def create_job_node(
-            self, reference: GrReference, document_type: Document,
+            self, reference: JobReference, document_type: DocumentType,
             leaf: AbstractLeaf
     ) -> None:
         reference_label = str(reference)
@@ -78,7 +76,7 @@ class DocumentTreeController:
         self._gui.ExpandAll()
 
     def _append_existing(
-            self, reference: str, document_type: Document, leaf: AbstractLeaf
+            self, reference: str, document_type: DocumentType, leaf: AbstractLeaf
     ) -> None:
         job_branch = self._document_tree.branch(reference)
 
@@ -117,7 +115,7 @@ class DocumentTreeController:
         return result
 
     def _new_document_branch(
-            self, job_branch: JobBranch, document_type: Document
+            self, job_branch: JobBranch, document_type: DocumentType
     ) -> DocumentBranch:
         result = job_branch.create_branch(document_type=document_type)
         self._append_to_gui(result)

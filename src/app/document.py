@@ -6,7 +6,7 @@ from app.document_tree import DocumentTreeController
 from app.user_input import SubmissionDocument
 from app.page_view import PageViewController
 from data_structures import AbstractNode
-from documents.pending import PendingLeaf
+from document_tree import PendingLeaf
 from gui import Viewer
 
 
