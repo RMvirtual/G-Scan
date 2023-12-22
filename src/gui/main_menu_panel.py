@@ -6,7 +6,7 @@ from gui.logo_panel import Logo
 
 class MainMenu(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
-        super().__init__(parent=parent)
+        super().__init__(parent)
 
         self.logo = Logo(self)
         self.departments = Departments(self)
@@ -17,10 +17,10 @@ class MainMenu(wx.Panel):
             self.departments, self.operations, self.credit_control)
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(window=self.logo, proportion=2, flag=wx.EXPAND)
+        sizer.Add(self.logo, proportion=2, flag=wx.EXPAND)
 
         for panel in self._subpanels:
-            sizer.Add(window=panel, proportion=3, flag=wx.EXPAND)
+            sizer.Add(panel, proportion=3, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
         self.SetBackgroundColour(colour=wx.WHITE)
@@ -36,13 +36,11 @@ class MainMenu(wx.Panel):
         self._switch_to(self.credit_control)
 
     def _switch_to(self, subpanel: wx.Panel) -> None:
-        self._hide_complement_of(subpanel)
-        subpanel.Show()
-        self.Layout()
-
-    def _hide_complement_of(self, subpanel: wx.Panel) -> None:
-        for panel in self._complement_of(subpanel):
+        other_panels = filter(
+            lambda panel: panel is not subpanel, self._subpanels)
+        
+        for panel in other_panels:
             panel.Hide()
 
-    def _complement_of(self, subpanel) -> list[wx.Panel]:
-        return filter(lambda panel: panel is not subpanel, self._subpanels)
+        subpanel.Show()
+        self.Layout()
