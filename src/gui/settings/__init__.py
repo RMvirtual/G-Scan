@@ -1,1 +1,0 @@
-from gui.settings.settings import Settings
