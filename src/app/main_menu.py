@@ -1,20 +1,23 @@
 import wx
 import database
 
-from app import configuration
+from app.configuration import AppConfiguration
 from app.abstract_root import RootInterface
 from gui import MainMenu
 
 
 class MainMenuController:
-    def __init__(self, root_application: RootInterface):
+    def __init__(
+            self, root_application: RootInterface, app_config: AppConfiguration
+    ) -> None:
         self._root = root_application
         self._initialise_gui()
         self._initialise_callbacks()
         self._initialise_keyboard_shortcuts()
         self._gui.SetFocus()
 
-        self._config = configuration.load_default()
+        # self._config = configuration.load_default()
+        self._config = app_config
 
     def _initialise_gui(self) -> None:
         self._gui = MainMenu(self._root.window)
@@ -76,7 +79,7 @@ class MainMenuController:
         self._config.department = None
 
     def on_quick_start(self, event: wx.EVT_BUTTON) -> None:
-        self._config = configuration.load_default()
+        # self._config = configuration.load_default()
         self.launch_image_viewer(self._config)
 
     def on_operations(self, event: wx.EVT_BUTTON) -> None:

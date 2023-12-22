@@ -2,14 +2,19 @@ import wx
 import database
 
 from app.abstract_root import RootInterface
+from app.configuration import AppConfiguration
 from departments import Department
 from gui import Settings
 from user import UserSettings
 
 
 class SettingsController:
-    def __init__(self, root_application: RootInterface):
+    def __init__(
+            self, root_application: RootInterface, app_config: AppConfiguration
+    ) -> None:
         self._root = root_application
+        self._config = app_config
+
         self._initialise_gui()
         self._initialise_callbacks()
         self._load_settings_from_file()
@@ -68,7 +73,7 @@ class SettingsController:
         self._root.launch_main_menu()
 
     def _load_settings_from_file(self) -> None:
-        self._set_from_user_settings(settings=database.load_user_settings())
+        self._set_from_user_settings(self._config.settings)
         self._root.window.Layout()
 
     def _refresh_document_options(self) -> None:
@@ -87,7 +92,9 @@ class SettingsController:
 
     def _set_department(self, settings: UserSettings) -> None:
         department_names = list(map(
-            lambda dept: dept.full_name, database.load_all_departments()))
+            lambda dept: dept.full_name, 
+            self._config.database.all_departments()
+        ))
         
         self._gui.defaults.department_options = department_names
         self._gui.defaults.department = settings.department.full_name
@@ -99,9 +106,10 @@ class SettingsController:
             self._set_document_from_department(department))
 
     def _set_document_from_user_settings(self, settings: UserSettings) -> None:
-        document_names = settings.department.document_types.full_names()
+        document_names = list(map(
+            lambda d: d.full_name, settings.department.document_types))
+        
         self._gui.defaults.document_options = document_names
-
         self._gui.defaults.document_type = settings.document_type.full_name
 
     def _set_document_from_department(self, department: Department) -> None:
@@ -116,10 +124,14 @@ class SettingsController:
         result.dest_dir = self._gui.directories.dest_directory
 
         department_name = self._gui.defaults.department
-        result.department = database.load_department(full_name=department_name)
+        
+        result.department = self._config.database.department(
+            full_name=department_name)
 
         document_name = self._gui.defaults.document_type
-        result.document_type = database.load_document(full_name=document_name)
+        
+        result.document_type = self._config.database.document(
+            full_name=document_name)
 
         return result
 

@@ -1,16 +1,26 @@
+import os
 import database
 
 from departments import Department
 from documents import Document
+from database import JSONDatabase
 
 
 class AppConfiguration:
-    def __init__(self) -> None:
-        self.scan_directory: str = ""
-        self.dest_directory: str = ""
-        self.department: Department = None
-        self.document_type: Document = None
-        self.departments: list[Department] = database.load_all_departments()
+    def __init__(self, database: JSONDatabase, username: str) -> None:
+        self.database = database
+
+        self.settings = (
+            database.create_user(username) if not database.user_exists(username)
+            else database.load_user_settings(username)
+        )
+
+        self.scan_directory = self.settings.scan_dir
+        self.dest_directory = self.settings.dest_dir
+        self.department = self.settings.department
+        self.document_type = self.settings.document_type
+
+        self.departments = database.all_departments()
 
     def set_department(
             self, short_code: str = None, full_name: str = None) -> None:
@@ -35,22 +45,3 @@ class AppConfiguration:
 
         else:
             raise ValueError("No document type paremeter provided.")
-
-
-def load() -> AppConfiguration:
-    result = AppConfiguration()
-    result.departments = database.load_all_departments()
-
-    return result
-
-
-def load_default() -> AppConfiguration:
-    user_defaults = database.load_user_settings()
-
-    result = load()
-    result.scan_directory = user_defaults.scan_dir
-    result.dest_directory = user_defaults.dest_dir
-    result.document_type = user_defaults.document_type
-    result.department = user_defaults.department
-
-    return result

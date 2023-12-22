@@ -1,5 +1,6 @@
 import wx
 import documents
+
 from app.configuration import AppConfiguration
 from documents import Document
 from documents.format import AbstractReference, JobReference
@@ -16,8 +17,8 @@ class UserInputController:
     def __init__(self, gui: Viewer, config: AppConfiguration) -> None:
         self._gui = gui
         self._config = config
-        self._input_bar = self._gui.input_bar
 
+        self._input_bar = self._gui.input_bar
         self._load_department()
         self._load_document()
 
@@ -31,17 +32,16 @@ class UserInputController:
         self._input_bar.department = current_department
 
     def _load_document(self) -> None:
-        names = self._config.department.document_types.full_names()
+        names = list(map(
+            lambda d: d.full_name, self._config.department.document_types))
+
         self._input_bar.document_options = names
 
         current_document = self._config.document_type.full_name
         self._input_bar.document_type = current_document
 
     def submission_document(self) -> SubmissionDocument:
-        return SubmissionDocument(
-            reference=self.job_reference(),
-            document_type=self.document_type()
-        )
+        return SubmissionDocument(self.job_reference(), self.document_type())
 
     def job_reference(self) -> JobReference or None:
         reference = self._input_bar.reference_input

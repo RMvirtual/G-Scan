@@ -95,32 +95,64 @@ class JSONDatabase:
         if username not in contents:
             raise ValueError(f"Could not find settings for user {username}.")
 
-        user_entry = contents[username]
+        return self._deserialise_user_settings(
+            {username: contents[username]})[0]
 
-        return UserSettings(
-            username,
-            user_entry["scan_directory"],
-            user_entry["dest_directory"],
-            load_department(short_code=user_entry["department"]),
-            load_document(short_code=user_entry["document_type"])
-        )
+    def user_exists(self, username: str) -> bool:
+        return username in self.user_settings_json()
+
+    def create_user(self, username: str) -> UserSettings:
+        contents = self.user_settings_json()
+
+        if username in contents:        
+            raise ValueError(f"User {username} already exists.")
+        
+        result = self._deserialise_individual_user_settings(
+            username, contents["GSCAN_DEFAULT"])
+
+        self.save_user_settings(result)
+
+        return result
+
+    def save_user_settings(self, settings: UserSettings) -> None:
+        json_contents = self.user_settings_json()
+        json_contents.update(self._serialise_user_settings(settings))
+
+        with open(self.files.user_settings, mode="w") as user_settings:
+            user_settings.write(json.dumps(json_contents, indent=2))
 
     def user_settings_json(self) -> JSONFormat:
         with open(self.files.user_settings) as file_stream:
             return json.load(file_stream)
 
-    def save_user_settings(self, settings: UserSettings) -> None:
-        json_contents = self.user_settings_json()
-
-        json_contents[settings.username] = {
-            "scan_directory": settings.scan_dir,
-            "dest_directory": settings.dest_dir,
-            "department": settings.department.short_code,
-            "document_type": settings.document_type.short_code
+    @staticmethod
+    def _serialise_user_settings(settings: UserSettings) -> JSONFormat:
+        return {
+            settings.username: {
+                "scan_directory": settings.scan_dir,
+                "dest_directory": settings.dest_dir,
+                "department": settings.department.short_code,
+                "document_type": settings.document_type.short_code
+            }
         }
 
-        with open(self.files.user_settings, mode="w") as user_settings:
-            user_settings.write(json.dumps(json_contents, indent=2))
+    def _deserialise_user_settings(
+            self, settings: JSONFormat) -> list[UserSettings]:
+        return [
+            self._deserialise_individual_user_settings(username, user_settings)
+            for username, user_settings in settings.items()
+        ]
+
+    def _deserialise_individual_user_settings(
+            self, username: str, values: dict[str, str|list[str]]
+    ) -> UserSettings:
+        return UserSettings(
+            username,
+            values["scan_directory"],
+            values["dest_directory"],
+            self.department(short_code=values["department"]),
+            self.document(short_code=values["document_type"])
+        )
 
 
 ### Aiming to remove from here down. ###
@@ -206,7 +238,7 @@ def load_all_documents() -> DocumentTypes:
     return result
 
 
-def load_user_settings() -> UserSettings:
+def load_user_settings(user_name: str = None) -> UserSettings:
     # Need option here for when user does not exist.
     with open(file_system.user_settings_path()) as user_settings:
         contents = json.loads(user_settings.read())
@@ -220,7 +252,6 @@ def load_user_settings() -> UserSettings:
 
 
 def save_user_settings(settings: UserSettings) -> None:
-
     json_entry = {
         settings.username: {
             "scan_directory": settings.scan_dir,
