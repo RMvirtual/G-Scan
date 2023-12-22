@@ -10,7 +10,7 @@ from paperwork_types import A4Document, CustomerPaperwork
 class TestPaperworkBarcoding:
     @pytest.fixture
     def setup_teardown(self) -> None:
-        test_data_folder = Path(__file__).parent.joinpath("data")
+        test_data_folder = Path(__file__).parent.joinpath("input_data")
         self.temp_directory = Path(tempfile.TemporaryDirectory().name)
 
         shutil.copytree(test_data_folder, self.temp_directory)
@@ -29,7 +29,7 @@ class TestPaperworkBarcoding:
         assert (page.w, page.h) == (2481, 3508)
 
     def test_should_write_page(self, setup_teardown) -> None:
-        test_data_folder = Path(__file__).parent.joinpath("data")
+        test_data_folder = Path(__file__).parent.joinpath("input_data")
 
         one_page_file = self.temp_directory.joinpath("one_page_A4.pdf")
         page_images = pdf.pdf.read_pdf(str(one_page_file))
@@ -44,7 +44,7 @@ class TestPaperworkBarcoding:
         doc.save()
 
     def test_should_write_barcode_page(self, setup_teardown) -> None:
-        test_data_folder = Path(__file__).parent.joinpath("data")
+        test_data_folder = Path(__file__).parent.joinpath("input_data")
 
         one_page_file = self.temp_directory.joinpath("one_page_A4.pdf")
         page_images = pdf.pdf.read_pdf(str(one_page_file))
