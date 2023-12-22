@@ -66,25 +66,26 @@ class PageRangeDialog(wx.Dialog):
         self.from_entry.SetMax(self.to_entry.GetValue() - 1)
 
     def _initialise_sizer(self) -> None:
-        border = 5
-        flags = wx.ALL
-
         top_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        top_sizer.Add(self.from_label, proportion=1, flag=flags, border=border)
-        top_sizer.Add(self.from_entry, proportion=1,flag=flags, border=border)
-        top_sizer.Add(self.to_label, proportion=1, flag=flags, border=border)
-        top_sizer.Add(self.to_entry, proportion=1, flag=flags, border=border)
-
         button_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        button_sizer.Add(
-            self.split_all_button, proportion=1, flag=flags, border=border)
+        sizer_arrangements = {
+            top_sizer: [
+                self.from_label,
+                self.from_entry,
+                self.to_label,
+                self.to_entry
+            ],
+            button_sizer: [
+                self.split_all_button,
+                self.split_range_button, 
+                self.cancel_button
+            ]
+        }
 
-        button_sizer.Add(
-            self.split_range_button, proportion=1, flag=flags, border=border)
-
-        button_sizer.Add(
-            self.cancel_button, proportion=1, flag=flags, border=border)
+        for sizer, buttons in sizer_arrangements.items():
+            for button in buttons:
+                sizer.Add(button, proportion=1, flag=wx.ALL, border=5)
 
         vertical_sizer = wx.BoxSizer(orient=wx.VERTICAL)
         vertical_sizer.Add(sizer=top_sizer, flag=wx.ALIGN_CENTRE_HORIZONTAL)
