@@ -24,27 +24,23 @@ class SettingsController:
         self._root.window.set_panel(self._gui)
 
     def _initialise_callbacks(self) -> None:
-        self._initialise_save_and_exit_callbacks()
-        self._initialise_directory_callbacks()
-        self._initialise_department_callbacks()
-
-        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
-
-    def _initialise_save_and_exit_callbacks(self) -> None:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
-    def _initialise_directory_callbacks(self) -> None:
-        panel = self._gui.directories
-        panel.scan_browse.Bind(wx.EVT_BUTTON, self.on_scan_dir_browse)
-        panel.dest_browse.Bind(wx.EVT_BUTTON, self.on_dest_dir_browse)
+        self._gui.directories.scan_browse.Bind(
+            wx.EVT_BUTTON, self.on_scan_dir_browse)
+        
+        self._gui.directories.dest_browse.Bind(
+            wx.EVT_BUTTON, self.on_dest_dir_browse)
 
-    def _initialise_department_callbacks(self) -> None:
-        panel = self._gui.defaults
-        panel.department_box.Bind(wx.EVT_COMBOBOX, self.on_department_box)
+        self._gui.defaults.department_box.Bind(
+            wx.EVT_COMBOBOX, self.on_department_box)
+
+        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
     def on_save(self, event = None) -> None:
-        database.save_user_settings(settings=self._settings_from_gui())
+        self._config.database.save_user_settings(self._settings_from_gui())
+        
         self._exit_to_main_menu()
 
     def on_exit(self, event = None) -> None:
@@ -120,18 +116,15 @@ class SettingsController:
 
     def _settings_from_gui(self) -> UserSettings:
         result = UserSettings()
+
         result.scan_dir = self._gui.directories.scan_directory
         result.dest_dir = self._gui.directories.dest_directory
 
-        department_name = self._gui.defaults.department
-        
         result.department = self._config.database.department(
-            full_name=department_name)
+            full_name=self._gui.defaults.department)
 
-        document_name = self._gui.defaults.document_type
-        
         result.document_type = self._config.database.document(
-            full_name=document_name)
+            full_name=self._gui.defaults.document_type)
 
         return result
 
