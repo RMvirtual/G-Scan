@@ -1,5 +1,6 @@
 import shutil
 import tempfile
+import fitz
 import pytest
 import pdf.pdf
 
@@ -28,6 +29,7 @@ class TestPaperworkBarcoding:
         page = page_images[0]
         assert (page.w, page.h) == (2481, 3508)
 
+    @pytest.mark.skip
     def test_should_write_page(self, setup_teardown) -> None:
         test_data_folder = Path(__file__).parent.joinpath("input_data")
 
@@ -43,6 +45,16 @@ class TestPaperworkBarcoding:
         doc.draw_page(str(test_data_folder.joinpath("attempt.png")))
         doc.save()
 
+        result_doc = fitz.Document(out_file)
+        image = result_doc.get_page_images(0)[0]
+
+        correct_folder = Path(__file__).parent.joinpath("expected_outputs")
+        correct_doc = fitz.Document(correct_folder.joinpath("attempt.pdf"))
+        correct_image = correct_doc.get_page_images(0)[0]
+
+        assert image == correct_image
+
+    @pytest.mark.skip
     def test_should_write_barcode_page(self, setup_teardown) -> None:
         test_data_folder = Path(__file__).parent.joinpath("input_data")
 
