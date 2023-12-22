@@ -2,12 +2,12 @@ import wx
 
 from app.configuration import AppConfiguration
 from documents import Document
-from documents.format import AbstractReference, JobReference
+from job_references import GrReference
 from gui import Viewer
 
 
 class SubmissionDocument:
-    def __init__(self, reference: AbstractReference, document_type: Document):
+    def __init__(self, reference: GrReference, document_type: Document):
         self.reference = reference
         self.document_type = document_type
 
@@ -42,11 +42,11 @@ class UserInputController:
     def submission_document(self) -> SubmissionDocument:
         return SubmissionDocument(self.job_reference(), self.document_type())
 
-    def job_reference(self) -> JobReference or None:
+    def job_reference(self) -> GrReference or None:
         reference = self._input_bar.reference_input
 
         try:
-            return JobReference(reference)
+            return GrReference(reference)
 
         except ValueError:
             message_box = wx.MessageDialog(

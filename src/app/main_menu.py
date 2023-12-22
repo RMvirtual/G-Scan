@@ -1,5 +1,4 @@
 import wx
-import database
 
 from app.configuration import AppConfiguration
 from app.abstract_root import RootInterface
@@ -16,7 +15,6 @@ class MainMenuController:
         self._initialise_keyboard_shortcuts()
         self._gui.SetFocus()
 
-        # self._config = configuration.load_default()
         self._config = app_config
 
     def _initialise_gui(self) -> None:
@@ -83,11 +81,15 @@ class MainMenuController:
         self.launch_image_viewer(self._config)
 
     def on_operations(self, event: wx.EVT_BUTTON) -> None:
-        self._config.department = database.load_department(short_code="ops")
+        self._config.department = self._config.database.department(
+            short_code="ops")
+        
         self._gui.view_ops()
 
     def on_credit_control(self, event: wx.EVT_BUTTON) -> None:
-        self._config.department = database.load_department(short_code="pods")
+        self._config.department = self._config.database.department(
+            short_code="pods")
+
         self._gui.view_credit_control()
 
     def on_exit(self, event: wx.EVT_BUTTON) -> None:
@@ -97,25 +99,25 @@ class MainMenuController:
         self.launch_settings()
 
     def on_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = database.load_document(
+        self._config.document_type = self._config.database.document(
             short_code="customer_paperwork")
 
         self.launch_image_viewer(self._config)
 
     def on_loading_list(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = database.load_document(
+        self._config.document_type = self._config.database.document(
             short_code="loading_list")
         
         self.launch_image_viewer(self._config)
 
     def on_signed_pod(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = database.load_document(
+        self._config.document_type = self._config.database.document(
             short_code="standard_delivery_note")
 
         self.launch_image_viewer(self._config)
 
     def on_signed_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
-        self._config.document_type = database.load_document(
+        self._config.document_type = self._config.database.document(
             short_code="customer_paperwork_signed")
 
         self.launch_image_viewer(self._config)

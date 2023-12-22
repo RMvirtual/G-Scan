@@ -3,13 +3,13 @@ import wx
 from data_structures import AbstractNode, AbstractLeaf
 
 from documents import (
-    Document, DocumentBranch, DocumentLeaf, DocumentTree, JobBranch,
-    PendingBranch, PendingLeaf, rendering
+    Document, DocumentBranch, DocumentTree, JobBranch,
+    PendingLeaf, rendering
 )
 
 from gui.page_range_dialog import PageRangeDialog
 from gui.viewer.document_tree import DocumentTreeCtrl
-from documents.format import AbstractReference
+from job_references import GrReference
 
 
 class DocumentTreeController:
@@ -56,7 +56,7 @@ class DocumentTreeController:
         return result
 
     def create_job_node(
-            self, reference: AbstractReference, document_type: Document,
+            self, reference: GrReference, document_type: Document,
             leaf: AbstractLeaf
     ) -> None:
         reference_label = str(reference)

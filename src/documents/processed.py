@@ -3,18 +3,18 @@ from __future__ import annotations
 from data_structures import (
     AbstractBranch, AbstractLeaf, AbstractRoot)
 
-from documents.format import AbstractReference
+from job_references import GrReference
 from documents.document_types import Document
 
 
 class JobBranch(AbstractBranch):
     def __init__(
-            self, parent: AbstractRoot, reference: AbstractReference) -> None:
+            self, parent: AbstractRoot, reference: GrReference) -> None:
         super().__init__(parent=parent, label=str(reference))
         self.reference = reference
         self.document_branches: list[DocumentBranch] = []
 
-    def set_reference(self, new_reference: AbstractReference) -> None:
+    def set_reference(self, new_reference: GrReference) -> None:
         self.reference = new_reference
         self.label = str(new_reference)
 
