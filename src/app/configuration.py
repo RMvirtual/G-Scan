@@ -1,8 +1,3 @@
-import os
-import database
-
-from departments import Department
-from documents import Document
 from database import JSONDatabase
 
 
@@ -25,10 +20,10 @@ class AppConfiguration:
     def set_department(
             self, short_code: str = None, full_name: str = None) -> None:
         if short_code:
-            self.department = database.load_department(short_code=short_code)
+            self.department = self.database.department(short_code=short_code)
 
         elif full_name:
-            self.department = database.load_department(full_name=full_name)
+            self.department = self.database.department(full_name=full_name)
 
         else:
             raise ValueError("No department parameter provided.")
