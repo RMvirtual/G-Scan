@@ -180,6 +180,7 @@ def image_converter(master_application, file, scan_dir, multi_page_handling):
 
             with open(scan_dir + "/" + pdf_file, "wb") as output_stream:
                 output.write(output_stream)
+                
             output_stream.close_all()
             master_application.write_log("Created " + pdf_file)
             img.close_all()
