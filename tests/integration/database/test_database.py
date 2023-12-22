@@ -81,8 +81,31 @@ class TestJSONDatabase:
 
         settings = database.load_user_settings(username="rmvir")
         settings.department = database.department(short_code="pods")
-        
         database.save_user_settings(settings)
 
         updated_settings = database.load_user_settings(username="rmvir")
         assert updated_settings.department.short_code == "pods"
+
+    def test_overwrite_preserves_other_entries(self, setup_teardown) -> None:
+        database = JSONDatabase(self.database_files)
+
+        settings = database.load_user_settings(username="rmvir")
+        settings.department = database.department(short_code="pods")
+        database.save_user_settings(settings)
+
+        correct_settings = {
+            "GSCAN_DEFAULT": {
+                "scan_directory": "",
+                "dest_directory": "//office/edocs",
+                "department": "ops",
+                "document_type": "customer_paperwork"
+            },
+            "rmvir": {
+                "scan_directory": "myshare/lol",
+                "dest_directory": "//does_not_matter/share",
+                "department": "pods",
+                "document_type": "customer_paperwork"
+            }
+        }
+
+        assert database.user_settings_json() == correct_settings
