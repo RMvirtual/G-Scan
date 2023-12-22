@@ -8,12 +8,6 @@ class MainMenu(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent=parent)
 
-        self._initialise_panels()
-        self._initialise_sizer()
-        self.SetBackgroundColour(colour=wx.WHITE)
-        self._switch_to(self.departments)
-
-    def _initialise_panels(self) -> None:
         self.logo = Logo(self)
         self.departments = Departments(self)
         self.operations = Operations(self)
@@ -22,7 +16,6 @@ class MainMenu(wx.Panel):
         self._subpanels = (
             self.departments, self.operations, self.credit_control)
 
-    def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(window=self.logo, proportion=2, flag=wx.EXPAND)
 
@@ -30,6 +23,8 @@ class MainMenu(wx.Panel):
             sizer.Add(window=panel, proportion=3, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
+        self.SetBackgroundColour(colour=wx.WHITE)
+        self._switch_to(self.departments)
 
     def view_departments(self) -> None:
         self._switch_to(self.departments)

@@ -1,7 +1,7 @@
 import wx
 import file_system
 
-from gui.metrics import scale_with_ratio
+import gui.metrics
 
 
 class Logo(wx.Panel):
@@ -22,7 +22,9 @@ class Logo(wx.Panel):
 
     def on_resize(self, _event = None) -> None:
         width, height = self.Size
-        new_width, new_height = scale_with_ratio(self.image, width, height)
+        
+        new_width, new_height = gui.metrics.scale_with_ratio(
+            self.image, width, height)
 
         scaled_image = self.image.Scale(
             int(new_width), int(new_height), wx.IMAGE_QUALITY_NORMAL)
