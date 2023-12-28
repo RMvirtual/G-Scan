@@ -1,5 +1,4 @@
 import wx
-from gui import fonts
 
 
 class UserToolbar(wx.Panel):
@@ -17,7 +16,7 @@ class UserToolbar(wx.Panel):
         self._initialise_buttons()
 
     def _initialise_input_box(self) -> None:
-        font = fonts.font(point_size=11)
+        font = wx.Font(wx.FontInfo(pointSize=11))
 
         label_text = "Please enter job reference:"
         self._input_label = wx.StaticText(self, label=label_text)
@@ -27,7 +26,7 @@ class UserToolbar(wx.Panel):
         self.reference_box.SetFont(font)
 
     def _initialise_dropdown_boxes(self) -> None:
-        font = fonts.font(point_size=9, bold=True)
+        font = wx.Font(wx.FontInfo(pointSize=9)).Bold()
 
         self._department_label = wx.StaticText(self, label="Department")
         self._department_label.SetFont(font)

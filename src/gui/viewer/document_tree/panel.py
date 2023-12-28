@@ -1,5 +1,5 @@
 import wx
-from gui import fonts
+
 from gui.viewer.document_tree.tree import DocumentTreeCtrl
 
 
@@ -11,7 +11,7 @@ class DocumentTreePanel(wx.Panel):
 
     def _initialise_widgets(self) -> None:
         self._title = wx.StaticText(parent=self, label="Jobs")
-        self._title.SetFont(fonts.font(point_size=30, bold=True))
+        self._title.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
 
         self.upload_to_fcl = wx.Button(parent=self, label="Upload to FCL")
         self.tree = DocumentTreeCtrl(parent=self)
