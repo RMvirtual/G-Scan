@@ -1,5 +1,4 @@
 import wx
-from gui import fonts
 
 
 class Operations(wx.Panel):
@@ -8,7 +7,7 @@ class Operations(wx.Panel):
 
         self.options = OperationsOptions(self)
         self.back = wx.Button(parent=self, label="Back")
-        self.back.SetFont(fonts.font(point_size=30, bold=True))
+        self.back.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
@@ -31,7 +30,7 @@ class OperationsOptions(wx.Panel):
         self.loading_list = wx.Button(parent=self, label="Loading\nList")
 
         for button in [self.cust_pwork, self.loading_list]:
-            button.SetFont(fonts.font(point_size=30, bold=True))
+            button.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
 
         flags = wx.LEFT|wx.RIGHT|wx.ALIGN_TOP
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
@@ -48,7 +47,7 @@ class CreditControl(wx.Panel):
         self.options = CreditControlOptions(self)
     
         self.back = wx.Button(self, label="Back")
-        self.back.SetFont(fonts.font(point_size=30, bold=True))
+        self.back.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(self.options, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)
@@ -71,7 +70,7 @@ class CreditControlOptions(wx.Panel):
         self._buttons = [self.signed_pod, self.customer_paperwork_pod]
 
         for button in self._buttons:
-            button.SetFont(fonts.font(point_size=30, bold=True))
+            button.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
 
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
@@ -94,7 +93,9 @@ class SettingsToolbar(wx.Panel):
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         for widget in [self.settings, self.exit]:
-            widget.SetFont(fonts.font(point_size=30, bold=True))
+            font = wx.Font(wx.FontInfo(pointSize=30)).Bold()
+
+            widget.SetFont(font)
 
             sizer.Add(
                 widget, proportion=0, flag=wx.ALL|wx.ALIGN_RIGHT, border=15)
@@ -112,7 +113,7 @@ class DepartmentOptions(wx.Panel):
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
         for button in buttons:
-            button.SetFont(fonts.font(point_size=30, bold=True))
+            button.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
 
             sizer.Add(
                 button, proportion=0, flag=wx.LEFT|wx.RIGHT|wx.ALIGN_TOP,

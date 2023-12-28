@@ -1,11 +1,10 @@
 import wx
-
-from gui.metrics import recommended_metrics
+import gui.metrics
 
 
 class Window(wx.Frame):
     def __init__(self):
-        size, position = recommended_metrics()
+        size, position = gui.metrics.recommended_metrics()
         super().__init__(None, title="", size=size, pos=position)
 
         self._panel = None
