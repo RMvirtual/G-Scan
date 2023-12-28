@@ -18,42 +18,32 @@ class FileMenu(wx.MenuBar):
     def __init__(self):
         super().__init__()
 
-        self._initialise_file_menu()
-        self.Append(self.file_menu, "File")
-
-    def _initialise_file_menu(self) -> None:
         self.file_menu = wx.Menu()
 
         self.import_files = self.file_menu.Append(
-            id=wx.ID_ANY, item="&Import Files\tCTRL+I",
+            id=wx.ID_ANY,
+            item="&Import Files\tCTRL+I",
             helpString="Import Files"
         )
 
         self.import_prenamed_files = self.file_menu.Append(
-            id=wx.ID_ANY, item="&Import Prenamed Files\tCTRL+M",
+            id=wx.ID_ANY,
+            item="&Import Prenamed Files\tCTRL+M",
             helpString="Import files prenamed as the reference to be used"
         )
 
         self.quit = self.file_menu.Append(
-            id=wx.ID_ANY, item='&Quit\tF4', helpString="Quit to Main Menu")
+            id=wx.ID_ANY, item='&Quit\tF4',
+            helpString="Quit to Main Menu"
+        )
 
+        self.Append(self.file_menu, "File")
 
 
 class UserToolbar(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super().__init__(parent=parent)
-        self._initialise()
 
-    def _initialise(self) -> None:
-        self._initialise_widgets()
-        self._initialise_sizer()
-
-    def _initialise_widgets(self) -> None:
-        self._initialise_input_box()
-        self._initialise_dropdown_boxes()
-        self._initialise_buttons()
-
-    def _initialise_input_box(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=11))
 
         label_text = "Please enter job reference:"
@@ -62,8 +52,6 @@ class UserToolbar(wx.Panel):
 
         self.reference_box = wx.TextCtrl(self)
         self.reference_box.SetFont(font)
-
-    def _initialise_dropdown_boxes(self) -> None:
         font = wx.Font(wx.FontInfo(pointSize=9)).Bold()
 
         self._department_label = wx.StaticText(self, label="Department")
@@ -74,42 +62,30 @@ class UserToolbar(wx.Panel):
         self._document_label.SetFont(font)
         self.document_box = self._default_combobox()
 
-    def _initialise_buttons(self) -> None:
         self.submit = wx.Button(self, label="Submit")
 
-    def _initialise_sizer(self) -> None:
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
 
         border = 5
         label_flags = wx.LEFT|wx.RIGHT|wx.ALIGN_BOTTOM
 
         sizer.Add(
-            window=self._input_label,
+            self._input_label, 
             pos=(0,0), span=(1,2), flag=wx.TOP|label_flags, border=border
         )
 
         sizer.Add(
-            window=self._department_label,
-            pos=(0,2), flag=label_flags, border=border
-        )
+            self._department_label, pos=(0,2), flag=label_flags, border=border)
 
         sizer.Add(
-            window=self._document_label,
-            pos=(0,3), flag=label_flags, border=border
-        )
+            self._document_label, pos=(0,3), flag=label_flags, border=border)
 
         flags = wx.ALL
 
-        sizer.Add(
-            window=self.reference_box, pos=(1, 0), flag=flags, border=border)
-
-        sizer.Add(window=self.submit, pos=(1,1), flag=flags, border=border)
-
-        sizer.Add(
-            window=self.department_box, pos=(1,2), flag=flags, border=border)
-
-        sizer.Add(
-            window=self.document_box, pos=(1,3), flag=flags, border=border)
+        sizer.Add(self.reference_box, pos=(1, 0), flag=flags, border=border)
+        sizer.Add(self.submit, pos=(1,1), flag=flags, border=border)
+        sizer.Add(self.department_box, pos=(1,2), flag=flags, border=border)
+        sizer.Add(self.document_box, pos=(1,3), flag=flags, border=border)
 
         self.SetSizer(sizer)
 
