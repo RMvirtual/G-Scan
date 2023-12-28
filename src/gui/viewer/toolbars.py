@@ -44,23 +44,29 @@ class UserToolbar(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super().__init__(parent=parent)
 
-        font = wx.Font(wx.FontInfo(pointSize=11))
+        input_line_font = wx.Font(wx.FontInfo(pointSize=11))
 
-        label_text = "Please enter job reference:"
-        self._input_label = wx.StaticText(self, label=label_text)
-        self._input_label.SetFont(font)
+        self._input_label = wx.StaticText(
+            self, label="Please enter job reference:")
+        
+        self._input_label.SetFont(input_line_font)
 
         self.reference_box = wx.TextCtrl(self)
-        self.reference_box.SetFont(font)
-        font = wx.Font(wx.FontInfo(pointSize=9)).Bold()
+        self.reference_box.SetFont(input_line_font)
 
+        department_line_font = wx.Font(wx.FontInfo(pointSize=9)).Bold()
         self._department_label = wx.StaticText(self, label="Department")
-        self._department_label.SetFont(font)
-        self.department_box = self._default_combobox()
+       
+        self._department_label.SetFont(department_line_font)
+
+        self.department_box = wx.ComboBox(
+            self, value="", choices=[""], style=wx.CB_READONLY)
 
         self._document_label = wx.StaticText(self, label="Document Type")
-        self._document_label.SetFont(font)
-        self.document_box = self._default_combobox()
+        self._document_label.SetFont(department_line_font)
+
+        self.document_box = wx.ComboBox(
+            self, value="", choices=[""], style=wx.CB_READONLY)
 
         self.submit = wx.Button(self, label="Submit")
 
@@ -68,6 +74,7 @@ class UserToolbar(wx.Panel):
 
         border = 5
         label_flags = wx.LEFT|wx.RIGHT|wx.ALIGN_BOTTOM
+
 
         sizer.Add(
             self._input_label, 
@@ -80,12 +87,15 @@ class UserToolbar(wx.Panel):
         sizer.Add(
             self._document_label, pos=(0,3), flag=label_flags, border=border)
 
-        flags = wx.ALL
+        widget_positions = {
+            self.reference_box: (1,0),
+            self.submit: (1,1),
+            self.department_box: (1,2),
+            self.document_box: (1,3)
+        }
 
-        sizer.Add(self.reference_box, pos=(1, 0), flag=flags, border=border)
-        sizer.Add(self.submit, pos=(1,1), flag=flags, border=border)
-        sizer.Add(self.department_box, pos=(1,2), flag=flags, border=border)
-        sizer.Add(self.document_box, pos=(1,3), flag=flags, border=border)
+        for widget, sizing in widget_positions.items():
+            sizer.Add(widget, pos=sizing,flag=wx.ALL, border=5)
 
         self.SetSizer(sizer)
 
@@ -133,7 +143,3 @@ class UserToolbar(wx.Panel):
     def document_options(self, new_options: list[str]) -> None:
         self.document_box.SetItems(new_options)
         self.Layout()
-
-    def _default_combobox(self) -> wx.ComboBox:
-        return wx.ComboBox(
-            parent=self, value="", choices=[""], style=wx.CB_READONLY)
