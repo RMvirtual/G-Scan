@@ -1,7 +1,5 @@
 import wx
 
-from gui import fonts
-
 BrowseWidgets = tuple[wx.StaticText, wx.TextCtrl, wx.Button]
 
 
@@ -20,7 +18,7 @@ class Defaults(wx.Panel):
         self.doc_type_box = wx.ComboBox(
             self, value="", choices=[""], style=wx.CB_READONLY)
 
-        self.title.SetFont(fonts.font(point_size=20, bold=True))
+        self.title.SetFont(wx.Font(wx.FontInfo(pointSize=20)).Bold())
 
         text_widgets: list[wx.Window] = [
             self.doc_type_label, self.departments_label, self.department_box,
@@ -28,7 +26,7 @@ class Defaults(wx.Panel):
         ]
 
         for widget in text_widgets:
-            widget.SetFont(fonts.font(point_size=12))
+            widget.SetFont(wx.Font(wx.FontInfo(pointSize=12)))
 
         sizer = wx.GridBagSizer(vgap=15, hgap=30)
 
@@ -96,10 +94,10 @@ class Directories(wx.Panel):
             self.dest_label, self.dest_box, self.dest_browse,
         ]
 
-        self.title.SetFont(fonts.font(point_size=20, bold=True))
+        self.title.SetFont(wx.Font(wx.FontInfo(pointSize=20)).Bold())
 
         for widget in text_widgets:
-            widget.SetFont(fonts.font(point_size=12))
+            widget.SetFont(wx.Font(wx.FontInfo(pointSize=12)))
 
         sizer = wx.GridBagSizer(vgap=5, hgap=5)
 
@@ -154,9 +152,9 @@ class Settings(wx.Panel):
         self.save = wx.Button(self, label="Save")
         self.exit = wx.Button(self, label="Exit")
 
-        self.title.SetFont(fonts.font(point_size=30, bold=True))
-        self.save.SetFont(fonts.font(point_size=12))
-        self.exit.SetFont(fonts.font(point_size=12))
+        self.title.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
+        self.save.SetFont(wx.Font(wx.FontInfo(pointSize=12)))
+        self.exit.SetFont(wx.Font(wx.FontInfo(pointSize=12)))
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
