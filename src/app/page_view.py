@@ -1,7 +1,7 @@
 import wx
 
 from wx.lib.floatcanvas import FloatCanvas
-from gui.viewer.panels.page_view import PageView
+from gui.viewer.panels import PageView
 
 
 class PageViewController:

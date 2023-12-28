@@ -1,6 +1,50 @@
 import wx
 
 
+class BottomToolbar(wx.Panel):
+    def __init__(self, parent: wx.Frame):
+        super(BottomToolbar, self).__init__(
+            parent=parent
+        )
+        self.exit = wx.Button(parent=self, label="Exit")
+        self._initialise_sizer()
+
+    def _initialise_sizer(self) -> None:
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        sizer.Add(
+            window=self.exit, proportion=0,
+            flag=wx.ALL|wx.ALIGN_RIGHT, border=5
+        )
+
+        self.SetSizer(sizer)
+
+
+class FileMenu(wx.MenuBar):
+    def __init__(self):
+        super().__init__()
+
+        self._initialise_file_menu()
+        self.Append(self.file_menu, "File")
+
+    def _initialise_file_menu(self) -> None:
+        self.file_menu = wx.Menu()
+
+        self.import_files = self.file_menu.Append(
+            id=wx.ID_ANY, item="&Import Files\tCTRL+I",
+            helpString="Import Files"
+        )
+
+        self.import_prenamed_files = self.file_menu.Append(
+            id=wx.ID_ANY, item="&Import Prenamed Files\tCTRL+M",
+            helpString="Import files prenamed as the reference to be used"
+        )
+
+        self.quit = self.file_menu.Append(
+            id=wx.ID_ANY, item='&Quit\tF4', helpString="Quit to Main Menu")
+
+
+
 class UserToolbar(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super().__init__(parent=parent)

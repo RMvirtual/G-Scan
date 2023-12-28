@@ -1,6 +1,7 @@
 import wx
-from wx.lib.floatcanvas.NavCanvas import NavCanvas
+
 from wx.lib.floatcanvas import FloatCanvas
+from wx.lib.floatcanvas.NavCanvas import NavCanvas
 
 
 class PageView(NavCanvas):

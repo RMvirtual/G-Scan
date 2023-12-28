@@ -1,1 +1,0 @@
-from gui.viewer.panels.page_view import PageView
