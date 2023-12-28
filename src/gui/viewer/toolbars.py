@@ -70,9 +70,7 @@ class UserToolbar(wx.Panel):
 
         self.submit = wx.Button(self, label="Submit")
 
-        sizer = wx.GridBagSizer(vgap=0, hgap=0)
-
-        all_flags = wx.ALL
+        interactive_flags = wx.ALL
         label_flags = wx.LEFT|wx.RIGHT|wx.ALIGN_BOTTOM
 
         widget_sizings = {
@@ -80,11 +78,13 @@ class UserToolbar(wx.Panel):
                 "pos": (0,0), "span": (1,2), "flags": wx.TOP|label_flags},
             self._department_label: {"pos": (0,2), "flags": label_flags},
             self._document_label: {"pos": (0,3), "flags": label_flags},
-            self.reference_box: {"pos": (1,0), "flags": all_flags},
-            self.submit: {"pos": (1,1), "flags": all_flags},
-            self.department_box: {"pos": (1,2), "flags": all_flags},
-            self.document_box: {"pos": (1,3), "flags": all_flags}
+            self.reference_box: {"pos": (1,0), "flags": interactive_flags},
+            self.submit: {"pos": (1,1), "flags": interactive_flags},
+            self.department_box: {"pos": (1,2), "flags": interactive_flags},
+            self.document_box: {"pos": (1,3), "flags": interactive_flags}
         }
+
+        sizer = wx.GridBagSizer(vgap=0, hgap=0)
 
         for widget, sizing_info in widget_sizings.items():
             sizer.Add(
