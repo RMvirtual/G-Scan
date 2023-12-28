@@ -8,14 +8,7 @@ from gui.viewer.toolbars import BottomToolbar, FileMenu, UserToolbar
 class Viewer(wx.Panel):
     def __init__(self, parent_window: wx.Frame):
         super().__init__(parent=parent_window)
-        self._initialise_widgets()
 
-    def _initialise_widgets(self) -> None:
-        self._initialise_panels()
-        self._initialise_sizer()
-        self.SetBackgroundColour(colour=wx.LIGHT_GREY)
-
-    def _initialise_panels(self) -> None:
         self.file_menu = FileMenu()
         self.Parent.SetMenuBar(self.file_menu)
 
@@ -24,25 +17,21 @@ class Viewer(wx.Panel):
         self.file_tree = DocumentTreePanel(self)
         self.bottom_bar = BottomToolbar(self)
 
-    def _initialise_sizer(self) -> None:
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         flags = wx.EXPAND|wx.LEFT|wx.RIGHT
 
         sizer.Add(window=self.input_bar, proportion=0, flag=flags, border=5)
-        sizer.Add(sizer=self._page_sizer(), proportion=1, flag=flags, border=5)
+
+        page_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
+        page_flags = wx.EXPAND|wx.ALL
+
+        page_sizer.Add(self.page_view, proportion=3, flag=page_flags, border=5)
+        page_sizer.Add(self.file_tree, proportion=1, flag=page_flags, border=5)
+
+        sizer.Add(page_sizer, proportion=1, flag=flags, border=5)
 
         sizer.Add(
-            window=self.bottom_bar,
-            proportion=0, flag=flags|wx.BOTTOM, border=5
-        )
+            self.bottom_bar, proportion=0, flag=flags|wx.BOTTOM, border=5)
 
         self.SetSizer(sizer)
-
-    def _page_sizer(self) -> wx.Sizer:
-        result = wx.BoxSizer(orient=wx.HORIZONTAL)
-        flags = wx.EXPAND|wx.ALL
-
-        result.Add(window=self.page_view, proportion=3, flag=flags, border=5)
-        result.Add(window=self.file_tree, proportion=1, flag=flags, border=5)
-
-        return result
+        self.SetBackgroundColour(colour=wx.LIGHT_GREY)
