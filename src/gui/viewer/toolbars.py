@@ -75,27 +75,36 @@ class UserToolbar(wx.Panel):
         border = 5
         label_flags = wx.LEFT|wx.RIGHT|wx.ALIGN_BOTTOM
 
+        label_widgets = {
+            self._input_label: {
+                "pos": (0,0), "span": (1,2), "prepended_flags": wx.TOP},
+            self._department_label: {"pos": (0,2)},
+            self._document_label: {"pos": (0,3)}
+        }
 
-        sizer.Add(
-            self._input_label, 
-            pos=(0,0), span=(1,2), flag=wx.TOP|label_flags, border=border
-        )
+        for widget, sizing_info in label_widgets.items():
+            span = sizing_info["span"] if "span" in sizing_info else (1,1) 
+            label_flags = wx.LEFT|wx.RIGHT|wx.ALIGN_BOTTOM
 
-        sizer.Add(
-            self._department_label, pos=(0,2), flag=label_flags, border=border)
+            flags = (
+                sizing_info["prepended_flags"]|label_flags
+                if "prepended_flags" in sizing_info else label_flags
+            )
 
-        sizer.Add(
-            self._document_label, pos=(0,3), flag=label_flags, border=border)
+            sizer.Add(
+                widget, pos=sizing_info["pos"],
+                span=span, flag=flags, border=5
+            )
 
-        widget_positions = {
+        input_box_widgets = {
             self.reference_box: (1,0),
             self.submit: (1,1),
             self.department_box: (1,2),
             self.document_box: (1,3)
         }
 
-        for widget, sizing in widget_positions.items():
-            sizer.Add(widget, pos=sizing,flag=wx.ALL, border=5)
+        for widget, sizing in input_box_widgets.items():
+            sizer.Add(widget, pos=sizing, flag=wx.ALL, border=5)
 
         self.SetSizer(sizer)
 
