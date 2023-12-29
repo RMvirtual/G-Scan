@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from controllers.configuration import AppConfiguration
+from configuration import AppConfiguration
 
 
 class RootInterface(ABC):
