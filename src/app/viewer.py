@@ -18,12 +18,6 @@ class ViewerApplicationController:
         self._gui = Viewer(self._root.window)
         self._root.window.set_panel(self._gui)
 
-        self._bind_callbacks()
-
-        self._documents = DocumentController(self._gui)
-        self._user_input = UserInputController(self._gui, self._config)
-
-    def _bind_callbacks(self) -> None:
         file_menu = self._gui.file_menu
 
         self._root.window.Bind(
@@ -41,6 +35,9 @@ class ViewerApplicationController:
         self._gui.input_bar.submit.Bind(wx.EVT_BUTTON, self.on_submit)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
         self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+
+        self._documents = DocumentController(self._gui)
+        self._user_input = UserInputController(self._gui, self._config)
 
     def on_submit(self, _event: wx.EVT_BUTTON) -> None:
         submission_document = self._user_input.submission_document()
