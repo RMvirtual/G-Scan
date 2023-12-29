@@ -11,6 +11,7 @@ class ViewerApplicationController:
     def __init__(
             self, root_application: RootInterface, config: AppConfiguration
     ) -> None:
+        
         self._root = root_application
         self._config = config
 
