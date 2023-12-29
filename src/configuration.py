@@ -1,3 +1,4 @@
+import abc
 from database import JSONDatabase
 
 
@@ -40,3 +41,21 @@ class AppConfiguration:
 
         else:
             raise ValueError("No document type paremeter provided.")
+
+
+class RootInterface(abc.ABC):
+    @abc.abstractmethod
+    def exit(self) -> None:
+        ...
+
+    @abc.abstractmethod
+    def launch_settings(self) -> None:
+        ...
+
+    @abc.abstractmethod
+    def launch_image_viewer(self, config: AppConfiguration) -> None:
+        ...
+
+    @abc.abstractmethod
+    def launch_main_menu(self) -> None:
+        ...

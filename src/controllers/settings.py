@@ -1,9 +1,8 @@
 import wx
 
-from controllers.abstract_root import RootInterface
-from configuration import AppConfiguration
-from views import Settings
+from configuration import AppConfiguration, RootInterface
 from user import UserSettings
+from views import Settings
 
 
 class SettingsController:

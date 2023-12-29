@@ -2,8 +2,7 @@ import os
 import wx
 import file_system
 
-from controllers.abstract_root import RootInterface
-from configuration import AppConfiguration
+from configuration import AppConfiguration, RootInterface
 from controllers.document_editor import DocumentEditorController
 from controllers.main_menu import MainMenuController
 from controllers.settings import SettingsController

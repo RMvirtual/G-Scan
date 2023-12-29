@@ -4,8 +4,7 @@ import file_system
 import rendering
 
 from wx.lib.floatcanvas import FloatCanvas
-from controllers.abstract_root import RootInterface
-from configuration import AppConfiguration
+from configuration import AppConfiguration, RootInterface
 from data_structures import AbstractNode, AbstractLeaf
 from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
 from document_type import DocumentType

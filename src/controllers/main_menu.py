@@ -1,7 +1,6 @@
 import wx
 
-from configuration import AppConfiguration
-from controllers.abstract_root import RootInterface
+from configuration import AppConfiguration, RootInterface
 from views import MainMenu
 
 
