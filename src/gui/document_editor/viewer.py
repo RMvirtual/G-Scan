@@ -1,8 +1,8 @@
 import wx
 
-from gui.viewer.document_tree import DocumentTreePanel
-from gui.viewer.panels import PageView
-from gui.viewer.toolbars import BottomToolbar, FileMenu, UserToolbar
+from gui.document_editor.document_tree import DocumentTreePanel
+from gui.document_editor.panels import PageView
+from gui.document_editor.toolbars import BottomToolbar, FileMenu, UserToolbar
 
 
 class Viewer(wx.Panel):

@@ -4,7 +4,7 @@ import file_system
 
 from app.configuration import AppConfiguration
 from app.main_menu import MainMenuController
-from app.viewer import DocumentEditorController
+from app.document_editor import DocumentEditorController
 from app.settings import SettingsController
 from app.abstract_root import RootInterface
 from gui.window import Window
