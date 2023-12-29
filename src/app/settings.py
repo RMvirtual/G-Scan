@@ -65,23 +65,22 @@ class SettingsController:
         self._root.launch_main_menu()
 
     def _load_settings_from_config(self) -> None:
-        department_names = list(map(
+        departments = list(map(
             lambda dept: dept.full_name, 
             self._config.database.all_departments()
         ))
 
-        document_names = list(map(
+        documents = list(map(
             lambda d: d.full_name,
             self._config.settings.department.document_types
         ))
 
         self._gui.directories.scan_directory = self._config.settings.scan_dir
         self._gui.directories.dest_directory = self._config.settings.dest_dir
-       
-        self._gui.defaults.department_options = department_names
+        self._gui.defaults.department_options = departments
         self._gui.defaults.department = self._config.settings.department.full_name
 
-        self._gui.defaults.document_options = document_names
+        self._gui.defaults.document_options = documents
 
         self._gui.defaults.document_type = (
             self._config.settings.document_type.full_name)

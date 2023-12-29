@@ -10,23 +10,18 @@ class MainMenuController:
             self, root_application: RootInterface, app_config: AppConfiguration
     ) -> None:
         self._root = root_application
-        self._initialise_gui()
-        self._initialise_callbacks()
-        self._initialise_keyboard_shortcuts()
-        self._gui.SetFocus()
-
-        self._config = app_config
-
-    def _initialise_gui(self) -> None:
         self._gui = MainMenu(self._root.window)
         self._root.window.set_panel(self._gui)
-
-    def _initialise_callbacks(self) -> None:
         self._initialise_department_callbacks()
         self._initialise_operations_callbacks()
         self._initialise_credit_control_callbacks()
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
+
+        self._initialise_keyboard_shortcuts()
+        self._gui.SetFocus()
+
+        self._config = app_config
 
     def _initialise_department_callbacks(self) -> None:
         panel = self._gui.departments
@@ -69,15 +64,15 @@ class MainMenuController:
         if self._gui.operations.IsShown():
             self._gui.view_departments()
 
-        else:
-            self.launch_exit()
+            return
+
+        self.launch_exit()
 
     def on_back_to_departments(self, event: wx.EVT_BUTTON) -> None:
         self._gui.view_departments()
         self._config.department = None
 
     def on_quick_start(self, event: wx.EVT_BUTTON) -> None:
-        # self._config = configuration.load_default()
         self.launch_image_viewer(self._config)
 
     def on_operations(self, event: wx.EVT_BUTTON) -> None:
