@@ -1,7 +1,7 @@
 import dataclasses
 
-from departments import Department
-from document_type import DocumentType
+from models.departments import Department
+from models.document_type import DocumentType
 
 
 @dataclasses.dataclass

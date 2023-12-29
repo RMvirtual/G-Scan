@@ -1,7 +1,7 @@
 import pytest
 
-from date import Date
-from job_references import JobReference
+from models.date import Date
+from models.job_references import JobReference
 
 
 def test_should_produce_full_gr_representation() -> None:

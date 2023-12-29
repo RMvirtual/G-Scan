@@ -6,15 +6,18 @@ from wx.lib.floatcanvas import FloatCanvas
 from app.root_interface import RootInterface
 from configuration import Configuration
 from data_structures import AbstractNode, AbstractLeaf
-from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
-from document_type import DocumentType
-from job_references import JobReference
+from models.document_tree import (
+    DocumentBranch, DocumentTree, JobBranch, PendingLeaf)
+
+from models.document_type import DocumentType
+from models.job_references import JobReference
 from views import Viewer
 from views.page_range_dialog import PageRangeDialog
 from views.document_editor.document_tree import DocumentTreeCtrl
 from views.document_editor.panels import PageView
 from views.window import Window
 from views.file_import_dialog import file_import_dialog
+
 
 class SubmissionDocument:
     def __init__(self, reference: JobReference, document_type: DocumentType):
@@ -292,7 +295,7 @@ class DocumentController:
 
     def import_files(self):
         # With this, do we actually need a scan directory??
-        
+
         files_to_import = file_import_dialog()
 
         if files_to_import:

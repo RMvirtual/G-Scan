@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from data_structures import AbstractBranch, AbstractLeaf, AbstractRoot
-from document_type import DocumentType
-from job_references import JobReference
+from models.document_type import DocumentType
+from models.job_references import JobReference
 
 
 class PendingBranch(AbstractBranch):
