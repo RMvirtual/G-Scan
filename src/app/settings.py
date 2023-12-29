@@ -33,8 +33,11 @@ class SettingsController:
         self._load_settings_from_file()
 
     def on_save(self, event = None) -> None:
-        self._config.database.save_user_settings(self._settings_from_gui())
+        new_settings = self._settings_from_gui()
         
+        self._config.database.save_user_settings(new_settings)
+        self._config.settings = new_settings
+
         self._exit_to_main_menu()
 
     def on_exit(self, event = None) -> None:
