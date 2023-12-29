@@ -281,7 +281,7 @@ class DocumentController:
         self._gui = gui
         self._page_view = PageViewController(self._gui.page_view)
         self._document_tree = DocumentTreeController(self._gui.file_tree.tree)
-        
+
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
         self._page_view.bind_split_pages(callback=self.on_split_pages)
@@ -291,6 +291,8 @@ class DocumentController:
         self._currently_viewed = None
 
     def import_files(self):
+        # With this, do we actually need a scan directory??
+        
         files_to_import = file_import_dialog()
 
         if files_to_import:
