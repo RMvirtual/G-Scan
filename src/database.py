@@ -1,9 +1,9 @@
 import json
 
+from file_system import JSONDatabaseFiles
 from models.departments import Department 
 from models.document_type import DocumentType
-from file_system import JSONDatabaseFiles
-from user import UserSettings
+from models.user import UserSettings
 
 
 JSONFormat = dict[str, dict[str, str|list[str]]]
