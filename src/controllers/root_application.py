@@ -1,3 +1,5 @@
+import views.metrics
+
 from app.root_interface import RootInterface
 from configuration import Configuration
 from controllers.document_editor import DocumentEditorController
@@ -8,7 +10,9 @@ from views.window import Window
 
 class RootApplication(RootInterface):
     def __init__(self, app_config: Configuration):
-        self.window = Window()
+        size, position = views.metrics.recommended_metrics()
+        
+        self.window = Window(size, position)
         self._config = app_config
 
     def launch_main_menu(self) -> None:

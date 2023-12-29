@@ -1,10 +1,9 @@
 import wx
-import views.metrics
 
 
 class Window(wx.Frame):
-    def __init__(self):
-        size, position = views.metrics.recommended_metrics()
+    def __init__(
+            self, size: tuple[int, int], position: tuple[int, int]) -> None:
         super().__init__(None, title="", size=size, pos=position)
 
         self._panel = None
