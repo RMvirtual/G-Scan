@@ -1,7 +1,7 @@
 import wand.image
 import wx
 
-from gui.metrics.aspect_ratio import scale_with_ratio
+from views.metrics.aspect_ratio import scale_with_ratio
 
 
 class Image:

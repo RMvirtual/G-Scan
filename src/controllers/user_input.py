@@ -1,9 +1,9 @@
 import wx
 
-from app.configuration import AppConfiguration
+from controllers.configuration import AppConfiguration
 from document_type import DocumentType
 from job_references import JobReference
-from gui import Viewer
+from views import Viewer
 
 
 class SubmissionDocument:
@@ -18,23 +18,19 @@ class UserInputController:
         self._config = config
 
         self._input_bar = self._gui.input_bar
-        self._load_department()
-        self._load_document()
 
-    def _load_department(self):
-        names = list(map(
+        departments = list(map(
             lambda dept: dept.full_name, self._config.departments))
         
-        self._input_bar.department_options = names
+        self._input_bar.department_options = departments
 
         current_department = self._config.department.full_name
         self._input_bar.department = current_department
 
-    def _load_document(self) -> None:
-        names = list(map(
+        documents = list(map(
             lambda d: d.full_name, self._config.department.document_types))
 
-        self._input_bar.document_options = names
+        self._input_bar.document_options = documents
 
         current_document = self._config.document_type.full_name
         self._input_bar.document_type = current_document

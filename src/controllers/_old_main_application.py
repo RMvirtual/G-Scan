@@ -1,7 +1,7 @@
 from datetime import datetime
-from gui.main_menu import MainMenu
-from gui.popupbox import PopupBox
-from gui.settings.settings_menu import SettingsMenu
+from views.main_menu import MainMenu
+from views.popupbox import PopupBox
+from views.settings.settings_menu import SettingsMenu
 from pdf.viewer import PDFViewer
 import pdf.reader
 import pdf.writer_old

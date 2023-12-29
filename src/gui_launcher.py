@@ -2,14 +2,14 @@ import os
 import wx
 import file_system
 
-from app.configuration import AppConfiguration
-from app.main_menu import MainMenuController
-from app.document_editor import DocumentEditorController
-from app.settings import SettingsController
-from app.abstract_root import RootInterface
-from gui.window import Window
+from controllers.abstract_root import RootInterface
+from controllers.configuration import AppConfiguration
+from controllers.document_editor import DocumentEditorController
+from controllers.main_menu import MainMenuController
+from controllers.settings import SettingsController
 from database import JSONDatabase
 from file_system import JSONDatabaseFiles
+from views.window import Window
 
 
 class RootApplication(RootInterface):
