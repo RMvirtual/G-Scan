@@ -1,6 +1,5 @@
 import wx
 import ntpath
-import file_system
 import rendering
 
 from wx.lib.floatcanvas import FloatCanvas
@@ -15,7 +14,7 @@ from views.page_range_dialog import PageRangeDialog
 from views.document_editor.document_tree import DocumentTreeCtrl
 from views.document_editor.panels import PageView
 from views.window import Window
-
+from views.file_import_dialog import file_import_dialog
 
 class SubmissionDocument:
     def __init__(self, reference: JobReference, document_type: DocumentType):
@@ -282,22 +281,20 @@ class DocumentController:
         self._gui = gui
         self._page_view = PageViewController(self._gui.page_view)
         self._document_tree = DocumentTreeController(self._gui.file_tree.tree)
-        self._bind_callbacks()
-
-        self._page_view.hide_all_widgets()
-        self._currently_viewed = None
-
-    def _bind_callbacks(self) -> None:
+        
         self._page_view.bind_page_no(callback=self.on_page_no)
         self._page_view.bind_delete(callback=self.on_delete)
         self._page_view.bind_split_pages(callback=self.on_split_pages)
         self._document_tree.bind_selection(callback=self.on_item_selection)
 
-    def import_files(self):
-        files = file_system.file_import_dialog()
+        self._page_view.hide_all_widgets()
+        self._currently_viewed = None
 
-        if files:
-            results = self.add_pending_files(paths=files)
+    def import_files(self):
+        files_to_import = file_import_dialog()
+
+        if files_to_import:
+            results = self.add_pending_files(paths=files_to_import)
             self._set_currently_viewed(results[0])
 
     def import_as(self) -> None:
@@ -376,21 +373,17 @@ class DocumentEditorController:
     ) -> None:
         self._root = root_application
         self._config = config
+        self._window = window
 
         self._gui = Viewer(window)
+
         window.set_panel(self._gui)
 
         file_menu = self._gui.file_menu
+        window.Bind(wx.EVT_MENU, self.on_import_files, file_menu.import_files)
 
         window.Bind(
-            event=wx.EVT_MENU, handler=self.on_import_files,
-            source=file_menu.import_files
-        )
-
-        window.Bind(
-            event=wx.EVT_MENU, handler=self.on_import_as,
-            source=file_menu.import_prenamed_files
-        )
+            wx.EVT_MENU, self.on_import_as, file_menu.import_prenamed_files)
 
         window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
 
@@ -400,7 +393,6 @@ class DocumentEditorController:
 
         self._documents = DocumentController(self._gui)
         self._user_input = UserInputController(self._gui, self._config)
-        self._window = window
 
     def on_submit(self, _event: wx.EVT_BUTTON) -> None:
         submission_document = self._user_input.submission_document()
@@ -427,4 +419,3 @@ class DocumentEditorController:
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
-

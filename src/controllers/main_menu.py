@@ -16,6 +16,8 @@ class MainMenuController:
         self._config = app_config
 
         self._gui = MainMenu(window)
+
+        # Could move this out of the constructor maybe??
         window.set_panel(self._gui)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
