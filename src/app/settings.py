@@ -3,7 +3,6 @@ import database
 
 from app.abstract_root import RootInterface
 from app.configuration import AppConfiguration
-from departments import Department
 from gui import Settings
 from user import UserSettings
 
@@ -15,15 +14,9 @@ class SettingsController:
         self._root = root_application
         self._config = app_config
 
-        self._initialise_gui()
-        self._initialise_callbacks()
-        self._load_settings_from_file()
-
-    def _initialise_gui(self) -> None:
         self._gui = Settings(self._root.window)
         self._root.window.set_panel(self._gui)
 
-    def _initialise_callbacks(self) -> None:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
@@ -37,6 +30,7 @@ class SettingsController:
             wx.EVT_COMBOBOX, self.on_department_box)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
+        self._load_settings_from_file()
 
     def on_save(self, event = None) -> None:
         self._config.database.save_user_settings(self._settings_from_gui())
@@ -69,24 +63,11 @@ class SettingsController:
         self._root.launch_main_menu()
 
     def _load_settings_from_file(self) -> None:
-        self._set_from_user_settings(self._config.settings)
-        self._root.window.Layout()
+        settings = self._config.settings
 
-    def _refresh_document_options(self) -> None:
-        department_name = self._gui.defaults.department
-        department = database.load_department(full_name=department_name)
-        self._set_document(department=department)
-
-    def _set_from_user_settings(self, settings: UserSettings) -> None:
-        self._set_directories(settings)
-        self._set_department(settings)
-        self._set_document(settings=settings)
-
-    def _set_directories(self, settings: UserSettings) -> None:
         self._gui.directories.scan_directory = settings.scan_dir
         self._gui.directories.dest_directory = settings.dest_dir
 
-    def _set_department(self, settings: UserSettings) -> None:
         department_names = list(map(
             lambda dept: dept.full_name, 
             self._config.database.all_departments()
@@ -95,21 +76,22 @@ class SettingsController:
         self._gui.defaults.department_options = department_names
         self._gui.defaults.department = settings.department.full_name
 
-    def _set_document(
-            self, settings: UserSettings = None, department: Department = None
-    ) -> None:
-        self._set_document_from_user_settings(settings) if settings else (
-            self._set_document_from_department(department))
-
-    def _set_document_from_user_settings(self, settings: UserSettings) -> None:
         document_names = list(map(
             lambda d: d.full_name, settings.department.document_types))
-        
+
         self._gui.defaults.document_options = document_names
         self._gui.defaults.document_type = settings.document_type.full_name
 
-    def _set_document_from_department(self, department: Department) -> None:
-        document_names = department.document_types.full_names()
+        self._root.window.Layout()
+
+    def _refresh_document_options(self) -> None:
+        department_name = self._gui.defaults.department
+        department = self._config.database.department(full_name=department_name)
+
+        document_names = list(map(
+            lambda document: document.full_name, department.document_types))
+
+        # document_names = department.document_types.full_names()
 
         self._gui.defaults.document_options = document_names
         self._gui.defaults.document_type = document_names[0]
