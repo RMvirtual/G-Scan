@@ -2,37 +2,10 @@ import os
 import wx
 import file_system
 
-from configuration import AppConfiguration, RootInterface
-from controllers.document_editor import DocumentEditorController
-from controllers.main_menu import MainMenuController
-from controllers.settings import SettingsController
+from configuration import Configuration
+from controllers.root_application import RootApplication
 from database import JSONDatabase
 from file_system import JSONDatabaseFiles
-from views.window import Window
-
-
-class RootApplication(RootInterface):
-    def __init__(self, app_config: AppConfiguration):
-        self.window = Window()
-        self._config = app_config
-
-    def launch_main_menu(self) -> None:
-        MainMenuController(self, self._config, self.window)
-
-    def launch_settings(self) -> None:
-        SettingsController(self, self._config, self.window)
-
-    def launch_image_viewer(self, config: AppConfiguration) -> None:
-        DocumentEditorController(self, config, self.window)
-
-    def show(self) -> None:
-        self.window.Show()
-
-    def close(self, event = None) -> None:
-        self.window.Close()
-
-    def exit(self) -> None:
-        self.close()
 
 
 def main() -> None:
@@ -47,14 +20,13 @@ def main() -> None:
     ))
 
     database = JSONDatabase(JSONDatabaseFiles(*database_files))
-    configuration = AppConfiguration(database, os.getlogin())
+    configuration = Configuration(database, os.getlogin())
 
     controller = RootApplication(configuration)
     controller.show()
     controller.launch_main_menu()
     
     gui_runtime.MainLoop()
-
 
 
 if __name__ == '__main__':

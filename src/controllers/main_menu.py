@@ -1,6 +1,7 @@
 import wx
 
-from configuration import AppConfiguration, RootInterface
+from app.root_interface import RootInterface
+from configuration import Configuration
 from views.main_menu import MainMenu
 from views.window import Window
 
@@ -8,7 +9,7 @@ from views.window import Window
 class MainMenuController:
     def __init__(
             self, root_application: RootInterface,
-            app_config: AppConfiguration,
+            app_config: Configuration,
             window: Window
     ) -> None:
         self._root = root_application

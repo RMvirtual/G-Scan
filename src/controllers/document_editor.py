@@ -4,7 +4,8 @@ import file_system
 import rendering
 
 from wx.lib.floatcanvas import FloatCanvas
-from configuration import AppConfiguration, RootInterface
+from app.root_interface import RootInterface
+from configuration import Configuration
 from data_structures import AbstractNode, AbstractLeaf
 from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
 from document_type import DocumentType
@@ -23,7 +24,7 @@ class SubmissionDocument:
 
 
 class UserInputController:
-    def __init__(self, gui: Viewer, config: AppConfiguration) -> None:
+    def __init__(self, gui: Viewer, config: Configuration) -> None:
         self._gui = gui
         self._config = config
 
@@ -370,7 +371,7 @@ class DocumentController:
 class DocumentEditorController:
     def __init__(
             self, root_application: RootInterface,
-            config: AppConfiguration,
+            config: Configuration,
             window: Window
     ) -> None:
         self._root = root_application

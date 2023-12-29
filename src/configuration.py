@@ -1,8 +1,7 @@
-import abc
 from database import JSONDatabase
 
 
-class AppConfiguration:
+class Configuration:
     def __init__(self, database: JSONDatabase, username: str) -> None:
         self.database = database
 
@@ -41,21 +40,3 @@ class AppConfiguration:
 
         else:
             raise ValueError("No document type paremeter provided.")
-
-
-class RootInterface(abc.ABC):
-    @abc.abstractmethod
-    def exit(self) -> None:
-        ...
-
-    @abc.abstractmethod
-    def launch_settings(self) -> None:
-        ...
-
-    @abc.abstractmethod
-    def launch_image_viewer(self, config: AppConfiguration) -> None:
-        ...
-
-    @abc.abstractmethod
-    def launch_main_menu(self) -> None:
-        ...
