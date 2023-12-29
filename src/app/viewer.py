@@ -7,7 +7,7 @@ from app.user_input import UserInputController
 from gui import Viewer
 
 
-class ViewerApplicationController:
+class DocumentEditorController:
     def __init__(
             self, root_application: RootInterface, config: AppConfiguration
     ) -> None:

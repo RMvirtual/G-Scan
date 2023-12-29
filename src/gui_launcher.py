@@ -4,7 +4,7 @@ import file_system
 
 from app.configuration import AppConfiguration
 from app.main_menu import MainMenuController
-from app.viewer import ViewerApplicationController
+from app.viewer import DocumentEditorController
 from app.settings import SettingsController
 from app.abstract_root import RootInterface
 from gui.window import Window
@@ -25,7 +25,7 @@ class RootApplication(RootInterface):
         SettingsController(self, self._config)
 
     def launch_image_viewer(self, config: AppConfiguration) -> None:
-        ViewerApplicationController(self, config)
+        DocumentEditorController(self, config)
 
     def show(self) -> None:
         self.window.Show()
