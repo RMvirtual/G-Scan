@@ -12,9 +12,8 @@ from views.window import Window
 
 
 class RootApplication(RootInterface):
-    def __init__(self, database: JSONDatabase, app_config: AppConfiguration):
+    def __init__(self, app_config: AppConfiguration):
         self.window = Window()
-        self._database = database
         self._config = app_config
 
     def launch_main_menu(self) -> None:
@@ -41,10 +40,8 @@ def main() -> None:
 
     gui_runtime = wx.App()
     
-    database = _default_database()
-    app_config = AppConfiguration(database, os.getlogin())
-
-    controller = RootApplication(database, app_config)
+    app_config = AppConfiguration(_default_database(), os.getlogin())
+    controller = RootApplication(app_config)
     controller.show()
     controller.launch_main_menu()
     
