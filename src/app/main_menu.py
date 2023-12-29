@@ -12,53 +12,49 @@ class MainMenuController:
         self._root = root_application
         self._gui = MainMenu(self._root.window)
         self._root.window.set_panel(self._gui)
-        self._initialise_department_callbacks()
-        self._initialise_operations_callbacks()
-        self._initialise_credit_control_callbacks()
+
+        departments_panel = self._gui.departments
+
+        departments_panel.options.ops.Bind(wx.EVT_BUTTON, self.on_operations)
+        departments_panel.options.pods.Bind(
+            wx.EVT_BUTTON, self.on_credit_control)
+        
+        departments_panel.options.quick_start.Bind(
+            wx.EVT_BUTTON, self.on_quick_start)
+        
+        departments_panel.toolbar.settings.Bind(
+            wx.EVT_BUTTON, self.on_settings)
+        
+        departments_panel.toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+
+        ops_panel = self._gui.operations
+
+        ops_panel.options.cust_pwork.Bind(
+            wx.EVT_BUTTON, self.on_customer_paperwork)
+        
+        ops_panel.options.loading_list.Bind(
+            wx.EVT_BUTTON, self.on_loading_list)
+        
+        ops_panel.back.Bind(wx.EVT_BUTTON, self.on_back_to_departments)
+
+        cc_panel = self._gui.credit_control
+
+        cc_panel.options.customer_paperwork_pod.Bind(
+            wx.EVT_BUTTON, self.on_signed_customer_paperwork)
+
+        cc_panel.options.signed_pod.Bind(wx.EVT_BUTTON, self.on_signed_pod)
+        cc_panel.back.Bind(wx.EVT_BUTTON, self.on_back_to_departments)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
-        self._initialise_keyboard_shortcuts()
-        self._gui.SetFocus()
-
-        self._config = app_config
-
-    def _initialise_department_callbacks(self) -> None:
-        panel = self._gui.departments
-
-        panel.options.ops.Bind(wx.EVT_BUTTON, self.on_operations)
-        panel.options.pods.Bind(wx.EVT_BUTTON, self.on_credit_control)
-        panel.options.quick_start.Bind(wx.EVT_BUTTON, self.on_quick_start)
-        panel.toolbar.settings.Bind(wx.EVT_BUTTON, self.on_settings)
-        panel.toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
-
-    def _initialise_operations_callbacks(self) -> None:
-        panel = self._gui.operations
-        btn_press = wx.EVT_BUTTON
-
-        panel.options.cust_pwork.Bind(btn_press, self.on_customer_paperwork)
-        panel.options.loading_list.Bind(btn_press, self.on_loading_list)
-        panel.back.Bind(btn_press, self.on_back_to_departments)
-
-    def _initialise_credit_control_callbacks(self) -> None:
-        panel = self._gui.credit_control
-        btn_press = wx.EVT_BUTTON
-
-        panel.options.customer_paperwork_pod.Bind(
-            btn_press, self.on_signed_customer_paperwork)
-
-        panel.options.signed_pod.Bind(btn_press, self.on_signed_pod)
-
-        panel.back.Bind(btn_press, self.on_back_to_departments)
-
-    def _initialise_keyboard_shortcuts(self) -> None:
         f4_shortcut_id = wx.NewId()
         self._gui.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
 
-        shortcuts = wx.AcceleratorTable([
-            (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)])
+        self._gui.SetAcceleratorTable(wx.AcceleratorTable([
+            (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)]))
+        self._gui.SetFocus()
 
-        self._gui.SetAcceleratorTable(shortcuts)
+        self._config = app_config
 
     def on_f4(self, event: wx.EVT_MENU) -> None:
         if self._gui.operations.IsShown():
