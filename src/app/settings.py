@@ -1,5 +1,4 @@
 import wx
-import database
 
 from app.abstract_root import RootInterface
 from app.configuration import AppConfiguration
@@ -30,7 +29,7 @@ class SettingsController:
             wx.EVT_COMBOBOX, self.on_department_box)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
-        self._load_settings_from_file()
+        self._load_settings_from_config()
 
     def on_save(self, event = None) -> None:
         new_settings = self._settings_from_gui()
@@ -65,53 +64,51 @@ class SettingsController:
         self._gui.Close()
         self._root.launch_main_menu()
 
-    def _load_settings_from_file(self) -> None:
-        settings = self._config.settings
-
-        self._gui.directories.scan_directory = settings.scan_dir
-        self._gui.directories.dest_directory = settings.dest_dir
-
+    def _load_settings_from_config(self) -> None:
         department_names = list(map(
             lambda dept: dept.full_name, 
             self._config.database.all_departments()
         ))
-        
-        self._gui.defaults.department_options = department_names
-        self._gui.defaults.department = settings.department.full_name
 
         document_names = list(map(
-            lambda d: d.full_name, settings.department.document_types))
+            lambda d: d.full_name,
+            self._config.settings.department.document_types
+        ))
+
+        self._gui.directories.scan_directory = self._config.settings.scan_dir
+        self._gui.directories.dest_directory = self._config.settings.dest_dir
+       
+        self._gui.defaults.department_options = department_names
+        self._gui.defaults.department = self._config.settings.department.full_name
 
         self._gui.defaults.document_options = document_names
-        self._gui.defaults.document_type = settings.document_type.full_name
+
+        self._gui.defaults.document_type = (
+            self._config.settings.document_type.full_name)
 
         self._root.window.Layout()
 
     def _refresh_document_options(self) -> None:
-        department_name = self._gui.defaults.department
-        department = self._config.database.department(full_name=department_name)
-
-        document_names = list(map(
-            lambda document: document.full_name, department.document_types))
-
-        # document_names = department.document_types.full_names()
-
-        self._gui.defaults.document_options = document_names
-        self._gui.defaults.document_type = document_names[0]
-
-    def _settings_from_gui(self) -> UserSettings:
-        result = UserSettings()
-
-        result.scan_dir = self._gui.directories.scan_directory
-        result.dest_dir = self._gui.directories.dest_directory
-
-        result.department = self._config.database.department(
+        department = self._config.database.department(
             full_name=self._gui.defaults.department)
 
-        result.document_type = self._config.database.document(
-            full_name=self._gui.defaults.document_type)
+        documents = list(map(lambda d: d.full_name, department.document_types))
 
-        return result
+        self._gui.defaults.document_options = documents
+        self._gui.defaults.document_type = documents[0]
+
+    def _settings_from_gui(self) -> UserSettings:
+        return UserSettings(
+            username=self._config.settings.username,
+            scan_dir=self._gui.directories.scan_directory,
+            dest_dir=self._gui.directories.dest_directory,
+            department=self._config.database.department(
+                full_name=self._gui.defaults.department
+            ),
+            document_type=self._config.database.document(
+                full_name=self._gui.defaults.document_type
+            )
+        )
 
     @staticmethod
     def _directory_dialog() -> str or None:
