@@ -13,6 +13,7 @@ from views import Viewer
 from views.page_range_dialog import PageRangeDialog
 from views.document_editor.document_tree import DocumentTreeCtrl
 from views.document_editor.panels import PageView
+from views.window import Window
 
 
 class SubmissionDocument:
@@ -368,27 +369,29 @@ class DocumentController:
 
 class DocumentEditorController:
     def __init__(
-            self, root_application: RootInterface, config: AppConfiguration
+            self, root_application: RootInterface,
+            config: AppConfiguration,
+            window: Window
     ) -> None:
         self._root = root_application
         self._config = config
 
-        self._gui = Viewer(self._root.window)
-        self._root.window.set_panel(self._gui)
+        self._gui = Viewer(window)
+        window.set_panel(self._gui)
 
         file_menu = self._gui.file_menu
 
-        self._root.window.Bind(
+        window.Bind(
             event=wx.EVT_MENU, handler=self.on_import_files,
             source=file_menu.import_files
         )
 
-        self._root.window.Bind(
+        window.Bind(
             event=wx.EVT_MENU, handler=self.on_import_as,
             source=file_menu.import_prenamed_files
         )
 
-        self._root.window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
+        window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
 
         self._gui.input_bar.submit.Bind(wx.EVT_BUTTON, self.on_submit)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
@@ -396,6 +399,7 @@ class DocumentEditorController:
 
         self._documents = DocumentController(self._gui)
         self._user_input = UserInputController(self._gui, self._config)
+        self._window = window
 
     def on_submit(self, _event: wx.EVT_BUTTON) -> None:
         submission_document = self._user_input.submission_document()
@@ -417,7 +421,7 @@ class DocumentEditorController:
 
     def on_close(self, event = None) -> None:
         self._gui.Destroy()
-        self._root.window.SetMenuBar(wx.MenuBar())
+        self._window.SetMenuBar(wx.MenuBar())
 
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()

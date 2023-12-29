@@ -3,17 +3,20 @@ import wx
 from configuration import AppConfiguration, RootInterface
 from user import UserSettings
 from views import Settings
+from views.window import Window
 
 
 class SettingsController:
     def __init__(
-            self, root_application: RootInterface, app_config: AppConfiguration
+            self, root_application: RootInterface,
+            app_config: AppConfiguration,
+            window: Window
     ) -> None:
         self._root = root_application
         self._config = app_config
 
-        self._gui = Settings(self._root.window)
-        self._root.window.set_panel(self._gui)
+        self._gui = Settings(window)
+        window.set_panel(self._gui)
 
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
@@ -28,6 +31,8 @@ class SettingsController:
             wx.EVT_COMBOBOX, self.on_department_box)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
+
+        self._window = window
         self._load_settings_from_config()
 
     def on_save(self, event = None) -> None:
@@ -84,7 +89,7 @@ class SettingsController:
         self._gui.defaults.document_type = (
             self._config.settings.document_type.full_name)
 
-        self._root.window.Layout()
+        self._window.Layout()
 
     def _refresh_document_options(self) -> None:
         department = self._config.database.department(

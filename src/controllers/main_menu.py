@@ -1,18 +1,21 @@
 import wx
 
 from configuration import AppConfiguration, RootInterface
-from views import MainMenu
+from views.main_menu import MainMenu
+from views.window import Window
 
 
 class MainMenuController:
     def __init__(
-            self, root_application: RootInterface, app_config: AppConfiguration
+            self, root_application: RootInterface,
+            app_config: AppConfiguration,
+            window: Window
     ) -> None:
         self._root = root_application
         self._config = app_config
 
-        self._gui = MainMenu(self._root.window)
-        self._root.window.set_panel(self._gui)
+        self._gui = MainMenu(window)
+        window.set_panel(self._gui)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 

@@ -17,13 +17,13 @@ class RootApplication(RootInterface):
         self._config = app_config
 
     def launch_main_menu(self) -> None:
-        MainMenuController(self, self._config)
+        MainMenuController(self, self._config, self.window)
 
     def launch_settings(self) -> None:
-        SettingsController(self, self._config)
+        SettingsController(self, self._config, self.window)
 
     def launch_image_viewer(self, config: AppConfiguration) -> None:
-        DocumentEditorController(self, config)
+        DocumentEditorController(self, config, self.window)
 
     def show(self) -> None:
         self.window.Show()
