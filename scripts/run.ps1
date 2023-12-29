@@ -14,7 +14,7 @@ Clear-Host; Write-Host "Running from Build."
 Push-Location $TARGET
 & $PYTHON_VENV -activate
 
-python gui_launcher.py
+python main.py
 
 & $PYTHON_VENV -deactivate
 Pop-Location
