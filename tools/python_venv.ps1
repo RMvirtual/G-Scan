@@ -1,10 +1,8 @@
 [CmdletBinding()]
-param(
-    [switch] $install, [switch] $activate, [switch] $deactivate
-)
+param([switch] $install, [switch] $activate, [switch] $deactivate)
 
 $REQUIREMENTS = "$env:DEVENV\lib\pip_requirements.txt"
-$TARGET = "$env:DEVENV\devenv\python"
+$TARGET = "$env:DEVENV\.venv"
 
 
 function activateVenv
@@ -14,7 +12,10 @@ function activateVenv
 }
 
 
-function deactivateVenv {if ($env:VIRTUAL_ENV) {deactivate}}
+function deactivateVenv
+{
+    if ($env:VIRTUAL_ENV) {deactivate}
+}
 
 
 function createVenv

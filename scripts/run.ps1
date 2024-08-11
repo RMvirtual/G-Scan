@@ -1,20 +1,9 @@
-if (-not $env:DEVENV) {
-    & "$PSScriptRoot\setup.ps1"
-
-    if ($LASTEXITCODE) {Write-Host "Run failed."}
-}
+if (-not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
 
 
-$PYTHON_VENV = "$env:DEVENV\tools\python.ps1"
-$TARGET = "$env:DEVENV\build\release\gscan\bin"
+$PYTHON_VENV = "$env:DEVENV\tools\python_venv.ps1"
 
 
-Clear-Host; Write-Host "Running from Build."
-
-Push-Location $TARGET
+Clear-Host; Write-Host "Should run here."
 & $PYTHON_VENV -activate
-
-python main.py
-
 & $PYTHON_VENV -deactivate
-Pop-Location

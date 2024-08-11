@@ -1,16 +1,18 @@
-if (-not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
-if ($LASTEXITCODE) {Write-Host "Test environment setup failed."; exit 1}
+[CmdletBinding()]
+param ([string[]] $specific)
 
-$TESTS = "$env:DEVENV\build\tests"
-$PYTHON_VENV = "$env:DEVENV\tools\python.ps1"
+if (-not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
+
+$PYTHON_VENV = "$env:DEVENV\tools\python_venv.ps1"
 
 
 Clear-Host; Write-Host "Starting tests."
+if (-Not $specific) {$specific = @()}
 
-Push-Location $TESTS
+Push-Location "$env:DEVENV\tests"
 & $PYTHON_VENV -activate
 
-python test_runner.py
+python test_runner.py $specific
 
 & $PYTHON_VENV -deactivate
 Pop-Location

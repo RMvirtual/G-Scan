@@ -1,13 +1,12 @@
 {
 	"folders": [
-		{
-			"path": ".."
-		}
+		{"path": ".."}
 	],
 	"settings": {
+		"files.exclude": {"**/__pycache__": true, "**/.pytest_cache": true},
 		"powershell.buttons.showPanelMovementButtons": true,
-		"python.defaultInterpreterPath": "${workspaceFolder}/devenv/python/Scripts/python.exe",
-		"python.analysis.extraPaths": ["${workspaceFolder}/src"],
-		"python.analysis.exclude": ["./build"]
+		"python.analysis.exclude": ["./build", "./venv"],
+		"python.analysis.extraPaths": ["./src", "./tests"],
+		"python.defaultInterpreterPath": "./.venv/Scripts/python.exe"
 	}
 }

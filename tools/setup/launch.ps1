@@ -2,7 +2,7 @@
 if ($LASTEXITCODE) {Write-Host "Launch failed."; exit 1}
 
 $INSTALL_SCRIPT = "$env:DEVENV\tools\setup\install.ps1"
-$TARGET = "$env:DEVENV\devenv"
+$TARGET = "$env:DEVENV\.venv"
 
 
 if (-Not (Test-Path $TARGET)) {& $INSTALL_SCRIPT}
