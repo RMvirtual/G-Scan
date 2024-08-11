@@ -6,11 +6,11 @@ from wx.lib.floatcanvas import FloatCanvas
 from app.root_interface import RootInterface
 from configuration import Configuration
 from data_structures import AbstractNode, AbstractLeaf
-from models.document_tree import (
+from document_tree import (
     DocumentBranch, DocumentTree, JobBranch, PendingLeaf)
 
-from models.document_type import DocumentType
-from models.job_references import JobReference
+from document_type import DocumentType
+from job_references import JobReference
 from views import Viewer
 from views.page_range_dialog import PageRangeDialog
 from views.document_editor.document_tree import DocumentTreeCtrl
@@ -51,7 +51,7 @@ class UserInputController:
     def submission_document(self) -> SubmissionDocument:
         return SubmissionDocument(self.job_reference(), self.document_type())
 
-    def job_reference(self) -> JobReference or None:
+    def job_reference(self) -> JobReference|None:
         reference = self._input_bar.reference_input
 
         try:

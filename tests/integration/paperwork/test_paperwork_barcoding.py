@@ -1,16 +1,18 @@
 import shutil
 import tempfile
+from pathlib import Path
+from typing import Any, Generator
+
 import fitz
 import pytest
-import pdf.pdf
 
-from pathlib import Path
+import pdf.pdf
 from paperwork_types import A4Document, CustomerPaperwork
 
 
 class TestPaperworkBarcoding:
-    @pytest.fixture
-    def setup_teardown(self) -> None:
+    @pytest.fixture(autouse="function")
+    def setup_teardown(self) -> Generator[Any, Any, Any]:
         test_data_folder = Path(__file__).parent.joinpath("input_data")
         self.temp_directory = Path(tempfile.TemporaryDirectory().name)
 
@@ -20,7 +22,7 @@ class TestPaperworkBarcoding:
 
         shutil.rmtree(self.temp_directory)
 
-    def test_should_read_page(self, setup_teardown) -> None:
+    def test_should_read_page(self) -> None:
         one_page_file = self.temp_directory.joinpath("one_page_A4.pdf")
         page_images = pdf.pdf.read_pdf(str(one_page_file))
 
@@ -30,7 +32,7 @@ class TestPaperworkBarcoding:
         assert (page.w, page.h) == (2481, 3508)
 
     @pytest.mark.skip
-    def test_should_write_page(self, setup_teardown) -> None:
+    def test_should_write_page(self) -> None:
         test_data_folder = Path(__file__).parent.joinpath("input_data")
 
         one_page_file = self.temp_directory.joinpath("one_page_A4.pdf")
@@ -55,7 +57,7 @@ class TestPaperworkBarcoding:
         assert image == correct_image
 
     @pytest.mark.skip
-    def test_should_write_barcode_page(self, setup_teardown) -> None:
+    def test_should_write_barcode_page(self) -> None:
         test_data_folder = Path(__file__).parent.joinpath("input_data")
 
         one_page_file = self.temp_directory.joinpath("one_page_A4.pdf")

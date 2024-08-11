@@ -1,5 +1,6 @@
 import dataclasses
-from models.document_type import DocumentType
+
+from document_type import DocumentType
 
 
 @dataclasses.dataclass

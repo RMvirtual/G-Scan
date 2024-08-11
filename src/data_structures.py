@@ -27,7 +27,7 @@ class AbstractNode:
 
         return self
 
-    def child_by_id(self, node_id: int) -> AbstractNode or None:
+    def child_by_id(self, node_id: int) -> AbstractNode|None:
         for child in self.children:
             if child.node_id == node_id:
                 return child

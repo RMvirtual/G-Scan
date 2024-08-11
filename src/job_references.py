@@ -1,4 +1,4 @@
-from models.date import Calendar, Date
+from date import Calendar, Date
 
 
 class JobReference:

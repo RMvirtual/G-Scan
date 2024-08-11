@@ -8,7 +8,7 @@ def aspect_ratio(width: int, height: int) -> float:
 def scale_to_ratio(ratio: float, width: int, height: int) -> tuple[int, int]:
     too_wide = aspect_ratio(width, height) > ratio
 
-    return (height * ratio, height) if too_wide else (width, width / ratio)
+    return (height*ratio, height) if too_wide else (width, width/ratio)
 
 def scale_with_ratio(
         image: wx.Image, new_width: int, new_height: int) -> tuple[int, int]:

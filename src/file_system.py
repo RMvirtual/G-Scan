@@ -1,13 +1,4 @@
-import dataclasses
-
 from pathlib import Path
-
-
-@dataclasses.dataclass
-class JSONDatabaseFiles:
-    departments: Path
-    document_types: Path
-    user_settings: Path
 
 
 def root_directory() -> Path:

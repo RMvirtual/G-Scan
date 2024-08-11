@@ -1,42 +1,42 @@
+import dataclasses
 import json
+from pathlib import Path
 
-from file_system import JSONDatabaseFiles
-from models.departments import Department 
-from models.document_type import DocumentType
-from models.user import UserSettings
+from departments import Department 
+from document_type import DocumentType
+from user import UserSettings
 
 
 JSONFormat = dict[str, dict[str, str|list[str]]]
+
+
+@dataclasses.dataclass
+class JSONDatabaseFiles:
+    departments: Path
+    document_types: Path
+    user_settings: Path
 
 
 class JSONDatabase:
     def __init__(self, files: JSONDatabaseFiles) -> None:
         self.files = files
 
-    def department(
-            self, short_code: str = "", full_name: str = "") -> Department:
+    def department(self, short_code: str = "", full_name: str = "") -> Department:
         if not (short_code or full_name):
             raise ValueError("Department parameter not selected.")
 
         departments = self.all_departments()
 
-        if full_name:
-            filtered = [
-                dept for dept in departments if dept.full_name == full_name]
-        
-            if not filtered:
-                raise ValueError(f"Invalid department: {full_name}")
+        filtered = (
+            [dept for dept in departments if dept.full_name == full_name]
+            if full_name else
+            [dept for dept in departments if dept.short_code == short_code]
+        )
 
-            return filtered[0]
+        if not filtered:
+            raise ValueError(f"Invalid department: {full_name}")
 
-        else:
-            filtered = [
-                dept for dept in departments if dept.short_code == short_code]
-
-            if not filtered:
-                raise ValueError(f"Invalid department: {short_code}")
-
-            return filtered[0]
+        return filtered[0]
 
     def all_departments(self) -> list[Department]:
         with open(self.files.departments) as file_stream:
@@ -135,8 +135,7 @@ class JSONDatabase:
             }
         }
 
-    def _deserialise_user_settings(
-            self, settings: JSONFormat) -> list[UserSettings]:
+    def _deserialise_user_settings(self, settings: JSONFormat) -> list[UserSettings]:
         return [
             self._deserialise_individual_user_settings(username, user_settings)
             for username, user_settings in settings.items()

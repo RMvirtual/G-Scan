@@ -1,7 +1,7 @@
 import wx
+
 import file_system
 import views.metrics
-
 from views.departments import CreditControl, Departments, Operations
 
 

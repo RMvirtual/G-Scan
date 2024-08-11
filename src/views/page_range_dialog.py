@@ -59,10 +59,10 @@ class PageRangeDialog(wx.Dialog):
                 self.to_entry.GetValue()-1)
         )
 
-    def _process_from_value_change(self, event: wx.EVT_SPINCTRL) -> None:
+    def _process_from_value_change(self, event: wx.Event) -> None:
         self.to_entry.SetMin(self.from_entry.GetValue() + 1)
 
-    def _process_to_value_change(self, event: wx.EVT_SPINCTRL) -> None:
+    def _process_to_value_change(self, event: wx.Event) -> None:
         self.from_entry.SetMax(self.to_entry.GetValue() - 1)
 
     def _initialise_sizer(self) -> None:

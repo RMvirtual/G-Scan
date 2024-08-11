@@ -1,31 +1,33 @@
 import shutil
 import tempfile
+from pathlib import Path
+from typing import Any, Generator
+
 import pytest
 
-from pathlib import Path
-from database import JSONDatabase
-from file_system import JSONDatabaseFiles
-  
+from database import JSONDatabase, JSONDatabaseFiles
+
+
+INPUT_DATA = Path(__file__).parent.joinpath("input_data")
+
 
 class TestJSONDatabase:
-    @pytest.fixture
-    def setup_teardown(self) -> None:
-        test_data_folder = Path(__file__).parent.joinpath("data")
+    @pytest.fixture(autouse="function")
+    def setup_teardown(self) -> Generator[Any, Any, Any]:
+        temp_dir = Path(tempfile.TemporaryDirectory().name)
+        shutil.copytree(INPUT_DATA, temp_dir)
 
-        self.temp_directory = Path(tempfile.TemporaryDirectory().name)
-        shutil.copytree(test_data_folder, self.temp_directory)
+        file_paths = [
+            temp_dir.joinpath(f"{file_}.json") 
+            for file_ in ["departments", "document_types", "user_settings"]
+        ]
 
-        self.database_files = JSONDatabaseFiles(
-            self.temp_directory.joinpath("departments.json"),
-            self.temp_directory.joinpath("document_types.json"),
-            self.temp_directory.joinpath("user_settings.json")
-        )
+        self.database_files = JSONDatabaseFiles(*file_paths)
 
         yield
+        shutil.rmtree(temp_dir)
 
-        shutil.rmtree(self.temp_directory)
-
-    def test_should_load_departments(self, setup_teardown) -> None:
+    def test_should_load_departments(self) -> None:
         database = JSONDatabase(self.database_files)
         departments = database.all_departments()
 
@@ -34,13 +36,12 @@ class TestJSONDatabase:
         short_codes = set(department.short_code for department in  departments)
         assert short_codes == {"ops", "pods"}
 
-    def test_should_load_document_types(self, setup_teardown) -> None:
+    def test_should_load_document_types(self) -> None:
         database = JSONDatabase(self.database_files)
         document_types = database.all_documents()
 
         assert len(document_types) == 6
-
-        short_codes = set(doc_type.short_code for doc_type in document_types)
+        short_codes = set(doc.short_code for doc in document_types)
 
         correct_short_codes = {
             "customer_paperwork_signed", "standard_delivery_note",
@@ -49,7 +50,7 @@ class TestJSONDatabase:
 
         assert short_codes == correct_short_codes
 
-    def test_should_load_all_user_settings_json(self, setup_teardown) -> None:
+    def test_should_load_all_user_settings_json(self) -> None:
         database = JSONDatabase(self.database_files)
     
         correct_settings = {
@@ -69,14 +70,14 @@ class TestJSONDatabase:
 
         assert database.user_settings_json() == correct_settings
 
-    def test_should_load_user_settings(self, setup_teardown) -> None:
+    def test_should_load_user_settings(self) -> None:
         database = JSONDatabase(self.database_files)
         settings = database.load_user_settings(username="rmvir")
 
         assert settings.username == "rmvir"
         assert settings.department.short_code == "ops"
 
-    def test_should_overwrite_user_settings(self, setup_teardown) -> None:
+    def test_should_overwrite_user_settings(self) -> None:
         database = JSONDatabase(self.database_files)
 
         settings = database.load_user_settings(username="rmvir")
@@ -86,7 +87,7 @@ class TestJSONDatabase:
         updated_settings = database.load_user_settings(username="rmvir")
         assert updated_settings.department.short_code == "pods"
 
-    def test_overwrite_preserves_other_entries(self, setup_teardown) -> None:
+    def test_overwrite_preserves_other_entries(self) -> None:
         database = JSONDatabase(self.database_files)
 
         settings = database.load_user_settings(username="rmvir")

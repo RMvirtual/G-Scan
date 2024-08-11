@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from data_structures import AbstractBranch, AbstractLeaf, AbstractRoot
-from models.document_type import DocumentType
-from models.job_references import JobReference
+from document_type import DocumentType
+from job_references import JobReference
 
 
 class PendingBranch(AbstractBranch):
@@ -55,6 +55,7 @@ class JobBranch(AbstractBranch):
 class DocumentBranch(AbstractBranch):
     def __init__(self, parent: JobBranch, document_type: DocumentType) -> None:
         super().__init__(parent=parent, label=document_type.full_name)
+        
         self.document_type = document_type
 
     def set_type(self, new_type: DocumentType) -> None:
