@@ -25,35 +25,38 @@ class JSONDatabase:
         if not (short_code or full_name):
             raise ValueError("Department parameter not selected.")
 
-        departments = self.all_departments()
+        if short_code:
+            field = short_code
+            predicate = lambda d: d.short_code == field
+        
+        else:
+            field = full_name
+            predicate = lambda d: d.full_name == field
+        
+        for department in self.all_departments():
+            if predicate(department):
+                return department
 
-        filtered = (
-            [dept for dept in departments if dept.full_name == full_name]
-            if full_name else
-            [dept for dept in departments if dept.short_code == short_code]
-        )
-
-        if not filtered:
-            raise ValueError(f"Invalid department: {full_name}")
-
-        return filtered[0]
+        raise ValueError(f"Invalid department: {field}")
 
     def all_departments(self) -> list[Department]:
         with open(self.files.departments) as file_stream:
-            json_contents: JSONFormat = json.load(file_stream)
+            json_contents: dict = json.load(file_stream)
         
-        return [
-            Department(
-                short_code,
-                values["full_name"],
-                values["short_name"], 
-                list(filter(
-                    lambda doc: doc.short_code in values["document_types"], 
-                    self.all_documents())
-                )
-            ) for short_code, values in json_contents.items()
-        ]
+        documents = self.all_documents()
+        result = []
 
+        for short_code, values in json_contents.items():
+            matching_docs = list(filter(
+                lambda d: d.short_code in values["document_types"], documents))
+            
+            result.append(Department(
+                short_code, values["full_name"], values["short_name"],
+                matching_docs
+            ))
+            
+        return result
+    
     def document(
             self, short_code: str = None, full_name: str = None) -> DocumentType:
         documents = self.all_documents()
