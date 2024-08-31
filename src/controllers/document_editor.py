@@ -1,22 +1,22 @@
-import wx
 import ntpath
-import rendering
 
+import wx
 from wx.lib.floatcanvas import FloatCanvas
-from root_interface import RootInterface
+
+import rendering
 from configuration import Configuration
 from data_structures import AbstractNode, AbstractLeaf
 from document_tree import (
     DocumentBranch, DocumentTree, JobBranch, PendingLeaf)
-
 from document_type import DocumentType
 from job_references import JobReference
+from root_interface import RootInterface
 from views import Viewer
-from views.page_range_dialog import PageRangeDialog
 from views.document_editor.document_tree import DocumentTreeCtrl
 from views.document_editor.panels import PageView
-from views.window import Window
 from views.file_import_dialog import file_import_dialog
+from views.page_range_dialog import PageRangeDialog
+from views.window import Window
 
 
 class SubmissionDocument:
@@ -209,7 +209,7 @@ class DocumentTreeController:
         return PendingLeaf(
             parent=self._document_tree.pending_branch,
             file_name=ntpath.basename(file_path),
-            data=rendering.render_images(file_path=file_path)
+            data=rendering.load_images(file_path=file_path)
         )
 
 

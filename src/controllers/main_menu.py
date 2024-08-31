@@ -1,7 +1,7 @@
 import wx
 
-from root_interface import RootInterface
 from configuration import Configuration
+from root_interface import RootInterface
 from views.main_menu import MainMenu
 from views.window import Window
 
@@ -19,16 +19,14 @@ class MainMenuController:
 
         # Could move this out of the constructor maybe??
         window.set_panel(self._gui)
-
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
-
-        depts_panel = self._gui.departments
 
         dept_options = self._gui.departments.options
         dept_options.ops.Bind(wx.EVT_BUTTON, self.on_operations)
         dept_options.pods.Bind(wx.EVT_BUTTON, self.on_credit_control)
         dept_options.quick_start.Bind(wx.EVT_BUTTON, self.on_quick_start)
 
+        depts_panel = self._gui.departments
         dept_toolbar =  depts_panel.toolbar
         dept_toolbar.settings.Bind(wx.EVT_BUTTON, self.on_settings)
         dept_toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
@@ -57,7 +55,7 @@ class MainMenuController:
 
         self._gui.SetFocus()
 
-    def on_f4(self, event: wx.EVT_MENU) -> None:
+    def on_f4(self, event: wx.Event) -> None:
         if self._gui.operations.IsShown():
             self._gui.view_departments()
 
@@ -65,61 +63,61 @@ class MainMenuController:
 
         self.launch_exit()
 
-    def on_back_to_departments(self, event: wx.EVT_BUTTON) -> None:
+    def on_back_to_departments(self, event: wx.Event) -> None:
         self._gui.view_departments()
         self._config.department = None
 
-    def on_quick_start(self, event: wx.EVT_BUTTON) -> None:
+    def on_quick_start(self, event: wx.Event) -> None:
         self.launch_image_viewer(self._config)
 
-    def on_operations(self, event: wx.EVT_BUTTON) -> None:
+    def on_operations(self, event: wx.Event) -> None:
         self._config.department = self._config.database.department(
             short_code="ops")
         
         self._gui.view_ops()
 
-    def on_credit_control(self, event: wx.EVT_BUTTON) -> None:
+    def on_credit_control(self, event: wx.Event) -> None:
         self._config.department = self._config.database.department(
             short_code="pods")
 
         self._gui.view_credit_control()
 
-    def on_exit(self, event: wx.EVT_BUTTON) -> None:
+    def on_exit(self, event: wx.Event) -> None:
         self.launch_exit()
 
-    def on_settings(self, event: wx.EVT_BUTTON) -> None:
+    def on_settings(self, event: wx.Event) -> None:
         self.launch_settings()
 
-    def on_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
+    def on_customer_paperwork(self, event: wx.Event) -> None:
         self._config.document_type = self._config.database.document(
             short_code="customer_paperwork")
 
-        self.launch_image_viewer(self._config)
+        self.launch_image_viewer()
 
-    def on_loading_list(self, event: wx.EVT_BUTTON) -> None:
+    def on_loading_list(self, event: wx.Event) -> None:
         self._config.document_type = self._config.database.document(
             short_code="loading_list")
         
-        self.launch_image_viewer(self._config)
+        self.launch_image_viewer()
 
-    def on_signed_pod(self, event: wx.EVT_BUTTON) -> None:
+    def on_signed_pod(self, event: wx.Event) -> None:
         self._config.document_type = self._config.database.document(
             short_code="standard_delivery_note")
 
-        self.launch_image_viewer(self._config)
+        self.launch_image_viewer()
 
-    def on_signed_customer_paperwork(self, event: wx.EVT_BUTTON) -> None:
+    def on_signed_customer_paperwork(self, event: wx.Event) -> None:
         self._config.document_type = self._config.database.document(
             short_code="customer_paperwork_signed")
 
-        self.launch_image_viewer(self._config)
+        self.launch_image_viewer()
 
-    def on_close(self, event: wx.EVT_BUTTON = None) -> None:
+    def on_close(self, event: wx.Event) -> None:
         self._gui.Destroy()
 
-    def launch_image_viewer(self, config) -> None:
+    def launch_image_viewer(self) -> None:
         self._gui.Close()
-        self._root.launch_image_viewer(self._config)
+        self._root.launch_image_viewer()
 
     def launch_settings(self) -> None:
         self._gui.Close()

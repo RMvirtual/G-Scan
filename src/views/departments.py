@@ -123,14 +123,14 @@ class CreditControlOptions(wx.Panel):
         self.customer_paperwork_pod = wx.Button(
             self, label="Customer\nPaperwork POD")
 
-        self._buttons = [self.signed_pod, self.customer_paperwork_pod]
+        buttons = [self.signed_pod, self.customer_paperwork_pod]
 
-        for button in self._buttons:
+        for button in buttons:
             button.SetFont(wx.Font(wx.FontInfo(pointSize=30)).Bold())
 
         sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        for button in self._buttons:
+        for button in buttons:
             sizer.Add(
                 button, proportion=0, flag=wx.LEFT|wx.RIGHT|wx.ALIGN_TOP, 
                 border=15

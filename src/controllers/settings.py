@@ -1,7 +1,7 @@
 import wx
 
-from root_interface import RootInterface
 from configuration import Configuration
+from root_interface import RootInterface
 from user import UserSettings
 from views import Settings
 from views.window import Window
@@ -9,12 +9,12 @@ from views.window import Window
 
 class SettingsController:
     def __init__(
-            self, root_application: RootInterface,
-            app_config: Configuration,
+            self, root_application: RootInterface, 
+            config: Configuration,
             window: Window
     ) -> None:
         self._root = root_application
-        self._config = app_config
+        self._config = config
 
         self._gui = Settings(window)
         window.set_panel(self._gui)
@@ -22,10 +22,10 @@ class SettingsController:
         self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
-        self._gui.directories.scan_browse.Bind(
+        self._gui.directories.scan_box.button.Bind(
             wx.EVT_BUTTON, self.on_scan_dir_browse)
         
-        self._gui.directories.dest_browse.Bind(
+        self._gui.directories.dest_box.button.Bind(
             wx.EVT_BUTTON, self.on_dest_dir_browse)
 
         self._gui.defaults.department_box.Bind(
@@ -36,33 +36,32 @@ class SettingsController:
         self._window = window
         self._load_settings_from_config()
 
-    def on_save(self, event = None) -> None:
+    def on_save(self, event: wx.Event = None) -> None:
         new_settings = self._settings_from_gui()
-        
         self._config.database.save_user_settings(new_settings)
         self._config.settings = new_settings
 
         self._exit_to_main_menu()
 
-    def on_exit(self, event = None) -> None:
+    def on_exit(self, event: wx.Event = None) -> None:
         self._exit_to_main_menu()
 
-    def on_scan_dir_browse(self, event = None) -> None:
-        user_selection = self._directory_dialog()
+    def on_scan_dir_browse(self, event: wx.Event = None) -> None:
+        directory = self._directory_dialog()
 
-        if user_selection:
-            self._gui.directories.scan_directory = user_selection
+        if directory:
+            self._gui.directories.scan_directory = directory
 
-    def on_dest_dir_browse(self, event = None) -> None:
-        user_selection = self._directory_dialog()
+    def on_dest_dir_browse(self, event: wx.Event = None) -> None:
+        directory = self._directory_dialog()
 
-        if user_selection:
-            self._gui.directories.dest_directory = user_selection
+        if directory:
+            self._gui.directories.dest_directory = directory
 
-    def on_department_box(self, event = None) -> None:
+    def on_department_box(self, event: wx.Event = None) -> None:
         self._refresh_document_options()
 
-    def on_close(self, event = None) -> None:
+    def on_close(self, event: wx.Event = None) -> None:
         self._gui.Destroy()
 
     def _exit_to_main_menu(self) -> None:
@@ -71,9 +70,7 @@ class SettingsController:
 
     def _load_settings_from_config(self) -> None:
         departments = list(map(
-            lambda dept: dept.full_name, 
-            self._config.database.all_departments()
-        ))
+            lambda d: d.full_name, self._config.database.all_departments()))
 
         documents = list(map(
             lambda d: d.full_name,
@@ -107,15 +104,13 @@ class SettingsController:
             scan_dir=self._gui.directories.scan_directory,
             dest_dir=self._gui.directories.dest_directory,
             department=self._config.database.department(
-                full_name=self._gui.defaults.department
-            ),
+                full_name=self._gui.defaults.department),
             document_type=self._config.database.document(
-                full_name=self._gui.defaults.document_type
-            )
+                full_name=self._gui.defaults.document_type)
         )
 
     @staticmethod
-    def _directory_dialog() -> str or None:
+    def _directory_dialog() -> str|None:
         with wx.DirDialog(None) as browser:
             return (
                 None if browser.ShowModal() == wx.ID_CANCEL

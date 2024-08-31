@@ -21,7 +21,7 @@ class Logo(wx.Panel):
 
         self.Bind(wx.EVT_SIZE, self.on_resize)
 
-    def on_resize(self, _event = None) -> None:
+    def on_resize(self, _event: wx.Event = None) -> None:
         width, height = self.Size
         
         new_width, new_height = views.metrics.scale_with_ratio(

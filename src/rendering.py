@@ -2,7 +2,7 @@ import fitz
 import wx
 
 
-def render_images(file_path: str) -> list[wx.Image]:
+def load_images(file_path: str) -> list[wx.Image]:
     result = []
 
     with fitz.open(file_path) as document_stream:
