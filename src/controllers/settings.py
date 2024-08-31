@@ -1,6 +1,6 @@
 import wx
 
-from app.root_interface import RootInterface
+from root_interface import RootInterface
 from configuration import Configuration
 from user import UserSettings
 from views import Settings

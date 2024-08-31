@@ -1,6 +1,6 @@
 import views.metrics
 
-from app.root_interface import RootInterface
+from root_interface import RootInterface
 from configuration import Configuration
 from controllers.document_editor import DocumentEditorController
 from controllers.main_menu import MainMenuController

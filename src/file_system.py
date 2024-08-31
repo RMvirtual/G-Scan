@@ -8,7 +8,7 @@ def root_directory() -> Path:
 
 
 def image_resources_directory() -> Path:
-    return root_directory().joinpath("resources", "images")
+    return root_directory().joinpath("data", "images")
 
 
 def config_directory() -> Path:

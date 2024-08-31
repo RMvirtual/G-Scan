@@ -1,16 +1,14 @@
 import os
-import wx
-import file_system
 
+import wx
+
+import file_system
 from configuration import Configuration
 from controllers.root_application import RootApplication
-from database import JSONDatabase
-from file_system import JSONDatabaseFiles
+from database import JSONDatabase, JSONDatabaseFiles
 
 
 def main() -> None:
-    """Default entry point using current OS username logged in."""
-
     gui_runtime = wx.App()
     config_directory = file_system.config_directory()   
     

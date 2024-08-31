@@ -3,7 +3,7 @@ import ntpath
 import rendering
 
 from wx.lib.floatcanvas import FloatCanvas
-from app.root_interface import RootInterface
+from root_interface import RootInterface
 from configuration import Configuration
 from data_structures import AbstractNode, AbstractLeaf
 from document_tree import (

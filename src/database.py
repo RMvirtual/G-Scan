@@ -21,23 +21,21 @@ class JSONDatabase:
     def __init__(self, files: JSONDatabaseFiles) -> None:
         self.files = files
 
-    def department(self, short_code: str = "", full_name: str = "") -> Department:
+    def department(
+            self, short_code: str = None, full_name: str = None) -> Department:
         if not (short_code or full_name):
             raise ValueError("Department parameter not selected.")
 
-        if short_code:
-            field = short_code
-            predicate = lambda d: d.short_code == field
-        
-        else:
-            field = full_name
-            predicate = lambda d: d.full_name == field
-        
+        predicate = (
+            lambda d: d.short_code == short_code if short_code 
+            else lambda d: d.full_name == full_name
+        )
+                
         for department in self.all_departments():
             if predicate(department):
                 return department
 
-        raise ValueError(f"Invalid department: {field}")
+        raise ValueError(f"Invalid department: {short_code or full_name}")
 
     def all_departments(self) -> list[Department]:
         with open(self.files.departments) as file_stream:
@@ -59,28 +57,19 @@ class JSONDatabase:
     
     def document(
             self, short_code: str = None, full_name: str = None) -> DocumentType:
-        documents = self.all_documents()
-
         if not (short_code or full_name):
-            raise ValueError("Document Type parameter not selected.")
+            raise ValueError("Document type parameter not selected.")
 
-        if full_name:
-            filtered = [
-                doc for doc in documents if doc.full_name == full_name]
-        
-            if not filtered:
-                raise ValueError(f"Invalid Document Type: {full_name}")
+        predicate = (
+            lambda d: d.short_code == short_code if short_code
+            else lambda d: d.full_name == full_name
+        )
 
-            return filtered[0]
+        for doc in self.all_documents():
+            if predicate(doc):
+                return doc
 
-        else:
-            filtered = [
-                dept for dept in documents if dept.short_code == short_code]
-
-            if not filtered:
-                raise ValueError(f"Invalid Document Type: {short_code}")
-
-            return filtered[0]
+        raise ValueError(f"Invalid document type: {short_code or full_name}")
 
     def all_documents(self) -> list[DocumentType]:
         with open(self.files.document_types) as file_stream:
@@ -154,3 +143,8 @@ class JSONDatabase:
             self.department(short_code=values["department"]),
             self.document(short_code=values["document_type"])
         )
+
+    @staticmethod
+    def validate_option_selected(short_code: str|None, full_name: str|None) -> Department:
+        if not (short_code or full_name):
+            raise ValueError("Department parameter not selected.")

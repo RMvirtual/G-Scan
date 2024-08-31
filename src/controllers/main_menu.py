@@ -1,6 +1,6 @@
 import wx
 
-from app.root_interface import RootInterface
+from root_interface import RootInterface
 from configuration import Configuration
 from views.main_menu import MainMenu
 from views.window import Window
