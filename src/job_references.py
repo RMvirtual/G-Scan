@@ -18,7 +18,7 @@ class JobReference:
             self._job_number = "00000"
 
     def __str__(self) -> str:
-        return self.prefix + self._date.format("yymm") + self._job_number
+        return self.prefix + self._date.format_as("yymm") + self._job_number
 
     @property
     def job_number(self) -> str:
