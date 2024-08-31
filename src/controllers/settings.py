@@ -28,7 +28,7 @@ class SettingsController:
         self._gui.directories.dest_box.button.Bind(
             wx.EVT_BUTTON, self.on_dest_dir_browse)
 
-        self._gui.defaults.department_box.Bind(
+        self._gui.defaults.department_option.box.Bind(
             wx.EVT_COMBOBOX, self.on_department_box)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
