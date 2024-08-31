@@ -2,7 +2,8 @@ from date import Calendar, Date
 
 
 class JobReference:
-    def __init__(self, date: Date = None, job_number: str = None) -> None:
+    def __init__(
+            self, date: Date|None = None, job_number: str|None = None) -> None:
         """GR + 9 digits. First 4 digits: yymm; last 5 digits: job no."""
 
         if not (date or job_number) or (date and job_number):
@@ -26,7 +27,7 @@ class JobReference:
 
     @job_number.setter
     def job_number(self, job_number: str) -> None:
-        digits = self._clean_job_number_candidate(job_number)
+        digits = self._strip_job_number_prefix(job_number)
         digits_valid = 1 <= len(digits) <= 5 and digits.isnumeric()
 
         if not digits_valid:
@@ -35,7 +36,7 @@ class JobReference:
         self._job_number = "0" * (5-len(digits)) + digits
 
     def _set_full_job_number(self, job_number: str) -> None:
-        digits = self._clean_job_number_candidate(job_number)
+        digits = self._strip_job_number_prefix(job_number)
 
         if not len(digits) == 9 and digits.isnumeric():
             raise ValueError(f"Incorrect job reference format: {job_number}.")
@@ -43,6 +44,6 @@ class JobReference:
         self._date = Calendar().date(int(digits[2:4]), int(digits[0:2]))
         self._job_number = digits[-5:]
 
-    def _clean_job_number_candidate(self, job_number: str) -> str:
+    def _strip_job_number_prefix(self, job_number: str) -> str:
         return job_number.lower().removeprefix(self.prefix.lower()).strip()
     
