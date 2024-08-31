@@ -68,28 +68,17 @@ class Calendar:
         return list(map(
             lambda m: m.month_name, self.months(self.current_year)))
 
-    def years(self) -> tuple[int, int]:
-        return self.current_year, self.last_year
-
-    def years_as_strings(self) -> tuple:
-        return tuple(map(str, self.years()))
+    def last_two_years(self) -> tuple[int, int]:
+        return self.current_year, self.current_year - 1
     
     @property
     def current_month(self):
-        return Date(self.current_month_no, self.current_year)
-
-    @property
-    def current_month_name(self) -> str:
-        return datetime.datetime.now().strftime("%B")
-
-    @property
-    def current_month_no(self) -> int:
-        return datetime.datetime.now().strftime("%m")
+        return Date(
+            int(datetime.datetime.now().strftime("%m")), 
+            self.current_year
+        )
 
     @property
     def current_year(self) -> int:
         return int(datetime.datetime.now().strftime("%Y"))
     
-    @property
-    def last_year(self) -> int:
-        return self.current_year - 1
