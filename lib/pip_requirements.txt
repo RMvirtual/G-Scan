@@ -1,6 +1,6 @@
 numpy==1.26.2
 Pillow==10.1.0
-PyMuPDF==1.23.7
+PyMuPDF==1.24.10
 PyPDF2==3.0.1
 pypiwin32==223
 pytest==7.4.3

@@ -16,12 +16,14 @@ class Date:
     def format_as(self, format: str) -> str:
         """Accepts formats of a combination of yy, yyyy, mm, mmm."""
 
-        return format.lower() \
-            .replace("mmm", MONTHS[self.month_no]) \
-            .replace("yyyy", str(self.year)) \
-            .replace("mm", str(self.month_no).zfill(2)) \
+        return (
+            format.lower()
+            .replace("mmm", MONTHS[self.month_no])
+            .replace("yyyy", str(self.year))
+            .replace("mm", str(self.month_no).zfill(2))
             .replace("yy", str(self.year)[-2:])
-
+        )
+    
     @property
     def month_name(self) -> str:
         return MONTHS[self.month_no]

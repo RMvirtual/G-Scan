@@ -10,9 +10,7 @@ from views.window import Window
 
 class RootApplication(RootInterface):
     def __init__(self, app_config: Configuration):
-        size, position = views.metrics.recommended_metrics()
-        
-        self.window = Window(size, position)
+        self.window = Window(*views.metrics.recommended_metrics())
         self._config = app_config
 
     def launch_main_menu(self) -> None:

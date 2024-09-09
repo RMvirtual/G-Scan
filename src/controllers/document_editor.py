@@ -55,7 +55,7 @@ class UserInputController:
         reference = self._input_bar.reference_input
 
         try:
-            return JobReference(reference)
+            return JobReference(job_number=reference)
 
         except ValueError:
             message_box = wx.MessageDialog(
@@ -248,7 +248,7 @@ class PageViewController:
         self.canvas.Zoom(
             zoom_factor, event.Position, "Pixel", keepPointInPlace=True)
 
-    def fit_page_to_panel(self, _event: wx.EVT_LEFT_DCLICK = None):
+    def fit_page_to_panel(self, _event: wx.Event = None):
         self.canvas.ZoomToBB()
 
     def bind_page_no(self, callback) -> None:
@@ -312,17 +312,17 @@ class DocumentController:
             leaf=self._currently_viewed
         )
 
-    def on_split_pages(self, event: wx.EVT_BUTTON) -> None:
+    def on_split_pages(self, event: wx.Event) -> None:
         self._document_tree.split_pages(self._currently_viewed)
 
-    def on_delete(self, event: wx.EVT_BUTTON) -> None:
+    def on_delete(self, event: wx.Event) -> None:
         self._document_tree.delete_selected()
         self._page_view.clear_display()
 
-    def on_page_no(self, event: wx.EVT_SPINCTRL) -> None:
+    def on_page_no(self, event: wx.Event) -> None:
         self._display_node_to_view(page_no=event.Position - 1)
 
-    def on_item_selection(self, event: wx.EVT_TREE_SEL_CHANGED) -> None:
+    def on_item_selection(self, event: wx.Event) -> None:
         selections = self._document_tree.selected_items()
 
         if len(selections) == 1:
@@ -399,19 +399,19 @@ class DocumentEditorController:
         self._documents = DocumentController(self._gui)
         self._user_input = UserInputController(self._gui, self._config)
 
-    def on_submit(self, _event: wx.EVT_BUTTON) -> None:
+    def on_submit(self, _event: wx.Event) -> None:
         submission_document = self._user_input.submission_document()
 
         if submission_document.reference:
             self._documents.submit(submission_document)
 
-    def on_import_files(self, event: wx.EVT_MENU) -> None:
+    def on_import_files(self, event: wx.Event) -> None:
         self._documents.import_files()
 
-    def on_import_as(self, event: wx.EVT_MENU) -> None:
+    def on_import_as(self, event: wx.Event) -> None:
         self._documents.import_as()
 
-    def on_quit(self, event: wx.EVT_MENU = None) -> None:
+    def on_quit(self, event: wx.Event = None) -> None:
         self._exit_to_main_menu()
 
     def on_exit(self, event = None) -> None:

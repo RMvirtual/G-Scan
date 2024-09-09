@@ -21,31 +21,25 @@ class MainMenuController:
         window.set_panel(self._gui)
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
-        dept_options = self._gui.departments.options
-        dept_options.ops.Bind(wx.EVT_BUTTON, self.on_operations)
-        dept_options.pods.Bind(wx.EVT_BUTTON, self.on_credit_control)
-        dept_options.quick_start.Bind(wx.EVT_BUTTON, self.on_quick_start)
+        depts = self._gui.departments
+        ops = self._gui.operations
+        accounts = self._gui.credit_control
 
-        depts_panel = self._gui.departments
-        dept_toolbar =  depts_panel.toolbar
-        dept_toolbar.settings.Bind(wx.EVT_BUTTON, self.on_settings)
-        dept_toolbar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+        widgets_to_handlers = {
+            depts.options.ops: self.on_operations,
+            depts.options.pods: self.on_credit_control,
+            depts.options.quick_start: self.on_quick_start,
+            depts.toolbar.settings: self.on_settings,
+            depts.toolbar.exit: self.on_exit,
+            ops.options.cust_pwork: self.on_customer_paperwork,
+            ops.options.loading_list: self.on_loading_list,
+            accounts.back: self.on_back_to_departments,
+            accounts.options.customer_paperwork_pod: self.on_signed_customer_paperwork,
+            accounts.options.signed_pod: self.on_signed_customer_paperwork    
+        }
 
-        ops_panel = self._gui.operations
-        ops_panel.back.Bind(wx.EVT_BUTTON, self.on_back_to_departments)
-
-        ops_options = ops_panel.options
-        ops_options.cust_pwork.Bind(wx.EVT_BUTTON, self.on_customer_paperwork)
-        ops_options.loading_list.Bind(wx.EVT_BUTTON, self.on_loading_list)
-        
-        cc_panel = self._gui.credit_control
-        cc_panel.back.Bind(wx.EVT_BUTTON, self.on_back_to_departments)
-
-        cc_options = cc_panel.options
-        cc_options.customer_paperwork_pod.Bind(
-            wx.EVT_BUTTON, self.on_signed_customer_paperwork)
-
-        cc_options.signed_pod.Bind(wx.EVT_BUTTON, self.on_signed_pod)
+        for widget, handler in widgets_to_handlers.items():
+            widget.Bind(wx.EVT_BUTTON, handler)
 
         f4_shortcut_id = wx.NewId()
         self._gui.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
@@ -54,7 +48,7 @@ class MainMenuController:
             wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)]))
 
         self._gui.SetFocus()
-
+    
     def on_f4(self, event: wx.Event) -> None:
         if self._gui.operations.IsShown():
             self._gui.view_departments()
@@ -91,7 +85,7 @@ class MainMenuController:
     def on_customer_paperwork(self, event: wx.Event) -> None:
         self._config.document_type = self._config.database.document(
             short_code="customer_paperwork")
-
+       
         self.launch_image_viewer()
 
     def on_loading_list(self, event: wx.Event) -> None:
@@ -117,7 +111,7 @@ class MainMenuController:
 
     def launch_image_viewer(self) -> None:
         self._gui.Close()
-        self._root.launch_image_viewer()
+        self._root.launch_image_viewer(self._config)
 
     def launch_settings(self) -> None:
         self._gui.Close()

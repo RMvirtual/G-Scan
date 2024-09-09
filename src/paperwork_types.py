@@ -1,9 +1,15 @@
+from pathlib import Path
+from PIL import Image
+from io import BytesIO
+
+import pymupdf
 from reportlab.graphics.barcode import code128
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.utils import ImageReader
 
 
 pdfmetrics.registerFont(TTFont("Calibri", "Calibri.ttf"))
@@ -11,25 +17,36 @@ pdfmetrics.registerFont(TTFont("Calibri-Bold", "Calibrib.ttf"))
 
 
 class A4Document:
-    def __init__(self, file_name: str) -> None:
+    def __init__(self, file_name: Path) -> None:
         self.canvas = Canvas(
-            filename=file_name, pagesize=A4, pageCompression=1)
+            filename=str(file_name), pagesize=A4, pageCompression=1)
 
         self.canvas.setFillColorRGB(0, 0, 0)
 
-    def draw_page(self, image_path: str):
-        self.draw_image(image_path=image_path, width_mm=210, height_mm=297)
+    def draw_page(self, image_path: Path):
+        self.draw_image(
+            image_path=image_path, width_mm=210, height_mm=297)
+        
         self.next_page()
 
     def draw_image(
-            self, image_path: str, width_mm: int, height_mm: int,
+            self, image_path: Path, width_mm: int, height_mm: int,
             x: int = 0, y: int = 0) -> None:
+        document = pymupdf.open(image_path)
+        
+        pixmap: pymupdf.Pixmap = document.load_page(0).get_pixmap(
+            matrix=pymupdf.Matrix(2.0, 2.0))
+        
+        image = ImageReader(BytesIO(pixmap.tobytes("png")))
+
         self.canvas.drawImage(
-            image=image_path,
+            image=image,
             x=x, y=y,
             width=width_mm*mm, height=height_mm*mm,
             mask=None, preserveAspectRatio=True
         )
+
+        document.close()
 
     def next_page(self):
         self.canvas.showPage()
