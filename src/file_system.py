@@ -13,9 +13,9 @@ def image_resources_directory() -> Path:
     return root_directory().joinpath("data", "images")
 
 
-def config_directory() -> Path:
-    return root_directory().joinpath("config")
+def data_directory() -> Path:
+    return root_directory().joinpath("data")
 
 
 def user_settings_path() -> Path:
-    return config_directory().joinpath("user_settings.json")
+    return data_directory().joinpath("user_settings.json")

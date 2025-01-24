@@ -10,7 +10,7 @@ from database import JSONDatabase, JSONDatabaseFiles
 
 def main() -> None:
     gui_runtime = wx.App()
-    config_directory = file_system.config_directory()   
+    config_directory = file_system.data_directory()   
     
     database_files = list(map(
         config_directory.joinpath,
