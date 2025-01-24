@@ -1,5 +1,6 @@
 numpy==1.26.2
 Pillow==10.1.0
+pyinstaller==6.11.1
 PyMuPDF==1.24.10
 PyPDF2==3.0.1
 pypiwin32==223

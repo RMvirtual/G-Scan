@@ -1,10 +1,9 @@
 if (-not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
 
-
 $PYTHON_VENV = "$env:DEVENV\tools\python_venv.ps1"
 
 
-Clear-Host; Write-Host "Running."
+Write-Host "Running application from source code."
 
 & $PYTHON_VENV -activate
 $env:GSCAN_ROOT = $env:DEVENV

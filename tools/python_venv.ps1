@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param([switch] $install, [switch] $activate, [switch] $deactivate)
 
-$REQUIREMENTS = "$env:DEVENV\lib\pip_requirements.txt"
+$REQUIREMENTS = "$env:DEVENV\lib\requirements.txt"
 $TARGET = "$env:DEVENV\.venv"
 
 
