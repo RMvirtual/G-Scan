@@ -7,5 +7,9 @@ $PYTHON_VENV = "$env:DEVENV\tools\python_venv.ps1"
 Clear-Host; Write-Host "Running."
 
 & $PYTHON_VENV -activate
+$env:GSCAN_ROOT = $env:DEVENV
+
 python.exe "$env:DEVENV\src\main.py"
+
+$env:GSCAN_ROOT = $NULL
 & $PYTHON_VENV -deactivate

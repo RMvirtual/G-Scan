@@ -1,9 +1,11 @@
+import os
 from pathlib import Path
 
 
 def root_directory() -> Path:
-    """Assumes structure of gscan/bin/file_system.py"""
-
+    if "GSCAN_ROOT" in os.environ:
+        return Path(os.environ["GSCAN_ROOT"])
+    
     return Path(__file__).parent.parent
 
 
