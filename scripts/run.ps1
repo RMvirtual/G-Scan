@@ -3,7 +3,6 @@ param([switch] $src, [switch] $exe)
 
 if (-not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
 
-
 if ($src -and $exe) {
     Write-Host "Must select only one option of -src or -exe."
     exit 1
@@ -34,5 +33,4 @@ elseif ($exe) {
     }
 
     & $exeBinary
-
 }

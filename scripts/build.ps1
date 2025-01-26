@@ -12,6 +12,7 @@ Push-Location $env:DEVENV
 
 pyinstaller "$env:DEVENV\src\main.py" --name "gscan" --onedir --noconfirm `
     --add-data "$env:DEVENV\data\*.json:data" `
+    --add-data "$env:DEVENV\data\images:data\images" `
     $(if ($clean) {"--clean"})
 
 & $PYTHON_VENV -deactivate
