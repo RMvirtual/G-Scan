@@ -1,16 +1,18 @@
-import gui.metrics
+import wx
 
-from root_interface import RootInterface
 from configuration import Configuration
 from controllers.document_editor.editor import DocumentEditorController
 from controllers.main_menu import MainMenuController
 from controllers.settings import SettingsController
 from gui.window import Window
+from root_interface import RootInterface
 
 
 class RootApplication(RootInterface):
     def __init__(self, app_config: Configuration):
-        self.window = Window(*gui.metrics.recommended_metrics())
+        display_width, display_height = wx.DisplaySize()
+        size = (int(display_width/2), int(display_height/1.1))
+        self.window = Window(size, position=wx.Point(size[0],0))
         self._config = app_config
 
     def launch_main_menu(self) -> None:
@@ -25,7 +27,7 @@ class RootApplication(RootInterface):
     def show(self) -> None:
         self.window.Show()
 
-    def close(self, event = None) -> None:
+    def close(self, event: wx.Event = None) -> None:
         self.window.Close()
 
     def exit(self) -> None:

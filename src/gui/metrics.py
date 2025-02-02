@@ -10,10 +10,3 @@ def preserved_scale(image: wx.Image, width: int, height: int) -> tuple[int, int]
         return (height*image_ratio, height)
     
     return (width, width/image_ratio)
-    
-
-def recommended_metrics() -> tuple[tuple[int, int], wx.Point]:
-    width, height = wx.DisplaySize()
-    size = int(width/2), int(height/1.1)
-
-    return size, wx.Point(x=size[0], y=0)
