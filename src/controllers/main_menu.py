@@ -1,7 +1,7 @@
 import wx
 
 from configuration import Configuration
-from gui.main_menu import MainMenu
+from gui.main_menu.main_menu import MainMenu
 from gui.window import Window
 from root_interface import RootInterface
 

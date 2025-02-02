@@ -9,11 +9,11 @@ from root_interface import RootInterface
 
 
 class RootApplication(RootInterface):
-    def __init__(self, app_config: Configuration):
+    def __init__(self, config: Configuration):
         display_width, display_height = wx.DisplaySize()
         size = (int(display_width/2), int(display_height/1.1))
         self.window = Window(size, position=wx.Point(size[0],0))
-        self._config = app_config
+        self._config = config
 
     def launch_main_menu(self) -> None:
         MainMenuController(self, self._config, self.window)
