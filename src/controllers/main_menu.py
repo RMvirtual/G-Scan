@@ -32,11 +32,11 @@ class MainMenuController:
             depts.quick_start_btn: self.on_quick_start,
             depts.settings_btn: self.on_settings,
             depts.exit_btn: self.on_exit,
-            ops.options.cust_pwork: self.on_customer_paperwork,
-            ops.options.loading_list: self.on_loading_list,
-            accounts.back: self.on_back_to_departments,
-            accounts.options.customer_paperwork_pod: self.on_signed_customer_paperwork,
-            accounts.options.signed_pod: self.on_signed_customer_paperwork    
+            ops.cust_pwork: self.on_customer_paperwork,
+            ops.loading_list: self.on_loading_list,
+            accounts.back_btn: self.on_back_to_departments,
+            accounts.customer_paperwork_btn: self.on_signed_customer_paperwork,
+            accounts.standard_btn: self.on_signed_customer_paperwork    
         }
 
         for widget, handler in widgets_to_handlers.items():
