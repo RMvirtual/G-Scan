@@ -1,7 +1,7 @@
 import wx
 
 from gui.main_menu.departments.credit_control import CreditControl
-from gui.main_menu.departments.departments import Departments
+from gui.main_menu.departments.departments import DepartmentsPanel
 from gui.main_menu.departments.operations import Operations
 from gui.main_menu.logo import LogoPanel
 
@@ -11,7 +11,7 @@ class MainMenu(wx.Panel):
         super().__init__(parent)
 
         self.logo = LogoPanel(self)
-        self.departments = Departments(self)
+        self.departments = DepartmentsPanel(self)
         self.operations = Operations(self)
         self.credit_control = CreditControl(self)
 
