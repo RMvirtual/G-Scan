@@ -27,9 +27,9 @@ class MainMenuController:
 
         # Callbacks.
         widgets_to_handlers = {
-            depts.ops: self.on_operations,
-            depts.pods: self.on_credit_control,
-            depts.quick_start: self.on_quick_start,
+            depts.ops_btn: self.on_operations,
+            depts.pods_btn: self.on_credit_control,
+            depts.quick_start_btn: self.on_quick_start,
             depts.settings_btn: self.on_settings,
             depts.exit_btn: self.on_exit,
             ops.options.cust_pwork: self.on_customer_paperwork,
