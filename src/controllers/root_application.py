@@ -2,7 +2,7 @@ import views.metrics
 
 from root_interface import RootInterface
 from configuration import Configuration
-from controllers.document_editor import DocumentEditorController
+from controllers.document_editor.editor import DocumentEditorController
 from controllers.main_menu import MainMenuController
 from controllers.settings import SettingsController
 from views.window import Window

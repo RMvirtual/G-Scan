@@ -25,6 +25,7 @@ class MainMenuController:
         ops = self._gui.operations
         accounts = self._gui.credit_control
 
+        # Callbacks.
         widgets_to_handlers = {
             depts.options.ops: self.on_operations,
             depts.options.pods: self.on_credit_control,
@@ -62,7 +63,7 @@ class MainMenuController:
         self._config.department = None
 
     def on_quick_start(self, event: wx.Event) -> None:
-        self.launch_image_viewer(self._config)
+        self.launch_image_viewer()
 
     def on_operations(self, event: wx.Event) -> None:
         self._config.department = self._config.database.department(

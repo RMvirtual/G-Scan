@@ -20,25 +20,24 @@ class SettingsController:
         self._window = window
 
         # Load settings from configuration.        
-        departments = list(map(
+        settings = config.settings
+
+        department_names = list(map(
             lambda d: d.full_name, self._config.database.all_departments()))
 
-        documents = list(map(
-            lambda d: d.full_name,
-            self._config.settings.department.document_types
-        ))
+        document_names = list(map(
+            lambda d: d.full_name, settings.department.document_types))
 
         dirs_frame = self._gui.directories
-        dirs_frame.scan_directory = self._config.settings.scan_dir
-        dirs_frame.dest_directory = self._config.settings.dest_dir
+        dirs_frame.scan_directory = settings.scan_dir
+        dirs_frame.dest_directory = settings.dest_dir
 
         defaults_frame = self._gui.defaults
-        defaults_frame.department_options = departments
-        defaults_frame.department = self._config.settings.department.full_name
-        defaults_frame.document_options = documents
+        defaults_frame.department_options = department_names
+        defaults_frame.department = settings.department.full_name
+        defaults_frame.document_options = document_names
 
-        defaults_frame.document_type = (
-            self._config.settings.document_type.full_name)
+        defaults_frame.document_type = settings.document_type.full_name
 
         self._window.Layout()
         window.set_panel(self._gui)
@@ -50,8 +49,8 @@ class SettingsController:
         dirs_frame.scan_box.button.Bind(wx.EVT_BUTTON, self.on_scan_dir_browse)
         dirs_frame.dest_box.button.Bind(wx.EVT_BUTTON, self.on_dest_dir_browse)
 
-        self._gui.defaults.department_option.box.Bind(
-            wx.EVT_COMBOBOX, self.on_department_box)
+        defaults_frame.department_option.box.Bind(
+            wx.EVT_COMBOBOX, self.on_department_option_change)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
 
@@ -88,21 +87,19 @@ class SettingsController:
         if directory is not None:
             self._gui.directories.dest_directory = directory
 
-    def on_department_box(self, event: wx.Event = None) -> None:
-        self._refresh_document_options()
+    def on_department_option_change(self, event: wx.Event) -> None:
+        defaults_frame = self._gui.defaults
 
-    def on_close(self, event: wx.Event = None) -> None:
+        department = self._config.database.department(
+            full_name=defaults_frame.department)
+
+        documents = list(map(lambda d: d.full_name, department.document_types))
+        defaults_frame.document_options = documents
+        defaults_frame.document_type = documents[0]
+
+    def on_close(self, event: wx.Event) -> None:
         self._gui.Destroy()
 
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
-
-    def _refresh_document_options(self) -> None:
-        department = self._config.database.department(
-            full_name=self._gui.defaults.department)
-
-        documents = list(map(lambda d: d.full_name, department.document_types))
-
-        self._gui.defaults.document_options = documents
-        self._gui.defaults.document_type = documents[0]
