@@ -1,17 +1,33 @@
 import wx
 
-from gui.main_menu.departments.settings_toolbar import SettingsToolbar
-
 
 class Departments(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent)
-        self.options = DepartmentOptions(self)
-        self.toolbar = SettingsToolbar(self)
 
+        self.options = DepartmentOptions(self)
+        font = wx.Font(wx.FontInfo(pointSize=30)).Bold()
+
+        self.settings_btn = wx.Button(self, label="Settings")
+        self.settings_btn.SetFont(font)
+
+        self.exit_btn = wx.Button(self, label="Exit")
+        self.exit_btn.SetFont(font)
+
+        # Sizer layout.
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(self.options, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)
-        sizer.Add(self.toolbar, proportion=0, flag=wx.ALIGN_RIGHT)
+
+        sizer.Add(
+            self.settings_btn, proportion=0, flag=wx.ALL|wx.ALIGN_RIGHT, 
+            border=15
+        )
+
+        sizer.Add(
+            self.exit_btn, proportion=0, flag=wx.ALL|wx.ALIGN_RIGHT, 
+            border=15
+        )
+
         self.SetSizer(sizer)
 
 
