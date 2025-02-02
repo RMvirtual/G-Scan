@@ -5,7 +5,7 @@ class DefaultsPanel(wx.Panel):
     def __init__(self, parent: wx.Window) -> None:
         super().__init__(parent)
 
-        self.title = wx.StaticText(self, label="Defaults")
+        self.title_lbl = wx.StaticText(self, label="Defaults")
         self.departments_lbl = wx.StaticText(self, label="Departments")
         
         self.department_box = wx.ComboBox(
@@ -16,7 +16,7 @@ class DefaultsPanel(wx.Panel):
         self.document_box = wx.ComboBox(
             self, value="", choices=[""], style=wx.CB_READONLY)
 
-        self.title.SetFont(wx.Font(wx.FontInfo(pointSize=20)).Bold())
+        self.title_lbl.SetFont(wx.Font(wx.FontInfo(pointSize=20)).Bold())
 
         all_widgets: list[wx.Button|wx.ComboBox] = [
             self.departments_lbl, self.department_box, self.document_lbl, 
@@ -31,7 +31,7 @@ class DefaultsPanel(wx.Panel):
         sizer = wx.GridBagSizer(vgap=15, hgap=30)
         
         left_flag = wx.ALIGN_LEFT
-        sizer.Add(self.title, pos=(0,0), span=(1,2), flag=left_flag)
+        sizer.Add(self.title_lbl, pos=(0,0), span=(1,2), flag=left_flag)
         sizer.Add(self.departments_lbl, pos=(1,0), flag=left_flag)
         sizer.Add(self.document_lbl, pos=(1,1), flag=left_flag)
             

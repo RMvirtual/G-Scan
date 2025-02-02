@@ -46,8 +46,8 @@ class SettingsController:
         self._gui.save_btn.Bind(wx.EVT_BUTTON, self.on_save)
         self._gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
 
-        dirs_frame.scan_box.button.Bind(wx.EVT_BUTTON, self.on_scan_dir_browse)
-        dirs_frame.dest_box.button.Bind(wx.EVT_BUTTON, self.on_dest_dir_browse)
+        dirs_frame.scan_dir_button.Bind(wx.EVT_BUTTON, self.on_scan_dir_browse)
+        dirs_frame.dest_dir_button.Bind(wx.EVT_BUTTON, self.on_dest_dir_browse)
 
         defaults_frame.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_option_change)
