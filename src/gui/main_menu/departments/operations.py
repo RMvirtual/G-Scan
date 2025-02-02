@@ -1,6 +1,8 @@
 import wx
 
 
+# TODO: Mostly duplicated by the CreditControlPanel.
+
 class OperationsPanel(wx.Panel):
     def __init__(self, parent: wx.Frame):
         super().__init__(parent)
