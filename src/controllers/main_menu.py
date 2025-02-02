@@ -1,9 +1,9 @@
 import wx
 
 from configuration import Configuration
-from root_interface import RootInterface
 from gui.main_menu import MainMenu
 from gui.window import Window
+from root_interface import RootInterface
 
 
 class MainMenuController:

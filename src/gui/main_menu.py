@@ -15,6 +15,7 @@ class Logo(wx.Panel):
         self.bitmap = wx.StaticBitmap(
             self, bitmap=self.image.ConvertToBitmap(depth=32))
 
+        # Sizer layout.
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(window=self.bitmap, proportion=0, flag=wx.EXPAND, border=0)
         self.SetSizer(sizer)
@@ -24,7 +25,7 @@ class Logo(wx.Panel):
     def on_resize(self, _event: wx.Event = None) -> None:
         width, height = self.Size
         
-        new_width, new_height = gui.metrics.scale_with_ratio(
+        new_width, new_height = gui.metrics.preserved_scale(
             self.image, width, height)
 
         scaled_image = self.image.Scale(
@@ -45,6 +46,7 @@ class MainMenu(wx.Panel):
         self._subpanels = (
             self.departments, self.operations, self.credit_control)
 
+        # Grid layout.
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(self.logo, proportion=2, flag=wx.EXPAND)
 

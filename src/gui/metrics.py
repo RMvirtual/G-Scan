@@ -1,31 +1,19 @@
 import wx
 
 
-def aspect_ratio(width: int, height: int) -> float:
-    return float(width) / float(height)
+def preserved_scale(image: wx.Image, width: int, height: int) -> tuple[int, int]:
+    image_ratio = float(image.GetWidth()) / float(image.GetHeight())
+    requested_ratio = float(width) / float(height)
+    is_too_wide = requested_ratio > image_ratio
 
-
-def scale_to_ratio(ratio: float, width: int, height: int) -> tuple[int, int]:
-    too_wide = aspect_ratio(width, height) > ratio
-
-    return (height*ratio, height) if too_wide else (width, width/ratio)
-
-def scale_with_ratio(
-        image: wx.Image, new_width: int, new_height: int) -> tuple[int, int]:
-    return scale_to_ratio(image_aspect_ratio(image), new_width, new_height)
-
-
-def image_aspect_ratio(image: wx.Image) -> float:
-    return aspect_ratio(image.GetWidth(), image.GetHeight())
-
+    if is_too_wide:
+        return (height*image_ratio, height)
+    
+    return (width, width/image_ratio)
+    
 
 def recommended_metrics() -> tuple[tuple[int, int], wx.Point]:
-    size = scaled_sizes()
+    width, height = wx.DisplaySize()
+    size = int(width/2), int(height/1.1)
 
     return size, wx.Point(x=size[0], y=0)
-
-
-def scaled_sizes() -> tuple[int, int]:
-    width, height = wx.DisplaySize()
-
-    return int(width/2), int(height/1.1)

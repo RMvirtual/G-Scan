@@ -2,10 +2,10 @@ import wx
 
 from configuration import Configuration
 from controllers import workflows
+from gui.settings.settings import Settings
+from gui.window import Window
 from root_interface import RootInterface
 from user import UserSettings
-from gui import Settings
-from gui.window import Window
 
 
 class SettingsController:

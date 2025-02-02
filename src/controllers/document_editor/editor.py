@@ -4,7 +4,7 @@ from configuration import Configuration
 from controllers.document_editor.document import DocumentController
 from controllers.document_editor.user_input import UserInputController
 from root_interface import RootInterface
-from gui import Viewer
+from gui.document_editor import Viewer
 from gui.window import Window
 
 
