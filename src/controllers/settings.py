@@ -1,6 +1,7 @@
 import wx
 
 from configuration import Configuration
+from controllers import workflows
 from root_interface import RootInterface
 from user import UserSettings
 from views import Settings
@@ -47,15 +48,15 @@ class SettingsController:
         self._exit_to_main_menu()
 
     def on_scan_dir_browse(self, event: wx.Event = None) -> None:
-        directory = self._directory_dialog()
+        directory = workflows.request_directory()
 
-        if directory:
+        if directory is not None:
             self._gui.directories.scan_directory = directory
 
     def on_dest_dir_browse(self, event: wx.Event = None) -> None:
-        directory = self._directory_dialog()
+        directory = workflows.request_directory()
 
-        if directory:
+        if directory is not None:
             self._gui.directories.dest_directory = directory
 
     def on_department_box(self, event: wx.Event = None) -> None:
@@ -109,10 +110,3 @@ class SettingsController:
                 full_name=self._gui.defaults.document_type)
         )
 
-    @staticmethod
-    def _directory_dialog() -> str|None:
-        with wx.DirDialog(None) as browser:
-            return (
-                None if browser.ShowModal() == wx.ID_CANCEL
-                else browser.GetPath()
-            )
