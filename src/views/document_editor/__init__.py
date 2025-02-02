@@ -1,2 +1,0 @@
-from views.document_editor.viewer import Viewer
-from views.document_editor.document_tree import DocumentTreeCtrl

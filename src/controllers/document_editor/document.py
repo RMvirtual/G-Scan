@@ -6,7 +6,7 @@ from controllers.document_editor.page_view import PageViewController
 from controllers.document_editor.user_input import SubmissionDocument
 from data_structures import AbstractNode
 from document_tree import PendingLeaf
-from views import Viewer
+from gui import Viewer
 
 
 class DocumentController:

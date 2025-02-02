@@ -4,8 +4,8 @@ from configuration import Configuration
 from controllers.document_editor.document import DocumentController
 from controllers.document_editor.user_input import UserInputController
 from root_interface import RootInterface
-from views import Viewer
-from views.window import Window
+from gui import Viewer
+from gui.window import Window
 
 
 class DocumentEditorController:

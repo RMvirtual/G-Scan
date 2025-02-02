@@ -4,8 +4,8 @@ from configuration import Configuration
 from controllers import workflows
 from root_interface import RootInterface
 from user import UserSettings
-from views import Settings
-from views.window import Window
+from gui import Settings
+from gui.window import Window
 
 
 class SettingsController:

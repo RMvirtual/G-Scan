@@ -1,8 +1,8 @@
 import wx
 
 import file_system
-import views.metrics
-from views.departments import CreditControl, Departments, Operations
+import gui.metrics
+from gui.departments import CreditControl, Departments, Operations
 
 
 class Logo(wx.Panel):
@@ -24,7 +24,7 @@ class Logo(wx.Panel):
     def on_resize(self, _event: wx.Event = None) -> None:
         width, height = self.Size
         
-        new_width, new_height = views.metrics.scale_with_ratio(
+        new_width, new_height = gui.metrics.scale_with_ratio(
             self.image, width, height)
 
         scaled_image = self.image.Scale(

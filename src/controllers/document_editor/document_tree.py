@@ -7,8 +7,8 @@ from data_structures import AbstractNode, AbstractLeaf
 from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
 from document_type import DocumentType
 from job_references import JobReference
-from views.document_editor.document_tree import DocumentTreeCtrl
-from views.page_range_dialog import PageRangeDialog
+from gui.document_editor.document_tree import DocumentTreeCtrl
+from gui.page_range_dialog import PageRangeDialog
 
 
 class DocumentTreeController:

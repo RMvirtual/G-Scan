@@ -5,7 +5,7 @@ import wx
 from configuration import Configuration
 from document_type import DocumentType
 from job_references import JobReference
-from views import Viewer
+from gui import Viewer
 
 
 @dataclasses.dataclass

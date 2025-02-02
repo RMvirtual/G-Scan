@@ -1,16 +1,16 @@
-import views.metrics
+import gui.metrics
 
 from root_interface import RootInterface
 from configuration import Configuration
 from controllers.document_editor.editor import DocumentEditorController
 from controllers.main_menu import MainMenuController
 from controllers.settings import SettingsController
-from views.window import Window
+from gui.window import Window
 
 
 class RootApplication(RootInterface):
     def __init__(self, app_config: Configuration):
-        self.window = Window(*views.metrics.recommended_metrics())
+        self.window = Window(*gui.metrics.recommended_metrics())
         self._config = app_config
 
     def launch_main_menu(self) -> None:
