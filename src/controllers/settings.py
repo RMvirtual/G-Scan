@@ -43,13 +43,13 @@ class SettingsController:
         window.set_panel(self._gui)
 
         # Bind callbacks.
-        self._gui.save.Bind(wx.EVT_BUTTON, self.on_save)
-        self._gui.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+        self._gui.save_btn.Bind(wx.EVT_BUTTON, self.on_save)
+        self._gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
 
         dirs_frame.scan_box.button.Bind(wx.EVT_BUTTON, self.on_scan_dir_browse)
         dirs_frame.dest_box.button.Bind(wx.EVT_BUTTON, self.on_dest_dir_browse)
 
-        defaults_frame.department_option.box.Bind(
+        defaults_frame.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_option_change)
 
         self._gui.Bind(wx.EVT_CLOSE, self.on_close)
