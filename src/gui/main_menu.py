@@ -1,7 +1,6 @@
 import wx
 
 import file_system
-import gui.metrics
 from gui.departments import CreditControl, Departments, Operations
 
 
@@ -22,12 +21,19 @@ class Logo(wx.Panel):
 
         self.Bind(wx.EVT_SIZE, self.on_resize)
 
-    def on_resize(self, _event: wx.Event = None) -> None:
-        width, height = self.Size
-        
-        new_width, new_height = gui.metrics.preserved_scale(
-            self.image, width, height)
+    def on_resize(self, event: wx.Event) -> None:
+        image_ratio = float(self.image.GetWidth()) / float(self.image.GetHeight())
 
+        width, height = self.Size
+        requested_ratio = float(width) / float(height)
+        is_too_wide = requested_ratio > image_ratio
+
+        if is_too_wide:
+            new_width, new_height = (height*image_ratio, height)
+        
+        else:
+            new_width, new_height = (width, width/image_ratio)
+        
         scaled_image = self.image.Scale(
             int(new_width), int(new_height), wx.IMAGE_QUALITY_NORMAL)
 
