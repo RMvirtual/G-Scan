@@ -1,12 +1,12 @@
 import wx
 
+from controllers import workflows
 from controllers.document_editor.document_tree import DocumentTreeController
 from controllers.document_editor.page_view import PageViewController
 from controllers.document_editor.user_input import SubmissionDocument
 from data_structures import AbstractNode
 from document_tree import PendingLeaf
 from views import Viewer
-from views.file_import_dialog import file_import_dialog
 
 
 class DocumentController:
@@ -24,9 +24,8 @@ class DocumentController:
         self._currently_viewed = None
 
     def import_files(self):
-        # With this, do we actually need a scan directory??
-
-        files_to_import = file_import_dialog()
+        # TODO: With this, do we actually need a scan directory??
+        files_to_import = workflows.request_files()
 
         if files_to_import:
             results = self.add_pending_files(paths=files_to_import)
