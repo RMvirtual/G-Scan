@@ -3,8 +3,15 @@ import json
 from pathlib import Path
 
 from departments import Department 
-from document_type import DocumentType
-from user import UserSettings
+from documents import DocumentType
+
+
+@dataclasses.dataclass
+class UserSettings:
+    username: str = ""
+    dest_dir: str = ""
+    department: Department|None = None
+    document_type: DocumentType|None = None
 
 
 JSONFormat = dict[str, dict[str, str|list[str]]]
@@ -120,8 +127,7 @@ class JSONDatabase:
     def _serialise_user_settings(settings: UserSettings) -> JSONFormat:
         return {
             settings.username: {
-                "scan_directory": settings.scan_dir,
-                "dest_directory": settings.dest_dir,
+                "output_directory": settings.dest_dir,
                 "department": settings.department.short_code,
                 "document_type": settings.document_type.short_code
             }
@@ -138,8 +144,7 @@ class JSONDatabase:
     ) -> UserSettings:
         return UserSettings(
             username,
-            values["scan_directory"],
-            values["dest_directory"],
+            values["output_directory"],
             self.department(short_code=values["department"]),
             self.document(short_code=values["document_type"])
         )

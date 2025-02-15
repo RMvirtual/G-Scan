@@ -1,4 +1,6 @@
 from database import JSONDatabase
+from departments import Department
+from documents import DocumentType
 
 
 class Configuration:
@@ -10,7 +12,6 @@ class Configuration:
             else database.load_user_settings(username)
         )
 
-        self.scan_directory = self.settings.scan_dir
         self.dest_directory = self.settings.dest_dir
         self.department = self.settings.department
         self.document_type = self.settings.document_type
@@ -39,7 +40,7 @@ class Configuration:
                 full_name)
 
     def _assert_one_parameter_used(
-            short_code: str|None = None, full_name: str|None = None) -> None:
+            short_code: str|None, full_name: str|None) -> None:
         if not (short_code or full_name):
             raise ValueError("Neither short code or full name parameter used.")
         

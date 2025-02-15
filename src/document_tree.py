@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from data_structures import AbstractBranch, AbstractLeaf, AbstractRoot
-from document_type import DocumentType
+from documents import DocumentType
 from job_references import JobReference
 
 

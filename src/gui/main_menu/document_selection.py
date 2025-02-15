@@ -1,6 +1,6 @@
 import wx
 
-from document_type import DocumentType
+from documents import DocumentType
 
 
 class DocumentSelectionPanel(wx.Panel):

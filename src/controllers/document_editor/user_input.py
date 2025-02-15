@@ -3,7 +3,7 @@ import dataclasses
 import wx
 
 from configuration import Configuration
-from document_type import DocumentType
+from documents import DocumentType
 from gui.document_editor import Viewer
 from job_references import JobReference
 

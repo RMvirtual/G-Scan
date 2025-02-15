@@ -1,6 +1,6 @@
 import dataclasses
 
-from document_type import DocumentType
+from documents import DocumentType
 
 
 @dataclasses.dataclass(frozen=True)
