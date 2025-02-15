@@ -13,21 +13,20 @@ class DocumentSelectionPanel(wx.Panel):
 
         for document in document_types:
             self.option_btns[document] = wx.Button(
-                self, label=document.full_name)
+                self, label=document.full_name, style=wx.BU_EXACTFIT)
 
         self.back = wx.Button(parent=self, label="Back")
 
-        font = wx.Font(wx.FontInfo(pointSize=30)).Bold()
+        font = wx.Font(wx.FontInfo(pointSize=16)).Bold()
 
         for button in *self.option_btns.values(), self.back:
             button.SetFont(font)
 
         # Sizer layout.
-        doc_row_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        flags = wx.LEFT|wx.RIGHT|wx.ALIGN_TOP
+        doc_row_sizer = wx.WrapSizer()
         
         for button in self.option_btns.values():
-            doc_row_sizer.Add(button, proportion=0, flag=flags, border=15)
+            doc_row_sizer.Add(button, proportion=1, flag=wx.ALL, border=15)
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(doc_row_sizer, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)

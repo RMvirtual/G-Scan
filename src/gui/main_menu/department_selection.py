@@ -11,8 +11,8 @@ class DepartmentSelectionPanel(wx.Panel):
         self.dept_btns: dict[str, wx.Button] = {}
 
         for department in departments:
-            dept_btn = wx.Button(self, label=department.short_name)
-            self.dept_btns[department.short_code] = dept_btn
+            self.dept_btns[department.short_code] = wx.Button(
+                self, label=department.short_name, style=wx.BU_EXACTFIT)
 
         self.quick_start_btn = wx.Button(self, label="Quick Start")
         self.settings_btn = wx.Button(self, label="Settings")
@@ -29,11 +29,10 @@ class DepartmentSelectionPanel(wx.Panel):
             button.SetFont(font)
 
         # Sizer layout.
-        depts_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        depts_flag = wx.LEFT|wx.RIGHT|wx.ALIGN_TOP
+        depts_sizer = wx.WrapSizer(orient=wx.HORIZONTAL)
 
         for button in *self.dept_btns.values(), self.quick_start_btn:
-            depts_sizer.Add(button, proportion=0, flag=depts_flag, border=15)
+            depts_sizer.Add(button, proportion=0, flag=wx.ALL, border=15)
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
         sizer.Add(depts_sizer, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)
