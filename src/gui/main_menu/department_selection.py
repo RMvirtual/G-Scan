@@ -1,8 +1,9 @@
 import wx
+
 from departments import Department
 
 
-class DepartmentsPanel(wx.Panel):
+class DepartmentSelectionPanel(wx.Panel):
     def __init__(
             self, parent: wx.Frame, departments: list[Department]) -> None:
         super().__init__(parent)

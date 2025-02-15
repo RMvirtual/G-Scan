@@ -1,8 +1,8 @@
 import wx
 
-from gui.main_menu.departments.departments import DepartmentsPanel
-from gui.main_menu.logo import LogoPanel
 from departments import Department
+from gui.main_menu.department_selection import DepartmentSelectionPanel
+from gui.main_menu.logo import LogoPanel
 
 
 class MainMenu(wx.Panel):
@@ -10,7 +10,7 @@ class MainMenu(wx.Panel):
         super().__init__(parent)
 
         self.logo = LogoPanel(self)
-        self.panel = DepartmentsPanel(self, departments)
+        self.panel = DepartmentSelectionPanel(self, departments)
 
         # Sizer layout.
         self.sizer = wx.BoxSizer(orient=wx.VERTICAL)

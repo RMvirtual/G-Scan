@@ -6,9 +6,9 @@ from configuration import Configuration
 from controllers.selector import AppSelector
 from departments import Department
 from document_type import DocumentType
+from gui.main_menu.document_selection import DocumentSelectionPanel
 from gui.main_menu.main_menu import MainMenu
 from gui.window import Window
-from gui.main_menu.departments.doc_select_panel import DocumentSelectionPanel
 
 
 class MainMenuController:
