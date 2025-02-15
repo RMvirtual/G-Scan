@@ -13,11 +13,12 @@ if (-not $src -and -not $exe) {$src = $true}
 if ($src) {
     Write-Host "Running application from source code."
 
+    $env:PYTHONPATH = "$env:DEVENV\src"
     $pythonVenv = "$env:DEVENV\tools\python_venv.ps1"
     & $pythonVenv -activate
+    
     $env:GSCAN_ROOT = $env:DEVENV
-
-    python.exe "$env:DEVENV\src\main.py"
+    python.exe "$env:DEVENV\src\controllers\app.py"
 
     $env:GSCAN_ROOT = $NULL
     & $pythonVenv -deactivate

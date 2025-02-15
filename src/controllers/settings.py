@@ -4,13 +4,13 @@ from configuration import Configuration
 from controllers import workflows
 from gui.settings.settings import Settings
 from gui.window import Window
-from root_interface import RootInterface
+from controllers.selector import AppSelector
 from user import UserSettings
 
 
 class SettingsController:
     def __init__(
-            self, root_application: RootInterface, 
+            self, root_application: AppSelector, 
             config: Configuration,
             window: Window
     ) -> None:

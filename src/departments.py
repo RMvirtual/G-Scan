@@ -3,7 +3,7 @@ import dataclasses
 from document_type import DocumentType
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Department:
     short_code: str
     full_name: str

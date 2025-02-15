@@ -21,7 +21,8 @@ class LogoPanel(wx.Panel):
         self.Bind(wx.EVT_SIZE, self.on_resize)
 
     def on_resize(self, event: wx.Event) -> None:
-        image_ratio = float(self.image.GetWidth()) / float(self.image.GetHeight())
+        image_ratio = float(
+            self.image.GetWidth()) / float(self.image.GetHeight())
 
         width, height = self.Size
         requested_ratio = float(width) / float(height)

@@ -2,7 +2,7 @@ import abc
 from configuration import Configuration
 
 
-class RootInterface(abc.ABC):
+class AppSelector(abc.ABC):
     @abc.abstractmethod
     def exit(self) -> None:
         ...

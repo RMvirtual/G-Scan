@@ -1,81 +1,69 @@
+from typing import Callable
+
 import wx
 
 from configuration import Configuration
+from controllers.selector import AppSelector
+from departments import Department
+from document_type import DocumentType
 from gui.main_menu.main_menu import MainMenu
 from gui.window import Window
-from root_interface import RootInterface
+from gui.main_menu.departments.doc_select_panel import DocumentSelectionPanel
 
 
 class MainMenuController:
     def __init__(
-            self, root_application: RootInterface,
-            app_config: Configuration,
-            window: Window
+            self, root: AppSelector, config: Configuration, window: Window
     ) -> None:
-        self._root = root_application
-        self._config = app_config
+        self.root = root
+        self.config = config
+        self.panel = MainMenu(window, config.departments)
 
-        self._gui = MainMenu(window)
-
-        # Could move this out of the constructor maybe??
-        window.set_panel(self._gui)
-        self._gui.Bind(wx.EVT_CLOSE, self.on_close)
-
-        depts = self._gui.departments
-        ops = self._gui.operations
-        accounts = self._gui.credit_control
+        window.set_panel(self.panel)
 
         # Callbacks.
-        widgets_to_handlers = {
-            depts.ops_btn: self.on_operations,
-            depts.pods_btn: self.on_credit_control,
-            depts.quick_start_btn: self.on_quick_start,
-            depts.settings_btn: self.on_settings,
-            depts.exit_btn: self.on_exit,
-            ops.cust_pwork: self.on_customer_paperwork,
-            ops.loading_list: self.on_loading_list,
-            accounts.back_btn: self.on_back_to_departments,
-            accounts.customer_paperwork_btn: self.on_signed_customer_paperwork,
-            accounts.standard_btn: self.on_signed_customer_paperwork    
-        }
+        self.panel.Bind(wx.EVT_CLOSE, self.on_close)
+        
+        depts_panel = self.panel.panel
+        dept_buttons = depts_panel.dept_btns
 
-        for widget, handler in widgets_to_handlers.items():
-            widget.Bind(wx.EVT_BUTTON, handler)
+        for department in self.config.departments:
+            dept_buttons[department.short_code].Bind(
+                wx.EVT_BUTTON, self._department_selection_lambda(department))
+
+        depts_panel.quick_start_btn.Bind(wx.EVT_BUTTON, self.on_quick_start)
+        depts_panel.settings_btn.Bind(wx.EVT_BUTTON, self.on_settings)
+        depts_panel.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
 
         f4_shortcut_id = wx.NewId()
-        self._gui.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
+        self.panel.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
 
-        self._gui.SetAcceleratorTable(wx.AcceleratorTable([(
+        self.panel.SetAcceleratorTable(wx.AcceleratorTable([(
             wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)]))
 
-        self._gui.SetFocus()
+        self.panel.SetFocus()
     
     def on_f4(self, event: wx.Event) -> None:
-        if self._gui.operations.IsShown():
-            self._gui.view_departments()
-
-            return
-
         self.launch_exit()
 
+    def on_department_selection(
+            self, event: wx.Event, department: Department) -> None:
+        doc_select_panel = DocumentSelectionPanel(
+            self.panel, department.document_types)
+        
+        self.panel.switch_to(doc_select_panel)
+
+        # Setup callbacks to new department window.
+        for document in department.document_types:
+            doc_btn = doc_select_panel.option_btns[document] 
+            callback = self._final_selection_lambda(department, document)
+            doc_btn.Bind(wx.EVT_BUTTON, callback)
+
     def on_back_to_departments(self, event: wx.Event) -> None:
-        self._gui.view_departments()
-        self._config.department = None
+        self.config.department = None
 
     def on_quick_start(self, event: wx.Event) -> None:
         self.launch_image_viewer()
-
-    def on_operations(self, event: wx.Event) -> None:
-        self._config.department = self._config.database.department(
-            short_code="ops")
-        
-        self._gui.view_ops()
-
-    def on_credit_control(self, event: wx.Event) -> None:
-        self._config.department = self._config.database.department(
-            short_code="pods")
-
-        self._gui.view_credit_control()
 
     def on_exit(self, event: wx.Event) -> None:
         self.launch_exit()
@@ -83,41 +71,51 @@ class MainMenuController:
     def on_settings(self, event: wx.Event) -> None:
         self.launch_settings()
 
-    def on_customer_paperwork(self, event: wx.Event) -> None:
-        self._config.document_type = self._config.database.document(
-            short_code="customer_paperwork")
-       
-        self.launch_image_viewer()
-
-    def on_loading_list(self, event: wx.Event) -> None:
-        self._config.document_type = self._config.database.document(
-            short_code="loading_list")
-        
-        self.launch_image_viewer()
-
-    def on_signed_pod(self, event: wx.Event) -> None:
-        self._config.document_type = self._config.database.document(
-            short_code="standard_delivery_note")
-
-        self.launch_image_viewer()
-
-    def on_signed_customer_paperwork(self, event: wx.Event) -> None:
-        self._config.document_type = self._config.database.document(
-            short_code="customer_paperwork_signed")
-
-        self.launch_image_viewer()
-
     def on_close(self, event: wx.Event) -> None:
-        self._gui.Destroy()
+        self.panel.Destroy()
 
     def launch_image_viewer(self) -> None:
-        self._gui.Close()
-        self._root.launch_image_viewer(self._config)
+        self.panel.Close()
+        self.root.launch_image_viewer(self.config)
 
     def launch_settings(self) -> None:
-        self._gui.Close()
-        self._root.launch_settings()
+        self.panel.Close()
+        self.root.launch_settings()
 
     def launch_exit(self) -> None:
-        self._gui.Close()
-        self._root.exit()
+        self.panel.Close()
+        self.root.exit()
+
+    def on_selection(
+            self, event: wx.Event, department: Department, 
+            document: DocumentType
+    ) -> None:
+        self.config.department = department
+        self.config.document_type = document
+
+        self.launch_image_viewer()
+
+    def _final_selection_lambda(
+            self, department: Department, document: DocumentType
+    ) -> Callable[[wx.Event], None]:
+        """Used to create lambdas referencing specific departments 
+        and documents within a loop as referencing specific departments 
+        but without using the department as a lambda parameter will just
+        end up updating all the lambdas to use the last department 
+        rather than a self-contained lambda for each one. 
+        Not just a hacky misunderstanding of lambdas.
+        """
+        return lambda event: self.on_selection(event, department, document)
+
+    def _department_selection_lambda(
+            self, department: Department) -> Callable[[wx.Event], None]:
+        """Used to create lambdas referencing specific departments 
+        as when trying to create multiple lambdas via a loop 
+        referencing specific departments but without using the 
+        department as a lambda parameter will just end up updating all 
+        the lambdas to use the last department rather than a 
+        self-contained lambda for each one. 
+        Not just a hacky misunderstanding of lambdas.
+        """
+        return lambda event: self.on_department_selection(event, department)
+

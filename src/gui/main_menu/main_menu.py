@@ -1,49 +1,34 @@
 import wx
 
-from gui.main_menu.departments.credit_control import CreditControlPanel
 from gui.main_menu.departments.departments import DepartmentsPanel
-from gui.main_menu.departments.operations import OperationsPanel
 from gui.main_menu.logo import LogoPanel
+from departments import Department
 
 
 class MainMenu(wx.Panel):
-    def __init__(self, parent: wx.Frame) -> None:
+    def __init__(self, parent: wx.Frame, departments: list[Department]) -> None:
         super().__init__(parent)
 
         self.logo = LogoPanel(self)
-        self.departments = DepartmentsPanel(self)
-        self.operations = OperationsPanel(self)
-        self.credit_control = CreditControlPanel(self)
-
-        self._subpanels = (
-            self.departments, self.operations, self.credit_control)
+        self.panel = DepartmentsPanel(self, departments)
 
         # Sizer layout.
-        sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(self.logo, proportion=2, flag=wx.EXPAND)
+        self.sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        self.sizer.Add(self.logo, proportion=2, flag=wx.EXPAND)
+        self.sizer.Add(self.panel, proportion=3, flag=wx.EXPAND)
 
-        for panel in self._subpanels:
-            sizer.Add(panel, proportion=3, flag=wx.EXPAND)
-
-        self.SetSizer(sizer)
+        self.SetSizer(self.sizer)
         self.SetBackgroundColour(colour=wx.WHITE)
-        self._switch_to(self.departments)
 
-    def view_departments(self) -> None:
-        self._switch_to(self.departments)
+    def switch_to(self, new_panel: wx.Panel) -> None:
+        self.sizer.Clear()
+        self.panel.Destroy()
+        self.panel = new_panel
 
-    def view_ops(self) -> None:
-        self._switch_to(self.operations)
+        # Sizer layout.
+        self.sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        self.sizer.Add(self.logo, proportion=2, flag=wx.EXPAND)
+        self.sizer.Add(self.panel, proportion=3, flag=wx.EXPAND)
 
-    def view_credit_control(self) -> None:
-        self._switch_to(self.credit_control)
-
-    def _switch_to(self, subpanel: wx.Panel) -> None:
-        other_panels = filter(
-            lambda panel: panel is not subpanel, self._subpanels)
-        
-        for panel in other_panels:
-            panel.Hide()
-
-        subpanel.Show()
+        self.SetSizer(self.sizer)
         self.Layout()
