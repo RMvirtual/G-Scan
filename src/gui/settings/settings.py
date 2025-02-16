@@ -5,8 +5,8 @@ from gui.settings.directories import DirectoriesPanel
 
 
 class Settings(wx.Panel):
-    def __init__(self, window: wx.Frame) -> None:
-        super().__init__(window)
+    def __init__(self, parent: wx.Frame) -> None:
+        super().__init__(parent)
 
         self.title_txt = wx.StaticText(self, label="Settings")
         self.directories = DirectoriesPanel(self)

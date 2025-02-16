@@ -1,6 +1,4 @@
 from database import JSONDatabase
-from departments import Department
-from documents import DocumentType
 
 
 class Configuration:

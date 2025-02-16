@@ -15,18 +15,17 @@ class SettingsController:
     ) -> None:
         self.app = app
         self.gui = Settings(window)
-        self.window = window
         self.user_settings = user_settings
         self.dept_options = dept_options
 
         # Load settings from configuration.        
         self.gui.directories.output_dir_entry.SetValue(user_settings.output_dir)
 
-        dept_names = list(map(lambda d: d.full_name, dept_options))        
+        dept_names = list(map(lambda d: d.full_name, self.dept_options))        
         self.gui.defaults.dept_box.SetItems(dept_names)
         self.gui.defaults.dept_box.SetValue(user_settings.department.full_name)
 
-        self.update_doc_options(user_settings.department)
+        self.update_document_options(user_settings.department)
 
         # Bind callbacks.
         self.gui.save_btn.Bind(wx.EVT_BUTTON, self.on_save)
@@ -41,34 +40,22 @@ class SettingsController:
         self.gui.Bind(wx.EVT_CLOSE, self.on_close)
 
     def on_save(self, event: wx.Event) -> None:
-        department_value = self.gui.defaults.dept_box.GetValue()
+        dept_value: str = self.gui.defaults.dept_box.GetValue()
 
-        department_selection: list[Department] = list(filter(
-            lambda d: d.full_name == department_value, self.dept_options))
+        dept = list(filter(
+            lambda d: d.full_name == dept_value, self.dept_options))[0]
         
-        if not department_selection:
-            return
-        
-        default_department = department_selection[0]
         document_value = self.gui.defaults.doc_box.GetValue()
 
-        document_selection = list(filter(
-            lambda d: d.full_name == document_value, 
-            default_department.document_types
-        ))
+        document = list(filter(
+            lambda d: d.full_name == document_value, dept.document_types))[0]
         
-        if not document_selection:
-            return
-
-        default_document = document_selection[0]
         output_directory = self.gui.directories.output_dir_entry.GetValue()
 
-        new_settings = UserSettings(
-            self.user_settings.username, output_directory, default_department, 
-            default_document
-        )
+        settings = UserSettings(
+            self.user_settings.username, output_directory, dept, document)
 
-        self.app.update_user_settings(new_settings)
+        self.app.update_user_settings(settings)
         self.exit_to_main_menu()
 
     def on_exit(self, event: wx.Event) -> None:
@@ -86,14 +73,14 @@ class SettingsController:
         department = [
             d for d in self.dept_options if d.full_name == department_value][0]
 
-        self.update_doc_options(department)
+        self.update_document_options(department)
 
-    def update_doc_options(self, department: Department) -> None:
+    def update_document_options(self, department: Department) -> None:
         self.gui.defaults.dept_box.SetValue(department.full_name)
-        documents = list(map(lambda d: d.full_name, department.document_types))
+        doc_names = list(map(lambda d: d.full_name, department.document_types))
         
-        self.gui.defaults.doc_box.SetItems(documents)
-        self.gui.defaults.doc_box.SetValue(documents[0])
+        self.gui.defaults.doc_box.SetItems(doc_names)
+        self.gui.defaults.doc_box.SetValue(doc_names[0])
 
     def on_close(self, event: wx.Event) -> None:
         self.gui.Destroy()
