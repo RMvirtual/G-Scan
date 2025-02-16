@@ -55,14 +55,12 @@ class TestJSONDatabase:
     
         correct_settings = {
             "GSCAN_DEFAULT": {
-                "scan_directory": "",
-                "dest_directory": "//office/edocs",
+                "output_directory": "//office/edocs",
                 "department": "ops",
                 "document_type": "customer_paperwork"
             },
             "rmvir": {
-                "scan_directory": "myshare/lol",
-                "dest_directory": "//does_not_matter/share",
+                "output_directory": "//does_not_matter/share",
                 "department": "ops",
                 "document_type": "customer_paperwork"
             }
@@ -96,14 +94,12 @@ class TestJSONDatabase:
 
         correct_settings = {
             "GSCAN_DEFAULT": {
-                "scan_directory": "",
-                "dest_directory": "//office/edocs",
+                "output_directory": "//office/edocs",
                 "department": "ops",
                 "document_type": "customer_paperwork"
             },
             "rmvir": {
-                "scan_directory": "myshare/lol",
-                "dest_directory": "//does_not_matter/share",
+                "output_directory": "//does_not_matter/share",
                 "department": "pods",
                 "document_type": "customer_paperwork"
             }
