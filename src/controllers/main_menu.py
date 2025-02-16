@@ -3,7 +3,7 @@ from typing import Callable
 import wx
 
 from configuration import Configuration
-from controllers.selector import AppSelector
+from controllers.mediator import ApplicationMediator
 from departments import Department
 from documents import DocumentType
 from gui.main_menu.document_selection import DocumentSelectionPanel
@@ -13,7 +13,7 @@ from gui.window import Window
 
 class MainMenuController:
     def __init__(
-            self, root: AppSelector, config: Configuration, window: Window
+            self, root: ApplicationMediator, config: Configuration, window: Window
     ) -> None:
         self.root = root
         self.config = config

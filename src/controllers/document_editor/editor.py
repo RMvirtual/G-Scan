@@ -3,14 +3,14 @@ import wx
 from configuration import Configuration
 from controllers.document_editor.document import DocumentController
 from controllers.document_editor.user_input import UserInputController
-from controllers.selector import AppSelector
+from controllers.mediator import ApplicationMediator
 from gui.document_editor import Viewer
 from gui.window import Window
 
 
 class DocumentEditorController:
     def __init__(
-            self, root_application: AppSelector,
+            self, root_application: ApplicationMediator,
             config: Configuration,
             window: Window
     ) -> None:

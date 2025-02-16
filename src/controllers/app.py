@@ -6,12 +6,12 @@ from configuration import Configuration
 from controllers.document_editor.editor import DocumentEditorController
 from controllers.main_menu import MainMenuController
 from controllers.settings import SettingsController
-from controllers.selector import AppSelector
-from database import JSONDatabase, JSONDatabaseFiles
+from controllers.mediator import ApplicationMediator
+from database import JSONDatabase, JSONDatabaseFiles, UserSettings
 from gui.window import Window
 
 
-class MainApplication(AppSelector):
+class MainApplication(ApplicationMediator):
     def __init__(self, config: Configuration):
         display_width, display_height = wx.DisplaySize()
         size = (int(display_width/2), int(display_height/1.1))
@@ -23,10 +23,19 @@ class MainApplication(AppSelector):
         MainMenuController(self, self.config, self.window)
 
     def launch_settings(self) -> None:
-        SettingsController(self, self.config, self.window)
+        department_options = self.config.database.all_departments()
+        user_settings = self.config.settings
+
+        SettingsController(
+            self, self.config, self.window, department_options, user_settings)
 
     def launch_image_viewer(self, config: Configuration) -> None:
         DocumentEditorController(self, config, self.window)
+
+    def update_user_settings(self, settings: UserSettings) -> None:
+        database = self.config.database
+        database.save_user_settings(settings)
+        self.config.settings = settings
 
     def show(self) -> None:
         self.window.Show()

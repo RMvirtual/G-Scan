@@ -20,25 +20,18 @@ class Settings(wx.Panel):
 
         # Sizer layout.
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        
-        sizer.Add(
-            self.title_txt, proportion=0, flag=wx.ALIGN_LEFT|wx.ALL, border=15)
+        min_size_flag = wx.ALIGN_LEFT|wx.ALL
+
+        sizer.Add(self.title_txt, proportion=0, flag=min_size_flag, border=15)
 
         sizer.Add(
             self.directories, proportion=0, flag=wx.EXPAND|wx.ALL, border=15)
 
-        sizer.Add(
-            self.defaults, proportion=0, flag=wx.ALIGN_LEFT|wx.ALL, border=15)
+        sizer.Add(self.defaults, proportion=0, flag=min_size_flag, border=15)
 
-        sizer.Add(
-            self.save_btn, proportion=0, 
-            flag=wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM, border=15
-        )
-
-        sizer.Add(
-            self.exit_btn, proportion=0, flag=wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM, 
-            border=15
-        )
+        low_right_flag = wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM 
+        sizer.Add(self.save_btn, proportion=0, flag=low_right_flag, border=15)
+        sizer.Add(self.exit_btn, proportion=0, flag=low_right_flag, border=15)
 
         sizer.AddStretchSpacer()
         self.SetSizer(sizer)
