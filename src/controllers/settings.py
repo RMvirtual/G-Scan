@@ -28,9 +28,6 @@ class SettingsController:
 
         self.update_doc_options(user_settings.department)
 
-        self.window.Layout()
-        window.set_panel(self.gui)
-
         # Bind callbacks.
         self.gui.save_btn.Bind(wx.EVT_BUTTON, self.on_save)
         self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)

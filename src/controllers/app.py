@@ -26,8 +26,10 @@ class MainApplication(ApplicationMediator):
         department_options = self.config.database.all_departments()
         user_settings = self.config.settings
 
-        SettingsController(
+        settings_controller = SettingsController(
             self, self.window, department_options, user_settings)
+        
+        self.window.set_panel(settings_controller.gui)
 
     def launch_image_viewer(self, config: Configuration) -> None:
         DocumentEditorController(self, config, self.window)
