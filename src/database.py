@@ -9,9 +9,9 @@ from documents import DocumentType
 @dataclasses.dataclass
 class UserSettings:
     username: str = ""
-    dest_dir: str = ""
+    output_dir: str = ""
     department: Department|None = None
-    document_type: DocumentType|None = None
+    document: DocumentType|None = None
 
 
 JSONFormat = dict[str, dict[str, str|list[str]]]
@@ -127,9 +127,9 @@ class JSONDatabase:
     def _serialise_user_settings(settings: UserSettings) -> JSONFormat:
         return {
             settings.username: {
-                "output_directory": settings.dest_dir,
+                "output_directory": settings.output_dir,
                 "department": settings.department.short_code,
-                "document_type": settings.document_type.short_code
+                "document_type": settings.document.short_code
             }
         }
 

@@ -12,9 +12,9 @@ class Configuration:
             else database.load_user_settings(username)
         )
 
-        self.dest_directory = self.settings.dest_dir
+        self.dest_directory = self.settings.output_dir
         self.department = self.settings.department
-        self.document_type = self.settings.document_type
+        self.document_type = self.settings.document
         self.departments = database.all_departments()
 
     def set_department(

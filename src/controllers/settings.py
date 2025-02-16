@@ -1,39 +1,32 @@
 import wx
 
-from configuration import Configuration
 from controllers import workflows
 from controllers.mediator import ApplicationMediator
 from database import UserSettings
-from departments import Department, DocumentType
+from departments import Department
 from gui.settings.settings import Settings
 from gui.window import Window
 
 
 class SettingsController:
     def __init__(
-            self, app: ApplicationMediator, config: Configuration, window: Window,
+            self, app: ApplicationMediator, window: Window,
             dept_options: list[Department], user_settings: UserSettings,
     ) -> None:
         self.app = app
-        self.config = config
         self.gui = Settings(window)
         self.window = window
         self.user_settings = user_settings
         self.dept_options = dept_options
 
         # Load settings from configuration.        
-        self.gui.directories.output_dir_entry.SetValue(user_settings.dest_dir)
-        
-        self.gui.defaults.dept_box.SetItems(
-            list(map(lambda d: d.full_name, dept_options)))
-        
-        self.gui.defaults.dept_box.SetValue(user_settings.department.full_name)
-        
-        self.gui.defaults.doc_box.SetItems(list(map(
-            lambda d: d.full_name, user_settings.department.document_types)))
+        self.gui.directories.output_dir_entry.SetValue(user_settings.output_dir)
 
-        self.gui.defaults.doc_box.SetValue(
-            user_settings.document_type.full_name)
+        dept_names = list(map(lambda d: d.full_name, dept_options))        
+        self.gui.defaults.dept_box.SetItems(dept_names)
+        self.gui.defaults.dept_box.SetValue(user_settings.department.full_name)
+
+        self.update_doc_options(user_settings.department)
 
         self.window.Layout()
         window.set_panel(self.gui)
@@ -92,10 +85,14 @@ class SettingsController:
 
     def on_department_option_change(self, event: wx.Event) -> None:
         department_value = self.gui.defaults.dept_box.GetValue()
+        
+        department = [
+            d for d in self.dept_options if d.full_name == department_value][0]
 
-        department = self.config.database.department(
-            full_name=department_value)
+        self.update_doc_options(department)
 
+    def update_doc_options(self, department: Department) -> None:
+        self.gui.defaults.dept_box.SetValue(department.full_name)
         documents = list(map(lambda d: d.full_name, department.document_types))
         
         self.gui.defaults.doc_box.SetItems(documents)
