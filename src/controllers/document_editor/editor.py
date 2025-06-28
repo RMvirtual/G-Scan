@@ -1,18 +1,28 @@
+import dataclasses
+
 import wx
 
 from configuration import Configuration
 from controllers.document_editor.document import DocumentController
-from controllers.document_editor.user_input import UserInputController
 from controllers.mediator import ApplicationMediator
+from documents import DocumentType
 from gui.document_editor import Viewer
 from gui.window import Window
+from job_references import create_job_reference
+
+
+@dataclasses.dataclass
+class SubmissionDocument:
+    reference: str
+    document_type: DocumentType
 
 
 class DocumentEditorController:
     def __init__(
-            self, root_application: ApplicationMediator,
-            config: Configuration,
-            window: Window
+        self,
+        root_application: ApplicationMediator,
+        config: Configuration,
+        window: Window,
     ) -> None:
         self._root = root_application
         self._config = config
@@ -26,7 +36,8 @@ class DocumentEditorController:
         window.Bind(wx.EVT_MENU, self.on_import_files, file_menu.import_files)
 
         window.Bind(
-            wx.EVT_MENU, self.on_import_as, file_menu.import_prenamed_files)
+            wx.EVT_MENU, self.on_import_as, file_menu.import_prenamed_files
+        )
 
         window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
 
@@ -35,13 +46,29 @@ class DocumentEditorController:
         self._gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
 
         self._documents = DocumentController(self._gui)
-        self._user_input = UserInputController(self._gui, self._config)
 
     def on_submit(self, _event: wx.Event) -> None:
-        submission_document = self._user_input.submission_document()
+        try:
+            input_bar = self._gui.input_bar
+            reference = create_job_reference(input_bar.reference_input)
 
-        if submission_document.reference:
-            self._documents.submit(submission_document)
+            document_type = self._config.database.document(
+                full_name=input_bar.document_type
+            )
+
+            self._documents.submit(
+                SubmissionDocument(reference, document_type)
+            )
+
+        except ValueError as error:
+            message_box = wx.MessageDialog(
+                parent=None,
+                message=str(error),
+                caption="Submission Failure",
+            )
+
+            with message_box:
+                message_box.ShowModal()
 
     def on_import_files(self, event: wx.Event) -> None:
         self._documents.import_files()
@@ -52,14 +79,13 @@ class DocumentEditorController:
     def on_quit(self, event: wx.Event = None) -> None:
         self._exit_to_main_menu()
 
-    def on_exit(self, event = None) -> None:
+    def on_exit(self, event=None) -> None:
         self._exit_to_main_menu()
 
-    def on_close(self, event = None) -> None:
+    def on_close(self, event=None) -> None:
         self._gui.Destroy()
         self._window.SetMenuBar(wx.MenuBar())
 
     def _exit_to_main_menu(self) -> None:
         self._gui.Close()
         self._root.launch_main_menu()
-
