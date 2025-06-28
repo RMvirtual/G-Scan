@@ -1,20 +1,11 @@
-import dataclasses
-
 import wx
 
 from configuration import Configuration
 from controllers.document_editor.document import DocumentController
 from controllers.mediator import ApplicationMediator
-from documents import DocumentType
 from gui.document_editor import Viewer
 from gui.window import Window
 from job_references import create_job_reference
-
-
-@dataclasses.dataclass
-class SubmissionDocument:
-    reference: str
-    document_type: DocumentType
 
 
 class DocumentEditorController:
@@ -56,9 +47,7 @@ class DocumentEditorController:
                 full_name=input_bar.document_type
             )
 
-            self._documents.submit(
-                SubmissionDocument(reference, document_type)
-            )
+            self._documents.submit(reference, document_type)
 
         except ValueError as error:
             message_box = wx.MessageDialog(

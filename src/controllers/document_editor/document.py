@@ -3,9 +3,8 @@ import wx
 from controllers import workflows
 from controllers.document_editor.document_tree import DocumentTreeController
 from controllers.document_editor.page_view import PageViewController
-from controllers.document_editor.user_input import SubmissionDocument
 from data_structures import AbstractNode
-from document_tree import PendingLeaf
+from document_tree import DocumentType, PendingLeaf
 from gui.document_editor import Viewer
 
 
@@ -34,11 +33,9 @@ class DocumentController:
     def import_as(self) -> None:
         print("Michelin Mode")
 
-    def submit(self, submission: SubmissionDocument) -> None:
+    def submit(self, reference: str, document_type: DocumentType) -> None:
         self._document_tree.create_job_node(
-            reference=submission.reference,
-            document_type=submission.document_type,
-            leaf=self._currently_viewed,
+            reference, document_type, leaf=self._currently_viewed
         )
 
     def on_split_pages(self, event: wx.Event) -> None:

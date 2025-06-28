@@ -11,6 +11,9 @@ def create_job_reference(reference: str, date: Date | None = None) -> str:
     """
     reference_no = reference.strip().lower().removeprefix("gr")
 
+    if not reference_no:
+        raise ValueError("Job number cannot be empty.")
+
     if not reference_no.isnumeric():
         raise ValueError(f"Job number must be numeric. Received {reference}.")
 
