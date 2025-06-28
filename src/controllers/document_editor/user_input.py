@@ -39,28 +39,24 @@ class UserInputController:
         current_document = self._config.document_type.full_name
         self._input_bar.document_type = current_document
 
-    def submission_document(self) -> SubmissionDocument:
-        return SubmissionDocument(self.job_reference(), self.document_type())
-
-    def job_reference(self) -> str | None:
-        reference = self._input_bar.reference_input
-
+    def submission_document(self) -> SubmissionDocument | None:
         try:
-            return create_job_reference(reference=reference)
+            reference = create_job_reference(self._input_bar.reference_input)
+
+            document_type = self._config.database.document(
+                full_name=self._input_bar.document_type
+            )
+
+            return SubmissionDocument(reference, document_type)
 
         except ValueError as error:
             message_box = wx.MessageDialog(
                 parent=None,
                 message=str(error),
-                caption="Invalid Job Reference",
+                caption="Submission Failure",
             )
 
             with message_box:
                 message_box.ShowModal()
 
             return None
-
-    def document_type(self) -> DocumentType:
-        return self._config.database.document(
-            full_name=self._input_bar.document_type
-        )
