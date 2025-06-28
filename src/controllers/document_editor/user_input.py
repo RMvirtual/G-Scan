@@ -21,16 +21,18 @@ class UserInputController:
 
         self._input_bar = self._gui.input_bar
 
-        departments = list(map(
-            lambda dept: dept.full_name, self._config.departments))
-        
+        departments = list(
+            map(lambda dept: dept.full_name, self._config.departments)
+        )
+
         self._input_bar.department_options = departments
 
         current_department = self._config.department.full_name
         self._input_bar.department = current_department
 
-        documents = list(map(
-            lambda d: d.full_name, self._config.department.document_types))
+        documents = list(
+            map(lambda d: d.full_name, self._config.department.document_types)
+        )
 
         self._input_bar.document_options = documents
 
@@ -40,16 +42,17 @@ class UserInputController:
     def submission_document(self) -> SubmissionDocument:
         return SubmissionDocument(self.job_reference(), self.document_type())
 
-    def job_reference(self) -> JobReference|None:
+    def job_reference(self) -> JobReference | None:
         reference = self._input_bar.reference_input
 
         try:
-            return JobReference(job_number=reference)
+            return JobReference(reference=reference)
 
         except ValueError:
             message_box = wx.MessageDialog(
-                parent=None, message=f"Job reference {reference} is invalid.",
-                caption="Invalid Job Reference"
+                parent=None,
+                message=f"Job reference {reference} is invalid.",
+                caption="Invalid Job Reference",
             )
 
             with message_box:
@@ -59,4 +62,5 @@ class UserInputController:
 
     def document_type(self) -> DocumentType:
         return self._config.database.document(
-            full_name=self._input_bar.document_type)
+            full_name=self._input_bar.document_type
+        )

@@ -27,7 +27,7 @@ class AbstractNode:
 
         return self
 
-    def child_by_id(self, node_id: int) -> AbstractNode|None:
+    def child_by_id(self, node_id: int) -> AbstractNode | None:
         for child in self.children:
             if child.node_id == node_id:
                 return child
@@ -128,8 +128,7 @@ class AbstractBranch(AbstractNode):
 
 class AbstractLeaf(AbstractNode):
     def __init__(
-            self, parent: AbstractNode, label: str = "",
-            data: list[any] = None
+        self, parent: AbstractNode, label: str = "", data: list[any] = None
     ) -> None:
         super().__init__(parent=parent, label=label)
 

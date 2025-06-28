@@ -1,49 +1,62 @@
+from __future__ import annotations
+
 from date import Calendar, Date
 
 
 class JobReference:
-    def __init__(
-            self, date: Date|None = None, job_number: str|None = None) -> None:
-        """GR + 9 digits. First 4 digits: yymm; last 5 digits: job no."""
+    def __init__(self, reference: str, date: Date | None = None) -> None:
+        """
+        GR + 9 digits. First 4 digits: yymm; last 5 digits: job no. If
+        date is provided, passing the job number will overwrite from
+        right to left.
+        """
+        reference_no = reference.strip().lower().removeprefix("gr")
 
-        if not (date or job_number) or (date and job_number):
-            raise ValueError("Must pass one parameter: date or job number.")
+        if not reference_no.isnumeric():
+            raise ValueError(
+                f"Job number must be numeric. Received {reference}."
+            )
 
-        self.prefix = "GR"
+        if date is None:
+            if len(reference_no) != 9:
+                raise ValueError(
+                    "Job number must be full 9 digits if a date is not "
+                    f"provided to prefix from. Received {reference}."
+                )
 
-        if job_number:
-            self._set_full_job_number(job_number)
+            self._date = Calendar().date(
+                int(reference_no[2:4]), int(reference_no[0:2])
+            )
+
+            self._job_number = reference_no[-5:]
 
         else:
+            if len(reference_no) > 5:
+                raise ValueError(
+                    "Should not pass both date and suffix reference number "
+                    "greater than 5 characters. "
+                    f"Received {date} and {reference}"
+                )
+
             self._date = date
-            self._job_number = "00000"
+            padded_zeroes = "0" * (5 - len(reference_no))
+            self._job_number = padded_zeroes + reference_no
 
     def __str__(self) -> str:
-        return self.prefix + self._date.format_as("yymm") + self._job_number
+        return f"GR{self._date.format_as("yymm")}{self._job_number}"
+
+    def __eq__(self, value: JobReference | str) -> bool:
+        if isinstance(value, str):
+            return str(self) == value
+
+        elif isinstance(value, JobReference):
+            return str(self) == str(value)
+
+        else:
+            raise TypeError(
+                f"Cannot compare JobReference and type {type(value)}"
+            )
 
     @property
     def job_number(self) -> str:
         return self._job_number
-
-    @job_number.setter
-    def job_number(self, job_number: str) -> None:
-        digits = self._strip_job_number_prefix(job_number)
-        digits_valid = 1 <= len(digits) <= 5 and digits.isnumeric()
-
-        if not digits_valid:
-            raise ValueError("Incorrect number of digits.")
-
-        self._job_number = "0" * (5-len(digits)) + digits
-
-    def _set_full_job_number(self, job_number: str) -> None:
-        digits = self._strip_job_number_prefix(job_number)
-
-        if not len(digits) == 9 and digits.isnumeric():
-            raise ValueError(f"Incorrect job reference format: {job_number}.")
-
-        self._date = Calendar().date(int(digits[2:4]), int(digits[0:2]))
-        self._job_number = digits[-5:]
-
-    def _strip_job_number_prefix(self, job_number: str) -> str:
-        return job_number.lower().removeprefix(self.prefix.lower()).strip()
-    

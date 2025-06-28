@@ -10,8 +10,9 @@
 			"**/.pytest_cache": true
 		},
 		"python.analysis.exclude": [
+			"./.venv",
 			"./build",
-			"./venv"
+			"./dist",
 		],
 		"python.analysis.extraPaths": [
 			"./src",

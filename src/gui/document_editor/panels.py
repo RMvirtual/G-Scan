@@ -1,5 +1,4 @@
 import wx
-
 from wx.lib.floatcanvas import FloatCanvas
 from wx.lib.floatcanvas.NavCanvas import NavCanvas
 
@@ -7,8 +6,9 @@ from wx.lib.floatcanvas.NavCanvas import NavCanvas
 class PageView(NavCanvas):
     def __init__(self, parent: wx.Panel) -> None:
         super().__init__(
-            parent=parent, ProjectionFun=None,
-            BackgroundColor="DARK SLATE BLUE"
+            parent=parent,
+            ProjectionFun=None,
+            BackgroundColor="DARK SLATE BLUE",
         )
 
         self._initialise_toolbar_extensions()
@@ -18,19 +18,22 @@ class PageView(NavCanvas):
         self.delete_button = wx.Button(parent=self.ToolBar, label="Delete")
 
         self.page_no = wx.SpinCtrl(
-            parent=self.ToolBar, value="0",
-            style=wx.SP_ARROW_KEYS|wx.SP_HORIZONTAL
+            parent=self.ToolBar,
+            value="0",
+            style=wx.SP_ARROW_KEYS | wx.SP_HORIZONTAL,
         )
 
         self.page_quantity = wx.TextCtrl(
-            parent=self.ToolBar, value="Pages: 0", style=wx.TE_READONLY)
+            parent=self.ToolBar, value="Pages: 0", style=wx.TE_READONLY
+        )
 
-        self.split_button = wx.Button(
-            parent=self.ToolBar, label="Split Pages")
+        self.split_button = wx.Button(parent=self.ToolBar, label="Split Pages")
 
         additional_tools = [
-            self.page_no, self.page_quantity, self.delete_button,
-            self.split_button
+            self.page_no,
+            self.page_quantity,
+            self.delete_button,
+            self.split_button,
         ]
 
         for tool in additional_tools:
@@ -38,7 +41,7 @@ class PageView(NavCanvas):
 
         self.ToolBar.Realize()
 
-    def set_total_pages(self, quantity: int or str) -> None:
+    def set_total_pages(self, quantity: int | str) -> None:
         self.page_quantity.SetValue(f"Total Pages: {quantity}")
         self.page_no.SetMin(1)
         self.page_no.SetMax(quantity)
