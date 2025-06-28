@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from data_structures import AbstractBranch, AbstractLeaf, AbstractRoot
 from documents import DocumentType
-from job_references import JobReference
 
 
 class DocumentTree(AbstractRoot):
@@ -12,19 +11,19 @@ class DocumentTree(AbstractRoot):
         self.pending_branch = PendingBranch(parent=self)
         self.job_branches: list[JobBranch] = []
 
-    def create_job_branch(self, reference: JobReference) -> JobBranch:
+    def create_job_branch(self, reference: str) -> JobBranch:
         result = JobBranch(self, reference)
         self.job_branches.append(result)
 
         return result
 
-    def branch(self, reference: JobReference) -> JobBranch:
+    def branch(self, reference: str) -> JobBranch:
         return self.matching_branches(reference)[0]
 
-    def contains_branch(self, reference: JobReference) -> bool:
+    def contains_branch(self, reference: str) -> bool:
         return bool(self.matching_branches(reference))
 
-    def matching_branches(self, reference: JobReference) -> list[JobBranch]:
+    def matching_branches(self, reference: str) -> list[JobBranch]:
         return [
             branch
             for branch in self.job_branches
@@ -38,12 +37,12 @@ class PendingBranch(AbstractBranch):
 
 
 class JobBranch(AbstractBranch):
-    def __init__(self, parent: AbstractRoot, reference: JobReference) -> None:
+    def __init__(self, parent: AbstractRoot, reference: str) -> None:
         super().__init__(parent=parent, label=str(reference))
         self.reference = reference
         self.document_branches: list[DocumentBranch] = []
 
-    def set_reference(self, new_reference: JobReference) -> None:
+    def set_reference(self, new_reference: str) -> None:
         self.reference = new_reference
         self.label = str(new_reference)
 

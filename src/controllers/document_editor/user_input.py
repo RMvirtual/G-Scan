@@ -5,12 +5,12 @@ import wx
 from configuration import Configuration
 from documents import DocumentType
 from gui.document_editor import Viewer
-from job_references import JobReference
+from job_references import create_job_reference
 
 
 @dataclasses.dataclass
 class SubmissionDocument:
-    reference: JobReference
+    reference: str
     document_type: DocumentType
 
 
@@ -42,16 +42,16 @@ class UserInputController:
     def submission_document(self) -> SubmissionDocument:
         return SubmissionDocument(self.job_reference(), self.document_type())
 
-    def job_reference(self) -> JobReference | None:
+    def job_reference(self) -> str | None:
         reference = self._input_bar.reference_input
 
         try:
-            return JobReference(reference=reference)
+            return create_job_reference(reference=reference)
 
-        except ValueError:
+        except ValueError as error:
             message_box = wx.MessageDialog(
                 parent=None,
-                message=f"Job reference {reference} is invalid.",
+                message=str(error),
                 caption="Invalid Job Reference",
             )
 

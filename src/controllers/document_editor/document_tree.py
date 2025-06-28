@@ -3,12 +3,11 @@ import ntpath
 import wx
 
 import rendering
-from data_structures import AbstractNode, AbstractLeaf
+from data_structures import AbstractLeaf, AbstractNode
 from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
 from documents import DocumentType
 from gui.document_editor.document_tree import DocumentTreeCtrl
 from gui.page_range_dialog import PageRangeDialog
-from job_references import JobReference
 
 
 class DocumentTreeController:
@@ -29,7 +28,8 @@ class DocumentTreeController:
     def selected_items(self) -> list[AbstractNode]:
         return [
             self._node_from_handle(handle=selection)
-            for selection in self._gui.GetSelections() if selection is not None
+            for selection in self._gui.GetSelections()
+            if selection is not None
         ]
 
     def split_pages(self, node: AbstractLeaf) -> None:
@@ -55,10 +55,12 @@ class DocumentTreeController:
         return result
 
     def create_job_node(
-            self, reference: JobReference, document_type: DocumentType,
-            leaf: AbstractLeaf
+        self,
+        reference: str,
+        document_type: DocumentType,
+        leaf: AbstractLeaf,
     ) -> None:
-        reference_label = str(reference)
+        reference_label = reference
 
         if self._document_tree.contains_branch(reference_label):
             self._append_existing(reference_label, document_type, leaf)
@@ -67,7 +69,8 @@ class DocumentTreeController:
             job_branch = self._new_job_branch(reference_label)
 
             document_branch = self._new_document_branch(
-                job_branch, document_type)
+                job_branch, document_type
+            )
 
             document_branch.add(leaf)
 
@@ -77,7 +80,7 @@ class DocumentTreeController:
         self._gui.ExpandAll()
 
     def _append_existing(
-            self, reference: str, document_type: DocumentType, leaf: AbstractLeaf
+        self, reference: str, document_type: DocumentType, leaf: AbstractLeaf
     ) -> None:
         job_branch = self._document_tree.branch(reference)
 
@@ -88,7 +91,8 @@ class DocumentTreeController:
             print(f"Does not contain {document_type.short_code}")
 
     def _on_split_dialog(
-            self, dialog: PageRangeDialog, node: AbstractLeaf) -> None:
+        self, dialog: PageRangeDialog, node: AbstractLeaf
+    ) -> None:
         option = dialog.ShowModal()
 
         if option == PageRangeDialog.SPLIT_ALL:
@@ -107,7 +111,9 @@ class DocumentTreeController:
         if is_full_range:
             return
 
-        self._append_to_gui(node.split_range(start=range[0]-1, stop=range[1]))
+        self._append_to_gui(
+            node.split_range(start=range[0] - 1, stop=range[1])
+        )
 
     def _new_job_branch(self, reference: str) -> JobBranch:
         result = self._document_tree.create_job_branch(reference)
@@ -116,7 +122,7 @@ class DocumentTreeController:
         return result
 
     def _new_document_branch(
-            self, job_branch: JobBranch, document_type: DocumentType
+        self, job_branch: JobBranch, document_type: DocumentType
     ) -> DocumentBranch:
         result = job_branch.create_branch(document_type=document_type)
         self._append_to_gui(result)
@@ -127,7 +133,7 @@ class DocumentTreeController:
         self._gui.AppendItem(
             parent=self._handle_from_node(node.parent),
             text=node.label,
-            data=node.node_id
+            data=node.node_id,
         )
 
     def _remove_from_gui(self, node: AbstractNode) -> None:
@@ -135,7 +141,8 @@ class DocumentTreeController:
 
     def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
         return self._document_tree.child_by_id(
-            node_id=self._gui.get_node_id(tree_handle=handle))
+            node_id=self._gui.get_node_id(tree_handle=handle)
+        )
 
     def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
         return self._gui.get_item_handle(node.node_id)
@@ -147,5 +154,5 @@ class DocumentTreeController:
         return PendingLeaf(
             parent=self._document_tree.pending_branch,
             file_name=ntpath.basename(file_path),
-            data=rendering.load_images(file_path=file_path)
+            data=rendering.load_images(file_path=file_path),
         )
