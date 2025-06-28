@@ -1,17 +1,28 @@
 [CmdletBinding()]
 param ([string[]] $specific)
 
-if (-not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
+# Pre-setup checks.
+if (-Not $env:DEVENV) {
+    & "$PSScriptRoot\setup.ps1"
 
-$PYTHON_VENV = "$env:DEVENV\tools\python_venv.ps1"
+    if (-Not $env:DEVENV) {
+        exit 1
+    }
+}
 
-Write-Host "Starting tests."
-if (-Not $specific) {$specific = @()}
 
+# Run tests.
+Write-Host "Running tests."
 Push-Location "$env:DEVENV\tests"
-& $PYTHON_VENV -activate
+$venv = "$env:DEVENV\scripts\python_venv.ps1"
+& $venv -activate
 
-python test_runner.py $specific
+try {
+    if (-Not $specific) {$specific = @()}
+    python test_runner.py $specific
+}
 
-& $PYTHON_VENV -deactivate
-Pop-Location
+finally {
+    & $venv -deactivate
+    Pop-Location
+}

@@ -1,20 +1,31 @@
 [CmdletBinding()]
 param([switch] $clean)
 
-if (-Not $env:DEVENV) {& "$PSScriptRoot\setup.ps1"}
+# Pre-setup checks.
+if (-Not $env:DEVENV) {
+    & "$PSScriptRoot\setup.ps1"
 
-$PYTHON_VENV = "$env:DEVENV\tools\python_venv.ps1"
+    if (-Not $env:DEVENV) {
+        exit 1
+    }
+}
 
-Write-Host "Building release."
 
+# Build application.
+Write-Host "Building application."
 Push-Location $env:DEVENV
-& $PYTHON_VENV -activate
+$venv = "$env:DEVENV\scripts\python_venv.ps1"
+& $venv -activate
 
-pyinstaller "$env:DEVENV\src\controller\app.py" `
-    --name "gscan" --onedir --noconfirm `
-    --add-data "$env:DEVENV\data\*.json:data" `
-    --add-data "$env:DEVENV\data\images:data\images" `
-    $(if ($clean) {"--clean"})
+try {
+    pyinstaller "$env:DEVENV\src\controllers\app.py" `
+        --name "gscan" --onedir --noconfirm `
+        --add-data "$env:DEVENV\data\*.json:data" `
+        --add-data "$env:DEVENV\data\images:data\images" `
+        $(if ($clean) {"--clean"})
+}
 
-& $PYTHON_VENV -deactivate
-Pop-Location
+finally {
+    & $venv -deactivate
+    Pop-Location
+}

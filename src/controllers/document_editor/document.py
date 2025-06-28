@@ -38,7 +38,7 @@ class DocumentController:
         self._document_tree.create_job_node(
             reference=submission.reference,
             document_type=submission.document_type,
-            leaf=self._currently_viewed
+            leaf=self._currently_viewed,
         )
 
     def on_split_pages(self, event: wx.Event) -> None:
@@ -97,4 +97,3 @@ class DocumentController:
 
     def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
         return self._document_tree.add_pending_files(paths)
-

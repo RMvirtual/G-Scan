@@ -10,7 +10,8 @@ def load_images(file_path: str) -> list[wx.Image]:
             pixel_buffer = page.get_pixmap(dpi=300)
 
             bitmap = wx.Bitmap.FromBuffer(
-                pixel_buffer.width, pixel_buffer.height, pixel_buffer.samples)
+                pixel_buffer.width, pixel_buffer.height, pixel_buffer.samples
+            )
 
             result.append(bitmap.ConvertToImage())
 

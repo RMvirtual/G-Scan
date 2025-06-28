@@ -1,14 +1,14 @@
 [CmdletBinding()]
 param([switch] $install, [switch] $activate, [switch] $deactivate)
 
-$REQUIREMENTS = "$env:DEVENV\lib\requirements.txt"
-$TARGET = "$env:DEVENV\.venv"
+$REQUIREMENTS = "$env:DEVENV\lib\pip_requirements.txt"
+$VENV = "$env:DEVENV\.venv"
 
 
 function activateVenv
 {
-    if (-Not (Test-Path $TARGET)) {createVenv}
-    & "$TARGET\Scripts\Activate.ps1"
+    if (-Not (Test-Path $VENV)) {createVenv}
+    & "$VENV\Scripts\Activate.ps1"
 }
 
 
@@ -20,11 +20,10 @@ function deactivateVenv
 
 function createVenv
 {
-    if (Test-Path $TARGET) {Remove-Item $TARGET -Force -Recurse > $null}
-    python -m venv $TARGET
+    if (Test-Path $VENV) {Remove-Item $VENV -Force -Recurse > $null}
+    python -m venv $VENV
 
     activateVenv
-
     pip install -r $REQUIREMENTS --disable-pip-version-check
 
     $pipInstallFailed = -not $?

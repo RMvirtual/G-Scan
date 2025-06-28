@@ -1,14 +1,39 @@
 {
 	"folders": [
-		{"path": ".."}
+		{
+			"path": ".."
+		}
 	],
 	"settings": {
-		"files.exclude": {"**/__pycache__": true, "**/.pytest_cache": true},
-		"powershell.buttons.showPanelMovementButtons": true,
-		"python.analysis.exclude": ["./build", "./venv"],
-		"python.analysis.extraPaths": ["./src", "./tests"],
+		"files.exclude": {
+			"**/__pycache__": true,
+			"**/.pytest_cache": true
+		},
+		"python.analysis.exclude": [
+			"./build",
+			"./venv"
+		],
+		"python.analysis.extraPaths": [
+			"./src",
+			"./tests"
+		],
 		"python.defaultInterpreterPath": "./.venv/Scripts/python.exe",
 		"editor.semanticTokenColorCustomizations": {
-			"rules": {"selfParameter": "#567ece"}}
+			"rules": {
+				"selfParameter": "#567ece"
+			}
+		},
+		"editor.formatOnSave": true,
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.black-formatter",
+			"editor.formatOnSave": true,
+			"editor.codeActionsOnSave": {
+				"source.organizeImports": "explicit"
+			}
+		},
+		"isort.args": [
+			"--profile",
+			"black"
+		]
 	}
 }
