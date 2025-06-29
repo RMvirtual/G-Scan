@@ -36,6 +36,23 @@ class TestDocumentTree:
         assert len(job_branch) == 1
         assert len(tree.pending) == 0
 
+    def test_should_create_job_branch_document_entry(self) -> None:
+        tree = DocumentTree()
+        job_branch = tree.create_job_branch("GR190100100")
+        job_branch.create_document_entry(self._example_document_type())
+
+        assert len(job_branch) == 1
+
+    def test_should_remove_document_entry(self) -> None:
+        tree = DocumentTree()
+        job_branch = tree.create_job_branch("GR190100100")
+        entry = job_branch.create_document_entry(self._example_document_type())
+
+        job_branch.remove(entry)
+
+        assert entry.parent is None
+        assert len(job_branch) == 0
+
     def _example_document_type(self) -> DocumentType:
         return DocumentType(
             "ShortCode1",
