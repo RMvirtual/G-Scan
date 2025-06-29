@@ -55,11 +55,21 @@ class DocumentTreeController:
             )
 
             result.append(entry)
+            self.append_to_gui(entry)
             self._append_to_gui(entry)
 
         self.expand(self.tree.pending)
 
         return result
+
+    def append_to_gui(self, entry: DocumentEntry) -> None:
+        # TODO: Was part way through sorting this.
+
+        parent_handle = self.tree_handle(entry.parent)
+
+        self.gui.AppendItem(
+            parent=parent_handle, text=entry.type.full_name, data=id(entry)
+        )
 
     def create_job_node(
         self,
