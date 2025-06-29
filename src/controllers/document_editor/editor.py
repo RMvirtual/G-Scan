@@ -47,7 +47,7 @@ class DocumentEditorController:
                 full_name=input_bar.document_type
             )
 
-            self._documents.submit(reference, document_type)
+            self._documents.assign_current_document(reference, document_type)
 
         except ValueError as error:
             message_box = wx.MessageDialog(

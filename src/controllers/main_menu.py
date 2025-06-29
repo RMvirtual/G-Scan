@@ -13,7 +13,7 @@ from gui.window import Window
 
 class MainMenuController:
     def __init__(
-            self, root: ApplicationMediator, config: Configuration, window: Window
+        self, root: ApplicationMediator, config: Configuration, window: Window
     ) -> None:
         self.root = root
         self.config = config
@@ -23,13 +23,14 @@ class MainMenuController:
 
         # Callbacks.
         self.panel.Bind(wx.EVT_CLOSE, self.on_close)
-        
+
         depts_panel = self.panel.panel
         dept_buttons = depts_panel.dept_btns
 
         for department in self.config.departments:
             dept_buttons[department.short_code].Bind(
-                wx.EVT_BUTTON, self._department_selection_lambda(department))
+                wx.EVT_BUTTON, self._department_selection_lambda(department)
+            )
 
         depts_panel.quick_start_btn.Bind(wx.EVT_BUTTON, self.on_quick_start)
         depts_panel.settings_btn.Bind(wx.EVT_BUTTON, self.on_settings)
@@ -38,24 +39,32 @@ class MainMenuController:
         f4_shortcut_id = wx.NewId()
         self.panel.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
 
-        self.panel.SetAcceleratorTable(wx.AcceleratorTable([(
-            wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id)]))
+        escape_shortcut_id = wx.NewId()
+        self.panel.Bind(wx.EVT_MENU, self.on_f4, id=escape_shortcut_id)
 
+        accelators = [
+            (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id),
+            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, escape_shortcut_id),
+        ]
+
+        self.panel.SetAcceleratorTable(wx.AcceleratorTable(accelators))
         self.panel.SetFocus()
-    
+
     def on_f4(self, event: wx.Event) -> None:
         self.launch_exit()
 
     def on_department_selection(
-            self, event: wx.Event, department: Department) -> None:
+        self, event: wx.Event, department: Department
+    ) -> None:
         doc_select_panel = DocumentSelectionPanel(
-            self.panel, department.document_types)
-        
+            self.panel, department.document_types
+        )
+
         self.panel.switch_to(doc_select_panel)
 
         # Setup callbacks to new department window.
         for document in department.document_types:
-            doc_btn = doc_select_panel.option_btns[document] 
+            doc_btn = doc_select_panel.option_btns[document]
             callback = self._final_selection_lambda(department, document)
             doc_btn.Bind(wx.EVT_BUTTON, callback)
 
@@ -87,8 +96,7 @@ class MainMenuController:
         self.root.exit()
 
     def on_selection(
-            self, event: wx.Event, department: Department, 
-            document: DocumentType
+        self, event: wx.Event, department: Department, document: DocumentType
     ) -> None:
         self.config.department = department
         self.config.document_type = document
@@ -96,26 +104,26 @@ class MainMenuController:
         self.launch_image_viewer()
 
     def _final_selection_lambda(
-            self, department: Department, document: DocumentType
+        self, department: Department, document: DocumentType
     ) -> Callable[[wx.Event], None]:
-        """Used to create lambdas referencing specific departments 
-        and documents within a loop as referencing specific departments 
+        """Used to create lambdas referencing specific departments
+        and documents within a loop as referencing specific departments
         but without using the department as a lambda parameter will just
-        end up updating all the lambdas to use the last department 
-        rather than a self-contained lambda for each one. 
+        end up updating all the lambdas to use the last department
+        rather than a self-contained lambda for each one.
         Not just a hacky misunderstanding of lambdas.
         """
         return lambda event: self.on_selection(event, department, document)
 
     def _department_selection_lambda(
-            self, department: Department) -> Callable[[wx.Event], None]:
-        """Used to create lambdas referencing specific departments 
-        as when trying to create multiple lambdas via a loop 
-        referencing specific departments but without using the 
-        department as a lambda parameter will just end up updating all 
-        the lambdas to use the last department rather than a 
-        self-contained lambda for each one. 
+        self, department: Department
+    ) -> Callable[[wx.Event], None]:
+        """Used to create lambdas referencing specific departments
+        as when trying to create multiple lambdas via a loop
+        referencing specific departments but without using the
+        department as a lambda parameter will just end up updating all
+        the lambdas to use the last department rather than a
+        self-contained lambda for each one.
         Not just a hacky misunderstanding of lambdas.
         """
         return lambda event: self.on_department_selection(event, department)
-

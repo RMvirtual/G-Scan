@@ -80,3 +80,4 @@ class DocumentEntry:
     def __init__(self, parent: Branch, document_type: DocumentType) -> None:
         self.parent = parent
         self.type = document_type
+        self.pages = []

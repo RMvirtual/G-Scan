@@ -1,34 +1,34 @@
 import ntpath
 
 import wx
+from wx import TreeCtrl
 
 import rendering
 from data_structures import AbstractLeaf, AbstractNode
+from data_structures_new import DocumentEntry
+from data_structures_new import DocumentTree as DocumentTreeNew
 from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
 from documents import DocumentType
-from gui.document_editor.document_tree import DocumentTreeCtrl
 from gui.page_range_dialog import PageRangeDialog
 
 
 class DocumentTreeController:
-    def __init__(self, gui: DocumentTreeCtrl):
-        self._gui = gui
-        self._document_tree = DocumentTree()
-        self._initialise_root_node()
-        self._append_to_gui(self._document_tree.root.pending_branch)
+    def __init__(self, gui: TreeCtrl) -> None:
+        self.tree = DocumentTreeNew()
+        self.gui = gui
+        self.gui.AddRoot(text="Document Tree", data=id(self.tree))
 
-    def _initialise_root_node(self) -> None:
-        root = self._document_tree.root
-        self._gui.AddRoot(text=root.label, data=root.node_id)
-
-    def bind_selection(self, callback) -> None:
-        self._gui.Bind(event=wx.EVT_TREE_SEL_CHANGED, handler=callback)
-        # self._gui.Bind(event=wx.EVT_TREE_ITEM_ACTIVATED, handler=callback)
+        # Create pending branch.
+        self.gui.AppendItem(
+            parent=self.gui.GetRootItem(),
+            text="Pending",
+            data=id(self.tree.pending),
+        )
 
     def selected_items(self) -> list[AbstractNode]:
         return [
             self._node_from_handle(handle=selection)
-            for selection in self._gui.GetSelections()
+            for selection in self.gui.GetSelections()
             if selection is not None
         ]
 
@@ -42,15 +42,22 @@ class DocumentTreeController:
             self._remove_from_gui(node)
 
     def expand(self, node: AbstractNode) -> None:
-        self._gui.Expand(item=self._handle_from_node(node))
+        self.gui.Expand(item=self._handle_from_node(node))
 
-    def add_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
-        result = self._pending_leaves(paths)
+    def create_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
+        result = []
 
-        for pending_leaf in result:
-            self._append_to_gui(pending_leaf)
+        for path in paths:
+            entry = PendingLeaf(
+                parent=self.tree.pending,
+                file_name=ntpath.basename(path),
+                data=rendering.load_images(path),
+            )
 
-        self.expand(self._document_tree.pending_branch)
+            result.append(entry)
+            self._append_to_gui(entry)
+
+        self.expand(self.tree.pending)
 
         return result
 
@@ -62,7 +69,7 @@ class DocumentTreeController:
     ) -> None:
         reference_label = reference
 
-        if self._document_tree.contains_branch(reference_label):
+        if self.tree.contains_branch(reference_label):
             self._append_existing(reference_label, document_type, leaf)
 
         else:
@@ -77,12 +84,25 @@ class DocumentTreeController:
             self._remove_from_gui(node=leaf)
             self._append_to_gui(leaf)
 
-        self._gui.ExpandAll()
+        self.gui.ExpandAll()
+
+    def create_entry(self, entry: DocumentEntry) -> None: ...
+
+    def move_entry(
+        self, entry: DocumentEntry, reference: str, document_type: DocumentType
+    ) -> None:
+        self.gui.Delete(self.tree_handle(entry))
+
+        job_branch = self.tree.create_job_branch(reference)
+        job_branch.append(entry)
+        self._append_to_gui(entry)
+
+        return None
 
     def _append_existing(
         self, reference: str, document_type: DocumentType, leaf: AbstractLeaf
     ) -> None:
-        job_branch = self._document_tree.branch(reference)
+        job_branch = self.tree.branch(reference)
 
         if job_branch.contains_branch(document_type):
             print(f"Contains {document_type.short_code}")
@@ -116,7 +136,7 @@ class DocumentTreeController:
         )
 
     def _new_job_branch(self, reference: str) -> JobBranch:
-        result = self._document_tree.create_job_branch(reference)
+        result = self.tree.create_job_branch(reference)
         self._append_to_gui(result)
 
         return result
@@ -130,29 +150,79 @@ class DocumentTreeController:
         return result
 
     def _append_to_gui(self, node: AbstractNode) -> None:
-        self._gui.AppendItem(
+        self.gui.AppendItem(
             parent=self._handle_from_node(node.parent),
             text=node.label,
             data=node.node_id,
         )
 
     def _remove_from_gui(self, node: AbstractNode) -> None:
-        self._gui.Delete(self._gui.get_item_handle(node_id=node.node_id))
+        self.gui.Delete(self._handle_from_node(node))
+
+    def tree_handle(self, item_id) -> wx.TreeItemId:
+        root_handle = self.gui.GetRootItem()
+
+        if self.gui.GetItemData(item=root_handle) == item_id:
+            return root_handle
+
+        item, cookie = self.gui.GetFirstChild(item=root_handle)
+
+        while item.IsOk():
+            data = self.gui.GetItemData(item)
+
+            if data == item_id:
+                return item
+
+            if self.gui.ItemHasChildren(item):
+                match = self._find_child_handle(node_id=item_id, root_id=item)
+
+                if match.IsOk():
+                    return match
+
+            item, cookie = self.gui.GetNextChild(root_handle, cookie)
+
+        child = wx.TreeItemId()
+
+        if not child.IsOk():
+            raise ValueError(f"Node ID {item_id} does not exist in tree.")
+
+        return child
 
     def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
-        return self._document_tree.child_by_id(
-            node_id=self._gui.get_node_id(tree_handle=handle)
-        )
+        return self.tree.child_by_id(self.gui.GetItemData(item=handle))
 
     def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
-        return self._gui.get_item_handle(node.node_id)
+        root_handle = self.gui.GetRootItem()
 
-    def _pending_leaves(self, file_paths: list[str]) -> list[PendingLeaf]:
-        return [self._pending_leaf(file_path=path) for path in file_paths]
+        if self.gui.GetItemData(item=root_handle) == node.node_id:
+            return root_handle
 
-    def _pending_leaf(self, file_path: str) -> PendingLeaf:
-        return PendingLeaf(
-            parent=self._document_tree.pending_branch,
-            file_name=ntpath.basename(file_path),
-            data=rendering.load_images(file_path=file_path),
+        child = self._find_child_handle(
+            node_id=node.node_id, root_id=root_handle
         )
+
+        if not child.IsOk():
+            raise ValueError(f"Node ID {node.node_id} does not exist in tree.")
+
+        return child
+
+    def _find_child_handle(
+        self, node_id: int, root_id: wx.TreeItemId
+    ) -> wx.TreeItemId:
+        item, cookie = self.gui.GetFirstChild(item=root_id)
+
+        while item.IsOk():
+            data = self.gui.GetItemData(item)
+
+            if data == node_id:
+                return item
+
+            if self.gui.ItemHasChildren(item):
+                match = self._find_child_handle(node_id=node_id, root_id=item)
+
+                if match.IsOk():
+                    return match
+
+            item, cookie = self.gui.GetNextChild(root_id, cookie)
+
+        return wx.TreeItemId()
