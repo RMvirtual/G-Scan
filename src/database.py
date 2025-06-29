@@ -2,7 +2,7 @@ import dataclasses
 import json
 from pathlib import Path
 
-from departments import Department 
+from departments import Department
 from documents import DocumentType
 
 
@@ -10,11 +10,11 @@ from documents import DocumentType
 class UserSettings:
     username: str = ""
     output_dir: str = ""
-    department: Department|None = None
-    document: DocumentType|None = None
+    department: Department | None = None
+    document: DocumentType | None = None
 
 
-JSONFormat = dict[str, dict[str, str|list[str]]]
+JSONFormat = dict[str, dict[str, str | list[str]]]
 
 
 @dataclasses.dataclass
@@ -29,15 +29,17 @@ class JSONDatabase:
         self.files = files
 
     def department(
-            self, short_code: str = None, full_name: str = None) -> Department:
+        self, short_code: str = None, full_name: str = None
+    ) -> Department:
         if not (short_code or full_name):
             raise ValueError("Department parameter not selected.")
 
-        predicate = (
-            lambda d: d.short_code == short_code if short_code 
+        predicate = lambda d: (
+            d.short_code == short_code
+            if short_code
             else lambda d: d.full_name == full_name
         )
-                
+
         for department in self.all_departments():
             if predicate(department):
                 return department
@@ -47,28 +49,38 @@ class JSONDatabase:
     def all_departments(self) -> list[Department]:
         with open(self.files.departments) as file_stream:
             json_contents: dict = json.load(file_stream)
-        
+
         documents = self.all_documents()
         result = []
 
         for short_code, values in json_contents.items():
-            matching_docs = list(filter(
-                lambda d: d.short_code in values["document_types"], documents))
-            
-            result.append(Department(
-                short_code, values["full_name"], values["short_name"],
-                matching_docs
-            ))
-            
+            matching_docs = list(
+                filter(
+                    lambda d: d.short_code in values["document_types"],
+                    documents,
+                )
+            )
+
+            result.append(
+                Department(
+                    short_code,
+                    values["full_name"],
+                    values["short_name"],
+                    matching_docs,
+                )
+            )
+
         return result
-    
+
     def document(
-            self, short_code: str = None, full_name: str = None) -> DocumentType:
+        self, short_code: str = None, full_name: str = None
+    ) -> DocumentType:
         if not (short_code or full_name):
             raise ValueError("Document type parameter not selected.")
 
-        predicate = (
-            lambda d: d.short_code == short_code if short_code
+        predicate = lambda d: (
+            d.short_code == short_code
+            if short_code
             else lambda d: d.full_name == full_name
         )
 
@@ -81,9 +93,11 @@ class JSONDatabase:
     def all_documents(self) -> list[DocumentType]:
         with open(self.files.document_types) as file_stream:
             json_contents: JSONFormat = json.load(file_stream)
-        
+
         return [
-            DocumentType(short_code, values["full_name"], values["analysis_code"])
+            DocumentType(
+                short_code, values["full_name"], values["analysis_code"]
+            )
             for short_code, values in json_contents.items()
         ]
 
@@ -93,8 +107,11 @@ class JSONDatabase:
         if username not in contents:
             raise ValueError(f"Could not find settings for user {username}.")
 
-        return self._deserialise_user_settings(
-            {username: contents[username]})[0]
+        all_settings = self._deserialise_user_settings(
+            {username: contents[username]}
+        )
+
+        return all_settings[0]
 
     def user_exists(self, username: str) -> bool:
         return username in self.user_settings_json()
@@ -102,11 +119,12 @@ class JSONDatabase:
     def create_user(self, username: str) -> UserSettings:
         contents = self.user_settings_json()
 
-        if username in contents:        
+        if username in contents:
             raise ValueError(f"User {username} already exists.")
-        
+
         result = self._deserialise_individual_user_settings(
-            username, contents["GSCAN_DEFAULT"])
+            username, contents["GSCAN_DEFAULT"]
+        )
 
         self.save_user_settings(result)
 
@@ -129,27 +147,31 @@ class JSONDatabase:
             settings.username: {
                 "output_directory": settings.output_dir,
                 "department": settings.department.short_code,
-                "document_type": settings.document.short_code
+                "document_type": settings.document.short_code,
             }
         }
 
-    def _deserialise_user_settings(self, settings: JSONFormat) -> list[UserSettings]:
+    def _deserialise_user_settings(
+        self, settings: JSONFormat
+    ) -> list[UserSettings]:
         return [
             self._deserialise_individual_user_settings(username, user_settings)
             for username, user_settings in settings.items()
         ]
 
     def _deserialise_individual_user_settings(
-            self, username: str, values: dict[str, str|list[str]]
+        self, username: str, values: dict[str, str | list[str]]
     ) -> UserSettings:
         return UserSettings(
             username,
             values["output_directory"],
             self.department(short_code=values["department"]),
-            self.document(short_code=values["document_type"])
+            self.document(short_code=values["document_type"]),
         )
 
     @staticmethod
-    def validate_option_selected(short_code: str|None, full_name: str|None) -> Department:
+    def validate_option_selected(
+        short_code: str | None, full_name: str | None
+    ) -> Department:
         if not (short_code or full_name):
             raise ValueError("Department parameter not selected.")
