@@ -17,6 +17,7 @@ class DocumentController:
             self.gui.file_tree.tree_ctrl
         )
 
+        # Event handlers.
         self.gui.page_view.page_no.Bind(wx.EVT_SPINCTRL, self.on_page_no_btn)
 
         self.gui.page_view.delete_button.Bind(
@@ -77,7 +78,7 @@ class DocumentController:
         self.view_page(page_no=event.Position - 1)
 
     def on_delete_btn(self, event: wx.Event) -> None:
-        self.document_tree.delete_selected()
+        self.document_tree.delete_current()
         self.page_view.clear_display()
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:

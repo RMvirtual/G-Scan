@@ -5,8 +5,14 @@ from wx import TreeCtrl
 
 import rendering
 from data_structures import AbstractLeaf, AbstractNode
-from data_structures_new import Branch, DocumentEntry, DocumentTree
-from document_tree import DocumentBranch, JobBranch, PendingLeaf
+from data_structures_new import (
+    Branch,
+    DocumentEntry,
+    DocumentTree,
+    DocumentTypeBranch,
+    JobBranch,
+)
+from document_tree import DocumentBranch, PendingLeaf
 from documents import DocumentType
 from gui.page_range_dialog import PageRangeDialog
 
@@ -34,7 +40,7 @@ class DocumentTreeController:
             entry = branch.create_document_entry(Path(path).name, None)
             entry.pages = rendering.load_images(path)
 
-            self.gui.AppendItem(
+            entry.gui_id = self.gui.AppendItem(
                 parent=branch.gui_id, text=entry.name, data=entry
             )
 
@@ -44,21 +50,27 @@ class DocumentTreeController:
 
         return result
 
-    def selected_items(self) -> list[AbstractNode]:
-        return [
-            self._node_from_handle(handle=selection)
-            for selection in self.gui.GetSelections()
-            if selection is not None
-        ]
-
     def split_pages(self, node: AbstractLeaf) -> None:
         with PageRangeDialog(max_pages=len(node.data)) as dialog:
             self._on_split_dialog(dialog, node)
 
-    def delete_selected(self) -> None:
-        for node in self.selected_items():
-            node.detach()
-            self._remove_from_gui(node)
+    def delete_current(self) -> None:
+        gui_ids = self.gui.GetSelections()
+
+        for gui_id in gui_ids:
+            entry = self.gui.GetItemData(gui_id)
+            self.delete(entry)
+
+    def delete(self, entry: JobBranch | DocumentEntry) -> None:
+        if isinstance(entry, JobBranch):
+            self.tree.remove(entry)
+            self.gui.Delete(entry.gui_id)
+            entry.gui_id = None
+
+        elif isinstance(entry, DocumentEntry):
+            entry.parent.remove(entry)
+            self.gui.Delete(entry.gui_id)
+            entry.gui_id = None
 
     def create_job_node(
         self,
@@ -186,9 +198,6 @@ class DocumentTreeController:
             raise ValueError(f"Node ID {item_id} does not exist in tree.")
 
         return child
-
-    def _node_from_handle(self, handle: wx.TreeItemId) -> AbstractNode:
-        return self.tree.child_by_id(self.gui.GetItemData(item=handle))
 
     def _handle_from_node(self, node: AbstractNode) -> wx.TreeItemId:
         root_handle = self.gui.GetRootItem()

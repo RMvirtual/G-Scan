@@ -24,11 +24,16 @@ class DocumentTree:
     ) -> DocumentEntry:
         return self.pending.create_document(name, document_type)
 
+    def remove(self, entry: Branch) -> None:
+        if entry is not self.pending or entry not in self.jobs:
+            raise ValueError(f"Cannot remove entry {entry.name}")
+
 
 class Branch(abc.ABC):
-    def __init__(self) -> None:
+    def __init__(self, name: str) -> None:
         super().__init__()
 
+        self.name = name
         self.documents = []
         self.gui_id: wx.TreeItemId | None = None
 
@@ -63,7 +68,7 @@ class Branch(abc.ABC):
 
 class PendingBranch(Branch):
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__("Pending")
 
     def create_document(
         self, name: str, document_type: DocumentType
@@ -76,9 +81,12 @@ class PendingBranch(Branch):
 
 class JobBranch(Branch):
     def __init__(self, reference: str) -> None:
-        super().__init__()
+        super().__init__(reference)
 
-        self.reference = reference
+
+class DocumentTypeBranch(Branch):
+    def __init__(self, type_name: str) -> None:
+        super().__init__(type_name)
 
 
 class DocumentEntry:
