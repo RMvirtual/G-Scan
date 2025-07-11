@@ -9,7 +9,7 @@ from gui.document_editor import Viewer
 
 
 class DocumentController:
-    def __init__(self, gui: Viewer):
+    def __init__(self, gui: Viewer) -> None:
         self.gui = gui
         self.page_view = PageViewController(self.gui.page_view)
 

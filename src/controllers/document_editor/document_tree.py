@@ -97,8 +97,6 @@ class DocumentTreeController:
 
         self.gui.ExpandAll()
 
-    def create_entry(self, entry: DocumentEntry) -> None: ...
-
     def move_entry(
         self, entry: DocumentEntry, reference: str, document_type: DocumentType
     ) -> None:
