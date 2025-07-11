@@ -13,31 +13,22 @@ class Viewer(wx.Panel):
         self.file_menu = FileMenu()
         parent.SetMenuBar(self.file_menu)
 
-        self.input_bar = DocumentEntryToolbar(self)
-        self.page_view = PageCanvas(self)
-        self.file_tree = DocumentTreePanel(self)
+        self.entry_toolbar = DocumentEntryToolbar(self)
+        self.page_canvas = PageCanvas(self)
+        self.document_tree_panel = DocumentTreePanel(self)
         self.exit_btn = wx.Button(self, label="Exit")
 
         # Sizer layout.
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        flags = wx.EXPAND | wx.LEFT | wx.RIGHT
+        border = 5
+        full_width = wx.EXPAND | wx.LEFT | wx.RIGHT
 
-        sizer.Add(window=self.input_bar, proportion=0, flag=flags, border=5)
-
-        page_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        page_flags = wx.EXPAND | wx.ALL
-
-        page_sizer.Add(self.page_view, proportion=3, flag=page_flags, border=5)
-        page_sizer.Add(self.file_tree, proportion=1, flag=page_flags, border=5)
-
-        sizer.Add(page_sizer, proportion=1, flag=flags, border=5)
-
-        sizer.Add(
-            self.exit_btn,
-            proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.BOTTOM,
-            border=5,
-        )
+        sizer.Add(self.entry_toolbar, 0, full_width, border)
+        midsection = wx.BoxSizer(orient=wx.HORIZONTAL)
+        midsection.Add(self.page_canvas, 3, wx.EXPAND | wx.ALL, border)
+        midsection.Add(self.document_tree_panel, 1, wx.EXPAND | wx.ALL, border)
+        sizer.Add(midsection, 1, full_width, border)
+        sizer.Add(self.exit_btn, 0, wx.ALIGN_RIGHT | wx.BOTTOM, border)
 
         self.SetSizer(sizer)
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)

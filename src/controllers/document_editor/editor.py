@@ -23,29 +23,29 @@ class DocumentEditorController:
         self.documents = DocumentController(self.gui)
 
         # Event handlers.
-        file_menu = self.gui.file_menu
+        self.window.Bind(wx.EVT_MENU, self.on_import_files, self.gui.file_menu)
 
         self.window.Bind(
-            wx.EVT_MENU, self.on_import_files, file_menu.import_files
+            wx.EVT_MENU,
+            self.on_import_as,
+            self.gui.file_menu.import_prenamed_files,
         )
 
-        self.window.Bind(
-            wx.EVT_MENU, self.on_import_as, file_menu.import_prenamed_files
-        )
+        self.window.Bind(wx.EVT_MENU, self.on_quit, self.gui.file_menu.quit)
 
-        self.window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
-        self.gui.input_bar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
+        self.gui.entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
+
+        self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
         self.gui.Bind(wx.EVT_CLOSE, self.on_close)
-        self.gui.bottom_bar.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
 
     def on_submit(self, event: wx.Event) -> None:
         try:
             reference = create_job_reference(
-                self.gui.input_bar.reference_text.GetValue()
+                self.gui.entry_toolbar.reference_text.GetValue()
             )
 
             document_type = self.config.database.document(
-                full_name=self.gui.input_bar.document_combobox.GetValue()
+                full_name=self.gui.entry_toolbar.document_combobox.GetValue()
             )
 
             self.documents.assign_current_document(reference, document_type)
