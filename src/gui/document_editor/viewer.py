@@ -1,8 +1,8 @@
 import wx
 
+from gui.document_editor.canvas import PageCanvas
 from gui.document_editor.document_tree import DocumentTreePanel
 from gui.document_editor.file_menu import FileMenu
-from gui.document_editor.panels import PageView
 from gui.document_editor.toolbars import BottomToolbar, UserToolbar
 
 
@@ -14,7 +14,7 @@ class Viewer(wx.Panel):
         parent.SetMenuBar(self.file_menu)
 
         self.input_bar = UserToolbar(self)
-        self.page_view = PageView(self)
+        self.page_view = PageCanvas(self)
         self.file_tree = DocumentTreePanel(self)
         self.bottom_bar = BottomToolbar(self)
 

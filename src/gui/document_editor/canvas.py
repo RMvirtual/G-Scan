@@ -2,7 +2,7 @@ import wx
 from wx.lib.floatcanvas.NavCanvas import NavCanvas
 
 
-class PageView(NavCanvas):
+class PageCanvas(NavCanvas):
     def __init__(self, parent: wx.Panel) -> None:
         super().__init__(
             parent=parent,
