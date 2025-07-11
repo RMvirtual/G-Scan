@@ -1,5 +1,4 @@
 import wx
-from wx.lib.floatcanvas import FloatCanvas
 from wx.lib.floatcanvas.NavCanvas import NavCanvas
 
 
@@ -11,49 +10,31 @@ class PageView(NavCanvas):
             BackgroundColor="DARK SLATE BLUE",
         )
 
-        self._initialise_toolbar_extensions()
+        fit_zoom_tool = self.ToolBar.GetToolByPos(5).GetControl()
+        fit_zoom_tool.Label = "Fit To Page"
 
-    def _initialise_toolbar_extensions(self) -> None:
-        self._rename_zoom_to_fit_widget()
-        self.delete_button = wx.Button(parent=self.ToolBar, label="Delete")
+        self.delete_btn = wx.Button(parent=self.ToolBar, label="Delete")
 
-        self.page_no = wx.SpinCtrl(
+        self.page_no_spin_ctrl = wx.SpinCtrl(
             parent=self.ToolBar,
             value="0",
             style=wx.SP_ARROW_KEYS | wx.SP_HORIZONTAL,
         )
 
-        self.page_quantity = wx.TextCtrl(
+        self.page_qty_text = wx.TextCtrl(
             parent=self.ToolBar, value="Pages: 0", style=wx.TE_READONLY
         )
 
-        self.split_button = wx.Button(parent=self.ToolBar, label="Split Pages")
+        self.split_btn = wx.Button(parent=self.ToolBar, label="Split Pages")
 
         additional_tools = [
-            self.page_no,
-            self.page_quantity,
-            self.delete_button,
-            self.split_button,
+            self.page_no_spin_ctrl,
+            self.page_qty_text,
+            self.delete_btn,
+            self.split_btn,
         ]
 
         for tool in additional_tools:
-            self.ToolBar.AddControl(control=tool)
+            self.ToolBar.AddControl(tool)
 
         self.ToolBar.Realize()
-
-    def set_total_pages(self, quantity: int | str) -> None:
-        self.page_quantity.SetValue(f"Total Pages: {quantity}")
-        self.page_no.SetMin(1)
-        self.page_no.SetMax(quantity)
-
-    def _rename_zoom_to_fit_widget(self) -> None:
-        zoom_to_fit = self.ToolBar.GetToolByPos(5).GetControl()
-        zoom_to_fit.Label = "Fit To Page"
-
-    @property
-    def canvas(self) -> FloatCanvas:
-        return self.Canvas
-
-    @property
-    def toolbar(self) -> None:
-        return self.ToolBar

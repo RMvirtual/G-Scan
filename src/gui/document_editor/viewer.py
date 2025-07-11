@@ -11,7 +11,7 @@ class Viewer(wx.Panel):
         super().__init__(parent)
 
         self.file_menu = FileMenu()
-        self.Parent.SetMenuBar(self.file_menu)
+        parent.SetMenuBar(self.file_menu)
 
         self.input_bar = UserToolbar(self)
         self.page_view = PageView(self)

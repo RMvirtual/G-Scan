@@ -1,8 +1,8 @@
 import wx
+from wx.lib.floatcanvas import FloatCanvas
 
 from controllers import workflows
 from controllers.document_editor.document_tree import DocumentTreeController
-from controllers.document_editor.page_view import PageViewController
 from data_structures_new import Branch, DocumentEntry
 from document_tree import DocumentType
 from gui.document_editor import Viewer
@@ -11,28 +11,24 @@ from gui.document_editor import Viewer
 class DocumentController:
     def __init__(self, gui: Viewer) -> None:
         self.gui = gui
-        self.page_view = PageViewController(self.gui.page_view)
 
         self.document_tree = DocumentTreeController(
             self.gui.file_tree.tree_ctrl
         )
 
         # Event handlers.
-        self.gui.page_view.page_no.Bind(wx.EVT_SPINCTRL, self.on_page_no_btn)
-
-        self.gui.page_view.delete_button.Bind(
-            wx.EVT_BUTTON, self.on_delete_btn
-        )
-
-        self.gui.page_view.split_button.Bind(
-            wx.EVT_BUTTON, self.on_split_pages_btn
-        )
+        page_view = self.gui.page_view
+        page_view.Canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_canvas_wheel)
+        page_view.Canvas.Bind(wx.EVT_LEFT_DCLICK, self.on_canvas_click)
+        page_view.page_no_spin_ctrl.Bind(wx.EVT_SPINCTRL, self.on_page_no_btn)
+        page_view.delete_btn.Bind(wx.EVT_BUTTON, self.on_delete_btn)
+        page_view.split_btn.Bind(wx.EVT_BUTTON, self.on_split_pages_btn)
 
         self.gui.file_tree.tree_ctrl.Bind(
             wx.EVT_TREE_SEL_CHANGED, self.on_item_selection
         )
 
-        self.page_view.hide_all_widgets()
+        self.hide_document_entry_tools()
         self.current_document: DocumentEntry = None
 
     def import_files(self):
@@ -47,18 +43,36 @@ class DocumentController:
         print("Michelin Mode")
 
     def view_document_entry(self, entry: DocumentEntry) -> None:
+        # Set page total.
+        no_of_pages = len(entry.pages)
+        page_view = self.gui.page_view
+        page_view.page_qty_text.SetValue(f"Total Pages: {no_of_pages}")
+        page_view.page_no_spin_ctrl.SetMin(1)
+        page_view.page_no_spin_ctrl.SetMax(no_of_pages)
+        self.show_document_entry_tools()
+
         self.current_document = entry
-        self.page_view.show_all_widgets()
-        self.page_view.set_total_pages(len(entry.pages))
         self.view_page(0)
 
     def view_page(self, page_no: int) -> None:
-        self.page_view.load_image(self.current_document.pages[page_no])
-        self.page_view.set_page_no(page_no + 1)
+        image: wx.Image = self.current_document.pages[page_no]
+
+        bitmap = FloatCanvas.ScaledBitmap(
+            Bitmap=image, XY=(0, 0), Height=image.GetHeight(), Position="bl"
+        )
+
+        self.clear_canvas()
+        self.gui.page_view.Canvas.AddObject(bitmap)
+        self.gui.page_view.Canvas.ZoomToBB()
+        self.gui.page_view.page_no_spin_ctrl.SetValue(page_no + 1)
 
     def clear_view(self) -> None:
         self.current_document = None
-        self.page_view.clear_display()
+        self.clear_canvas()
+
+    def clear_canvas(self) -> None:
+        self.gui.page_view.Canvas.ClearAll()
+        self.gui.page_view.Canvas.ZoomToBB()
 
     def assign_current_document(
         self, reference: str, document_type: DocumentType
@@ -71,6 +85,31 @@ class DocumentController:
             reference, document_type, leaf=self.current_document
         )
 
+    def show_document_entry_tools(self) -> None:
+        view = self.gui.page_view
+        view.delete_btn.Show()
+        view.split_btn.Show()
+        view.page_no_spin_ctrl.Show()
+        view.page_qty_text.Show()
+
+    def hide_document_entry_tools(self) -> None:
+        view = self.gui.page_view
+
+        view.delete_btn.Hide()
+        view.split_btn.Hide()
+        view.page_no_spin_ctrl.Hide()
+        view.page_qty_text.Hide()
+
+    def on_canvas_wheel(self, event: wx.MouseEvent) -> None:
+        zoom_factor = (1 / 1.2) if event.GetWheelRotation() < 0 else 1.2
+
+        self.gui.page_view.Canvas.Zoom(
+            zoom_factor, event.Position, "Pixel", keepPointInPlace=True
+        )
+
+    def on_canvas_click(self, event: wx.Event) -> None:
+        self.gui.page_view.Canvas.ZoomToBB()
+
     def on_split_pages_btn(self, event: wx.Event) -> None:
         self.document_tree.split_pages(self.current_document)
 
@@ -79,20 +118,20 @@ class DocumentController:
 
     def on_delete_btn(self, event: wx.Event) -> None:
         self.document_tree.delete_current()
-        self.page_view.clear_display()
+        self.clear_canvas()
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
         entry = self.document_tree.gui.GetItemData(event.Item)
 
         if isinstance(entry, Branch):
             self.document_tree.gui.Expand(entry.gui_id)
-            self.page_view.hide_all_widgets()
+            self.hide_document_entry_tools()
             self.clear_view()
-            self.page_view.hide_split_button()
+            self.gui.page_view.split_btn.Hide()
 
         elif isinstance(entry, DocumentEntry):
             self.view_document_entry(entry)
 
         else:
-            self.page_view.hide_all_widgets()
+            self.hide_document_entry_tools()
             self.clear_view()

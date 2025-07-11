@@ -41,7 +41,7 @@ class DocumentEditorController:
     def on_submit(self, event: wx.Event) -> None:
         try:
             reference = create_job_reference(
-                self.gui.input_bar.reference_input.GetValue()
+                self.gui.input_bar.reference_text.GetValue()
             )
 
             document_type = self.config.database.document(
