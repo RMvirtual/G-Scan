@@ -32,9 +32,7 @@ class DocumentEditorController:
         )
 
         self.window.Bind(wx.EVT_MENU, self.on_quit, self.gui.file_menu.quit)
-
         self.gui.entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
-
         self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
         self.gui.Bind(wx.EVT_CLOSE, self.on_close)
 
@@ -45,7 +43,7 @@ class DocumentEditorController:
             )
 
             document_type = self.config.database.document(
-                full_name=self.gui.entry_toolbar.document_combobox.GetValue()
+                full_name=self.gui.entry_toolbar.document_box.GetValue()
             )
 
             self.documents.assign_current_document(reference, document_type)

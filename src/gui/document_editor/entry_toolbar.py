@@ -35,14 +35,17 @@ class DocumentEntryToolbar(wx.Panel):
 
         # Grid layout.
         sizer = wx.GridBagSizer(vgap=0, hgap=0)
-        centred_flag = wx.LEFT | wx.RIGHT | wx.ALIGN_BOTTOM
+        centre_bottom = wx.LEFT | wx.RIGHT | wx.ALIGN_BOTTOM
 
         sizer.Add(
-            self.input_lbl, (0, 0), (1, 2), wx.TOP | centred_flag, border=5
+            self.input_lbl, (0, 0), (1, 2), wx.TOP | centre_bottom, border=5
         )
 
-        sizer.Add(self.department_lbl, pos=(0, 2), flag=centred_flag, border=5)
-        sizer.Add(self.document_lbl, pos=(0, 3), flag=centred_flag, border=5)
+        sizer.Add(
+            self.department_lbl, pos=(0, 2), flag=centre_bottom, border=5
+        )
+
+        sizer.Add(self.document_lbl, pos=(0, 3), flag=centre_bottom, border=5)
         sizer.Add(self.reference_text, pos=(1, 0), flag=wx.ALL, border=5)
         sizer.Add(self.submit_btn, pos=(1, 1), flag=wx.ALL, border=5)
         sizer.Add(self.department_box, pos=(1, 2), flag=wx.ALL, border=5)
