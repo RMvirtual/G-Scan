@@ -1,21 +1,7 @@
 import wx
 
 
-class BottomToolbar(wx.Panel):
-    def __init__(self, parent: wx.Frame) -> None:
-        super().__init__(parent)
-
-        self.exit = wx.Button(self, label="Exit")
-        sizer = wx.BoxSizer(wx.VERTICAL)
-
-        sizer.Add(
-            self.exit, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=5
-        )
-
-        self.SetSizer(sizer)
-
-
-class UserToolbar(wx.Panel):
+class DocumentEntryToolbar(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent)
 

@@ -36,7 +36,7 @@ class DocumentEditorController:
         self.window.Bind(wx.EVT_MENU, self.on_quit, file_menu.quit)
         self.gui.input_bar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
         self.gui.Bind(wx.EVT_CLOSE, self.on_close)
-        self.gui.bottom_bar.exit.Bind(wx.EVT_BUTTON, self.on_exit)
+        self.gui.bottom_bar.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
 
     def on_submit(self, event: wx.Event) -> None:
         try:

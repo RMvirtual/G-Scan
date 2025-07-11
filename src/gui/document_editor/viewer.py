@@ -2,8 +2,8 @@ import wx
 
 from gui.document_editor.canvas import PageCanvas
 from gui.document_editor.document_tree import DocumentTreePanel
+from gui.document_editor.entry_toolbar import DocumentEntryToolbar
 from gui.document_editor.file_menu import FileMenu
-from gui.document_editor.toolbars import BottomToolbar, UserToolbar
 
 
 class Viewer(wx.Panel):
@@ -13,10 +13,10 @@ class Viewer(wx.Panel):
         self.file_menu = FileMenu()
         parent.SetMenuBar(self.file_menu)
 
-        self.input_bar = UserToolbar(self)
+        self.input_bar = DocumentEntryToolbar(self)
         self.page_view = PageCanvas(self)
         self.file_tree = DocumentTreePanel(self)
-        self.bottom_bar = BottomToolbar(self)
+        self.exit_btn = wx.Button(self, label="Exit")
 
         # Sizer layout.
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
@@ -33,7 +33,10 @@ class Viewer(wx.Panel):
         sizer.Add(page_sizer, proportion=1, flag=flags, border=5)
 
         sizer.Add(
-            self.bottom_bar, proportion=0, flag=flags | wx.BOTTOM, border=5
+            self.exit_btn,
+            proportion=0,
+            flag=wx.ALIGN_RIGHT | wx.BOTTOM,
+            border=5,
         )
 
         self.SetSizer(sizer)
