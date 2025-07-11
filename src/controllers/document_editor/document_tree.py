@@ -61,9 +61,6 @@ class DocumentTreeController:
             node.detach()
             self._remove_from_gui(node)
 
-    def expand_tree_entry(self, branch: Branch) -> None:
-        self.gui.Expand(item=branch.gui_id)
-
     def create_job_node(
         self,
         reference: str,
