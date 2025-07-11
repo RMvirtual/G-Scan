@@ -45,14 +45,6 @@ class DocumentTreeController:
 
         return result
 
-    def append_to_gui(self, entry: DocumentEntry) -> None:
-        # TODO: Was part way through sorting this.
-        parent_handle = self.tree_handle(entry.parent)
-
-        self.gui.AppendItem(
-            parent=parent_handle, text=entry.type.full_name, data=id(entry)
-        )
-
     def selected_items(self) -> list[AbstractNode]:
         return [
             self._node_from_handle(handle=selection)
