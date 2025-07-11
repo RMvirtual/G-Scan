@@ -5,16 +5,15 @@ from wx import TreeCtrl
 
 import rendering
 from data_structures import AbstractLeaf, AbstractNode
-from data_structures_new import Branch, DocumentEntry
-from data_structures_new import DocumentTree as DocumentTreeNew
-from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
+from data_structures_new import Branch, DocumentEntry, DocumentTree
+from document_tree import DocumentBranch, JobBranch, PendingLeaf
 from documents import DocumentType
 from gui.page_range_dialog import PageRangeDialog
 
 
 class DocumentTreeController:
     def __init__(self, gui: TreeCtrl) -> None:
-        self.tree = DocumentTreeNew()
+        self.tree = DocumentTree()
         self.gui = gui
         self.gui.AddRoot(text="Document Tree", data=id(self.tree))
 

@@ -17,9 +17,15 @@ class DocumentController:
             self.gui.file_tree.tree_ctrl
         )
 
-        self.page_view.bind_page_no(callback=self.on_page_no_btn)
-        self.page_view.bind_delete(callback=self.on_delete_btn)
-        self.page_view.bind_split_pages(callback=self.on_split_pages_btn)
+        self.gui.page_view.page_no.Bind(wx.EVT_SPINCTRL, self.on_page_no_btn)
+
+        self.gui.page_view.delete_button.Bind(
+            wx.EVT_BUTTON, self.on_delete_btn
+        )
+
+        self.gui.page_view.split_button.Bind(
+            wx.EVT_BUTTON, self.on_split_pages_btn
+        )
 
         self.gui.file_tree.tree_ctrl.Bind(
             wx.EVT_TREE_SEL_CHANGED, self.on_item_selection

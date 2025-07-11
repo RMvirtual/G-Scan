@@ -8,10 +8,6 @@ class PageViewController:
     def __init__(self, gui: PageView):
         self._gui = gui
         self.canvas: FloatCanvas.FloatCanvas = gui.canvas
-
-        self._initialise_bindings()
-
-    def _initialise_bindings(self) -> None:
         self.canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_wheel)
         self.canvas.Bind(wx.EVT_LEFT_DCLICK, self.fit_page_to_panel)
 
@@ -43,15 +39,6 @@ class PageViewController:
 
     def fit_page_to_panel(self, _event: wx.Event = None):
         self.canvas.ZoomToBB()
-
-    def bind_page_no(self, callback) -> None:
-        self._gui.page_no.Bind(event=wx.EVT_SPINCTRL, handler=callback)
-
-    def bind_delete(self, callback) -> None:
-        self._gui.delete_button.Bind(event=wx.EVT_BUTTON, handler=callback)
-
-    def bind_split_pages(self, callback) -> None:
-        self._gui.split_button.Bind(event=wx.EVT_BUTTON, handler=callback)
 
     def show_all_widgets(self) -> None:
         self._gui.delete_button.Show()
