@@ -3,6 +3,8 @@ from __future__ import annotations
 import abc
 from typing import Iterator
 
+import wx
+
 from documents import DocumentType
 
 
@@ -18,9 +20,9 @@ class DocumentTree:
         return result
 
     def create_pending_document(
-        self, document_type: DocumentType
+        self, name: str, document_type: DocumentType
     ) -> DocumentEntry:
-        return self.pending.create_document(document_type)
+        return self.pending.create_document(name, document_type)
 
 
 class Branch(abc.ABC):
@@ -28,11 +30,12 @@ class Branch(abc.ABC):
         super().__init__()
 
         self.documents = []
+        self.gui_id: wx.TreeItemId | None = None
 
     def create_document_entry(
-        self, document_type: DocumentType
+        self, name: str, document_type: DocumentType
     ) -> DocumentEntry:
-        result = DocumentEntry(self, document_type)
+        result = DocumentEntry(self, name, document_type)
         self.append(result)
 
         return result
@@ -62,8 +65,10 @@ class PendingBranch(Branch):
     def __init__(self) -> None:
         super().__init__()
 
-    def create_document(self, document_type: DocumentType) -> DocumentEntry:
-        result = DocumentEntry(self, document_type)
+    def create_document(
+        self, name: str, document_type: DocumentType
+    ) -> DocumentEntry:
+        result = DocumentEntry(self, name, document_type)
         self.documents.append(result)
 
         return result
@@ -77,7 +82,11 @@ class JobBranch(Branch):
 
 
 class DocumentEntry:
-    def __init__(self, parent: Branch, document_type: DocumentType) -> None:
+    def __init__(
+        self, parent: Branch, name: str, document_type: DocumentType
+    ) -> None:
         self.parent = parent
+        self.name = name
         self.type = document_type
         self.pages = []
+        self.gui_id: wx.TreeItemId | None = None

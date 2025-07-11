@@ -13,9 +13,9 @@ class TestDocumentTree:
 
     def test_should_create_pending_document(self) -> None:
         tree = DocumentTree()
-        result = tree.create_pending_document(self._example_document_type())
+        result = tree.create_pending_document("Pending1", None)
 
-        assert result.type.short_code == "ShortCode1"
+        assert result.name == "Pending1"
         assert len(tree.pending) == 1
         assert len(tree.jobs) == 0
 
@@ -24,7 +24,7 @@ class TestDocumentTree:
         job_branch = tree.create_job_branch("GR190100100")
 
         pending_item = tree.create_pending_document(
-            self._example_document_type()
+            "Pending1", self._example_document_type()
         )
 
         assert pending_item.parent is tree.pending
@@ -39,14 +39,20 @@ class TestDocumentTree:
     def test_should_create_job_branch_document_entry(self) -> None:
         tree = DocumentTree()
         job_branch = tree.create_job_branch("GR190100100")
-        job_branch.create_document_entry(self._example_document_type())
+
+        job_branch.create_document_entry(
+            "Document1", self._example_document_type()
+        )
 
         assert len(job_branch) == 1
 
     def test_should_remove_document_entry(self) -> None:
         tree = DocumentTree()
         job_branch = tree.create_job_branch("GR190100100")
-        entry = job_branch.create_document_entry(self._example_document_type())
+
+        entry = job_branch.create_document_entry(
+            "Document1", self._example_document_type()
+        )
 
         job_branch.remove(entry)
 

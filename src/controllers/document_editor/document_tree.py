@@ -1,11 +1,11 @@
-import ntpath
+from pathlib import Path
 
 import wx
 from wx import TreeCtrl
 
 import rendering
 from data_structures import AbstractLeaf, AbstractNode
-from data_structures_new import DocumentEntry
+from data_structures_new import Branch, DocumentEntry
 from data_structures_new import DocumentTree as DocumentTreeNew
 from document_tree import DocumentBranch, DocumentTree, JobBranch, PendingLeaf
 from documents import DocumentType
@@ -19,10 +19,38 @@ class DocumentTreeController:
         self.gui.AddRoot(text="Document Tree", data=id(self.tree))
 
         # Create pending branch.
-        self.gui.AppendItem(
+        pending_id = self.gui.AppendItem(
             parent=self.gui.GetRootItem(),
             text="Pending",
-            data=id(self.tree.pending),
+            data=self.tree.pending,
+        )
+
+        self.tree.pending.gui_id = pending_id
+
+    def create_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
+        branch = self.tree.pending
+        result = []
+
+        for path in paths:
+            entry = branch.create_document_entry(Path(path).name, None)
+            entry.pages = rendering.load_images(path)
+
+            self.gui.AppendItem(
+                parent=branch.gui_id, text=entry.name, data=entry
+            )
+
+            result.append(entry)
+
+        self.gui.Expand(branch.gui_id)
+
+        return result
+
+    def append_to_gui(self, entry: DocumentEntry) -> None:
+        # TODO: Was part way through sorting this.
+        parent_handle = self.tree_handle(entry.parent)
+
+        self.gui.AppendItem(
+            parent=parent_handle, text=entry.type.full_name, data=id(entry)
         )
 
     def selected_items(self) -> list[AbstractNode]:
@@ -41,35 +69,8 @@ class DocumentTreeController:
             node.detach()
             self._remove_from_gui(node)
 
-    def expand(self, node: AbstractNode) -> None:
-        self.gui.Expand(item=self._handle_from_node(node))
-
-    def create_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
-        result = []
-
-        for path in paths:
-            entry = PendingLeaf(
-                parent=self.tree.pending,
-                file_name=ntpath.basename(path),
-                data=rendering.load_images(path),
-            )
-
-            result.append(entry)
-            self.append_to_gui(entry)
-            self._append_to_gui(entry)
-
-        self.expand(self.tree.pending)
-
-        return result
-
-    def append_to_gui(self, entry: DocumentEntry) -> None:
-        # TODO: Was part way through sorting this.
-
-        parent_handle = self.tree_handle(entry.parent)
-
-        self.gui.AppendItem(
-            parent=parent_handle, text=entry.type.full_name, data=id(entry)
-        )
+    def expand_tree_entry(self, branch: Branch) -> None:
+        self.gui.Expand(item=branch.gui_id)
 
     def create_job_node(
         self,

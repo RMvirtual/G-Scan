@@ -3,7 +3,7 @@ import wx
 from controllers import workflows
 from controllers.document_editor.document_tree import DocumentTreeController
 from controllers.document_editor.page_view import PageViewController
-from data_structures_new import DocumentEntry
+from data_structures_new import Branch, DocumentEntry
 from document_tree import DocumentType
 from gui.document_editor import Viewer
 
@@ -41,10 +41,8 @@ class DocumentController:
 
     def view_document_entry(self, entry: DocumentEntry) -> None:
         self.current_document = entry
-
         self.page_view.show_all_widgets()
-        self.page_view.set_total_pages(len(self.current_document.pages))
-
+        self.page_view.set_total_pages(len(entry.pages))
         self.view_page(0)
 
     def view_page(self, page_no: int) -> None:
@@ -76,22 +74,17 @@ class DocumentController:
         self.document_tree.delete_selected()
         self.page_view.clear_display()
 
-    def on_item_selection(self, event: wx.Event) -> None:
-        selections = self.document_tree.selected_items()
+    def on_item_selection(self, event: wx.TreeEvent) -> None:
+        entry = self.document_tree.gui.GetItemData(event.Item)
 
-        if len(selections) == 1:
-            node = selections[0]
-
-            if node.is_leaf():
-                self.view_document_entry(node)
-
-            elif node.is_branch():
-                self.document_tree.expand(node)
-                self.page_view.hide_all_widgets()
-                self.clear_view()
-
-        elif len(selections) > 1:
+        if isinstance(entry, Branch):
+            self.document_tree.gui.Expand(entry.gui_id)
+            self.page_view.hide_all_widgets()
+            self.clear_view()
             self.page_view.hide_split_button()
+
+        elif isinstance(entry, DocumentEntry):
+            self.view_document_entry(entry)
 
         else:
             self.page_view.hide_all_widgets()
