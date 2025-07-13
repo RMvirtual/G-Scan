@@ -13,8 +13,7 @@ class Settings(wx.Panel):
 
         self.output_directory_entry = wx.TextCtrl(self, value="")
         self.output_directory_btn = wx.Button(self, label="...")
-
-        self.defaults_title_lbl = wx.StaticText(self, label="Defaults")
+        self.defaults_lbl = wx.StaticText(self, label="Defaults")
         self.department_lbl = wx.StaticText(self, label="Department")
 
         self.department_box = wx.ComboBox(
@@ -35,7 +34,7 @@ class Settings(wx.Panel):
         self.title_lbl.SetFont(title_font)
 
         heading_font = wx.Font(wx.FontInfo(pointSize=20)).Bold()
-        self.defaults_title_lbl.SetFont(heading_font)
+        self.defaults_lbl.SetFont(heading_font)
 
         size_12_font = wx.Font(wx.FontInfo(pointSize=12))
         self.output_directory_lbl.SetFont(size_12_font)
@@ -50,33 +49,29 @@ class Settings(wx.Panel):
 
         # Sizer layout.
         output_directory_sizer = wx.GridBagSizer(vgap=5, hgap=5)
-        align_centre_left = wx.ALIGN_LEFT | wx.ALIGN_CENTRE_VERTICAL
 
         output_directory_sizer.Add(
-            self.output_directory_lbl, pos=(1, 0), flag=align_centre_left
+            self.output_directory_lbl,
+            pos=(1, 0),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTRE_VERTICAL,
         )
 
         output_directory_sizer.Add(
             self.output_directory_entry,
             pos=(1, 1),
-            flag=wx.EXPAND | align_centre_left,
-        )
-
-        output_directory_sizer.Add(
-            self.output_directory_btn, pos=(1, 2), flag=align_centre_left
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTRE_VERTICAL | wx.EXPAND,
         )
 
         output_directory_sizer.AddGrowableCol(1)
 
-        defaults_sizer = wx.GridBagSizer(vgap=15, hgap=30)
-
-        defaults_sizer.Add(
-            self.defaults_title_lbl,
-            pos=(0, 0),
-            span=(1, 2),
-            flag=wx.ALIGN_LEFT,
+        output_directory_sizer.Add(
+            self.output_directory_btn,
+            pos=(1, 2),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTRE_VERTICAL,
         )
 
+        defaults_sizer = wx.GridBagSizer(vgap=15, hgap=30)
+        defaults_sizer.Add(self.defaults_lbl, (0, 0), (1, 2), wx.ALIGN_LEFT)
         defaults_sizer.Add(self.department_lbl, pos=(1, 0), flag=wx.ALIGN_LEFT)
         defaults_sizer.Add(self.document_lbl, pos=(1, 1), flag=wx.ALIGN_LEFT)
 
