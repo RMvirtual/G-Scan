@@ -65,7 +65,7 @@ class MainMenuController:
 
         # Setup callbacks to new department window.
         for document in department.document_types:
-            doc_btn = doc_select_panel.option_btns[document]
+            doc_btn = doc_select_panel.document_type_btns[document]
             callback = self._final_selection_lambda(department, document)
             doc_btn.Bind(wx.EVT_BUTTON, callback)
 

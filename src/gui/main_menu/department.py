@@ -36,8 +36,8 @@ class DepartmentsPanel(wx.Panel):
         for button in *self.department_btns.values(), self.quick_start_btn:
             departments_sizer.Add(button, 0, wx.ALL, border)
 
-        sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(departments_sizer, 1, wx.ALIGN_CENTRE_HORIZONTAL)
-        sizer.Add(self.settings_btn, 0, wx.ALL | wx.ALIGN_RIGHT, border)
-        sizer.Add(self.exit_btn, 0, wx.ALL | wx.ALIGN_RIGHT, border)
-        self.SetSizer(sizer)
+        main_sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        main_sizer.Add(departments_sizer, 1, wx.ALIGN_CENTRE_HORIZONTAL)
+        main_sizer.Add(self.settings_btn, 0, wx.ALL | wx.ALIGN_RIGHT, border)
+        main_sizer.Add(self.exit_btn, 0, wx.ALL | wx.ALIGN_RIGHT, border)
+        self.SetSizer(main_sizer)

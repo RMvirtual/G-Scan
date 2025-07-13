@@ -5,35 +5,35 @@ from documents import DocumentType
 
 class DocumentsPanel(wx.Panel):
     def __init__(
-        self, parent: wx.Frame, document_types: list[DocumentType]
+        self, parent: wx.Panel, document_types: list[DocumentType]
     ) -> None:
         super().__init__(parent)
 
-        self.option_btns: dict[DocumentType, wx.Button] = {}
+        self.document_type_btns: dict[DocumentType, wx.Button] = {}
 
-        for document in document_types:
-            self.option_btns[document] = wx.Button(
-                self, label=document.full_name, style=wx.BU_EXACTFIT
+        for document_type in document_types:
+            new_btn = wx.Button(
+                self, label=document_type.full_name, style=wx.BU_EXACTFIT
             )
+
+            self.document_type_btns[document_type] = new_btn
 
         self.back = wx.Button(parent=self, label="Back")
 
+        # Fonts.
         font = wx.Font(wx.FontInfo(pointSize=16)).Bold()
 
-        for button in *self.option_btns.values(), self.back:
+        for button in *self.document_type_btns.values(), self.back:
             button.SetFont(font)
 
         # Sizer layout.
-        doc_row_sizer = wx.WrapSizer()
+        border = 15
+        document_types_sizer = wx.WrapSizer()
 
-        for button in self.option_btns.values():
-            doc_row_sizer.Add(button, proportion=1, flag=wx.ALL, border=15)
+        for button in self.document_type_btns.values():
+            document_types_sizer.Add(button, 1, wx.ALL, border)
 
-        sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        sizer.Add(doc_row_sizer, proportion=1, flag=wx.ALIGN_CENTRE_HORIZONTAL)
-
-        sizer.Add(
-            self.back, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=15
-        )
-
-        self.SetSizer(sizer)
+        main_sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        main_sizer.Add(document_types_sizer, 1, wx.ALIGN_CENTRE_HORIZONTAL)
+        main_sizer.Add(self.back, 0, wx.ALL | wx.ALIGN_RIGHT, border)
+        self.SetSizer(main_sizer)
