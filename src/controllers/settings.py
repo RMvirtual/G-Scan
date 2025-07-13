@@ -27,10 +27,12 @@ class SettingsController:
         )
 
         dept_names = list(map(lambda d: d.full_name, self.dept_options))
-        self.gui.defaults.dept_box.SetItems(dept_names)
-        self.gui.defaults.dept_box.SetValue(user_settings.department.full_name)
+        self.gui.defaults.department_box.SetItems(dept_names)
+        self.gui.defaults.department_box.SetValue(
+            user_settings.department.full_name
+        )
 
-        self.update_document_options(user_settings.department)
+        self.update_options(user_settings.department)
 
         # Bind callbacks.
         self.gui.save_btn.Bind(wx.EVT_BUTTON, self.on_save)
@@ -40,7 +42,7 @@ class SettingsController:
             wx.EVT_BUTTON, self.on_output_directory_browse
         )
 
-        self.gui.defaults.dept_box.Bind(
+        self.gui.defaults.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_option_change
         )
 
@@ -59,25 +61,26 @@ class SettingsController:
         self.gui.SetAcceleratorTable(wx.AcceleratorTable(accelators))
         self.gui.SetFocus()
 
-    def update_document_options(self, department: Department) -> None:
-        self.gui.defaults.dept_box.SetValue(department.full_name)
-        doc_names = list(map(lambda d: d.full_name, department.document_types))
+    def update_options(self, department: Department) -> None:
+        names = [document.full_name for document in department.document_types]
 
-        self.gui.defaults.doc_box.SetItems(doc_names)
-        self.gui.defaults.doc_box.SetValue(doc_names[0])
+        panel = self.gui.defaults
+        panel.department_box.SetValue(department.full_name)
+        panel.document_box.SetItems(names)
+        panel.document_box.SetValue(names[0])
 
     def exit_to_main_menu(self) -> None:
         self.gui.Destroy()
         self.app.launch_main_menu()
 
     def on_save(self, event: wx.Event) -> None:
-        dept_value: str = self.gui.defaults.dept_box.GetValue()
+        dept_value: str = self.gui.defaults.department_box.GetValue()
 
         dept = list(
             filter(lambda d: d.full_name == dept_value, self.dept_options)
         )[0]
 
-        document_value = self.gui.defaults.doc_box.GetValue()
+        document_value = self.gui.defaults.document_box.GetValue()
 
         document = list(
             filter(
@@ -104,13 +107,13 @@ class SettingsController:
             self.gui.directories.output_dir_entry.SetValue(directory)
 
     def on_department_option_change(self, event: wx.Event) -> None:
-        department_value = self.gui.defaults.dept_box.GetValue()
+        department_value = self.gui.defaults.department_box.GetValue()
 
         department = [
             d for d in self.dept_options if d.full_name == department_value
         ][0]
 
-        self.update_document_options(department)
+        self.update_options(department)
 
     def on_f4_escape_key(self, event: wx.Event) -> None:
         self.exit_to_main_menu()
