@@ -23,18 +23,36 @@ class DocumentEditorController:
         self.documents = DocumentController(self.gui)
 
         # Event handlers.
-        self.window.Bind(wx.EVT_MENU, self.on_import_files, self.gui.file_menu)
+        self.gui.entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
+        self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_f4)
+
+        # File menu handlers.
+        file_menu = self.gui.file_menu
 
         self.window.Bind(
-            wx.EVT_MENU,
-            self.on_import_as,
-            self.gui.file_menu.import_prenamed_files,
+            wx.EVT_MENU, self.on_import_files, file_menu.import_files
         )
 
-        self.window.Bind(wx.EVT_MENU, self.on_quit, self.gui.file_menu.quit)
-        self.gui.entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
-        self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
-        self.gui.Bind(wx.EVT_CLOSE, self.on_close)
+        self.window.Bind(
+            wx.EVT_MENU, self.on_import_as, file_menu.import_prenamed_files
+        )
+
+        self.window.Bind(wx.EVT_MENU, self.on_exit, file_menu.quit)
+
+        # Shortcut keys.
+        f4_shortcut_id = wx.NewId()
+        self.gui.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
+
+        escape_shortcut_id = wx.NewId()
+        self.gui.Bind(wx.EVT_MENU, self.on_f4, id=escape_shortcut_id)
+
+        accelators = [
+            (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id),
+            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, escape_shortcut_id),
+        ]
+
+        self.gui.SetAcceleratorTable(wx.AcceleratorTable(accelators))
+        self.gui.SetFocus()
 
     def on_submit(self, event: wx.Event) -> None:
         try:
@@ -64,16 +82,10 @@ class DocumentEditorController:
     def on_import_as(self, event: wx.Event) -> None:
         self.documents.import_as()
 
-    def on_quit(self, event: wx.Event = None) -> None:
-        self._exit_to_main_menu()
+    def on_f4(self, event: wx.Event) -> None:
+        self.on_exit(event)
 
     def on_exit(self, event=None) -> None:
-        self._exit_to_main_menu()
-
-    def on_close(self, event=None) -> None:
         self.gui.Destroy()
         self.window.SetMenuBar(wx.MenuBar())
-
-    def _exit_to_main_menu(self) -> None:
-        self.gui.Close()
         self.root.launch_main_menu()

@@ -20,7 +20,9 @@ class FileMenu(wx.MenuBar):
         )
 
         self.quit = self.file_menu.Append(
-            id=wx.ID_ANY, item="&Quit\tF4", helpString="Quit to Main Menu"
+            id=wx.ID_ANY,
+            item="&Quit\tF4",
+            helpString="Quit to Main Menu",
         )
 
         self.Append(self.file_menu, "File")

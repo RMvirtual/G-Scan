@@ -36,6 +36,7 @@ class MainMenuController:
         depts_panel.settings_btn.Bind(wx.EVT_BUTTON, self.on_settings)
         depts_panel.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
 
+        # Shortcut keys.
         f4_shortcut_id = wx.NewId()
         self.panel.Bind(wx.EVT_MENU, self.on_f4, id=f4_shortcut_id)
 
