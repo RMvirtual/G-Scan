@@ -6,7 +6,7 @@ from configuration import Configuration
 from controllers.mediator import ApplicationMediator
 from departments import Department
 from documents import DocumentType
-from gui.main_menu.document_selection import DocumentSelectionPanel
+from gui.main_menu.document import DocumentSelectionPanel
 from gui.main_menu.main_menu import MainMenu
 from gui.window import Window
 

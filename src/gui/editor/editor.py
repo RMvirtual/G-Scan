@@ -1,15 +1,15 @@
 import wx
 
 from gui.editor.canvas import PageCanvas
-from gui.editor.entry_toolbar import DocumentEntryToolbar
 from gui.editor.menu_bar import TopMenuBar
+from gui.editor.toolbar import Toolbar
 
 
 class EditorPanel(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent)
 
-        self.entry_toolbar = DocumentEntryToolbar(self)
+        self.entry_toolbar = Toolbar(self)
         self.page_canvas = PageCanvas(self)
 
         self.tree_ctrl = wx.TreeCtrl(

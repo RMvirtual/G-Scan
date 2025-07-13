@@ -1,12 +1,14 @@
 import wx
 
 from departments import Department
-from gui.main_menu.department_selection import DepartmentSelectionPanel
+from gui.main_menu.department import DepartmentSelectionPanel
 from gui.main_menu.logo import LogoPanel
 
 
 class MainMenu(wx.Panel):
-    def __init__(self, parent: wx.Frame, departments: list[Department]) -> None:
+    def __init__(
+        self, parent: wx.Frame, departments: list[Department]
+    ) -> None:
         super().__init__(parent)
 
         self.logo = LogoPanel(self)

@@ -1,7 +1,7 @@
 import wx
 
 
-class DocumentEntryToolbar(wx.Panel):
+class Toolbar(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent)
 
