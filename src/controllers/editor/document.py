@@ -2,14 +2,14 @@ import wx
 from wx.lib.floatcanvas import FloatCanvas
 
 from controllers import workflows
-from controllers.document_editor.document_tree import DocumentTreeController
+from controllers.editor.document_tree import DocumentTreeController
 from data_structures_new import Branch, DocumentEntry
 from document_tree import DocumentType
-from gui.document_editor import Viewer
+from gui.editor import EditorPanel
 
 
 class DocumentController:
-    def __init__(self, gui: Viewer) -> None:
+    def __init__(self, gui: EditorPanel) -> None:
         self.gui = gui
 
         self.document_tree = DocumentTreeController(

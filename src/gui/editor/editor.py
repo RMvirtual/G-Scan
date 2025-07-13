@@ -1,22 +1,21 @@
 import wx
 
-from gui.document_editor.canvas import PageCanvas
-from gui.document_editor.document_tree import DocumentTreePanel
-from gui.document_editor.entry_toolbar import DocumentEntryToolbar
-from gui.document_editor.file_menu import FileMenu
+from gui.editor.canvas import PageCanvas
+from gui.editor.document_tree import DocumentTreePanel
+from gui.editor.entry_toolbar import DocumentEntryToolbar
+from gui.editor.menu_bar import TopMenuBar
 
 
-class Viewer(wx.Panel):
-    def __init__(self, parent: wx.Frame):
+class EditorPanel(wx.Panel):
+    def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent)
-
-        self.file_menu = FileMenu()
-        parent.SetMenuBar(self.file_menu)
 
         self.entry_toolbar = DocumentEntryToolbar(self)
         self.page_canvas = PageCanvas(self)
         self.document_tree_panel = DocumentTreePanel(self)
         self.exit_btn = wx.Button(self, label="Exit")
+        self.menu_bar = TopMenuBar()
+        parent.SetMenuBar(self.menu_bar)
 
         # Sizer layout.
         sizer = wx.BoxSizer(orient=wx.VERTICAL)

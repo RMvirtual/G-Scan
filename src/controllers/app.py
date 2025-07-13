@@ -1,12 +1,13 @@
 import os
+
 import wx
 
 import file_system
 from configuration import Configuration
-from controllers.document_editor.editor import DocumentEditorController
+from controllers.editor.editor import EditorController
 from controllers.main_menu import MainMenuController
-from controllers.settings import SettingsController
 from controllers.mediator import ApplicationMediator
+from controllers.settings import SettingsController
 from database import JSONDatabase, JSONDatabaseFiles, UserSettings
 from gui.window import Window
 
@@ -14,9 +15,9 @@ from gui.window import Window
 class MainApplication(ApplicationMediator):
     def __init__(self, config: Configuration):
         display_width, display_height = wx.DisplaySize()
-        size = (int(display_width/2), int(display_height/1.1))
-        
-        self.window = Window(size, position=wx.Point(size[0],0))
+        size = (int(display_width / 2), int(display_height / 1.1))
+
+        self.window = Window(size, position=wx.Point(size[0], 0))
         self.config = config
 
     def launch_main_menu(self) -> None:
@@ -27,12 +28,13 @@ class MainApplication(ApplicationMediator):
         user_settings = self.config.settings
 
         settings_controller = SettingsController(
-            self, self.window, department_options, user_settings)
-        
+            self, self.window, department_options, user_settings
+        )
+
         self.window.set_panel(settings_controller.gui)
 
     def launch_image_viewer(self, config: Configuration) -> None:
-        DocumentEditorController(self, config, self.window)
+        EditorController(self, config, self.window)
 
     def update_user_settings(self, settings: UserSettings) -> None:
         database = self.config.database
@@ -51,12 +53,14 @@ class MainApplication(ApplicationMediator):
 
 def main() -> None:
     gui_runtime = wx.App()
-    config_directory = file_system.data_directory()   
-    
-    database_files = list(map(
-        config_directory.joinpath,
-        ["departments.json", "document_types.json", "user_settings.json"]
-    ))
+    config_directory = file_system.data_directory()
+
+    database_files = list(
+        map(
+            config_directory.joinpath,
+            ["departments.json", "document_types.json", "user_settings.json"],
+        )
+    )
 
     database = JSONDatabase(JSONDatabaseFiles(*database_files))
     configuration = Configuration(database, os.getlogin())
@@ -64,10 +68,9 @@ def main() -> None:
     controller = MainApplication(configuration)
     controller.show()
     controller.launch_main_menu()
-    
+
     gui_runtime.MainLoop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-    
