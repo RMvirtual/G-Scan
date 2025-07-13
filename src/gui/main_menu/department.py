@@ -19,17 +19,15 @@ class DepartmentsPanel(wx.Panel):
         self.settings_btn = wx.Button(self, label="Settings")
         self.exit_btn = wx.Button(self, label="Exit")
 
-        all_buttons = [
-            *self.department_btns.values(),
-            self.quick_start_btn,
-            self.settings_btn,
-            self.exit_btn,
-        ]
-
+        # Fonts.
         font = wx.Font(wx.FontInfo(pointSize=30)).Bold()
 
-        for button in all_buttons:
-            button.SetFont(font)
+        for dept_btn in self.department_btns.values():
+            dept_btn.SetFont(font)
+
+        self.quick_start_btn.SetFont(font)
+        self.settings_btn.SetFont(font)
+        self.exit_btn.SetFont(font)
 
         # Sizer layout.
         border = 15
