@@ -43,14 +43,12 @@ class EditorController:
         f4_shortcut_id = wx.NewId()
         self.gui.Bind(wx.EVT_MENU, self.on_f4_escape_key, id=f4_shortcut_id)
 
-        escape_shortcut_id = wx.NewId()
-        self.gui.Bind(
-            wx.EVT_MENU, self.on_f4_escape_key, id=escape_shortcut_id
-        )
+        esc_shortcut_id = wx.NewId()
+        self.gui.Bind(wx.EVT_MENU, self.on_f4_escape_key, id=esc_shortcut_id)
 
         accelators = [
             (wx.ACCEL_NORMAL, wx.WXK_F4, f4_shortcut_id),
-            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, escape_shortcut_id),
+            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, esc_shortcut_id),
         ]
 
         self.gui.SetAcceleratorTable(wx.AcceleratorTable(accelators))
