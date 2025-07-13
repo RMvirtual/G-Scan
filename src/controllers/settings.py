@@ -4,7 +4,7 @@ from controllers import workflows
 from controllers.mediator import ApplicationMediator
 from database import UserSettings
 from departments import Department
-from gui.settings.settings import Settings
+from gui.settings import Settings
 from gui.window import Window
 
 
@@ -25,10 +25,8 @@ class SettingsController:
         self.gui.output_directory_entry.SetValue(user_settings.output_dir)
 
         dept_names = list(map(lambda d: d.full_name, self.dept_options))
-        self.gui.defaults.department_box.SetItems(dept_names)
-        self.gui.defaults.department_box.SetValue(
-            user_settings.department.full_name
-        )
+        self.gui.department_box.SetItems(dept_names)
+        self.gui.department_box.SetValue(user_settings.department.full_name)
 
         self.update_options(user_settings.department)
 
@@ -40,7 +38,7 @@ class SettingsController:
             wx.EVT_BUTTON, self.on_output_directory_browse
         )
 
-        self.gui.defaults.department_box.Bind(
+        self.gui.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_option_change
         )
 
@@ -62,7 +60,7 @@ class SettingsController:
     def update_options(self, department: Department) -> None:
         names = [document.full_name for document in department.document_types]
 
-        panel = self.gui.defaults
+        panel = self.gui
         panel.department_box.SetValue(department.full_name)
         panel.document_box.SetItems(names)
         panel.document_box.SetValue(names[0])
@@ -72,13 +70,13 @@ class SettingsController:
         self.app.launch_main_menu()
 
     def on_save(self, event: wx.Event) -> None:
-        dept_value: str = self.gui.defaults.department_box.GetValue()
+        dept_value: str = self.gui.department_box.GetValue()
 
         dept = list(
             filter(lambda d: d.full_name == dept_value, self.dept_options)
         )[0]
 
-        document_value = self.gui.defaults.document_box.GetValue()
+        document_value = self.gui.document_box.GetValue()
 
         document = list(
             filter(
@@ -105,7 +103,7 @@ class SettingsController:
             self.gui.output_directory_entry.SetValue(directory)
 
     def on_department_option_change(self, event: wx.Event) -> None:
-        department_value = self.gui.defaults.department_box.GetValue()
+        department_value = self.gui.department_box.GetValue()
 
         department = [
             d for d in self.dept_options if d.full_name == department_value
