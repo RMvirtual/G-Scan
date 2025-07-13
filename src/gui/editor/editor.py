@@ -12,15 +12,16 @@ class EditorPanel(wx.Panel):
         self.entry_toolbar = DocumentEntryToolbar(self)
         self.page_canvas = PageCanvas(self)
 
-        tree_style = (
-            wx.TR_HIDE_ROOT
-            | wx.TR_TWIST_BUTTONS
-            | wx.TR_HAS_BUTTONS
-            | wx.TR_NO_LINES
-            | wx.TR_MULTIPLE
+        self.tree_ctrl = wx.TreeCtrl(
+            self,
+            style=(
+                wx.TR_HIDE_ROOT
+                | wx.TR_TWIST_BUTTONS
+                | wx.TR_HAS_BUTTONS
+                | wx.TR_NO_LINES
+                | wx.TR_MULTIPLE
+            ),
         )
-
-        self.tree_ctrl = wx.TreeCtrl(self, style=tree_style)
 
         self.upload_btn = wx.Button(parent=self, label="Upload to FCL")
         self.exit_btn = wx.Button(self, label="Exit")
@@ -28,33 +29,21 @@ class EditorPanel(wx.Panel):
         parent.SetMenuBar(self.menu_bar)
 
         # Sizer layout.
-        sizer = wx.BoxSizer(orient=wx.VERTICAL)
         border = 5
-        full_width = wx.EXPAND | wx.LEFT | wx.RIGHT
-
-        sizer.Add(self.entry_toolbar, 0, full_width, border)
 
         tree_sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        tree_sizer.Add(self.upload_btn, 0, wx.ALIGN_LEFT | wx.ALL, border)
+        tree_sizer.Add(self.tree_ctrl, 1, wx.EXPAND | wx.VERTICAL, border)
 
-        tree_sizer.Add(
-            window=self.upload_btn,
-            proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5,
-        )
+        midsection_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
+        midsection_sizer.Add(self.page_canvas, 3, wx.EXPAND | wx.ALL, border)
+        midsection_sizer.Add(tree_sizer, 1, wx.EXPAND | wx.ALL, border)
 
-        tree_sizer.Add(
-            window=self.tree_ctrl,
-            proportion=1,
-            flag=wx.EXPAND | wx.VERTICAL,
-            border=5,
-        )
+        full_width_flags = wx.EXPAND | wx.LEFT | wx.RIGHT
+        main_sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        main_sizer.Add(self.entry_toolbar, 0, full_width_flags, border)
+        main_sizer.Add(midsection_sizer, 1, full_width_flags, border)
+        main_sizer.Add(self.exit_btn, 0, wx.ALIGN_RIGHT | wx.BOTTOM, border)
 
-        midsection = wx.BoxSizer(orient=wx.HORIZONTAL)
-        midsection.Add(self.page_canvas, 3, wx.EXPAND | wx.ALL, border)
-        midsection.Add(tree_sizer, 1, wx.EXPAND | wx.ALL, border)
-        sizer.Add(midsection, 1, full_width, border)
-        sizer.Add(self.exit_btn, 0, wx.ALIGN_RIGHT | wx.BOTTOM, border)
-
-        self.SetSizer(sizer)
+        self.SetSizer(main_sizer)
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
