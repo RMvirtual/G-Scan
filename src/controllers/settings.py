@@ -22,9 +22,7 @@ class SettingsController:
         self.dept_options = dept_options
 
         # Load settings from configuration.
-        self.gui.directories.output_dir_entry.SetValue(
-            user_settings.output_dir
-        )
+        self.gui.output_directory_entry.SetValue(user_settings.output_dir)
 
         dept_names = list(map(lambda d: d.full_name, self.dept_options))
         self.gui.defaults.department_box.SetItems(dept_names)
@@ -38,7 +36,7 @@ class SettingsController:
         self.gui.save_btn.Bind(wx.EVT_BUTTON, self.on_save)
         self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_exit)
 
-        self.gui.directories.output_dir_btn.Bind(
+        self.gui.output_directory_btn.Bind(
             wx.EVT_BUTTON, self.on_output_directory_browse
         )
 
@@ -88,7 +86,7 @@ class SettingsController:
             )
         )[0]
 
-        output_directory = self.gui.directories.output_dir_entry.GetValue()
+        output_directory = self.gui.output_directory_entry.GetValue()
 
         settings = UserSettings(
             self.user_settings.username, output_directory, dept, document
@@ -104,7 +102,7 @@ class SettingsController:
         directory = workflows.request_directory()
 
         if directory is not None:
-            self.gui.directories.output_dir_entry.SetValue(directory)
+            self.gui.output_directory_entry.SetValue(directory)
 
     def on_department_option_change(self, event: wx.Event) -> None:
         department_value = self.gui.defaults.department_box.GetValue()
