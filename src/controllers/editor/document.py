@@ -12,9 +12,7 @@ class DocumentController:
     def __init__(self, gui: EditorPanel) -> None:
         self.gui = gui
 
-        self.document_tree = DocumentTreeController(
-            self.gui.document_tree_panel.tree_ctrl
-        )
+        self.document_tree = DocumentTreeController(self.gui.tree_ctrl)
 
         # Event handlers.
         page_view = self.gui.page_canvas
@@ -24,7 +22,7 @@ class DocumentController:
         page_view.delete_btn.Bind(wx.EVT_BUTTON, self.on_delete_btn)
         page_view.split_btn.Bind(wx.EVT_BUTTON, self.on_split_pages_btn)
 
-        self.gui.document_tree_panel.tree_ctrl.Bind(
+        self.gui.tree_ctrl.Bind(
             wx.EVT_TREE_SEL_CHANGED, self.on_item_selection
         )
 
