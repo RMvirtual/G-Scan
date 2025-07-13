@@ -6,7 +6,7 @@ from configuration import Configuration
 from controllers.mediator import ApplicationMediator
 from departments import Department
 from documents import DocumentType
-from gui.main_menu.document import DocumentSelectionPanel
+from gui.main_menu.document import DocumentsPanel
 from gui.main_menu.main_menu import MainMenu
 from gui.window import Window
 
@@ -25,7 +25,7 @@ class MainMenuController:
         self.panel.Bind(wx.EVT_CLOSE, self.on_close)
 
         depts_panel = self.panel.panel
-        dept_buttons = depts_panel.dept_btns
+        dept_buttons = depts_panel.department_btns
 
         for department in self.config.departments:
             dept_buttons[department.short_code].Bind(
@@ -57,7 +57,7 @@ class MainMenuController:
     def on_department_selection(
         self, event: wx.Event, department: Department
     ) -> None:
-        doc_select_panel = DocumentSelectionPanel(
+        doc_select_panel = DocumentsPanel(
             self.panel, department.document_types
         )
 
