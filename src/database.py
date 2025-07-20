@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import dataclasses
 import json
 from pathlib import Path
@@ -12,6 +14,12 @@ class UserSettings:
     output_dir: str = ""
     department: Department | None = None
     document: DocumentType | None = None
+
+    def update(self, settings: UserSettings) -> None:
+        self.username = settings.username
+        self.output_dir = settings.output_dir
+        self.department = settings.department
+        self.document = settings.document
 
 
 JSONFormat = dict[str, dict[str, str | list[str]]]
