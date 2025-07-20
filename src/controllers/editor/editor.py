@@ -5,7 +5,6 @@ from controllers.editor.document import DocumentController
 from controllers.mediator import ApplicationMediator
 from controllers.settings import SettingsDialogController
 from gui.editor import EditorPanel
-from gui.settings_dialog import SettingsDialog
 from gui.window import Window
 from job_references import create_job_reference
 
@@ -88,7 +87,7 @@ class EditorController:
         self.documents.import_as()
 
     def on_settings(self, event: wx.Event) -> None:
-        controller = SettingsDialogController(self.root, self.gui, self.config)
+        controller = SettingsDialogController(self.gui, self.config)
         controller.poll()
 
     def on_exit(self, event=None) -> None:

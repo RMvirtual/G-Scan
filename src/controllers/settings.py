@@ -1,7 +1,6 @@
 import wx
 
 from configuration import Configuration
-from controllers.mediator import ApplicationMediator
 from database import UserSettings
 from departments import Department
 from gui.settings_dialog import SettingsDialog
@@ -10,11 +9,9 @@ from gui.settings_dialog import SettingsDialog
 class SettingsDialogController:
     def __init__(
         self,
-        app: ApplicationMediator,
         parent: wx.Frame,
         config: Configuration,
     ) -> None:
-        self.app = app
         self.gui = SettingsDialog(parent)
         self.config = config
         self.user_settings = config.settings
