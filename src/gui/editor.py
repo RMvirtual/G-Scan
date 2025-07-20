@@ -1,8 +1,8 @@
 import wx
 
-from gui.editor.canvas import PageCanvas
-from gui.editor.menu_bar import TopMenuBar
-from gui.editor.toolbar import Toolbar
+from gui.canvas import PageCanvas
+from gui.menu_bar import TopMenuBar
+from gui.toolbar import Toolbar
 
 
 class EditorPanel(wx.Panel):
