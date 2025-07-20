@@ -5,7 +5,6 @@ import wx
 import file_system
 from configuration import Configuration
 from controllers.editor.editor import EditorController
-from controllers.main_menu import MainMenuController
 from controllers.mediator import ApplicationMediator
 from controllers.settings import SettingsController
 from database import JSONDatabase, JSONDatabaseFiles, UserSettings
@@ -20,8 +19,8 @@ class MainApplication(ApplicationMediator):
         self.window = Window(size, position=wx.Point(size[0], 0))
         self.config = config
 
-    def launch_main_menu(self) -> None:
-        MainMenuController(self, self.config, self.window)
+    def launch_editor(self) -> None:
+        EditorController(self, self.config, self.window)
 
     def launch_settings(self) -> None:
         department_options = self.config.database.all_departments()
@@ -32,9 +31,6 @@ class MainApplication(ApplicationMediator):
         )
 
         self.window.set_panel(settings_controller.gui)
-
-    def launch_image_viewer(self, config: Configuration) -> None:
-        EditorController(self, config, self.window)
 
     def update_user_settings(self, settings: UserSettings) -> None:
         database = self.config.database
@@ -67,7 +63,7 @@ def main() -> None:
 
     controller = MainApplication(configuration)
     controller.show()
-    controller.launch_main_menu()
+    controller.launch_editor()
 
     gui_runtime.MainLoop()
 

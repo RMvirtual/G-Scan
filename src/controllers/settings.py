@@ -65,10 +65,6 @@ class SettingsController:
         panel.document_box.SetItems(names)
         panel.document_box.SetValue(names[0])
 
-    def exit_to_main_menu(self) -> None:
-        self.gui.Destroy()
-        self.app.launch_main_menu()
-
     def on_save(self, event: wx.Event) -> None:
         dept_value: str = self.gui.department_box.GetValue()
 
@@ -91,10 +87,9 @@ class SettingsController:
         )
 
         self.app.update_user_settings(settings)
-        self.exit_to_main_menu()
 
     def on_exit(self, event: wx.Event) -> None:
-        self.exit_to_main_menu()
+        self.app.exit()
 
     def on_output_directory_browse(self, event: wx.Event) -> None:
         directory = workflows.request_directory()
@@ -112,4 +107,4 @@ class SettingsController:
         self.update_options(department)
 
     def on_f4_escape_key(self, event: wx.Event) -> None:
-        self.exit_to_main_menu()
+        self.app.exit()

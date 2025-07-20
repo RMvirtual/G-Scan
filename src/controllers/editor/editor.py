@@ -4,6 +4,7 @@ from configuration import Configuration
 from controllers.editor.document import DocumentController
 from controllers.mediator import ApplicationMediator
 from gui.editor import EditorPanel
+from gui.settings import Settings
 from gui.window import Window
 from job_references import create_job_reference
 
@@ -38,6 +39,9 @@ class EditorController:
         )
 
         self.window.Bind(wx.EVT_MENU, self.on_exit, file_menu.quit)
+
+        settings_menu = self.gui.menu_bar.settings
+        self.window.Bind(wx.EVT_MENU, self.on_settings, settings_menu.settings)
 
         # Shortcut keys.
         f4_shortcut_id = wx.NewId()
@@ -82,10 +86,22 @@ class EditorController:
     def on_import_as(self, event: wx.Event) -> None:
         self.documents.import_as()
 
+    def on_settings(self, event: wx.Event) -> None:
+        dialog_box = wx.Dialog(self.gui)
+        settings_panel = Settings(dialog_box)
+        settings_panel.Fit()
+        dialog_box.Fit()
+
+        if dialog_box.ShowModal() == wx.ID_OK:
+            print("ITE")
+
+        else:
+            print("NOT ITE")
+
     def on_exit(self, event=None) -> None:
         self.gui.Destroy()
         self.window.SetMenuBar(wx.MenuBar())
-        self.root.launch_main_menu()
+        self.root.exit()
 
     def on_f4_escape_key(self, event: wx.Event) -> None:
         self.on_exit(event)

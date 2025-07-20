@@ -8,6 +8,9 @@ class TopMenuBar(wx.MenuBar):
         self.file = FileMenu()
         self.Append(self.file, "File")
 
+        self.settings = SettingsMenu()
+        self.Append(self.settings, "Settings")
+
 
 class FileMenu(wx.Menu):
     def __init__(self) -> None:
@@ -29,4 +32,15 @@ class FileMenu(wx.Menu):
             id=wx.ID_ANY,
             item="&Quit\tF4",
             helpString="Quit to Main Menu",
+        )
+
+
+class SettingsMenu(wx.Menu):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.settings = self.Append(
+            id=wx.ID_ANY,
+            item="&Settings\tCTRL+O",
+            helpString="Settings",
         )
