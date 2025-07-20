@@ -1,34 +1,36 @@
 import wx
 
-from controllers import workflows
+from configuration import Configuration
 from controllers.mediator import ApplicationMediator
 from database import UserSettings
 from departments import Department
-from gui.settings import Settings
-from gui.window import Window
+from gui.settings_dialog import SettingsDialog
 
 
-class SettingsController:
+class SettingsDialogController:
     def __init__(
         self,
         app: ApplicationMediator,
-        window: Window,
-        dept_options: list[Department],
-        user_settings: UserSettings,
+        gui: SettingsDialog,
+        config: Configuration,
     ) -> None:
         self.app = app
-        self.gui = Settings(window)
-        self.user_settings = user_settings
-        self.dept_options = dept_options
+        self.gui = gui
+        self.config = config
+        self.user_settings = config.settings
+        self.dept_options = config.departments
 
         # Load settings from configuration.
-        self.gui.output_directory_entry.SetValue(user_settings.output_dir)
+        self.gui.output_directory_entry.SetValue(self.user_settings.output_dir)
 
         dept_names = list(map(lambda d: d.full_name, self.dept_options))
         self.gui.department_box.SetItems(dept_names)
-        self.gui.department_box.SetValue(user_settings.department.full_name)
 
-        self.update_options(user_settings.department)
+        self.gui.department_box.SetValue(
+            self.user_settings.department.full_name
+        )
+
+        self.update_options(self.user_settings.department)
 
         # Bind callbacks.
         self.gui.save_btn.Bind(wx.EVT_BUTTON, self.on_save)
@@ -92,7 +94,12 @@ class SettingsController:
         self.app.exit()
 
     def on_output_directory_browse(self, event: wx.Event) -> None:
-        directory = workflows.request_directory()
+        dialog = wx.DirDialog(parent=None)
+
+        with dialog:
+            directory = (
+                dialog.GetPath() if dialog.ShowModal() == wx.ID_OK else None
+            )
 
         if directory is not None:
             self.gui.output_directory_entry.SetValue(directory)

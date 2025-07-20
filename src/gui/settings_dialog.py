@@ -1,7 +1,7 @@
 import wx
 
 
-class Settings(wx.Panel):
+class SettingsDialog(wx.Dialog):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent)
 

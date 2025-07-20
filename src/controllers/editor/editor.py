@@ -3,8 +3,9 @@ import wx
 from configuration import Configuration
 from controllers.editor.document import DocumentController
 from controllers.mediator import ApplicationMediator
+from controllers.settings import SettingsDialogController
 from gui.editor import EditorPanel
-from gui.settings import Settings
+from gui.settings_dialog import SettingsDialog
 from gui.window import Window
 from job_references import create_job_reference
 
@@ -87,12 +88,14 @@ class EditorController:
         self.documents.import_as()
 
     def on_settings(self, event: wx.Event) -> None:
-        dialog_box = wx.Dialog(self.gui)
-        settings_panel = Settings(dialog_box)
-        settings_panel.Fit()
-        dialog_box.Fit()
+        settings_dialog = SettingsDialog(self.gui)
+        settings_dialog.Fit()
 
-        if dialog_box.ShowModal() == wx.ID_OK:
+        controller = SettingsDialogController(
+            self.root, settings_dialog, self.config
+        )
+
+        if settings_dialog.ShowModal() == wx.ID_OK:
             print("ITE")
 
         else:

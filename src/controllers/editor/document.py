@@ -30,8 +30,15 @@ class DocumentController:
         self.current_document: DocumentEntry = None
 
     def import_files(self):
-        # TODO: With this, do we actually need a scan directory??
-        files = workflows.request_files()
+        dialog = wx.FileDialog(
+            parent=None,
+            style=(wx.FD_MULTIPLE | wx.FD_OPEN | wx.FD_FILE_MUST_EXIST),
+        )
+
+        with dialog:
+            dialog.ShowModal()
+
+        files = dialog.GetPaths()
 
         if files:
             pending_items = self.document_tree.create_pending_files(files)

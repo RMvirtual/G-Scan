@@ -6,7 +6,7 @@ import file_system
 from configuration import Configuration
 from controllers.editor.editor import EditorController
 from controllers.mediator import ApplicationMediator
-from controllers.settings import SettingsController
+from controllers.settings import SettingsDialogController
 from database import JSONDatabase, JSONDatabaseFiles, UserSettings
 from gui.window import Window
 
@@ -26,7 +26,7 @@ class MainApplication(ApplicationMediator):
         department_options = self.config.database.all_departments()
         user_settings = self.config.settings
 
-        settings_controller = SettingsController(
+        settings_controller = SettingsDialogController(
             self, self.window, department_options, user_settings
         )
 
