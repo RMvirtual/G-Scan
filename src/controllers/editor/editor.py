@@ -88,18 +88,8 @@ class EditorController:
         self.documents.import_as()
 
     def on_settings(self, event: wx.Event) -> None:
-        settings_dialog = SettingsDialog(self.gui)
-        settings_dialog.Fit()
-
-        controller = SettingsDialogController(
-            self.root, settings_dialog, self.config
-        )
-
-        if settings_dialog.ShowModal() == wx.ID_OK:
-            print("ITE")
-
-        else:
-            print("NOT ITE")
+        controller = SettingsDialogController(self.root, self.gui, self.config)
+        controller.poll()
 
     def on_exit(self, event=None) -> None:
         self.gui.Destroy()

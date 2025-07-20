@@ -11,11 +11,11 @@ class SettingsDialogController:
     def __init__(
         self,
         app: ApplicationMediator,
-        gui: SettingsDialog,
+        parent: wx.Frame,
         config: Configuration,
     ) -> None:
         self.app = app
-        self.gui = gui
+        self.gui = SettingsDialog(parent)
         self.config = config
         self.user_settings = config.settings
         self.dept_options = config.departments
@@ -57,7 +57,6 @@ class SettingsDialogController:
         ]
 
         self.gui.SetAcceleratorTable(wx.AcceleratorTable(accelators))
-        self.gui.SetFocus()
 
     def update_options(self, department: Department) -> None:
         names = [document.full_name for document in department.document_types]
@@ -104,6 +103,16 @@ class SettingsDialogController:
         if directory is not None:
             self.gui.output_directory_entry.SetValue(directory)
 
+    def poll(self) -> None:
+        self.gui.Show()
+        self.gui.Fit()
+        self.gui.SetFocus()
+
+        with self.gui:
+            print(self.gui.ShowModal())
+
+        return None
+
     def on_department_option_change(self, event: wx.Event) -> None:
         department_value = self.gui.department_box.GetValue()
 
@@ -114,4 +123,4 @@ class SettingsDialogController:
         self.update_options(department)
 
     def on_f4_escape_key(self, event: wx.Event) -> None:
-        self.app.exit()
+        self.gui.Destroy()

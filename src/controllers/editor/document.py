@@ -1,7 +1,6 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 
-from controllers import workflows
 from controllers.editor.document_tree import DocumentTreeController
 from data_structures_new import Branch, DocumentEntry
 from document_tree import DocumentType
