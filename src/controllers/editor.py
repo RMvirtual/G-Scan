@@ -20,6 +20,19 @@ class EditorController:
         self.window.set_panel(self.gui)
         self.documents = DocumentController(self.gui)
 
+        # Update GUI.
+        departments = [d.full_name for d in self.config.departments]
+        self.gui.entry_toolbar.department_box.Set(departments)
+        self.gui.entry_toolbar.department_box.SetValue(departments[0])
+
+        document_types = [
+            d.full_name for d in self.config.department.document_types
+        ]
+
+        self.gui.entry_toolbar.document_box.Set(document_types)
+        self.gui.entry_toolbar.document_box.SetValue(document_types[0])
+        self.gui.entry_toolbar.Fit()
+
         # Event handlers.
         self.gui.entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
         self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_f4_escape_key)
