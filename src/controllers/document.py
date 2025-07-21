@@ -36,8 +36,7 @@ class DocumentController:
 
         with dialog:
             dialog.ShowModal()
-
-        files = dialog.GetPaths()
+            files = dialog.GetPaths()
 
         if files:
             pending_items = self.document_tree.create_pending_files(files)
