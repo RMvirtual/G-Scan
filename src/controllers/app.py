@@ -4,7 +4,7 @@ import wx
 
 import file_system
 from configuration import Configuration
-from controllers.editor.editor import EditorController
+from controllers.editor import EditorController
 from database import JSONDatabase, JSONDatabaseFiles
 from gui.window import Window
 

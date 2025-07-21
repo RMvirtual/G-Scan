@@ -1,7 +1,7 @@
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 
-from controllers.editor.document_tree import DocumentTreeController
+from controllers.document_tree_ import DocumentTreeController
 from data_structures_new import Branch, DocumentEntry
 from document_tree import DocumentType
 from gui.editor import EditorPanel

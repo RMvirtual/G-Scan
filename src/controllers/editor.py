@@ -1,7 +1,7 @@
 import wx
 
 from configuration import Configuration
-from controllers.editor.document import DocumentController
+from controllers.document import DocumentController
 from controllers.settings import SettingsDialogController
 from gui.editor import EditorPanel
 from gui.window import Window
