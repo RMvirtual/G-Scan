@@ -2,7 +2,6 @@ import wx
 
 from configuration import Configuration
 from controllers.editor.document import DocumentController
-from controllers.mediator import ApplicationMediator
 from controllers.settings import SettingsDialogController
 from gui.editor import EditorPanel
 from gui.window import Window
@@ -12,11 +11,9 @@ from job_references import create_job_reference
 class EditorController:
     def __init__(
         self,
-        root_application: ApplicationMediator,
         config: Configuration,
         window: Window,
     ) -> None:
-        self.root = root_application
         self.config = config
         self.window = window
         self.gui = EditorPanel(window)
@@ -90,10 +87,9 @@ class EditorController:
         controller = SettingsDialogController(self.gui, self.config)
         controller.poll()
 
-    def on_exit(self, event=None) -> None:
+    def on_exit(self, event: wx.Event) -> None:
         self.gui.Destroy()
-        self.window.SetMenuBar(wx.MenuBar())
-        self.root.exit()
+        self.window.Destroy()
 
     def on_f4_escape_key(self, event: wx.Event) -> None:
         self.on_exit(event)
