@@ -1,3 +1,6 @@
+import calendar
+import datetime
+
 import wx
 from wx.lib.floatcanvas import FloatCanvas
 
@@ -119,9 +122,13 @@ class EditorController:
             inputted_numbers = toolbar.reference_input.GetValue()
 
             if len(inputted_numbers) < 9:
-                date = toolbar
+                month = toolbar.month_box.GetValue()
+                year = toolbar.year_box.GetValue()
+                date = datetime.datetime(year, month)
+                reference = create_job_reference(inputted_numbers, date)
 
-            reference = create_job_reference(inputted_numbers)
+            else:
+                reference = create_job_reference(inputted_numbers)
 
             document_type = self.config.database.document(
                 full_name=toolbar.document_box.GetValue()
