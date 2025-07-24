@@ -101,10 +101,14 @@ class DocumentTreeController:
         self, entry: DocumentEntry, reference: str, document_type: DocumentType
     ) -> None:
         self.gui.Delete(self.tree_handle(entry))
-
         job_branch = self.tree.create_job_branch(reference)
         job_branch.append(entry)
-        self._append_to_gui(entry)
+
+        self.gui.AppendItem(
+            parent=self._handle_from_node(entry.parent),
+            text=node.label,
+            data=node.node_id,
+        )
 
         return None
 

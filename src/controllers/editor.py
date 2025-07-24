@@ -47,11 +47,13 @@ class EditorController:
         page_view.delete_btn.Bind(wx.EVT_BUTTON, self.on_delete_btn)
         page_view.split_btn.Bind(wx.EVT_BUTTON, self.on_split_pages_btn)
 
-        self.gui.entry_toolbar.department_box.Bind(
+        entry_toolbar = self.gui.entry_toolbar
+        entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
+
+        entry_toolbar.department_box.Bind(
             wx.EVT_COMBOBOX, self.on_department_change
         )
 
-        self.gui.entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
         self.gui.exit_btn.Bind(wx.EVT_BUTTON, self.on_f4_escape_key)
 
         self.gui.tree_ctrl.Bind(
@@ -113,12 +115,16 @@ class EditorController:
 
     def on_submit(self, event: wx.Event) -> None:
         try:
-            reference = create_job_reference(
-                self.gui.entry_toolbar.reference_text.GetValue()
-            )
+            toolbar = self.gui.entry_toolbar
+            inputted_numbers = toolbar.reference_input.GetValue()
+
+            if len(inputted_numbers) < 9:
+                date = toolbar
+
+            reference = create_job_reference(inputted_numbers)
 
             document_type = self.config.database.document(
-                full_name=self.gui.entry_toolbar.document_box.GetValue()
+                full_name=toolbar.document_box.GetValue()
             )
 
             self.assign_current_document(reference, document_type)

@@ -31,8 +31,7 @@ def create_job_reference(reference: str, date: Date | None = None) -> str:
         if len(reference_no) > 5:
             raise ValueError(
                 "Should not pass both date and suffix reference number "
-                "greater than 5 characters. "
-                f"Received {date} and {reference}"
+                f"greater than 5 characters. Received {date} and {reference}."
             )
 
         padded_zeroes = "0" * (5 - len(reference_no))
