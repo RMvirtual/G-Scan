@@ -10,7 +10,7 @@ from controllers.settings import SettingsDialogController
 from data_structures_new import Branch, DocumentEntry
 from departments import Department
 from document_tree import DocumentType
-from gui.editor import EditorPanel
+from gui.editor import EditorFrame
 from job_references import create_job_reference
 
 
@@ -21,7 +21,7 @@ class EditorController:
         display_width, display_height = wx.DisplaySize()
         size = (int(display_width / 2), int(display_height / 1.1))
 
-        self.gui = EditorPanel(size, position=wx.Point(size[0], 0))
+        self.gui = EditorFrame(size, position=wx.Point(size[0], 0))
         self.document_tree = DocumentTreeController(self.gui.tree_ctrl)
         self.current_document: DocumentEntry = None
 

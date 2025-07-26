@@ -5,7 +5,7 @@ from gui.menu_bar import TopMenuBar
 from gui.toolbar import Toolbar
 
 
-class EditorPanel(wx.Frame):
+class EditorFrame(wx.Frame):
     def __init__(
         self, size: tuple[int, int], position: tuple[int, int]
     ) -> None:
