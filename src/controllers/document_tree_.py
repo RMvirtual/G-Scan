@@ -32,7 +32,7 @@ class DocumentTreeController:
 
         self.tree.pending.gui_id = pending_id
 
-    def create_pending_files(self, paths: list[str]) -> list[PendingLeaf]:
+    def create_pending_files(self, paths: list[str]) -> list[DocumentEntry]:
         branch = self.tree.pending
         result = []
 

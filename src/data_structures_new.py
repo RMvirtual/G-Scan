@@ -96,5 +96,5 @@ class DocumentEntry:
         self.parent = parent
         self.name = name
         self.type = document_type
-        self.pages = []
+        self.pages: list[wx.Bitmap] = []
         self.gui_id: wx.TreeItemId | None = None

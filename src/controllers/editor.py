@@ -1,7 +1,6 @@
 import datetime
 
 import wx
-from wx.lib.floatcanvas import FloatCanvas
 
 from configuration import Configuration
 from controllers.document_tree_ import DocumentTreeController
@@ -27,7 +26,11 @@ class EditorController:
         # Rendering context.
         self.buffer: wx.Bitmap = None
         self.page_bitmap: wx.Bitmap = None
-        self.mouse_position: tuple[int, int] = None
+        self.document_bitmap: wx.Bitmap = None
+        self.camera_xy = wx.Point(0, 0)
+
+        self.mouse_position: wx.Point = None
+        self.last_drag: wx.Point = None
         self.mouse_down = False
 
         # Update GUI.
@@ -47,7 +50,9 @@ class EditorController:
         self.gui.page_canvas.Bind(wx.EVT_PAINT, self.on_paint)
         self.gui.page_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_canvas_left_down)
         self.gui.page_canvas.Bind(wx.EVT_MOTION, self.on_canvas_drag)
+        self.gui.page_canvas.Bind(wx.EVT_LEAVE_WINDOW, self.on_canvas_leave)
         self.gui.page_canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
+        self.gui.page_canvas.Bind(wx.EVT_SIZE, self.on_canvas_resize)
 
         entry_toolbar = self.gui.entry_toolbar
         entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
@@ -103,6 +108,14 @@ class EditorController:
         device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
         device_context.Clear()
 
+        if self.current_document:
+            bitmap = self.document_bitmap.GetSubBitmap(
+                wx.Rect(self.camera_xy.x, self.camera_xy.y, 50, 50)
+            )
+
+            wx.Bitmap.Rescale(bitmap, bitmap_size)
+            device_context.DrawBitmap(bitmap, 0, 0, False)
+
         if self.mouse_down:
             # Black box signifying mouse motion.
             device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
@@ -123,6 +136,7 @@ class EditorController:
 
     def on_canvas_left_down(self, event: wx.MouseEvent) -> None:
         self.mouse_position = event.Position
+        self.last_drag = event.Position
         self.mouse_down = True
         self.render()
 
@@ -130,14 +144,49 @@ class EditorController:
 
     def on_canvas_drag(self, event: wx.MouseEvent) -> None:
         if self.mouse_down:
+            self.last_drag = self.mouse_position
             self.mouse_position = event.Position
+
+            drag_distance = wx.Point(
+                self.mouse_position.x - self.last_drag.x,
+                self.mouse_position.y - self.last_drag.y,
+            )
+
+            self.camera_xy.x = self.camera_xy.x - drag_distance.x
+            self.camera_xy.y = self.camera_xy.y - drag_distance.y
+
+            if self.camera_xy.x < 0:
+                self.camera_xy.x = 0
+
+            if self.camera_xy.y < 0:
+                self.camera_xy.y = 0
+
+            if self.document_bitmap is not None:
+                if self.camera_xy.x > self.document_bitmap.Width:
+                    self.camera_xy.x = self.document_bitmap.Width
+
+                if self.camera_xy.y > self.document_bitmap.Height:
+                    self.camera_xy.y = self.document_bitmap.Height
+
+            print(self.camera_xy)
             self.render()
             self.gui.page_canvas.Refresh(False)
 
-    def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
-        self.mouse_position = None
+    def on_canvas_leave(self, event: wx.MouseEvent) -> None:
         self.mouse_down = False
 
+        # self.render()
+        self.gui.page_canvas.Refresh(False)
+
+    def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
+        self.mouse_position = None
+        self.last_drag = None
+        self.mouse_down = False
+
+        self.render()
+        self.gui.page_canvas.Refresh(False)
+
+    def on_canvas_resize(self, event: wx.MouseEvent) -> None:
         self.render()
         self.gui.page_canvas.Refresh(False)
 
@@ -201,51 +250,32 @@ class EditorController:
 
         if files:
             pending_items = self.document_tree.create_pending_files(files)
-
             self.view_document_entry(pending_items[0])
 
     def view_document_entry(self, entry: DocumentEntry) -> None:
-        # Set page total.
-        no_of_pages = len(entry.pages)
-        page_view = self.gui.page_canvas
-        page_view.page_qty_text.SetValue(f"Total Pages: {no_of_pages}")
-        page_view.page_no_spin_ctrl.SetMin(1)
-        page_view.page_no_spin_ctrl.SetMax(no_of_pages)
-        self.show_document_entry_tools()
-
         self.current_document = entry
-        self.view_page(0)
+        original_bitmap = entry.pages[0]
 
-    def view_page(self, page_no: int) -> None:
-        image: wx.Image = self.current_document.pages[page_no]
-
-        bitmap = FloatCanvas.ScaledBitmap(
-            Bitmap=image, XY=(0, 0), Height=image.GetHeight(), Position="bl"
+        bitmap = original_bitmap.GetSubBitmap(
+            wx.Rect(0, 0, original_bitmap.Width, original_bitmap.Height)
         )
 
-        self.clear_canvas()
-        self.gui.page_canvas.Canvas.AddObject(bitmap)
-        self.gui.page_canvas.Canvas.ZoomToBB()
-        self.gui.page_canvas.page_no_spin_ctrl.SetValue(page_no + 1)
+        bitmap_size = self.gui.page_canvas.Size
+        wx.Bitmap.Rescale(bitmap, bitmap_size)
+        self.document_bitmap = bitmap
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
         entry = self.document_tree.gui.GetItemData(event.Item)
 
         if isinstance(entry, Branch):
             self.document_tree.gui.Expand(entry.gui_id)
-            self.hide_document_entry_tools()
             self.clear_view()
-            self.gui.page_canvas.split_btn.Hide()
 
         elif isinstance(entry, DocumentEntry):
             self.view_document_entry(entry)
 
         else:
-            self.hide_document_entry_tools()
             self.clear_view()
-
-    def on_page_no_btn(self, event: wx.Event) -> None:
-        self.view_page(page_no=event.Position - 1)
 
     def on_import_as(self, event: wx.Event) -> None:
         print("Michelin Mode")
@@ -277,11 +307,6 @@ class EditorController:
 
     def clear_view(self) -> None:
         self.current_document = None
-        self.clear_canvas()
-
-    def clear_canvas(self) -> None:
-        self.gui.page_canvas.Canvas.ClearAll()
-        self.gui.page_canvas.Canvas.ZoomToBB()
 
     def assign_current_document(
         self, reference: str, document_type: DocumentType
@@ -293,27 +318,3 @@ class EditorController:
         self.document_tree.create_job_node(
             reference, document_type, leaf=self.current_document
         )
-
-    def show_document_entry_tools(self) -> None:
-        view = self.gui.page_canvas
-        view.delete_btn.Show()
-        view.split_btn.Show()
-        view.page_no_spin_ctrl.Show()
-        view.page_qty_text.Show()
-
-    def hide_document_entry_tools(self) -> None:
-        view = self.gui.page_canvas
-
-    def on_canvas_wheel(self, event: wx.MouseEvent) -> None:
-        zoom_factor = (1 / 1.2) if event.GetWheelRotation() < 0 else 1.2
-
-        self.gui.page_canvas.Canvas.Zoom(
-            zoom_factor, event.Position, "Pixel", keepPointInPlace=True
-        )
-
-    def on_split_pages_btn(self, event: wx.Event) -> None:
-        self.document_tree.split_pages(self.current_document)
-
-    def on_delete_btn(self, event: wx.Event) -> None:
-        self.document_tree.delete_current()
-        self.clear_canvas()

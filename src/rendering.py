@@ -2,7 +2,7 @@ import fitz
 import wx
 
 
-def load_images(file_path: str) -> list[wx.Image]:
+def load_images(file_path: str) -> list[wx.Bitmap]:
     result = []
 
     with fitz.open(file_path) as document_stream:
@@ -13,6 +13,6 @@ def load_images(file_path: str) -> list[wx.Image]:
                 pixel_buffer.width, pixel_buffer.height, pixel_buffer.samples
             )
 
-            result.append(bitmap.ConvertToImage())
+            result.append(bitmap)
 
     return result
