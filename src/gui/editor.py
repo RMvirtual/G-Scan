@@ -1,6 +1,5 @@
 import wx
 
-from gui.canvas import PageCanvas
 from gui.menu_bar import TopMenuBar
 from gui.toolbar import Toolbar
 
@@ -10,10 +9,9 @@ class EditorFrame(wx.Frame):
         self, size: tuple[int, int], position: tuple[int, int]
     ) -> None:
         super().__init__(None, title="", size=size, pos=position)
-        self.SetBackgroundColour(colour=wx.WHITE)
 
         self.entry_toolbar = Toolbar(self)
-        self.page_canvas = PageCanvas(self)
+        self.page_canvas = wx.Panel(self)
 
         self.tree_ctrl = wx.TreeCtrl(
             self,
@@ -39,13 +37,12 @@ class EditorFrame(wx.Frame):
         tree_sizer.Add(self.tree_ctrl, 1, wx.EXPAND | wx.VERTICAL, border)
 
         midsection_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        midsection_sizer.Add(self.page_canvas, 3, wx.EXPAND | wx.ALL, border)
+        midsection_sizer.Add(self.page_canvas, 3, wx.EXPAND)
         midsection_sizer.Add(tree_sizer, 1, wx.EXPAND | wx.ALL, border)
 
-        full_width_flags = wx.EXPAND | wx.LEFT | wx.RIGHT
         main_sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        main_sizer.Add(self.entry_toolbar, 0, full_width_flags, border)
-        main_sizer.Add(midsection_sizer, 1, full_width_flags, border)
+        main_sizer.Add(self.entry_toolbar, 0, wx.EXPAND, border)
+        main_sizer.Add(midsection_sizer, 1, wx.EXPAND, border)
         main_sizer.Add(self.exit_btn, 0, wx.ALIGN_RIGHT | wx.BOTTOM, border)
 
         self.SetSizer(main_sizer)

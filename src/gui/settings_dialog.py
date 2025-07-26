@@ -96,4 +96,3 @@ class SettingsDialog(wx.Dialog):
         main_sizer.AddStretchSpacer()
 
         self.SetSizer(main_sizer)
-        self.SetBackgroundColour(colour=wx.WHITE)

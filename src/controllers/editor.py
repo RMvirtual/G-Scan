@@ -1,4 +1,3 @@
-import calendar
 import datetime
 
 import wx
@@ -25,7 +24,11 @@ class EditorController:
         self.document_tree = DocumentTreeController(self.gui.tree_ctrl)
         self.current_document: DocumentEntry = None
 
-        self.hide_document_entry_tools()
+        # Rendering context.
+        self.buffer: wx.Bitmap = None
+        self.page_bitmap: wx.Bitmap = None
+        self.mouse_position: tuple[int, int] = None
+        self.mouse_down = False
 
         # Update GUI.
         departments = [d.full_name for d in self.config.departments]
@@ -41,11 +44,10 @@ class EditorController:
         self.gui.entry_toolbar.Fit()
 
         # Event handlers.
-        page_view = self.gui.page_canvas
-        page_view.Canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_canvas_wheel)
-        page_view.Canvas.Bind(wx.EVT_LEFT_DCLICK, self.on_canvas_click)
-        page_view.delete_btn.Bind(wx.EVT_BUTTON, self.on_delete_btn)
-        page_view.split_btn.Bind(wx.EVT_BUTTON, self.on_split_pages_btn)
+        self.gui.page_canvas.Bind(wx.EVT_PAINT, self.on_paint)
+        self.gui.page_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_canvas_left_down)
+        self.gui.page_canvas.Bind(wx.EVT_MOTION, self.on_canvas_drag)
+        self.gui.page_canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
 
         entry_toolbar = self.gui.entry_toolbar
         entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
@@ -58,10 +60,6 @@ class EditorController:
 
         self.gui.tree_ctrl.Bind(
             wx.EVT_TREE_SEL_CHANGED, self.on_item_selection
-        )
-
-        self.gui.page_canvas.page_no_spin_ctrl.Bind(
-            wx.EVT_SPINCTRL, self.on_page_no_btn
         )
 
         # Top menu bar handlers.
@@ -93,9 +91,52 @@ class EditorController:
         ]
 
         self.gui.SetAcceleratorTable(wx.AcceleratorTable(accelators))
-
         self.gui.SetFocus()
         self.gui.Show()
+        self.render()
+
+    def render(self) -> None:
+        bitmap_size = self.gui.page_canvas.Size
+        self.buffer = wx.Bitmap(bitmap_size)
+        device_context = wx.MemoryDC(self.buffer)
+
+        device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
+        device_context.Clear()
+
+        if self.mouse_down:
+            # Black box signifying mouse motion.
+            device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
+
+            device_context.DrawRectangle(
+                self.mouse_position[0], self.mouse_position[1], 50, 50
+            )
+
+        device_context.SelectObject(wx.NullBitmap)
+
+    def on_paint(self, event: wx.Event) -> None:
+        self.page_bitmap = self.buffer
+        device_context = wx.PaintDC(self.gui.page_canvas)
+        device_context.DrawBitmap(self.page_bitmap, 0, 0, useMask=False)
+
+    def on_canvas_left_down(self, event: wx.MouseEvent) -> None:
+        self.mouse_position = event.Position
+        self.mouse_down = True
+        self.render()
+
+        self.gui.page_canvas.Refresh(False)
+
+    def on_canvas_drag(self, event: wx.MouseEvent) -> None:
+        if self.mouse_down:
+            self.mouse_position = event.Position
+            self.render()
+            self.gui.page_canvas.Refresh(False)
+
+    def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
+        self.mouse_position = None
+        self.mouse_down = False
+
+        self.render()
+        self.gui.page_canvas.Refresh(False)
 
     def change_department(self, department: Department) -> None:
         if self.config.department == department:
@@ -260,20 +301,12 @@ class EditorController:
     def hide_document_entry_tools(self) -> None:
         view = self.gui.page_canvas
 
-        view.delete_btn.Hide()
-        view.split_btn.Hide()
-        view.page_no_spin_ctrl.Hide()
-        view.page_qty_text.Hide()
-
     def on_canvas_wheel(self, event: wx.MouseEvent) -> None:
         zoom_factor = (1 / 1.2) if event.GetWheelRotation() < 0 else 1.2
 
         self.gui.page_canvas.Canvas.Zoom(
             zoom_factor, event.Position, "Pixel", keepPointInPlace=True
         )
-
-    def on_canvas_click(self, event: wx.Event) -> None:
-        self.gui.page_canvas.Canvas.ZoomToBB()
 
     def on_split_pages_btn(self, event: wx.Event) -> None:
         self.document_tree.split_pages(self.current_document)
