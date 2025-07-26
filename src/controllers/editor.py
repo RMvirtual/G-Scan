@@ -11,20 +11,17 @@ from data_structures_new import Branch, DocumentEntry
 from departments import Department
 from document_tree import DocumentType
 from gui.editor import EditorPanel
-from gui.window import Window
 from job_references import create_job_reference
 
 
 class EditorController:
-    def __init__(
-        self,
-        config: Configuration,
-        window: Window,
-    ) -> None:
+    def __init__(self, config: Configuration) -> None:
         self.config = config
-        self.window = window
-        self.gui = EditorPanel(window)
-        self.window.set_panel(self.gui)
+
+        display_width, display_height = wx.DisplaySize()
+        size = (int(display_width / 2), int(display_height / 1.1))
+
+        self.gui = EditorPanel(size, position=wx.Point(size[0], 0))
         self.document_tree = DocumentTreeController(self.gui.tree_ctrl)
         self.current_document: DocumentEntry = None
 
@@ -70,18 +67,18 @@ class EditorController:
         # Top menu bar handlers.
         file_menu = self.gui.menu_bar.file
 
-        self.window.Bind(
+        self.gui.Bind(
             wx.EVT_MENU, self.on_import_files, file_menu.import_files
         )
 
-        self.window.Bind(
+        self.gui.Bind(
             wx.EVT_MENU, self.on_import_as, file_menu.import_prenamed_files
         )
 
-        self.window.Bind(wx.EVT_MENU, self.on_exit, file_menu.quit)
+        self.gui.Bind(wx.EVT_MENU, self.on_exit, file_menu.quit)
 
         settings_menu = self.gui.menu_bar.settings
-        self.window.Bind(wx.EVT_MENU, self.on_settings, settings_menu.settings)
+        self.gui.Bind(wx.EVT_MENU, self.on_settings, settings_menu.settings)
 
         # Shortcut keys.
         f4_shortcut_id = wx.NewId()
@@ -96,7 +93,9 @@ class EditorController:
         ]
 
         self.gui.SetAcceleratorTable(wx.AcceleratorTable(accelators))
+
         self.gui.SetFocus()
+        self.gui.Show()
 
     def change_department(self, department: Department) -> None:
         if self.config.department == department:
@@ -213,7 +212,6 @@ class EditorController:
 
     def on_exit(self, event: wx.Event) -> None:
         self.gui.Destroy()
-        self.window.Destroy()
 
     def on_department_change(self, event: wx.Event) -> None:
         box = self.gui.entry_toolbar.department_box

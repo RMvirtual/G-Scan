@@ -5,9 +5,12 @@ from gui.menu_bar import TopMenuBar
 from gui.toolbar import Toolbar
 
 
-class EditorPanel(wx.Panel):
-    def __init__(self, parent: wx.Frame) -> None:
-        super().__init__(parent)
+class EditorPanel(wx.Frame):
+    def __init__(
+        self, size: tuple[int, int], position: tuple[int, int]
+    ) -> None:
+        super().__init__(None, title="", size=size, pos=position)
+        self.SetBackgroundColour(colour=wx.WHITE)
 
         self.entry_toolbar = Toolbar(self)
         self.page_canvas = PageCanvas(self)
@@ -26,7 +29,7 @@ class EditorPanel(wx.Panel):
         self.upload_btn = wx.Button(parent=self, label="Upload to FCL")
         self.exit_btn = wx.Button(self, label="Exit")
         self.menu_bar = TopMenuBar()
-        parent.SetMenuBar(self.menu_bar)
+        self.SetMenuBar(self.menu_bar)
 
         # Sizer layout.
         border = 5
