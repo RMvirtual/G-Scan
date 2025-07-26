@@ -108,7 +108,10 @@ class EditorController:
             device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
 
             device_context.DrawRectangle(
-                self.mouse_position[0], self.mouse_position[1], 50, 50
+                self.mouse_position[0] - 25,
+                self.mouse_position[1] - 25,
+                50,
+                50,
             )
 
         device_context.SelectObject(wx.NullBitmap)
