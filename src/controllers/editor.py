@@ -110,7 +110,7 @@ class EditorController:
 
         if self.current_document:
             bitmap = self.document_bitmap.GetSubBitmap(
-                wx.Rect(self.camera_xy.x, self.camera_xy.y, 50, 50)
+                wx.Rect(self.camera_xy.x, self.camera_xy.y, 400, 400)
             )
 
             wx.Bitmap.Rescale(bitmap, bitmap_size)
@@ -260,8 +260,6 @@ class EditorController:
             wx.Rect(0, 0, original_bitmap.Width, original_bitmap.Height)
         )
 
-        bitmap_size = self.gui.page_canvas.Size
-        wx.Bitmap.Rescale(bitmap, bitmap_size)
         self.document_bitmap = bitmap
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
