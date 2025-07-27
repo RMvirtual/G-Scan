@@ -10,6 +10,7 @@ from departments import Department
 from document_tree import DocumentType
 from gui.editor import EditorFrame
 from job_references import create_job_reference
+from maths import Vector2D
 
 
 class EditorController:
@@ -27,10 +28,9 @@ class EditorController:
         self.buffer: wx.Bitmap = None
         self.page_bitmap: wx.Bitmap = None
         self.document_bitmap: wx.Bitmap = None
-        self.camera_xy = wx.Point(0, 0)
-
-        self.mouse_position: wx.Point = None
-        self.last_drag: wx.Point = None
+        self.camera_xy = Vector2D(0, 0)
+        self.mouse_position: Vector2D = None
+        self.last_drag: Vector2D = None
         self.mouse_down = False
 
         # Update GUI.
@@ -121,8 +121,8 @@ class EditorController:
             device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
 
             device_context.DrawRectangle(
-                self.mouse_position[0] - 25,
-                self.mouse_position[1] - 25,
+                self.mouse_position.x - 25,
+                self.mouse_position.y - 25,
                 50,
                 50,
             )
@@ -135,42 +135,37 @@ class EditorController:
         device_context.DrawBitmap(self.page_bitmap, 0, 0, useMask=False)
 
     def on_canvas_left_down(self, event: wx.MouseEvent) -> None:
-        self.mouse_position = event.Position
-        self.last_drag = event.Position
+        self.mouse_position = Vector2D.fromPoint(event.Position)
+        self.last_drag = Vector2D.fromPoint(event.Position)
         self.mouse_down = True
         self.render()
 
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_drag(self, event: wx.MouseEvent) -> None:
-        if self.mouse_down:
-            self.last_drag = self.mouse_position
-            self.mouse_position = event.Position
+        if not self.mouse_down:
+            return
 
-            drag_distance = wx.Point(
-                self.mouse_position.x - self.last_drag.x,
-                self.mouse_position.y - self.last_drag.y,
-            )
+        self.last_drag = self.mouse_position
+        self.mouse_position = Vector2D.fromPoint(event.Position)
+        drag_distance = self.mouse_position - self.last_drag
+        self.camera_xy = self.camera_xy - drag_distance
 
-            self.camera_xy.x = self.camera_xy.x - drag_distance.x
-            self.camera_xy.y = self.camera_xy.y - drag_distance.y
+        if self.camera_xy.x < 0:
+            self.camera_xy.x = 0
 
-            if self.camera_xy.x < 0:
-                self.camera_xy.x = 0
+        if self.camera_xy.y < 0:
+            self.camera_xy.y = 0
 
-            if self.camera_xy.y < 0:
-                self.camera_xy.y = 0
+        if self.document_bitmap is not None:
+            if self.camera_xy.x > self.document_bitmap.Width:
+                self.camera_xy.x = self.document_bitmap.Width
 
-            if self.document_bitmap is not None:
-                if self.camera_xy.x > self.document_bitmap.Width:
-                    self.camera_xy.x = self.document_bitmap.Width
+            if self.camera_xy.y > self.document_bitmap.Height:
+                self.camera_xy.y = self.document_bitmap.Height
 
-                if self.camera_xy.y > self.document_bitmap.Height:
-                    self.camera_xy.y = self.document_bitmap.Height
-
-            print(self.camera_xy)
-            self.render()
-            self.gui.page_canvas.Refresh(False)
+        self.render()
+        self.gui.page_canvas.Refresh(False)
 
     def on_canvas_leave(self, event: wx.MouseEvent) -> None:
         self.mouse_down = False
