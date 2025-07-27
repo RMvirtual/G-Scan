@@ -120,8 +120,7 @@ class EditorController:
         self.last_drag = self.scene.mouse_pointer
         self.scene.mouse_pointer = Vector2D.fromPoint(event.Position)
         drag_distance = self.scene.mouse_pointer - self.last_drag
-
-        self.scene.camera = self.scene.camera - drag_distance
+        self.scene.camera += drag_distance
 
         if self.scene.camera.x < 0:
             self.scene.camera.x = 0
