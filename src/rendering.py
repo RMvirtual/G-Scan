@@ -4,12 +4,52 @@ import wx
 from maths import Vector2D
 
 
-class RenderingContext:
+class Scene:
     def __init__(self) -> None:
+        self.camera: Vector2D = Vector2D(0, 0)
+        self.mouse_pointer: Vector2D = None
+        self.bitmap_size: Vector2D = None
+
+
+class RenderingContext:
+    def __init__(self, canvas: wx.Panel) -> None:
+        self.canvas = canvas
         self.buffer: wx.Bitmap = None
         self.page_bitmap: wx.Bitmap = None
         self.document_bitmap: wx.Bitmap = None
-        self.camera_xy = Vector2D(0, 0)
+
+    def render(self, scene: Scene) -> None:
+        self.buffer = wx.Bitmap(scene.bitmap_size.x, scene.bitmap_size.y)
+        device_context = wx.MemoryDC(self.buffer)
+
+        device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
+        device_context.Clear()
+
+        if self.document_bitmap:
+            bitmap = self.document_bitmap.GetSubBitmap(
+                wx.Rect(scene.camera.x, scene.camera.y, 400, 400)
+            )
+
+            wx.Bitmap.Rescale(
+                bitmap, wx.Size(scene.bitmap_size.x, scene.bitmap_size.y)
+            )
+
+            device_context.DrawBitmap(bitmap, 0, 0, False)
+
+        if scene.mouse_pointer is not None:
+            # Black box signifying mouse motion.
+            device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
+
+            device_context.DrawRectangle(
+                scene.mouse_pointer.x - 25, scene.mouse_pointer.y - 25, 50, 50
+            )
+
+        device_context.SelectObject(wx.NullBitmap)
+
+    def swap_buffers(self) -> None:
+        self.page_bitmap = self.buffer
+        device_context = wx.PaintDC(self.canvas)
+        device_context.DrawBitmap(self.page_bitmap, 0, 0, useMask=False)
 
 
 def load_images(file_path: str) -> list[wx.Bitmap]:

@@ -11,7 +11,7 @@ from document_tree import DocumentType
 from gui.editor import EditorFrame
 from job_references import create_job_reference
 from maths import Vector2D
-from rendering import RenderingContext
+from rendering import RenderingContext, Scene
 
 
 class EditorController:
@@ -26,8 +26,8 @@ class EditorController:
         self.current_document: DocumentEntry = None
 
         # Rendering context.
-        self.rendering_context = RenderingContext()
-        self.mouse_position: Vector2D = None
+        self.rendering_context = RenderingContext(self.gui.page_canvas)
+        self.scene = Scene()
         self.last_drag: Vector2D = None
         self.mouse_down = False
 
@@ -99,48 +99,14 @@ class EditorController:
         self.render()
 
     def render(self) -> None:
-        bitmap_size = self.gui.page_canvas.Size
-        self.rendering_context.buffer = wx.Bitmap(bitmap_size)
-        device_context = wx.MemoryDC(self.rendering_context.buffer)
-
-        device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
-        device_context.Clear()
-
-        if self.current_document:
-            bitmap = self.rendering_context.document_bitmap.GetSubBitmap(
-                wx.Rect(
-                    self.rendering_context.camera_xy.x,
-                    self.rendering_context.camera_xy.y,
-                    400,
-                    400,
-                )
-            )
-
-            wx.Bitmap.Rescale(bitmap, bitmap_size)
-            device_context.DrawBitmap(bitmap, 0, 0, False)
-
-        if self.mouse_down:
-            # Black box signifying mouse motion.
-            device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
-
-            device_context.DrawRectangle(
-                self.mouse_position.x - 25,
-                self.mouse_position.y - 25,
-                50,
-                50,
-            )
-
-        device_context.SelectObject(wx.NullBitmap)
+        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.page_canvas.Size)
+        self.rendering_context.render(self.scene)
 
     def on_paint(self, event: wx.Event) -> None:
-        self.rendering_context.page_bitmap = self.rendering_context.buffer
-        device_context = wx.PaintDC(self.gui.page_canvas)
-        device_context.DrawBitmap(
-            self.rendering_context.page_bitmap, 0, 0, useMask=False
-        )
+        self.rendering_context.swap_buffers()
 
     def on_canvas_left_down(self, event: wx.MouseEvent) -> None:
-        self.mouse_position = Vector2D.fromPoint(event.Position)
+        self.scene.mouse_pointer = Vector2D.fromPoint(event.Position)
         self.last_drag = Vector2D.fromPoint(event.Position)
         self.mouse_down = True
         self.render()
@@ -151,34 +117,32 @@ class EditorController:
         if not self.mouse_down:
             return
 
-        self.last_drag = self.mouse_position
-        self.mouse_position = Vector2D.fromPoint(event.Position)
-        drag_distance = self.mouse_position - self.last_drag
+        self.last_drag = self.scene.mouse_pointer
+        self.scene.mouse_pointer = Vector2D.fromPoint(event.Position)
+        drag_distance = self.scene.mouse_pointer - self.last_drag
 
-        self.rendering_context.camera_xy = (
-            self.rendering_context.camera_xy - drag_distance
-        )
+        self.scene.camera = self.scene.camera - drag_distance
 
-        if self.rendering_context.camera_xy.x < 0:
-            self.rendering_context.camera_xy.x = 0
+        if self.scene.camera.x < 0:
+            self.scene.camera.x = 0
 
-        if self.rendering_context.camera_xy.y < 0:
-            self.rendering_context.camera_xy.y = 0
+        if self.scene.camera.y < 0:
+            self.scene.camera.y = 0
 
         if self.rendering_context.document_bitmap is not None:
             if (
-                self.rendering_context.camera_xy.x
+                self.scene.camera.x
                 > self.rendering_context.document_bitmap.Width
             ):
-                self.rendering_context.camera_xy.x = (
+                self.scene.camera.x = (
                     self.rendering_context.document_bitmap.Width
                 )
 
             if (
-                self.rendering_context.camera_xy.y
+                self.scene.camera.y
                 > self.rendering_context.document_bitmap.Height
             ):
-                self.rendering_context.camera_xy.y = (
+                self.scene.camera.y = (
                     self.rendering_context.document_bitmap.Height
                 )
 
@@ -188,11 +152,10 @@ class EditorController:
     def on_canvas_leave(self, event: wx.MouseEvent) -> None:
         self.mouse_down = False
 
-        # self.render()
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
-        self.mouse_position = None
+        self.scene.mouse_pointer = None
         self.last_drag = None
         self.mouse_down = False
 
@@ -273,6 +236,8 @@ class EditorController:
             wx.Rect(0, 0, original_bitmap.Width, original_bitmap.Height)
         )
 
+        self.scene = Scene()
+        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.page_canvas.Size)
         self.rendering_context.document_bitmap = bitmap
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
