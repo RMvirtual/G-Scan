@@ -1,26 +1,22 @@
 import fitz
 import wx
 
-from controllers.input import MouseState
-from maths import Vector2D
-
-
-class Scene:
-    def __init__(self) -> None:
-        self.camera: Vector2D = Vector2D(0, 0)
-        self.bitmap_size: Vector2D = None
+from rendering.input import MouseState
+from rendering.scene import Scene
 
 
 class RenderingContext:
     def __init__(self, canvas: wx.Panel) -> None:
         self.canvas = canvas
-        self.buffer: wx.Bitmap = None
-        self.page_bitmap: wx.Bitmap = None
+        self.working_buffer: wx.Bitmap = None
+        self.final_buffer: wx.Bitmap = None
         self.document_bitmap: wx.Bitmap = None
 
     def render(self, scene: Scene, mouse_state: MouseState) -> None:
-        self.buffer = wx.Bitmap(scene.bitmap_size.x, scene.bitmap_size.y)
-        device_context = wx.MemoryDC(self.buffer)
+        self.working_buffer = wx.Bitmap(
+            scene.bitmap_size.x, scene.bitmap_size.y
+        )
+        device_context = wx.MemoryDC(self.working_buffer)
 
         device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
         device_context.Clear()
@@ -50,9 +46,9 @@ class RenderingContext:
         device_context.SelectObject(wx.NullBitmap)
 
     def swap_buffers(self) -> None:
-        self.page_bitmap = self.buffer
+        self.final_buffer = self.working_buffer
         device_context = wx.PaintDC(self.canvas)
-        device_context.DrawBitmap(self.page_bitmap, 0, 0, useMask=False)
+        device_context.DrawBitmap(self.final_buffer, 0, 0, useMask=False)
 
 
 def load_images(file_path: str) -> list[wx.Bitmap]:
@@ -60,7 +56,7 @@ def load_images(file_path: str) -> list[wx.Bitmap]:
 
     with fitz.open(file_path) as document_stream:
         for page in document_stream:
-            pixel_buffer = page.get_pixmap(dpi=300)
+            pixel_buffer: fitz.Pixmap = page.get_pixmap(dpi=300)
 
             bitmap = wx.Bitmap.FromBuffer(
                 pixel_buffer.width, pixel_buffer.height, pixel_buffer.samples

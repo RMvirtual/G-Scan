@@ -4,7 +4,6 @@ import wx
 
 from configuration import Configuration
 from controllers.document_tree_ import DocumentTreeController
-from controllers.input import MouseState
 from controllers.settings import SettingsDialogController
 from data_structures_new import Branch, DocumentEntry
 from departments import Department
@@ -12,7 +11,7 @@ from document_tree import DocumentType
 from gui.editor import EditorFrame
 from job_references import create_job_reference
 from maths import Vector2D
-from rendering import RenderingContext, Scene
+from rendering import MouseState, RenderingContext, Scene
 
 
 class EditorController:
@@ -28,7 +27,7 @@ class EditorController:
 
         # Rendering context.
         self.rendering_context = RenderingContext(self.gui.page_canvas)
-        self.mouse_state = MouseState()
+        self.mouse = MouseState()
         self.scene = Scene()
 
         # Update GUI.
@@ -100,25 +99,25 @@ class EditorController:
 
     def render(self) -> None:
         self.scene.bitmap_size = Vector2D.fromPoint(self.gui.page_canvas.Size)
-        self.rendering_context.render(self.scene, self.mouse_state)
+        self.rendering_context.render(self.scene, self.mouse)
 
     def on_paint(self, event: wx.Event) -> None:
         self.rendering_context.swap_buffers()
 
     def on_canvas_left_down(self, event: wx.MouseEvent) -> None:
-        self.mouse_state.click_down(event)
+        self.mouse.click_down(event)
         self.render()
 
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
-        self.mouse_state.click_release(event)
+        self.mouse.click_release(event)
         self.render()
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_motion(self, event: wx.MouseEvent) -> None:
-        self.mouse_state.motion(event)
-        self.scene.camera += self.mouse_state.drag_distance()
+        self.mouse.motion(event)
+        self.scene.camera += self.mouse.drag_distance()
 
         # Clip camera movement to bounds of the document.
         if self.scene.camera.x < 0:
@@ -148,7 +147,7 @@ class EditorController:
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_leave(self, event: wx.MouseEvent) -> None:
-        self.mouse_state.click_release(event)
+        self.mouse.click_release(event)
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_resize(self, event: wx.MouseEvent) -> None:
