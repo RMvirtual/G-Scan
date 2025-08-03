@@ -131,26 +131,16 @@ class EditorController:
         if self.scene.camera.position.y < 0:
             self.scene.camera.position.y = 0
 
-        if self.rendering_context.document_bitmap is not None:
-            if (
-                self.scene.camera.position.x
-                > self.rendering_context.document_bitmap.Width
-            ):
-                self.scene.camera.position.x = (
-                    self.rendering_context.document_bitmap.Width
-                )
+        if self.scene.document is not None:
+            if self.scene.camera.position.x > self.scene.document.Width:
+                self.scene.camera.position.x = self.scene.document.Width
 
-            if (
-                self.scene.camera.position.y
-                > self.rendering_context.document_bitmap.Height
-            ):
-                self.scene.camera.position.y = (
-                    self.rendering_context.document_bitmap.Height
-                )
+            if self.scene.camera.position.y > self.scene.document.Height:
+                self.scene.camera.position.y = self.scene.document.Height
 
         toolbar = self.gui.canvas_toolbar
-        toolbar.camera_x_entry.SetValue(str(self.scene.camera.position.x))
-        toolbar.camera_y_entry.SetValue(str(self.scene.camera.position.y))
+        toolbar.camera_x_entry.SetValue(f"{self.scene.camera.position.x:.1f}")
+        toolbar.camera_y_entry.SetValue(f"{self.scene.camera.position.y:.1f}")
 
         self.render()
         self.gui.canvas.Refresh(False)
@@ -238,7 +228,7 @@ class EditorController:
 
         self.scene = Scene()
         self.scene.bitmap_size = Vector2D.fromPoint(self.gui.canvas.Size)
-        self.rendering_context.document_bitmap = bitmap
+        self.scene.document = bitmap
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
         entry = self.document_tree.gui.GetItemData(event.Item)

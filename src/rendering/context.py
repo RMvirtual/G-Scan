@@ -10,7 +10,6 @@ class RenderingContext:
         self.canvas = canvas
         self.working_buffer: wx.Bitmap = None
         self.final_buffer: wx.Bitmap = None
-        self.document_bitmap: wx.Bitmap = None
 
     def render(self, scene: Scene, mouse_state: MouseState) -> None:
         self.working_buffer = wx.Bitmap(
@@ -21,8 +20,8 @@ class RenderingContext:
         device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
         device_context.Clear()
 
-        if self.document_bitmap:
-            bitmap = self.document_bitmap.GetSubBitmap(
+        if scene.document is not None:
+            bitmap = scene.document.GetSubBitmap(
                 wx.Rect(
                     int(scene.camera.position.x),
                     int(scene.camera.position.y),
@@ -38,7 +37,6 @@ class RenderingContext:
             device_context.DrawBitmap(bitmap, 0, 0, False)
 
         if mouse_state.position is not None:
-            # Black box signifying mouse motion.
             device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
 
             device_context.DrawRectangle(

@@ -11,13 +11,17 @@ class CanvasToolbar(wx.Panel):
             self, label="X", style=wx.ALIGN_CENTER_HORIZONTAL
         )
 
-        self.camera_x_entry = wx.TextCtrl(self, value="0.0")
+        self.camera_x_entry = wx.TextCtrl(
+            self, value="0.0", style=wx.TE_READONLY
+        )
 
         self.camera_y_lbl = wx.StaticText(
             self, label="Y", style=wx.ALIGN_CENTER_HORIZONTAL
         )
 
-        self.camera_y_entry = wx.TextCtrl(self, value="0.0")
+        self.camera_y_entry = wx.TextCtrl(
+            self, value="0.0", style=wx.TE_READONLY
+        )
 
         self.camera_zoom_lbl = wx.StaticText(self, label="Zoom")
         zoom_options = [10, 25, 33, 50, 66, 75, 100, 125, 150, 200, 300, 500]
