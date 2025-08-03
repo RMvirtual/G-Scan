@@ -125,6 +125,7 @@ class EditorController:
         self.mouse.motion(event)
         self.scene.camera.position += self.mouse.drag_distance()
 
+        """
         # Clip camera movement to bounds of the document.
         if self.scene.camera.position.x < 0:
             self.scene.camera.position.x = 0
@@ -138,6 +139,7 @@ class EditorController:
 
             if self.scene.camera.position.y > self.scene.document.Height:
                 self.scene.camera.position.y = self.scene.document.Height
+        """
 
         toolbar = self.gui.canvas_toolbar
         toolbar.camera_x_entry.SetValue(f"{self.scene.camera.position.x:.1f}")
@@ -158,7 +160,6 @@ class EditorController:
     def on_zoom_level_selection(self, event: wx.CommandEvent) -> None:
         zoom = float(event.String.removesuffix("%"))
         self.scene.camera.zoom = zoom / 100
-        print(self.scene.camera.zoom)
 
     def change_department(self, department: Department) -> None:
         if self.config.department == department:
