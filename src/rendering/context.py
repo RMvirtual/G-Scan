@@ -22,20 +22,22 @@ class RenderingContext:
         if scene.document is not None:
             document_box = wx.Rect(scene.document.GetSize())
             camera_rect = scene.camera.rect()
-            document_box.Intersect(camera_rect)
-            document_bitmap = scene.document.GetSubBitmap(document_box)
 
-            relative_position = (
-                Vector2D(document_box.x, document_box.y)
-                - scene.camera.position
-            )
+            if document_box.Intersects(camera_rect):
+                document_box.Intersect(camera_rect)
+                document_bitmap = scene.document.GetSubBitmap(document_box)
 
-            device_context.DrawBitmap(
-                document_bitmap,
-                int(relative_position.x),
-                int(relative_position.y),
-                useMask=False,
-            )
+                relative_position = (
+                    Vector2D(document_box.x, document_box.y)
+                    - scene.camera.position
+                )
+
+                device_context.DrawBitmap(
+                    document_bitmap,
+                    int(relative_position.x),
+                    int(relative_position.y),
+                    useMask=False,
+                )
 
         if mouse_state.position is not None:
             device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
