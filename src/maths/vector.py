@@ -32,6 +32,9 @@ class Vector2D:
 
         return self
 
+    def __truediv__(self, scalar: float) -> Vector2D:
+        return Vector2D(self.x / scalar, self.y / scalar)
+
     def __repr__(self) -> str:
         return str(self)
 

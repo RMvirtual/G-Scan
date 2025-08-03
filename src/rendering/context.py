@@ -35,9 +35,9 @@ class RenderingContext:
         document_box.Intersect(camera_box)
         document_bitmap = scene.document.GetSubBitmap(document_box)
 
-        relative_position = (
-            Vector2D(document_box.x, document_box.y) - scene.camera.position
-        )
+        relative_position = Vector2D(
+            document_box.x, document_box.y
+        ) - Vector2D(camera_box.x, camera_box.y)
 
         device_context.DrawBitmap(
             document_bitmap,
