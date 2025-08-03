@@ -100,6 +100,8 @@ class EditorController:
         self.gui.SetAcceleratorTable(wx.AcceleratorTable(accelators))
         self.gui.SetFocus()
         self.gui.Show()
+
+        self.scene.camera.dimensions = Vector2D.fromPoint(self.gui.canvas.Size)
         self.render()
 
     def render(self) -> None:
@@ -148,7 +150,8 @@ class EditorController:
         self.mouse.click_release(event)
         self.gui.canvas.Refresh(False)
 
-    def on_canvas_resize(self, event: wx.MouseEvent) -> None:
+    def on_canvas_resize(self, event: wx.SizeEvent) -> None:
+        self.scene.camera.dimensions = Vector2D.fromPoint(event.Size)
         self.render()
         self.gui.canvas.Refresh(False)
 
@@ -226,6 +229,7 @@ class EditorController:
         )
 
         self.scene = Scene(bitmap_copy)
+        self.scene.camera.dimensions = Vector2D.fromPoint(self.gui.canvas.Size)
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
         entry = self.document_tree.gui.GetItemData(event.Item)

@@ -31,3 +31,9 @@ class Vector2D:
         self.y -= other.y
 
         return self
+
+    def __repr__(self) -> str:
+        return str(self)
+
+    def __str__(self) -> str:
+        return f"({self.x},{self.y})"
