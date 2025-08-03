@@ -4,6 +4,7 @@ import wx
 
 from configuration import Configuration
 from controllers.document_tree_ import DocumentTreeController
+from controllers.input import MouseState
 from controllers.settings import SettingsDialogController
 from data_structures_new import Branch, DocumentEntry
 from departments import Department
@@ -27,9 +28,8 @@ class EditorController:
 
         # Rendering context.
         self.rendering_context = RenderingContext(self.gui.page_canvas)
+        self.mouse_state = MouseState()
         self.scene = Scene()
-        self.last_drag: Vector2D = None
-        self.mouse_down = False
 
         # Update GUI.
         departments = [d.full_name for d in self.config.departments]
@@ -47,7 +47,7 @@ class EditorController:
         # Event handlers.
         self.gui.page_canvas.Bind(wx.EVT_PAINT, self.on_paint)
         self.gui.page_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_canvas_left_down)
-        self.gui.page_canvas.Bind(wx.EVT_MOTION, self.on_canvas_drag)
+        self.gui.page_canvas.Bind(wx.EVT_MOTION, self.on_canvas_motion)
         self.gui.page_canvas.Bind(wx.EVT_LEAVE_WINDOW, self.on_canvas_leave)
         self.gui.page_canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
         self.gui.page_canvas.Bind(wx.EVT_SIZE, self.on_canvas_resize)
@@ -100,27 +100,25 @@ class EditorController:
 
     def render(self) -> None:
         self.scene.bitmap_size = Vector2D.fromPoint(self.gui.page_canvas.Size)
-        self.rendering_context.render(self.scene)
+        self.rendering_context.render(self.scene, self.mouse_state)
 
     def on_paint(self, event: wx.Event) -> None:
         self.rendering_context.swap_buffers()
 
     def on_canvas_left_down(self, event: wx.MouseEvent) -> None:
-        self.scene.mouse_pointer = Vector2D.fromPoint(event.Position)
-        self.last_drag = Vector2D.fromPoint(event.Position)
-        self.mouse_down = True
+        self.mouse_state.click_down(event)
         self.render()
 
         self.gui.page_canvas.Refresh(False)
 
-    def on_canvas_drag(self, event: wx.MouseEvent) -> None:
-        if not self.mouse_down:
-            return
+    def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
+        self.mouse_state.click_release(event)
+        self.render()
+        self.gui.page_canvas.Refresh(False)
 
-        self.last_drag = self.scene.mouse_pointer
-        self.scene.mouse_pointer = Vector2D.fromPoint(event.Position)
-        drag_distance = self.scene.mouse_pointer - self.last_drag
-        self.scene.camera += drag_distance
+    def on_canvas_motion(self, event: wx.MouseEvent) -> None:
+        self.mouse_state.motion(event)
+        self.scene.camera += self.mouse_state.drag_distance()
 
         if self.scene.camera.x < 0:
             self.scene.camera.x = 0
@@ -149,16 +147,7 @@ class EditorController:
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_leave(self, event: wx.MouseEvent) -> None:
-        self.mouse_down = False
-
-        self.gui.page_canvas.Refresh(False)
-
-    def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
-        self.scene.mouse_pointer = None
-        self.last_drag = None
-        self.mouse_down = False
-
-        self.render()
+        self.mouse_state.click_release(event)
         self.gui.page_canvas.Refresh(False)
 
     def on_canvas_resize(self, event: wx.MouseEvent) -> None:

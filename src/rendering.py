@@ -7,7 +7,6 @@ from maths import Vector2D
 class Scene:
     def __init__(self) -> None:
         self.camera: Vector2D = Vector2D(0, 0)
-        self.mouse_pointer: Vector2D = None
         self.bitmap_size: Vector2D = None
 
 
@@ -18,7 +17,7 @@ class RenderingContext:
         self.page_bitmap: wx.Bitmap = None
         self.document_bitmap: wx.Bitmap = None
 
-    def render(self, scene: Scene) -> None:
+    def render(self, scene: Scene, mouse_state) -> None:
         self.buffer = wx.Bitmap(scene.bitmap_size.x, scene.bitmap_size.y)
         device_context = wx.MemoryDC(self.buffer)
 
@@ -36,12 +35,15 @@ class RenderingContext:
 
             device_context.DrawBitmap(bitmap, 0, 0, False)
 
-        if scene.mouse_pointer is not None:
+        if mouse_state.position is not None:
             # Black box signifying mouse motion.
             device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
 
             device_context.DrawRectangle(
-                scene.mouse_pointer.x - 25, scene.mouse_pointer.y - 25, 50, 50
+                mouse_state.position.x - 25,
+                mouse_state.position.y - 25,
+                50,
+                50,
             )
 
         device_context.SelectObject(wx.NullBitmap)
