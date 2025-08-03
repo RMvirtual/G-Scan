@@ -32,16 +32,16 @@ class EditorController:
 
         # Update GUI.
         departments = [d.full_name for d in self.config.departments]
-        self.gui.entry_toolbar.department_box.Set(departments)
-        self.gui.entry_toolbar.department_box.SetValue(departments[0])
+        self.gui.job_entry_toolbar.department_box.Set(departments)
+        self.gui.job_entry_toolbar.department_box.SetValue(departments[0])
 
         document_types = [
             d.full_name for d in self.config.department.document_types
         ]
 
-        self.gui.entry_toolbar.document_box.Set(document_types)
-        self.gui.entry_toolbar.document_box.SetValue(document_types[0])
-        self.gui.entry_toolbar.Fit()
+        self.gui.job_entry_toolbar.document_box.Set(document_types)
+        self.gui.job_entry_toolbar.document_box.SetValue(document_types[0])
+        self.gui.job_entry_toolbar.Fit()
 
         # Event handlers.
         self.gui.page_canvas.Bind(wx.EVT_PAINT, self.on_paint)
@@ -51,7 +51,7 @@ class EditorController:
         self.gui.page_canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
         self.gui.page_canvas.Bind(wx.EVT_SIZE, self.on_canvas_resize)
 
-        entry_toolbar = self.gui.entry_toolbar
+        entry_toolbar = self.gui.job_entry_toolbar
         entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
 
         entry_toolbar.department_box.Bind(
@@ -164,7 +164,7 @@ class EditorController:
             d.full_name for d in self.config.department.document_types
         ]
 
-        document_type_box = self.gui.entry_toolbar.document_box
+        document_type_box = self.gui.job_entry_toolbar.document_box
         document_type_box.Set(available_document_types)
 
         if document_type_box.GetValue() not in available_document_types:
@@ -174,7 +174,7 @@ class EditorController:
 
     def on_submit(self, event: wx.Event) -> None:
         try:
-            toolbar = self.gui.entry_toolbar
+            toolbar = self.gui.job_entry_toolbar
             inputted_numbers = toolbar.reference_input.GetValue()
 
             if len(inputted_numbers) < 9:
@@ -252,7 +252,7 @@ class EditorController:
         self.gui.Destroy()
 
     def on_department_change(self, event: wx.Event) -> None:
-        box = self.gui.entry_toolbar.department_box
+        box = self.gui.job_entry_toolbar.department_box
         selection = box.GetValue()
 
         matching_departments = list(

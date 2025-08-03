@@ -3,7 +3,7 @@ import datetime
 import wx
 
 
-class Toolbar(wx.Panel):
+class JobEntryToolbar(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
         super().__init__(parent)
 

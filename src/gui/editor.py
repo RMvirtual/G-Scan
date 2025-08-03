@@ -1,7 +1,8 @@
 import wx
 
+from gui.canvas_toolbar import CanvasToolbar
+from gui.job_entry_toolbar import JobEntryToolbar
 from gui.menu_bar import TopMenuBar
-from gui.toolbar import Toolbar
 
 
 class EditorFrame(wx.Frame):
@@ -10,7 +11,8 @@ class EditorFrame(wx.Frame):
     ) -> None:
         super().__init__(None, title="", size=size, pos=position)
 
-        self.entry_toolbar = Toolbar(self)
+        self.job_entry_toolbar = JobEntryToolbar(self)
+        self.canvas_toolbar = CanvasToolbar(self)
         self.page_canvas = wx.Panel(self)
 
         self.tree_ctrl = wx.TreeCtrl(
@@ -32,18 +34,25 @@ class EditorFrame(wx.Frame):
         # Sizer layout.
         border = 5
 
-        tree_sizer = wx.BoxSizer(orient=wx.VERTICAL)
+        tree_sizer = wx.BoxSizer(wx.VERTICAL)
         tree_sizer.Add(self.upload_btn, 0, wx.ALIGN_LEFT | wx.ALL, border)
-        tree_sizer.Add(self.tree_ctrl, 1, wx.EXPAND | wx.VERTICAL, border)
+        tree_sizer.Add(self.tree_ctrl, 1, wx.EXPAND)
 
-        midsection_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        midsection_sizer.Add(self.page_canvas, 3, wx.EXPAND)
-        midsection_sizer.Add(tree_sizer, 1, wx.EXPAND | wx.ALL, border)
+        canvas_sizer = wx.BoxSizer(wx.VERTICAL)
+        canvas_sizer.Add(self.canvas_toolbar, 0, wx.BOTTOM, border)
+        canvas_sizer.Add(self.page_canvas, 1, wx.EXPAND)
 
-        main_sizer = wx.BoxSizer(orient=wx.VERTICAL)
-        main_sizer.Add(self.entry_toolbar, 0, wx.EXPAND, border)
-        main_sizer.Add(midsection_sizer, 1, wx.EXPAND, border)
-        main_sizer.Add(self.exit_btn, 0, wx.ALIGN_RIGHT | wx.BOTTOM, border)
+        body_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        body_sizer.Add(canvas_sizer, 3, wx.EXPAND | wx.ALL, border)
+        body_sizer.Add(tree_sizer, 1, wx.EXPAND | wx.ALL, border)
+
+        main_sizer = wx.BoxSizer(wx.VERTICAL)
+        main_sizer.Add(self.job_entry_toolbar, 0, wx.EXPAND | wx.ALL, border)
+        main_sizer.Add(body_sizer, 1, wx.EXPAND)
+
+        main_sizer.Add(
+            self.exit_btn, 0, wx.ALIGN_LEFT | wx.LEFT | wx.BOTTOM, border
+        )
 
         self.SetSizer(main_sizer)
         self.SetBackgroundColour(colour=wx.LIGHT_GREY)
