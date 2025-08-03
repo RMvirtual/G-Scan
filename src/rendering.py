@@ -1,6 +1,7 @@
 import fitz
 import wx
 
+from controllers.input import MouseState
 from maths import Vector2D
 
 
@@ -17,7 +18,7 @@ class RenderingContext:
         self.page_bitmap: wx.Bitmap = None
         self.document_bitmap: wx.Bitmap = None
 
-    def render(self, scene: Scene, mouse_state) -> None:
+    def render(self, scene: Scene, mouse_state: MouseState) -> None:
         self.buffer = wx.Bitmap(scene.bitmap_size.x, scene.bitmap_size.y)
         device_context = wx.MemoryDC(self.buffer)
 

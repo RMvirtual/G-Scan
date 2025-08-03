@@ -120,6 +120,7 @@ class EditorController:
         self.mouse_state.motion(event)
         self.scene.camera += self.mouse_state.drag_distance()
 
+        # Clip camera movement to bounds of the document.
         if self.scene.camera.x < 0:
             self.scene.camera.x = 0
 
