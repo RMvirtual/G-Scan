@@ -12,9 +12,7 @@ class RenderingContext:
         self.final_buffer: wx.Bitmap = None
 
     def render(self, scene: Scene, mouse_state: MouseState) -> None:
-        canvas_size = self.canvas.GetSize()
-        self.working_buffer = wx.Bitmap(canvas_size)
-
+        self.working_buffer = wx.Bitmap(self.canvas.GetSize())
         device_context = wx.MemoryDC(self.working_buffer)
         device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
         device_context.Clear()
@@ -23,7 +21,7 @@ class RenderingContext:
             self.render_scene(scene, device_context)
 
         if mouse_state.position is not None:
-            self.render_mouse_reticle(mouse_state, device_context)
+            self.render_mouse_reticle(mouse_state.position, device_context)
 
         device_context.SelectObject(wx.NullBitmap)
 
@@ -49,14 +47,14 @@ class RenderingContext:
         )
 
     def render_mouse_reticle(
-        self, mouse: MouseState, device_context: wx.MemoryDC
+        self, position: Vector2D, device_context: wx.MemoryDC
     ) -> None:
         device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
         size = 50
 
         square = wx.Rect(
-            int(mouse.position.x - size / 2),
-            int(mouse.position.y - size / 2),
+            int(position.x - size / 2),
+            int(position.y - size / 2),
             size,
             size,
         )
