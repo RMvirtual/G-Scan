@@ -1,6 +1,7 @@
 import fitz
 import wx
 
+from maths import Vector2D
 from rendering.input import MouseState
 from rendering.scene import Scene
 
@@ -12,9 +13,9 @@ class RenderingContext:
         self.final_buffer: wx.Bitmap = None
 
     def render(self, scene: Scene, mouse_state: MouseState) -> None:
-        self.working_buffer = wx.Bitmap(
-            scene.bitmap_size.x, scene.bitmap_size.y
-        )
+        canvas_size = self.canvas.Size
+        self.working_buffer = wx.Bitmap(canvas_size)
+
         device_context = wx.MemoryDC(self.working_buffer)
 
         device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
@@ -30,10 +31,7 @@ class RenderingContext:
                 )
             )
 
-            wx.Bitmap.Rescale(
-                bitmap, wx.Size(scene.bitmap_size.x, scene.bitmap_size.y)
-            )
-
+            wx.Bitmap.Rescale(bitmap, canvas_size)
             device_context.DrawBitmap(bitmap, 0, 0, False)
 
         if mouse_state.position is not None:

@@ -103,7 +103,6 @@ class EditorController:
         self.render()
 
     def render(self) -> None:
-        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.canvas.Size)
         self.rendering_context.render(self.scene, self.mouse)
 
     def on_paint(self, event: wx.Event) -> None:
@@ -227,7 +226,6 @@ class EditorController:
         )
 
         self.scene = Scene()
-        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.canvas.Size)
         self.scene.document = bitmap
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
