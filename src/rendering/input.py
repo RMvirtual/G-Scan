@@ -21,7 +21,7 @@ class MouseState:
         if self.is_down:
             self.last_dragged = self.position
 
-        self.position = Vector2D.fromPoint(event.Position)
+        self.position = Vector2D(event.Position.x, event.Position.y)
 
     def drag_distance(self) -> Vector2D:
         if None in (self.position, self.last_dragged):

@@ -123,7 +123,7 @@ class EditorController:
 
     def on_canvas_motion(self, event: wx.MouseEvent) -> None:
         self.mouse.motion(event)
-        self.scene.camera.position += self.mouse.drag_distance()
+        self.scene.camera.position -= self.mouse.drag_distance()
 
         toolbar = self.gui.canvas_toolbar
         toolbar.camera_x_entry.SetValue(f"{self.scene.camera.position.x:.1f}")
