@@ -156,7 +156,9 @@ class EditorController:
         self.gui.canvas.Refresh(False)
 
     def on_zoom_level_selection(self, event: wx.CommandEvent) -> None:
-        print(event.String)
+        zoom = float(event.String.removesuffix("%"))
+        self.scene.camera.zoom = zoom / 100
+        print(self.scene.camera.zoom)
 
     def change_department(self, department: Department) -> None:
         if self.config.department == department:

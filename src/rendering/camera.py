@@ -1,3 +1,5 @@
+import wx
+
 from maths import Vector2D
 
 
@@ -17,3 +19,22 @@ class Camera:
         )
 
         self.zoom = zoom
+
+    def rect(self) -> wx.Rect:
+        rectangle = wx.Rect2D(
+            self.position.x,
+            self.position.y,
+            self.dimensions.x,
+            self.dimensions.y,
+        )
+
+        rectangle.Scale(1 / self.zoom)
+
+        result = wx.Rect(
+            int(rectangle.Left),
+            int(rectangle.Top),
+            int(rectangle.GetSize().Width),
+            int(rectangle.GetSize().Height),
+        )
+
+        return result

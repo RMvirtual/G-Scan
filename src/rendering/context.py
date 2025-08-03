@@ -19,15 +19,8 @@ class RenderingContext:
         device_context.Clear()
 
         if scene.document is not None:
-            camera_rect = wx.Rect(
-                int(scene.camera.position.x),
-                int(scene.camera.position.y),
-                int(scene.camera.dimensions.x),
-                int(scene.camera.dimensions.y),
-            )
-
+            camera_rect = scene.camera.rect()
             bitmap = scene.document.GetSubBitmap(camera_rect)
-
             device_context.DrawBitmap(bitmap, 0, 0, useMask=False)
 
         if mouse_state.position is not None:
