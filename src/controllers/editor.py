@@ -43,7 +43,7 @@ class EditorController:
         self.gui.job_entry_toolbar.document_box.SetValue(document_types[0])
         self.gui.job_entry_toolbar.Fit()
 
-        # Event handlers.
+        # Canvas event handlers.
         self.gui.canvas.Bind(wx.EVT_PAINT, self.on_paint)
         self.gui.canvas.Bind(wx.EVT_LEFT_DOWN, self.on_canvas_left_down)
         self.gui.canvas.Bind(wx.EVT_MOTION, self.on_canvas_motion)
@@ -51,6 +51,11 @@ class EditorController:
         self.gui.canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
         self.gui.canvas.Bind(wx.EVT_SIZE, self.on_canvas_resize)
 
+        self.gui.canvas_toolbar.camera_zoom_combobox.Bind(
+            wx.EVT_COMBOBOX, self.on_zoom_level_selection
+        )
+
+        # Job entry toolbar event handlers.
         entry_toolbar = self.gui.job_entry_toolbar
         entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
 
@@ -117,35 +122,35 @@ class EditorController:
 
     def on_canvas_motion(self, event: wx.MouseEvent) -> None:
         self.mouse.motion(event)
-        self.scene.camera += self.mouse.drag_distance()
+        self.scene.camera.position += self.mouse.drag_distance()
 
         # Clip camera movement to bounds of the document.
-        if self.scene.camera.x < 0:
-            self.scene.camera.x = 0
+        if self.scene.camera.position.x < 0:
+            self.scene.camera.position.x = 0
 
-        if self.scene.camera.y < 0:
-            self.scene.camera.y = 0
+        if self.scene.camera.position.y < 0:
+            self.scene.camera.position.y = 0
 
         if self.rendering_context.document_bitmap is not None:
             if (
-                self.scene.camera.x
+                self.scene.camera.position.x
                 > self.rendering_context.document_bitmap.Width
             ):
-                self.scene.camera.x = (
+                self.scene.camera.position.x = (
                     self.rendering_context.document_bitmap.Width
                 )
 
             if (
-                self.scene.camera.y
+                self.scene.camera.position.y
                 > self.rendering_context.document_bitmap.Height
             ):
-                self.scene.camera.y = (
+                self.scene.camera.position.y = (
                     self.rendering_context.document_bitmap.Height
                 )
 
         toolbar = self.gui.canvas_toolbar
-        toolbar.camera_x_entry.SetValue(str(self.scene.camera.x))
-        toolbar.camera_y_entry.SetValue(str(self.scene.camera.y))
+        toolbar.camera_x_entry.SetValue(str(self.scene.camera.position.x))
+        toolbar.camera_y_entry.SetValue(str(self.scene.camera.position.y))
 
         self.render()
         self.gui.canvas.Refresh(False)
@@ -157,6 +162,9 @@ class EditorController:
     def on_canvas_resize(self, event: wx.MouseEvent) -> None:
         self.render()
         self.gui.canvas.Refresh(False)
+
+    def on_zoom_level_selection(self, event: wx.CommandEvent) -> None:
+        print(event.String)
 
     def change_department(self, department: Department) -> None:
         if self.config.department == department:

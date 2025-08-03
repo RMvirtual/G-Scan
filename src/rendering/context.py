@@ -23,7 +23,12 @@ class RenderingContext:
 
         if self.document_bitmap:
             bitmap = self.document_bitmap.GetSubBitmap(
-                wx.Rect(scene.camera.x, scene.camera.y, 400, 400)
+                wx.Rect(
+                    int(scene.camera.position.x),
+                    int(scene.camera.position.y),
+                    400,
+                    400,
+                )
             )
 
             wx.Bitmap.Rescale(
