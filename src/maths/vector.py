@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Self
+from typing import Any, Self
 
 import wx
 
@@ -45,7 +45,10 @@ class Vector2D:
         return Vector2D(self.x / scalar, self.y / scalar)
 
     def __eq__(self, other: Vector2D) -> bool:
-        return self.x == other.x and self.y == other.y
+        if isinstance(other, Vector2D):
+            return self.x == other.x and self.y == other.y
+
+        return False
 
     def __repr__(self) -> str:
         return str(self)
