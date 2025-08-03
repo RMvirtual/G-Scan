@@ -14,6 +14,9 @@ class Vector2D:
     def fromPoint(point: wx.Point) -> Vector2D:
         return Vector2D(point.x, point.y)
 
+    def to_int(self) -> Vector2D:
+        return Vector2D(int(self.x), int(self.y))
+
     def __add__(self, other: Vector2D) -> Vector2D:
         return Vector2D(self.x + other.x, self.y + other.y)
 
@@ -32,11 +35,20 @@ class Vector2D:
 
         return self
 
+    def __mul__(self, scalar: float) -> Vector2D:
+        return Vector2D(self.x * scalar, self.y * scalar)
+
+    def __rmul__(self, scalar: float) -> Vector2D:
+        return Vector2D(self.x * scalar, self.y * scalar)
+
     def __truediv__(self, scalar: float) -> Vector2D:
         return Vector2D(self.x / scalar, self.y / scalar)
+
+    def __eq__(self, other: Vector2D) -> bool:
+        return self.x == other.x and self.y == other.y
 
     def __repr__(self) -> str:
         return str(self)
 
     def __str__(self) -> str:
-        return f"({self.x},{self.y})"
+        return f"({self.x}, {self.y})"

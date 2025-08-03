@@ -21,19 +21,14 @@ class Camera:
         self.zoom = zoom
 
     def rect(self) -> wx.Rect:
-        top_left = self.position - self.dimensions / 2
-
-        rectangle = wx.Rect2D(
-            top_left.x, top_left.y, self.dimensions.x, self.dimensions.y
-        )
-
-        rectangle.Scale(1 / self.zoom)
+        scaled_dimensions = self.dimensions * (1.0 / self.zoom)
+        top_left = self.position - scaled_dimensions / 2
 
         result = wx.Rect(
-            int(rectangle.Left),
-            int(rectangle.Top),
-            int(rectangle.GetSize().Width),
-            int(rectangle.GetSize().Height),
+            int(top_left.x),
+            int(top_left.y),
+            int(scaled_dimensions.x),
+            int(scaled_dimensions.y),
         )
 
         return result

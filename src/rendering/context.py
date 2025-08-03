@@ -26,8 +26,8 @@ class RenderingContext:
         device_context.SelectObject(wx.NullBitmap)
 
     def render_scene(self, scene: Scene, device_context: wx.MemoryDC) -> None:
-        document_box = wx.Rect(scene.document.GetSize())
         camera_box = scene.camera.rect()
+        document_box = wx.Rect(scene.document.GetSize())
 
         if not document_box.Intersects(camera_box):
             return
@@ -35,14 +35,14 @@ class RenderingContext:
         document_box.Intersect(camera_box)
         document_bitmap = scene.document.GetSubBitmap(document_box)
 
-        relative_position = Vector2D(
-            document_box.x, document_box.y
-        ) - Vector2D(camera_box.x, camera_box.y)
+        document_top_left = Vector2D(document_box.x, document_box.y)
+        camera_top_left = Vector2D(camera_box.x, camera_box.y)
+        relative_top_left = document_top_left - camera_top_left
 
         device_context.DrawBitmap(
             document_bitmap,
-            int(relative_position.x),
-            int(relative_position.y),
+            int(relative_top_left.x),
+            int(relative_top_left.y),
             useMask=False,
         )
 

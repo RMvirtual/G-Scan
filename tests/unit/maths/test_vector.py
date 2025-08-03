@@ -22,6 +22,12 @@ class TestVector2D:
         assert result.x == 2
         assert result.y == 2
 
+    def test_should_divide_by_scale(self) -> None:
+        assert Vector2D(3, 4) / 2 == Vector2D(1.5, 2)
+
+    def test_should_convert_to_integer(self) -> None:
+        assert Vector2D(1.5, 2.6).to_int() == Vector2D(1, 2)
+
     def test_should_construct_from_wx_point(self) -> None:
         result = Vector2D.fromPoint(wx.Point(10, 20))
         assert result.x == 10
