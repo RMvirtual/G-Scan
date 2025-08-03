@@ -112,12 +112,13 @@ class EditorController:
 
     def on_canvas_left_down(self, event: wx.MouseEvent) -> None:
         self.mouse.click_down(event)
-        self.render()
 
+        self.render()
         self.gui.canvas.Refresh(False)
 
     def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
         self.mouse.click_release(event)
+
         self.render()
         self.gui.canvas.Refresh(False)
 
@@ -138,6 +139,7 @@ class EditorController:
 
     def on_canvas_resize(self, event: wx.SizeEvent) -> None:
         self.scene.camera.dimensions = Vector2D.fromPoint(event.Size)
+
         self.render()
         self.gui.canvas.Refresh(False)
 
