@@ -13,7 +13,7 @@ class EditorFrame(wx.Frame):
 
         self.job_entry_toolbar = JobEntryToolbar(self)
         self.canvas_toolbar = CanvasToolbar(self)
-        self.page_canvas = wx.Panel(self)
+        self.canvas = wx.Panel(self)
 
         self.tree_ctrl = wx.TreeCtrl(
             self,
@@ -40,7 +40,7 @@ class EditorFrame(wx.Frame):
 
         canvas_sizer = wx.BoxSizer(wx.VERTICAL)
         canvas_sizer.Add(self.canvas_toolbar, 0, wx.BOTTOM, border)
-        canvas_sizer.Add(self.page_canvas, 1, wx.EXPAND)
+        canvas_sizer.Add(self.canvas, 1, wx.EXPAND)
 
         body_sizer = wx.BoxSizer(wx.HORIZONTAL)
         body_sizer.Add(canvas_sizer, 3, wx.EXPAND | wx.ALL, border)

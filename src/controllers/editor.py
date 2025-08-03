@@ -26,7 +26,7 @@ class EditorController:
         self.current_document: DocumentEntry = None
 
         # Rendering context.
-        self.rendering_context = RenderingContext(self.gui.page_canvas)
+        self.rendering_context = RenderingContext(self.gui.canvas)
         self.mouse = MouseState()
         self.scene = Scene()
 
@@ -44,12 +44,12 @@ class EditorController:
         self.gui.job_entry_toolbar.Fit()
 
         # Event handlers.
-        self.gui.page_canvas.Bind(wx.EVT_PAINT, self.on_paint)
-        self.gui.page_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_canvas_left_down)
-        self.gui.page_canvas.Bind(wx.EVT_MOTION, self.on_canvas_motion)
-        self.gui.page_canvas.Bind(wx.EVT_LEAVE_WINDOW, self.on_canvas_leave)
-        self.gui.page_canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
-        self.gui.page_canvas.Bind(wx.EVT_SIZE, self.on_canvas_resize)
+        self.gui.canvas.Bind(wx.EVT_PAINT, self.on_paint)
+        self.gui.canvas.Bind(wx.EVT_LEFT_DOWN, self.on_canvas_left_down)
+        self.gui.canvas.Bind(wx.EVT_MOTION, self.on_canvas_motion)
+        self.gui.canvas.Bind(wx.EVT_LEAVE_WINDOW, self.on_canvas_leave)
+        self.gui.canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
+        self.gui.canvas.Bind(wx.EVT_SIZE, self.on_canvas_resize)
 
         entry_toolbar = self.gui.job_entry_toolbar
         entry_toolbar.submit_btn.Bind(wx.EVT_BUTTON, self.on_submit)
@@ -98,7 +98,7 @@ class EditorController:
         self.render()
 
     def render(self) -> None:
-        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.page_canvas.Size)
+        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.canvas.Size)
         self.rendering_context.render(self.scene, self.mouse)
 
     def on_paint(self, event: wx.Event) -> None:
@@ -108,12 +108,12 @@ class EditorController:
         self.mouse.click_down(event)
         self.render()
 
-        self.gui.page_canvas.Refresh(False)
+        self.gui.canvas.Refresh(False)
 
     def on_canvas_left_up(self, event: wx.MouseEvent) -> None:
         self.mouse.click_release(event)
         self.render()
-        self.gui.page_canvas.Refresh(False)
+        self.gui.canvas.Refresh(False)
 
     def on_canvas_motion(self, event: wx.MouseEvent) -> None:
         self.mouse.motion(event)
@@ -143,16 +143,20 @@ class EditorController:
                     self.rendering_context.document_bitmap.Height
                 )
 
+        toolbar = self.gui.canvas_toolbar
+        toolbar.camera_x_entry.SetValue(str(self.scene.camera.x))
+        toolbar.camera_y_entry.SetValue(str(self.scene.camera.y))
+
         self.render()
-        self.gui.page_canvas.Refresh(False)
+        self.gui.canvas.Refresh(False)
 
     def on_canvas_leave(self, event: wx.MouseEvent) -> None:
         self.mouse.click_release(event)
-        self.gui.page_canvas.Refresh(False)
+        self.gui.canvas.Refresh(False)
 
     def on_canvas_resize(self, event: wx.MouseEvent) -> None:
         self.render()
-        self.gui.page_canvas.Refresh(False)
+        self.gui.canvas.Refresh(False)
 
     def change_department(self, department: Department) -> None:
         if self.config.department == department:
@@ -225,7 +229,7 @@ class EditorController:
         )
 
         self.scene = Scene()
-        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.page_canvas.Size)
+        self.scene.bitmap_size = Vector2D.fromPoint(self.gui.canvas.Size)
         self.rendering_context.document_bitmap = bitmap
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
