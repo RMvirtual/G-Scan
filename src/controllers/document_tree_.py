@@ -3,7 +3,6 @@ from pathlib import Path
 import wx
 from wx import TreeCtrl
 
-import rendering
 from data_structures import AbstractLeaf, AbstractNode
 from data_structures_new import (
     Branch,
@@ -12,8 +11,8 @@ from data_structures_new import (
     DocumentTypeBranch,
     JobBranch,
 )
-from document_tree import DocumentBranch, PendingLeaf
-from documents import DocumentType
+from document_tree import DocumentBranch
+from documents import DocumentType, load_images
 from gui.page_range_dialog import PageRangeDialog
 
 
@@ -38,7 +37,7 @@ class DocumentTreeController:
 
         for path in paths:
             entry = branch.create_document_entry(Path(path).name, None)
-            entry.pages = rendering.load_images(path)
+            entry.pages = load_images(path)
 
             entry.gui_id = self.gui.AppendItem(
                 parent=branch.gui_id, text=entry.name, data=entry
