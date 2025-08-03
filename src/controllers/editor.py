@@ -219,14 +219,13 @@ class EditorController:
 
     def view_document_entry(self, entry: DocumentEntry) -> None:
         self.current_document = entry
-        original_bitmap = entry.pages[0]
+        document_bitmap = entry.pages[0]
 
-        bitmap = original_bitmap.GetSubBitmap(
-            wx.Rect(0, 0, original_bitmap.Width, original_bitmap.Height)
+        bitmap_copy = document_bitmap.GetSubBitmap(
+            wx.Rect(0, 0, document_bitmap.Width, document_bitmap.Height)
         )
 
-        self.scene = Scene()
-        self.scene.document = bitmap
+        self.scene = Scene(bitmap_copy)
 
     def on_item_selection(self, event: wx.TreeEvent) -> None:
         entry = self.document_tree.gui.GetItemData(event.Item)

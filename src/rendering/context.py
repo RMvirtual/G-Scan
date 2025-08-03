@@ -14,10 +14,9 @@ class RenderingContext:
 
     def render(self, scene: Scene, mouse_state: MouseState) -> None:
         canvas_size = self.canvas.Size
-        self.working_buffer = wx.Bitmap(canvas_size)
+        self.working_buffer = wx.Bitmap(self.canvas.Size)
 
         device_context = wx.MemoryDC(self.working_buffer)
-
         device_context.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
         device_context.Clear()
 
@@ -26,13 +25,12 @@ class RenderingContext:
                 wx.Rect(
                     int(scene.camera.position.x),
                     int(scene.camera.position.y),
-                    400,
-                    400,
+                    canvas_size[0],
+                    canvas_size[1],
                 )
             )
 
-            wx.Bitmap.Rescale(bitmap, canvas_size)
-            device_context.DrawBitmap(bitmap, 0, 0, False)
+            device_context.DrawBitmap(bitmap, 0, 0, useMask=False)
 
         if mouse_state.position is not None:
             device_context.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
