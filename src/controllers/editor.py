@@ -50,6 +50,7 @@ class EditorController:
         self.gui.canvas.Bind(wx.EVT_LEAVE_WINDOW, self.on_canvas_leave)
         self.gui.canvas.Bind(wx.EVT_LEFT_UP, self.on_canvas_left_up)
         self.gui.canvas.Bind(wx.EVT_SIZE, self.on_canvas_resize)
+        self.gui.canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_canvas_mouse_wheel)
 
         self.gui.canvas_toolbar.camera_zoom_combobox.Bind(
             wx.EVT_COMBOBOX, self.on_zoom_level_selection
@@ -135,6 +136,12 @@ class EditorController:
 
     def on_canvas_leave(self, event: wx.MouseEvent) -> None:
         self.mouse.click_release(event)
+        self.gui.canvas.Refresh(False)
+
+    def on_canvas_mouse_wheel(self, event: wx.MouseEvent) -> None:
+        self.scene.camera.zoom += event.WheelRotation // 120 * 0.1
+
+        self.render()
         self.gui.canvas.Refresh(False)
 
     def on_canvas_resize(self, event: wx.SizeEvent) -> None:

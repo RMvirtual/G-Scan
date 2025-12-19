@@ -35,6 +35,7 @@ class RenderingContext:
         document_box.Intersect(camera_box)
         document_bitmap = scene.document.GetSubBitmap(document_box)
 
+        wx.Bitmap.Rescale(document_bitmap, self.working_buffer.Size)
         document_top_left = Vector2D(document_box.x, document_box.y)
         camera_top_left = Vector2D(camera_box.x, camera_box.y)
         relative_top_left = document_top_left - camera_top_left
