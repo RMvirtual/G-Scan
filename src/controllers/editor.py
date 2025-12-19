@@ -154,6 +154,9 @@ class EditorController:
         zoom = float(event.String.removesuffix("%"))
         self.scene.camera.zoom = zoom / 100
 
+        self.render()
+        self.gui.canvas.Refresh(False)
+
     def change_department(self, department: Department) -> None:
         if self.config.department == department:
             return
